@@ -1,7 +1,8 @@
 {
     "listen_port": 3000,
-    "salt_work_factor": 10
-
+    "salt_work_factor": 10,
+    "mongo_url" : "mongodb://localhost/test"
+    
 
 
 

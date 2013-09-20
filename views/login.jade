@@ -1,0 +1,17 @@
+extend layout
+block content
+    h3 Login
+        form(action='/login', method='post')
+            .login-row
+                .one_third
+                    label Username:
+                .one_third
+                    input(type='text', name='username')
+            .login-row
+                .one_third
+                    label Password:
+                .one_third
+                    input(type='password', name='password')
+            .login-row
+                input(type='submit', value='Log In') 
+

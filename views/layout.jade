@@ -1,7 +1,30 @@
-doctype 5
+!!!5
 html
   head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    title #{title} - Unity Profiles 
+    link(rel='stylesheet', href='/assets/css/combined.css')
+    script(
+        type='text/javascript',
+        src='js/libs/jquery/jquery.js'
+        )
+    script(
+        type='text/javascript',
+        src='assets/js/plugins.js'
+        )
+    script(
+        type='text/javascript',
+        src='assets/js/application.js'
+        )
+    
   body
-    block content
+    .boxed 
+        section(id='main', class='bg-escheresque', role='main') 
+            .section-alt
+                header#header.textcenter(role='header') 
+                    h2 Unity Profiles 
+            .section 
+                block content  
+            
+            .section
+                footer
+                    p Running on node with Express, Jade and Stylus

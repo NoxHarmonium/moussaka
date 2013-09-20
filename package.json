@@ -20,7 +20,8 @@
         "expect.js" : "*",
         "superagent" : "*",
         "passport" : "*",
-        "passport-local" : "*"
+        "passport-local" : "*",
+        "colors" : "*"
     },
     "repository" :
     { 
