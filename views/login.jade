@@ -3,15 +3,17 @@ block content
     h3 Login
         form(action='/login', method='post')
             .login-row
-                .one_third
+                .one_full
                     label Username:
-                .one_third
+                .one_full
                     input(type='text', name='username')
             .login-row
-                .one_third
+                .one_full
                     label Password:
-                .one_third
+                .one_full
                     input(type='password', name='password')
             .login-row
-                input(type='submit', value='Log In') 
+                .one_full
+                    input(type='submit', value='Log In', class='button')
+                    a(href='./sign_up' class='login-link') Sign Up
 

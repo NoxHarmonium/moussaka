@@ -2,6 +2,7 @@
 html
   head
     title #{title} - Unity Profiles 
+    link(rel='stylesheet', href='/css/style.css')
     link(rel='stylesheet', href='/assets/css/combined.css')
     script(
         type='text/javascript',
@@ -17,8 +18,8 @@ html
         )
     
   body
-    .boxed 
-        section(id='main', class='bg-escheresque', role='main') 
+    section(id='main', class='bg-blackthread', role='main') 
+        .boxed 
             .section-alt
                 header#header.textcenter(role='header') 
                     h2 Unity Profiles 
