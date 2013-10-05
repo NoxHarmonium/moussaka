@@ -2,30 +2,29 @@
 html
   head
     title #{title} - Unity Profiles 
-    link(rel='stylesheet', href='/css/style.css')
-    link(rel='stylesheet', href='/assets/css/combined.css')
+    link(rel='stylesheet' href='css/foundation.css')
     script(
         type='text/javascript',
-        src='js/libs/jquery/jquery.js'
+        src='http://code.jquery.com/jquery-1.10.1.min.js'
         )
     script(
         type='text/javascript',
-        src='assets/js/plugins.js'
+        src='js/vendor/custom.modernizr.js'
         )
     script(
         type='text/javascript',
-        src='assets/js/application.js'
+        src='/fashionista'
         )
-    
   body
-    section(id='main', class='bg-blackthread', role='main') 
-        .boxed 
-            .section-alt
+    section 
+        div.row 
+            section
                 header#header.textcenter(role='header') 
                     h2 Unity Profiles 
-            .section 
+        div.row
+            section 
                 block content  
-            
-            .section
+        div.row    
+            section
                 footer
                     p Running on node with Express, Jade and Stylus
