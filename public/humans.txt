@@ -1,23 +1,8 @@
-/* the humans responsible & colophon. humanstxt.org */
+/* Foundation was made by ZURB, an interaction design and design strategy firm in Campbell, CA */
+/* zurb.com */
+/* humanstxt.org */
 
-/** FRAMEWORK
- * Workless CSS Framework
- * https://github.com/iKreativ/Workless
- * http://twitter.com/iKreativ
- */
-
-/** TEAM
- * <your title>: <your name>
- * Site: 
- * Twitter: 
- * Location:
- */ 
-
-/** THANKS
- * Names (& URL): 
- */
-
-/** SITE
- * Standards: HTML5, CSS3
- * Components: Modernizr, jQuery, Workless      
- */
+/* SITE */
+  Standards: HTML5, CSS3
+  Components: jQuery, Orbit, Reveal
+  Software: Coda, Textmate, Git
