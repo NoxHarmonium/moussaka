@@ -27,3 +27,7 @@ app.param('user', function(req, res, next, email) {
 
 app.get('/users/:user', function (req, res) {});
 
+app.post('/users/', function (req, res) {
+    console.log(('Login request: Username:' + req.body.username + ' Password:' + req.body.password).green);
+});
+
