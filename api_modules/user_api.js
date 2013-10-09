@@ -38,11 +38,11 @@ app.get('/users/:user/', function (req, res) {
 });
 
 app.put('/users/:user/', function (req, res) {
-    console.log(('Create user request: Username: ' + req.body.username + ' Password:' + req.body.password).green);
+    //console.log(('Create user request: Username: ' + req.body.username + ' Password:' + req.body.password).green);
     
     if (req.user)
     {
-       console.log('Warning: User already exists'.yellow);
+       //console.log('Warning: User already exists'.yellow);
        res.send(409, { detail: 'User already exists' });
        return;
     }

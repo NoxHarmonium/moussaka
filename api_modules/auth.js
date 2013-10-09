@@ -11,17 +11,16 @@ passport.use(new LocalStrategy(
         User.findOne({ email: email }, function (err, user) {
             if (err) { return done(err); }
             if (!user) {
-                console.log('Incorrect email');
+                //console.log('Incorrect email');
                 return done(null, false, { message: 'Incorrect email' });
             }
             user.comparePassword(password, function (err, isMatch) {
-                console.log("cb"); 
                 if (isMatch)
                 {
                     return done(null, user);
                 }
                 
-                console.log('Incorrect password');
+                //console.log('Incorrect password');
                 return done(null, false, { message: 'Incorrect password' });
             
             });
