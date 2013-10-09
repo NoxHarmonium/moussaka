@@ -4,7 +4,8 @@
     "version": "0.0.1",
     "private": true,
     "scripts": {
-        "start": "node app.js"
+        "start": "node app.js",
+        "test" : "bash runtests.sh"
     },
     "env": {
         "PYTHON": "/usr/bin/python2.7"
