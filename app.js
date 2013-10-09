@@ -41,8 +41,6 @@ var app = express();
 exports.app_object = app;
 
 
-// Schemas
-var user_api = require('./api_modules/user_api.js');
 
 // all environments
 app.set('port', config.listen_port || process.env.PORT || 3000);
@@ -56,6 +54,8 @@ app.use(express.cookieParser('your secret here'));
 app.use(express.session());
 
 var auth = require('./api_modules/auth.js');
+// Schemas
+var user_api = require('./api_modules/user_api.js');
 
 app.use(app.router);
 app.use(require('stylus').middleware(__dirname + '/public'));

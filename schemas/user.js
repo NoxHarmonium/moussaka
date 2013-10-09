@@ -7,7 +7,6 @@ var mongoose = require('mongoose'),
 var UserSchema = mongoose.Schema({
     email: { type: String, required: true, index: { unique: true } },
     password: { type: String, required: true },
-    projects: { type: Array }
 
 });
 
@@ -29,8 +28,10 @@ UserSchema.pre("save", function(next) {
     });
 });
 
-UserSchema.methods.comparePassword = function(canidatePassword, cb) {
+UserSchema.methods.comparePassword = function(candidatePassword, cb) {
+    console.log('comparing password');
     bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
+        console.log('done compare'); 
         if (err) return cb(err);
         cb(null, isMatch);
     });

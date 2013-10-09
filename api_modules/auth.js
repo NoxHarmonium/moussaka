@@ -8,15 +8,23 @@ app.use(passport.session());
 
 passport.use(new LocalStrategy(
     function(email, password, done) {
-        User.findOne({ email: password }, function (err, user) {
+        User.findOne({ email: email }, function (err, user) {
             if (err) { return done(err); }
             if (!user) {
+                console.log('Incorrect email');
                 return done(null, false, { message: 'Incorrect email' });
             }
-            if(!user.validPassword(password)){
+            user.comparePassword(password, function (err, isMatch) {
+                console.log("cb"); 
+                if (isMatch)
+                {
+                    return done(null, user);
+                }
+                
+                console.log('Incorrect password');
                 return done(null, false, { message: 'Incorrect password' });
-            }
-            return done(null, user);
+            
+            });
           });
       }
 )
@@ -33,9 +41,10 @@ passport.deserializeUser(function(id, done) {
 })
 ;
 
+app.post('/login/',
+  passport.authenticate('local'),
+  function(req, res) {
+    res.send(200);
+  });
 
-app.post('/login',
-    passport.authenticate('local',  
-        { successRedirect: '/',
-          failureFlash: false })
-); 
+

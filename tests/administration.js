@@ -21,7 +21,7 @@ describe('Administration API tests', function() {
     });
 
     it('Create the user', function(done) {
-        superagent.post('http://localhost:3000/users/')
+        superagent.put('http://localhost:3000/users/' + username + '/')
             .send({
                     'username': username,
                     'password': password
@@ -41,6 +41,7 @@ describe('Administration API tests', function() {
                   })
                   .end(function(e, res) {
                     expect(e).to.eql(null);
+                    console.log("Login response: " + res.body);
                     expect(res.status).to.eql(200);
                     done();
                   });
@@ -53,6 +54,7 @@ describe('Administration API tests', function() {
             .end(function(e, res) {
                 expect(e).to.eql(null);
                 expect(res.ok).to.be.ok();
+                done();
             }); 
     });    
  

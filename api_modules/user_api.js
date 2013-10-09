@@ -19,15 +19,45 @@ app.param('user', function(req, res, next, email) {
     query.select('email projects');
     query.limit(10);
     query.exec(function (err, user) {
-        if (err) return handleError(err);
-        res.send(user);
+        if (err) return next(err);
+        req.user = user;
+        next();
     });
 
 });
 
-app.get('/users/:user', function (req, res) {});
+app.get('/users/:user/', function (req, res) {
+     if (req.user)
+     {
+        res.send(req.user);
+     }
+     else
+     {
+        res.send(404, { detail: 'User doesn\'t exist' }); 
+     }
+});
 
-app.post('/users/', function (req, res) {
-    console.log(('Login request: Username:' + req.body.username + ' Password:' + req.body.password).green);
+app.put('/users/:user/', function (req, res) {
+    console.log(('Create user request: Username: ' + req.body.username + ' Password:' + req.body.password).green);
+    
+    if (req.user)
+    {
+       console.log('Warning: User already exists'.yellow);
+       res.send(409, { detail: 'User already exists' });
+       return;
+    }
+
+    var newUser = new User();
+    newUser.email = req.body.username;
+    newUser.password = req.body.password;
+    newUser.save(
+        function (err) {
+           if (err)
+           {
+              return handleError(err); 
+           }
+           res.send(201);
+        }
+    );
 });
 
