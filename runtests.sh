@@ -3,4 +3,4 @@
 # Automated Test Script
 #
 
-mocha tests/administration.js
+mocha -R list tests/administration.js

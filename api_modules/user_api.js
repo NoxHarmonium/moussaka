@@ -20,7 +20,7 @@ app.param('user', function(req, res, next, email) {
     query.limit(10);
     query.exec(function (err, user) {
         if (err) return next(err);
-        req.user = user;
+        req.selectedUser = user;
         next();
     });
 
@@ -37,10 +37,20 @@ app.get('/users/:user/', function (req, res) {
      }
 });
 
-app.put('/users/:user/', function (req, res) {
+app.del('/users/:user/', function (req, res) {
+    
+    if (req.user.email == req.selectedUser.email)
+    {
+        req.user.remove();
+        res.send(200);
+    }
+    res.send(401);
+});
+
+app.put('/users/:user/', function (req, res, next) {
     //console.log(('Create user request: Username: ' + req.body.username + ' Password:' + req.body.password).green);
     
-    if (req.user)
+    if (req.selectedUser)
     {
        //console.log('Warning: User already exists'.yellow);
        res.send(409, { detail: 'User already exists' });
@@ -54,7 +64,7 @@ app.put('/users/:user/', function (req, res) {
         function (err) {
            if (err)
            {
-              return handleError(err); 
+              next(err); 
            }
            res.send(201);
         }

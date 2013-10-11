@@ -51,7 +51,7 @@ app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(express.cookieParser('your secret here'));
-app.use(express.session());
+app.use(express.session({ secret: 'keyboard cat' }));
 
 var auth = require('./api_modules/auth.js');
 // Schemas
@@ -61,6 +61,11 @@ app.use(app.router);
 app.use(require('stylus').middleware(__dirname + '/public'));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(function(err, req, res, next) {
+    if(!err) return next();
+    console.log("Unhandled error: ".red + err);
+    res.send(500, { detail : err });
+});
 
 // development only
 if ('development' == app.get('env')) {
