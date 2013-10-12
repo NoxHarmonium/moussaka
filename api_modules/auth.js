@@ -12,7 +12,7 @@ passport.use(new LocalStrategy(
             if (err) { return done(err); }
             if (!user) {
                 //console.log('Incorrect email');
-                return done(null, false, { message: 'Incorrect email' });
+                return done(null, false, { detail: 'Incorrect email' });
             }
             user.comparePassword(password, function (err, isMatch) {
                 if (isMatch)
@@ -21,7 +21,7 @@ passport.use(new LocalStrategy(
                 }
                 
                 //console.log('Incorrect password');
-                return done(null, false, { message: 'Incorrect password' });
+                return done(null, false, { detail: 'Incorrect password' });
             
             });
           });
@@ -37,13 +37,8 @@ passport.deserializeUser(function(id, done) {
   User.findById(id, function(err, user) {
       done(err, user);
     });
-})
-;
+});
 
-app.post('/login/',
-  passport.authenticate('local'),
-  function(req, res) {
-    res.send(200);
-  });
+
 
 

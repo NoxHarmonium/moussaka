@@ -63,7 +63,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function(err, req, res, next) {
     if(!err) return next();
-    console.log("Unhandled error: ".red + err);
+    console.log("Unhandled error: ".red + err + "\n" + err.stack);
     res.send(500, { detail : err });
 });
 

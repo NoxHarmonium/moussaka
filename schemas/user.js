@@ -29,6 +29,16 @@ UserSchema.pre("save", function(next) {
 });
 
 UserSchema.methods.comparePassword = function(candidatePassword, cb) {
+    if (candidatePassword== null)
+    {
+        cb(new Error("Cannot compare a null password"));
+    }
+
+    if (this.password == null)
+    {
+        cb(new Error("Cannot compare password on a user object with an undefined password"));
+    }
+
     bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
         if (err) return cb(err);
         cb(null, isMatch);
