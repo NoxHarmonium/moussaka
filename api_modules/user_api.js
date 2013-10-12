@@ -43,6 +43,7 @@ app.del('/users/:user/', function (req, res) {
     {
         req.user.remove();
         res.send(200);
+        return;
     }
     res.send(401);
 });
