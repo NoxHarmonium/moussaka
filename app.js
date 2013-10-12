@@ -4,8 +4,8 @@
  */
 
 // Config
-var config = require('./config.json');
 
+var config = require('./include/config');
 
 var express = require('express');
 var routes = require('./routes');

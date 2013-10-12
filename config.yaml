@@ -1,0 +1,25 @@
+
+---
+#
+#    unity-profiles config file
+#
+
+default: # The default config profile. (With documentation)
+
+    # The port that the API listens for requests on
+    listen_port:        80
+
+    # How much work it takes to hash the passwords stored in the database.
+    # For testing and development you can set it to something low but in production you
+    # would want to set it to a value that makes it as hard a possible for someone to crack
+    # whilst maintaining server performance.
+    salt_work_factor:   8
+
+    # The mongodb connection string
+    mongo_url:          "mongodb://localhost/unity-profiles"
+
+
+development: # The development config profile.
+    listen_port:        3000
+    salt_work_factor:   3
+    mongo_url:          "mongodb://localhost/unity-profiles-dev"

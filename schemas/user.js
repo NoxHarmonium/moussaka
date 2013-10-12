@@ -2,7 +2,7 @@
 
 var mongoose = require('mongoose'),
     bcrypt   = require('bcrypt'),
-    config   = require('../config.json')
+    config   = require('../include/config')
 
 var UserSchema = mongoose.Schema({
     email: { type: String, required: true, index: { unique: true } },
