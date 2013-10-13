@@ -23,7 +23,8 @@
         "passport" : "*",
         "passport-local" : "*",
         "colors" : "*",
-	"yaml-config" : "*"
+	"yaml-config" : "*",
+	"moment" : "*"
     },
     "repository" :
     { 

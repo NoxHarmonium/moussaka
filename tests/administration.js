@@ -3,28 +3,38 @@ var expect = require('expect.js');
 
 describe('Administration API tests', function() {
     var id;
-    var users = [
-        { 
-            username: 'test.account@test.com',
-            password: 'test_password'
-        },
-        { 
-            username: 'test.account2@test.com',
-            password: 'test_password3'
-        },
-        { 
-            username: 'test.account3@test.com',
-            password: 'test_password4'
-        },
-
-
-    ];
+    var users;
     var agent = superagent.agent();
+
+
+    it('Reset test', function(done)
+            {
+                agent.get('http://localhost:3000/test/user_api/reset/').end(function(e, res) {
+                    expect(e).to.eql(null);
+                    expect(res.ok).to.be.ok();
+                    done();
+                  });
+
+            });
+
+    it('Load test users', function(done)
+    {
+        agent.get('http://localhost:3000/test/user_api/reset/').end(function(e, res) {
+            expect(e).to.eql(null);
+            expect(res.ok).to.be.ok();
+            users = res.body;
+
+            done();
+          });
+
+    });
+
 
     // Clear out old test data if exists
     for (var i = 0; i < users.length; i++)
     {
         (function (u) {
+
             it('Login user [' + i + '] before user exists', function(done) {
                 agent.post('http://localhost:3000/login/')
                     .send(u)
@@ -106,11 +116,11 @@ describe('Administration API tests', function() {
 
         agent.post('http://localhost:3000/login/')
             .send(u)
-                  .end(function(e, res) {
-                    expect(e).to.eql(null);
-                    expect(res.status).to.be(401);
-                    done();
-                  });
+            .end(function(e, res) {
+                expect(e).to.eql(null);
+                expect(res.status).to.be(401);
+                done();
+            });
 
     });
 
@@ -279,6 +289,26 @@ describe('Administration API tests', function() {
                 expect(res.ok).to.be.ok();
                 done();
             });
+    }); 
+
+     it('Reset password for user [0]', function(done) {
+        agent.post('http://localhost:3000/users/' + users[0].username + '/resetpassword/')
+            .send()
+            .end(function(e, res) {
+                expect(e).to.eql(null);
+                expect(res.status).to.be(404);
+                done();
+            }); 
+    });   
+
+       it('Reset password for user [1]', function(done) {
+        agent.post('http://localhost:3000/users/' + users[1].username + '/resetpassword/')
+            .send()
+            .end(function(e, res) {
+                expect(e).to.eql(null);
+                expect(res.ok).to.be.ok();
+                done();
+            }); 
     }); 
 
 

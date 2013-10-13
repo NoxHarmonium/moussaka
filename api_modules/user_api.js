@@ -1,8 +1,22 @@
-app = require("../app.js").app_object;
-
-var User = require('../schemas/user.js'),
+var app = require("../app.js").app_object,
+    moment = require('moment'),
+    User = require('../schemas/user.js'),
     passport = require("passport");
 
+var testUsers = [
+        { 
+            username: 'test.account@test.com',
+            password: 'test_password'
+        },
+        { 
+            username: 'test.account2@test.com',
+            password: 'test_password3'
+        },
+        { 
+            username: 'test.account3@test.com',
+            password: 'test_password4'
+        },
+    ];
 
 app.get('/users/', function (req, res) {
     // Schemas
@@ -84,6 +98,11 @@ app.post('/users/:user/password/' , function (req, res, next) {
         return res.send(400, { detail: 'Cannot change password when logged in' })
     }
 
+    if (req.selectedUser.passwordExpiary && moment(req.selectedUser.passwordExpiary).isBefore())
+    {
+        return res.send(401, { detail: 'Temporary password has expired. You need to create a new one'})
+    }
+
     req.selectedUser.comparePassword(req.body.oldPassword, function (err, isMatch) {
         
         if (err)
@@ -111,6 +130,37 @@ app.post('/users/:user/password/' , function (req, res, next) {
     
 });
 
+app.post('/users/:user/resetpassword/' , function (req, res, next) {
+
+    if (req.selectedUser != null)
+    {
+
+        require('crypto').randomBytes(8, function(ex, buf) {
+            var tempPwd = buf.toString('hex');
+            req.selectedUser.password = tempPwd;
+            req.selectedUser.passwordExpiary = moment().add('minutes', 10);
+            req.selectedUser.save(function (err) {
+               if (err)
+               {
+                  next(err); 
+               }
+
+               console.log("Would send email to user with temp password: " + tempPwd);
+
+
+               return res.send(200);
+
+               // TODO: Actually send email here
+            }); 
+        });
+    }
+    else
+    {
+        return res.send(404, { "detail": "User not found" } );
+    }   
+    
+});
+
 app.get('/logout/',  function (req, res, next) {
     if (req.user != null)
     {
@@ -122,9 +172,40 @@ app.get('/logout/',  function (req, res, next) {
 
 });
 
-app.post('/login/',
-  passport.authenticate('local'),
-  function(req, res) {
-    res.send(200);
+app.post('/login/', function(req, res, next) {
+  passport.authenticate('local', function(err, user, info) {
+    if (err) { return next(err); }
+    
+    if (user && user.passwordExpiary != null)
+    {
+        return reqs.send(401, {"detail": "You cannot login with a temporary password. Change it first"})
+    }
+
+    if (!user) { return res.send(401, { "detail": "Incorrect username/password" }); }
+    req.logIn(user, function(err) {
+      if (err) { return next(err); }
+      return res.send(200);
+    });
+  })(req, res, next);
+});
+
+
+app.get('/test/user_api/testusers/', function(req, res, next) {
+    res.send(200, testUsers);
+});
+
+app.get('/test/user_api/reset/', function(req, res, next) {
+    var emails = new Array();
+    for(var i = 0; i < testUsers.length; i++)
+    {
+        emails.push(testUsers[i].email);
+    }
+
+    var query = User.find({'email': {$in: emails }});
+    query.exec(function (err, users) {
+        if (err) return next(err);
+        users.remove();
+        return res.send(200);
+    });
 });
 
