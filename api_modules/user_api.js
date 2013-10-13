@@ -38,17 +38,18 @@ app.get('/users/:user/', function (req, res) {
 });
 
 app.del('/users/:user/', function (req, res) {
-    
+
     if (req.user != null && req.user.email == req.selectedUser.email)
     {
-        req.user.remove(function (err)
+        return req.user.remove(function (err)
+        {
+            if (err)
             {
-                if (err)
-                {
-                     next(err); 
-                }
-                return res.send(200);
-            });
+                 next(err); 
+            }
+            req.logout();
+            return res.send(200);
+        });
     }
     return res.send(401);
 });
