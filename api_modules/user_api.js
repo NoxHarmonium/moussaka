@@ -196,15 +196,21 @@ app.get('/test/user_api/testusers/', function(req, res, next) {
 
 app.get('/test/user_api/reset/', function(req, res, next) {
     var emails = new Array();
-    for(var i = 0; i < testUsers.length; i++)
+    var i;
+    for(i = 0; i < testUsers.length; i++)
     {
-        emails.push(testUsers[i].email);
+        emails.push(testUsers[i].username);
     }
-
+    
+    console.log(emails);
+    
     var query = User.find({'email': {$in: emails }});
     query.exec(function (err, users) {
         if (err) return next(err);
-        users.remove();
+        for (i = 0; i < users.length; i++)
+        {
+            users[i].remove();
+        }
         return res.send(200);
     });
 });

@@ -3,7 +3,23 @@ var expect = require('expect.js');
 
 describe('Administration API tests', function() {
     var id;
-    var users;
+    // TODO: Actually get this list from the server
+    var users = 
+    [
+        {
+            username: 'test.account@test.com',
+            password: 'test_password'
+        },
+        {
+            username: 'test.account2@test.com',
+            password: 'test_password3'
+        },
+        {
+            username: 'test.account3@test.com',
+            password: 'test_password4'
+        },
+    ];
+  
     var agent = superagent.agent();
 
 
@@ -22,7 +38,6 @@ describe('Administration API tests', function() {
         agent.get('http://localhost:3000/test/user_api/reset/').end(function(e, res) {
             expect(e).to.eql(null);
             expect(res.ok).to.be.ok();
-            users = res.body;
 
             done();
           });
