@@ -1,22 +1,8 @@
 var app = require("../app.js").app_object,
     moment = require('moment'),
     User = require('../schemas/user.js'),
-    passport = require("passport");
-
-var testUsers = [
-        { 
-            username: 'test.account@test.com',
-            password: 'test_password'
-        },
-        { 
-            username: 'test.account2@test.com',
-            password: 'test_password3'
-        },
-        { 
-            username: 'test.account3@test.com',
-            password: 'test_password4'
-        },
-    ];
+    passport = require("passport"),
+    testData = require("../tests/testdata.js");
 
 app.get('/users/', function (req, res) {
     // Schemas
@@ -191,12 +177,14 @@ app.post('/login/', function(req, res, next) {
 
 
 app.get('/test/user_api/testusers/', function(req, res, next) {
-    res.send(200, testUsers);
+    res.send(200, testData.testUsers);
 });
 
 app.get('/test/user_api/reset/', function(req, res, next) {
-    var emails = new Array();
-    var i;
+    var testUsers = testData.testUsers,
+        emails = new Array(),
+        i;
+    
     for(i = 0; i < testUsers.length; i++)
     {
         emails.push(testUsers[i].username);

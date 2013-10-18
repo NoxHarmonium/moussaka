@@ -1,25 +1,10 @@
 var superagent = require('superagent');
 var expect = require('expect.js');
+var testData = require('./testData.js');
 
 describe('Administration API tests', function() {
     var id;
-    // TODO: Actually get this list from the server
-    var users = 
-    [
-        {
-            username: 'test.account@test.com',
-            password: 'test_password'
-        },
-        {
-            username: 'test.account2@test.com',
-            password: 'test_password3'
-        },
-        {
-            username: 'test.account3@test.com',
-            password: 'test_password4'
-        },
-    ];
-  
+    var users = testData.testUsers;
     var agent = superagent.agent();
 
 
