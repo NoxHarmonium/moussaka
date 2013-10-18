@@ -2,7 +2,7 @@ var app = require("../app.js").app_object,
     moment = require('moment'),
     User = require('../schemas/user.js'),
     passport = require("passport"),
-    testData = require("../tests/testdata.js"),
+    testData = require("../tests/testData.js"),
     config = require("../include/config.js");
 
 
