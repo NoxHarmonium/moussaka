@@ -1,6 +1,7 @@
 var superagent = require('superagent');
 var expect = require('expect.js');
-var testData = require('./testData.js');
+var rek = require('rekuire');
+var testData = rek('testData.js');
 
 describe('Administration API tests', function() {
     var id;
