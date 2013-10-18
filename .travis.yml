@@ -9,4 +9,4 @@ services: mongodb
 
 install: npm install
 before_script: npm start
-script npm test
+script: npm test
