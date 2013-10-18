@@ -7,3 +7,5 @@ Currently not even close to functioning and is in development.
 
 Version: 0.0.1
 
+[![Build Status](https://travis-ci.org/NoxHarmonium/unity-profiles.png?branch=master)](https://travis-ci.org/NoxHarmonium/unity-profiles)
+
