@@ -7,11 +7,13 @@
 var config = require('./include/config');
 
 var express = require('express');
-var userApi = require('./api_modules/user_api.js');
+var userApi = require('./api_modules/userApi.js');
 var http = require('http');
 var path = require('path');
 var mongoose = require('mongoose');
 var colors = require('colors');
+var passport = require("passport");
+var auth = require('./api_modules/auth.js');
 
 // Thanks http://stackoverflow.com/a/14049430
 
@@ -38,9 +40,6 @@ try {
 
 
 var app = express();
-exports.app_object = app;
-
-
 
 // all environments
 app.set('port', config.listen_port || process.env.PORT || 3000);
@@ -54,10 +53,9 @@ app.use(express.cookieParser('your secret here'));
 app.use(express.session({
   secret: 'keyboard cat'
 }));
+app.use(passport.initialize());
+app.use(passport.session());
 
-var auth = require('./api_modules/auth.js');
-// Schemas
-var user_api = require('./api_modules/user_api.js');
 
 app.use(app.router);
 app.use(require('stylus')

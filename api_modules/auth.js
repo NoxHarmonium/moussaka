@@ -1,12 +1,10 @@
-var app = require("../app.js")
-  .app_object,
-  passport = require("passport"),
+var
+passport = require("passport"),
   LocalStrategy = require('passport-local')
     .Strategy,
   User = require('../schemas/user.js');
 
-app.use(passport.initialize());
-app.use(passport.session());
+
 
 passport.use(new LocalStrategy(
   function (email, password, done) {
