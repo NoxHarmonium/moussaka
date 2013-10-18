@@ -30,7 +30,9 @@
        "grunt-contrib-uglify" : "*",
        "mocha" : "*", 
        "expect.js" : "*",
-       "superagent" : "*"
+       "superagent" : "*",
+       "jsbeautify" : "*",
+       "grunt-jsbeautifier" : "*"
     },
     "repository" :
     { 
