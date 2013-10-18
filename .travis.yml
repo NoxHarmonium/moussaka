@@ -9,6 +9,7 @@ services: mongodb
 
 install: npm install
 before_script: 
+  - grunt
   - npm start &
   - sleep 10 # Give it some time to warm up 
 script: npm test
