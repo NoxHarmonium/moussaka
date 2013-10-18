@@ -14,29 +14,8 @@ var mongoose = require('mongoose');
 var colors = require('colors');
 var passport = require("passport");
 var auth = require('./api_modules/auth.js');
+var dbAccess = require('./include/dbAccess');
 
-// Thanks http://stackoverflow.com/a/14049430
-
-mongoose.connection.on("open", function (ref) {
-  return console.log("Connected to mongo server!".green);
-});
-
-mongoose.connection.on("error", function (err) {
-  console.log("Could not connect to mongo server!".yellow);
-  console.log(err.message.red);
-  process.exit(1);
-});
-
-try {
-  mongoose.connect(config.mongo_url);
-  var db = mongoose.connection;
-  console.log("Started connection on " + (config.mongo_url)
-    .cyan + ", waiting for it to open...".grey);
-} catch (err) {
-  console.log(("Setting up failed to connect to " + config.mongo_url)
-    .red, err.message);
-  process.exit(1);
-}
 
 
 var app = express();
@@ -74,6 +53,11 @@ app.use(function (err, req, res, next) {
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
+
+dbAccess.init(function (err) {
+  // Database is required to run. Halt application  
+  process.exit(1);
+});
 
 // User API
 app.param('user', userApi.pUser);
