@@ -41,7 +41,7 @@ app.get('/users/:user/', function (req, res) {
 
 app.del('/users/:user/', function (req, res) {
 
-    if (req.user != null && req.user.email == req.selectedUser.email)
+    if (req.user && req.user.email == req.selectedUser.email)
     {
         return req.user.remove(function (err)
         {
@@ -81,14 +81,14 @@ app.put('/users/:user/', function (req, res, next) {
 
 app.post('/users/:user/password/' , function (req, res, next) {
 
-    if (req.user != null)
+    if (req.user)
     {
-        return res.send(400, { detail: 'Cannot change password when logged in' })
+        return res.send(400, { detail: 'Cannot change password when logged in' });
     }
 
     if (req.selectedUser.passwordExpiary && moment(req.selectedUser.passwordExpiary).isBefore())
     {
-        return res.send(401, { detail: 'Temporary password has expired. You need to create a new one'})
+        return res.send(401, { detail: 'Temporary password has expired. You need to create a new one'});
     }
 
     req.selectedUser.comparePassword(req.body.oldPassword, function (err, isMatch) {
@@ -120,7 +120,7 @@ app.post('/users/:user/password/' , function (req, res, next) {
 
 app.post('/users/:user/resetpassword/' , function (req, res, next) {
 
-    if (req.selectedUser != null)
+    if (req.selectedUser)
     {
 
         require('crypto').randomBytes(8, function(ex, buf) {
@@ -150,7 +150,7 @@ app.post('/users/:user/resetpassword/' , function (req, res, next) {
 });
 
 app.get('/logout/',  function (req, res, next) {
-    if (req.user != null)
+    if (req.user)
     {
         req.logout();
     }
@@ -164,9 +164,9 @@ app.post('/login/', function(req, res, next) {
   passport.authenticate('local', function(err, user, info) {
     if (err) { return next(err); }
     
-    if (user && user.passwordExpiary != null)
+    if (user && user.passwordExpiary)
     {
-        return reqs.send(401, {"detail": "You cannot login with a temporary password. Change it first"})
+        return reqs.send(401, {"detail": "You cannot login with a temporary password. Change it first"});
     }
 
     if (!user) { return res.send(401, { "detail": "Incorrect username/password" }); }
@@ -188,7 +188,7 @@ if (config.enable_test_exts)
 
     app.get('/test/user_api/reset/', function(req, res, next) {
         var testUsers = testData.testUsers,
-            emails = new Array(),
+            emails = [],
             i;
 
         for(i = 0; i < testUsers.length; i++)

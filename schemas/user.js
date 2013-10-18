@@ -2,7 +2,7 @@
 
 var mongoose = require('mongoose'),
     bcrypt   = require('bcrypt'),
-    config   = require('../include/config')
+    config   = require('../include/config');
 
 var UserSchema = mongoose.Schema({
     email: { type: String, required: true, index: { unique: true } },
@@ -29,12 +29,12 @@ UserSchema.pre("save", function(next) {
 });
 
 UserSchema.methods.comparePassword = function(candidatePassword, cb) {
-    if (candidatePassword== null)
+    if (!candidatePassword)
     {
         cb(new Error("Cannot compare a null password"));
     }
 
-    if (this.password == null)
+    if (!this.password)
     {
         cb(new Error("Cannot compare password on a user object with an undefined password"));
     }

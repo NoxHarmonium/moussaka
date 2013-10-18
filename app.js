@@ -78,7 +78,7 @@ app.get('/', routes.index);
 app.get('/login', function(req, res) {
     res.render('login', 
         { title: 'Login' }
-    )
+    );
 });
 
 http.createServer(app).listen(app.get('port'), function(){

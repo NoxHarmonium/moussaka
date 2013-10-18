@@ -10,61 +10,14 @@ describe('Administration API tests', function() {
 
 
     it('Reset test', function(done)
-            {
-                agent.get('http://localhost:3000/test/user_api/reset/').end(function(e, res) {
-                    expect(e).to.eql(null);
-                    expect(res.ok).to.be.ok();
-                    done();
-                  });
-
-            });
-
-    it('Load test users', function(done)
     {
         agent.get('http://localhost:3000/test/user_api/reset/').end(function(e, res) {
             expect(e).to.eql(null);
             expect(res.ok).to.be.ok();
-
             done();
           });
 
     });
-
-
-    // Clear out old test data if exists
-    for (var i = 0; i < users.length; i++)
-    {
-        (function (u) {
-
-            it('Login user [' + i + '] before user exists', function(done) {
-                agent.post('http://localhost:3000/login/')
-                    .send(u)
-                          .end(function(e, res) {
-                            expect(e).to.eql(null);
-                            expect(res.status).to.not.be(500);
-                            if (res.status != 401)
-                            {
-                                //console.log("Warning: Test user already exists, did the last test run fail halfway through?");
-                            }
-                            //expect(res.status).to.eql(401);
-                            done();
-                          });
-
-            });
-
-         
-            it('Delete user [' + i + '] if exist', function(done) {
-                agent.del('http://localhost:3000/users/' + u.username + '/')
-                 .end(function(e, res) {
-                    expect(e).to.eql(null);
-                    expect(res.status).to.not.be(500);
-                    done();
-                });
-            });
-        })(users[i]);
-
-
-    }
 
     it('Create user [0]', function(done) {
         agent.put('http://localhost:3000/users/' +  users[0].username + '/')
@@ -112,7 +65,7 @@ describe('Administration API tests', function() {
         {
             username: users[0].username,
             password: 'incorrect'
-        }
+        };
        
 
         agent.post('http://localhost:3000/login/')
