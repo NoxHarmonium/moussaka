@@ -18,8 +18,15 @@ default: # The default config profile. (With documentation)
     # The mongodb connection string
     mongo_url:          "mongodb://localhost/unity-profiles"
 
+    # Enable/disable special API extenstions used to make testing easier such as resetting state.
+    # Although these test extensions should be designed to only effect test data it is strongly
+    # recommended that they be disabled for live environments. (At least until they are protected)
+    enable_test_exts:   false
+
 
 development: # The development config profile.
     listen_port:        3000
     salt_work_factor:   3
     mongo_url:          "mongodb://localhost/unity-profiles-dev"
+    enable_test_exts:   true 
+    

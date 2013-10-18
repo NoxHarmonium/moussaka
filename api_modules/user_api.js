@@ -2,7 +2,9 @@ var app = require("../app.js").app_object,
     moment = require('moment'),
     User = require('../schemas/user.js'),
     passport = require("passport"),
-    testData = require("../tests/testdata.js");
+    testData = require("../tests/testdata.js"),
+    config = require("../include/config.js");
+
 
 app.get('/users/', function (req, res) {
     // Schemas
@@ -175,31 +177,36 @@ app.post('/login/', function(req, res, next) {
   })(req, res, next);
 });
 
-
-app.get('/test/user_api/testusers/', function(req, res, next) {
-    res.send(200, testData.testUsers);
-});
-
-app.get('/test/user_api/reset/', function(req, res, next) {
-    var testUsers = testData.testUsers,
-        emails = new Array(),
-        i;
-    
-    for(i = 0; i < testUsers.length; i++)
-    {
-        emails.push(testUsers[i].username);
-    }
-    
-    console.log(emails);
-    
-    var query = User.find({'email': {$in: emails }});
-    query.exec(function (err, users) {
-        if (err) return next(err);
-        for (i = 0; i < users.length; i++)
-        {
-            users[i].remove();
-        }
-        return res.send(200);
+//
+// Test extensions
+//
+if (config.enable_test_exts)
+{
+    app.get('/test/user_api/testusers/', function(req, res, next) {
+        res.send(200, testData.testUsers);
     });
-});
+
+    app.get('/test/user_api/reset/', function(req, res, next) {
+        var testUsers = testData.testUsers,
+            emails = new Array(),
+            i;
+
+        for(i = 0; i < testUsers.length; i++)
+        {
+            emails.push(testUsers[i].username);
+        }
+        
+        console.log(emails);
+        
+        var query = User.find({'email': {$in: emails }});
+        query.exec(function (err, users) {
+            if (err) return next(err);
+            for (i = 0; i < users.length; i++)
+            {
+                users[i].remove();
+            }
+            return res.send(200);
+        });
+    });
+}
 
