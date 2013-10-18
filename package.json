@@ -18,14 +18,19 @@
         "stylus": "*",
         "mongoose": "*",
         "bcrypt": "*",
-        "mocha": "*",
-        "expect.js" : "*",
-        "superagent" : "*",
         "passport" : "*",
         "passport-local" : "*",
         "colors" : "*",
 	"yaml-config" : "*",
 	"moment" : "*"
+    },
+    "devDependencies" : {
+       "grunt": "*",
+       "grunt-contrib-jshint" : "*",
+       "grunt-contrib-uglify" : "*",
+       "mocha" : "*", 
+       "expect.js" : "*",
+       "superagent" : "*"
     },
     "repository" :
     { 
