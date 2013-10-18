@@ -1,4 +1,3 @@
-
 /**
  * Module dependencies.
  */
@@ -17,23 +16,25 @@ var colors = require('colors');
 
 // Thanks http://stackoverflow.com/a/14049430
 
-mongoose.connection.on("open", function(ref) {
+mongoose.connection.on("open", function (ref) {
   return console.log("Connected to mongo server!".green);
 });
 
-mongoose.connection.on("error", function(err) {
+mongoose.connection.on("error", function (err) {
   console.log("Could not connect to mongo server!".yellow);
-    console.log(err.message.red);
-    process.exit(1);
+  console.log(err.message.red);
+  process.exit(1);
 });
 
 try {
-    mongoose.connect(config.mongo_url);
-    var db = mongoose.connection;
-    console.log("Started connection on " + (config.mongo_url).cyan + ", waiting for it to open...".grey);
-     } catch (err) {
-    console.log(("Setting up failed to connect to " + config.mongo_url).red, err.message);
-   process.exit(1);
+  mongoose.connect(config.mongo_url);
+  var db = mongoose.connection;
+  console.log("Started connection on " + (config.mongo_url)
+    .cyan + ", waiting for it to open...".grey);
+} catch (err) {
+  console.log(("Setting up failed to connect to " + config.mongo_url)
+    .red, err.message);
+  process.exit(1);
 }
 
 
@@ -51,20 +52,25 @@ app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(express.cookieParser('your secret here'));
-app.use(express.session({ secret: 'keyboard cat' }));
+app.use(express.session({
+  secret: 'keyboard cat'
+}));
 
 var auth = require('./api_modules/auth.js');
 // Schemas
 var user_api = require('./api_modules/user_api.js');
 
 app.use(app.router);
-app.use(require('stylus').middleware(__dirname + '/public'));
+app.use(require('stylus')
+  .middleware(__dirname + '/public'));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(function(err, req, res, next) {
-    if(!err) return next();
-    console.log("Unhandled error: ".red + err + "\n" + err.stack);
-    res.send(500, { detail : err });
+app.use(function (err, req, res, next) {
+  if (!err) return next();
+  console.log("Unhandled error: ".red + err + "\n" + err.stack);
+  res.send(500, {
+    detail: err
+  });
 });
 
 // development only
@@ -75,12 +81,13 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 //app.get('/users', user.list);
 
-app.get('/login', function(req, res) {
-    res.render('login', 
-        { title: 'Login' }
-    );
+app.get('/login', function (req, res) {
+  res.render('login', {
+    title: 'Login'
+  });
 });
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
-});
+http.createServer(app)
+  .listen(app.get('port'), function () {
+    console.log('Express server listening on port ' + app.get('port'));
+  });
