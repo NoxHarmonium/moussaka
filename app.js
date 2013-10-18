@@ -7,8 +7,7 @@
 var config = require('./include/config');
 
 var express = require('express');
-var routes = require('./routes');
-var user = require('./routes/user');
+var userApi = require('./api_modules/user_api.js');
 var http = require('http');
 var path = require('path');
 var mongoose = require('mongoose');
@@ -78,9 +77,23 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.get('/', routes.index);
-//app.get('/users', user.list);
+// User API
+app.param('user', userApi.pUser);
 
+app.get('/users/', userApi.listUsers);
+app.get('/users/:user/', userApi.getUser);
+app.del('/users/:user/', userApi.deleteUser);
+app.put('/users/:user/', userApi.putUser);
+app.post('/users/:user/password/', userApi.changePassword);
+app.post('/users/:user/resetpassword/', userApi.resetPassword);
+app.get('/logout/', userApi.logout);
+app.post('/login/', userApi.login);
+if (config.enable_test_exts) {
+  app.get('/test/user_api/testusers/', userApi.getTestUsers);
+  app.get('/test/user_api/reset/', userApi.resetTests);
+}
+
+// Rendered HTML pages
 app.get('/login', function (req, res) {
   res.render('login', {
     title: 'Login'

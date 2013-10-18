@@ -1,15 +1,11 @@
-var app = require("../app.js")
-  .app_object,
-  moment = require('moment'),
+var moment = require('moment'),
   User = require('../schemas/user.js'),
   passport = require("passport"),
   testData = require("../tests/testData.js"),
   config = require("../include/config.js");
 
 
-app.get('/users/', function (req, res) {
-  // Schemas
-
+exports.listUsers = function (req, res) {
   var query = User.find();
   query.select('email');
 
@@ -17,9 +13,9 @@ app.get('/users/', function (req, res) {
     if (err) return handleError(err);
     return sres.send(user);
   });
-});
+};
 
-app.param('user', function (req, res, next, email) {
+exports.pUser = function (req, res, next, email) {
   var query = User.findOne({
     'email': email
   });
@@ -28,10 +24,9 @@ app.param('user', function (req, res, next, email) {
     req.selectedUser = user;
     next();
   });
+};
 
-});
-
-app.get('/users/:user/', function (req, res) {
+exports.getUser = function (req, res) {
   if (req.user) {
     return res.send({
       username: req.user.username
@@ -41,9 +36,9 @@ app.get('/users/:user/', function (req, res) {
       detail: 'User doesn\'t exist'
     });
   }
-});
+};
 
-app.del('/users/:user/', function (req, res) {
+exports.deleteUser = function (req, res) {
 
   if (req.user && req.user.email == req.selectedUser.email) {
     return req.user.remove(function (err) {
@@ -55,9 +50,9 @@ app.del('/users/:user/', function (req, res) {
     });
   }
   return res.send(401);
-});
+};
 
-app.put('/users/:user/', function (req, res, next) {
+exports.putUser = function (req, res, next) {
   //console.log(('Create user request: Username: ' + req.body.username + ' Password:' + req.body.password).green);
 
   if (req.selectedUser) {
@@ -78,9 +73,9 @@ app.put('/users/:user/', function (req, res, next) {
       return res.send(201);
     }
   );
-});
+};
 
-app.post('/users/:user/password/', function (req, res, next) {
+exports.changePassword = function (req, res, next) {
 
   if (req.user) {
     return res.send(400, {
@@ -118,9 +113,9 @@ app.post('/users/:user/password/', function (req, res, next) {
     }
   });
 
-});
+};
 
-app.post('/users/:user/resetpassword/', function (req, res, next) {
+exports.resetPassword = function (req, res, next) {
 
   if (req.selectedUser) {
 
@@ -150,19 +145,17 @@ app.post('/users/:user/resetpassword/', function (req, res, next) {
     });
   }
 
-});
+};
 
-app.get('/logout/', function (req, res, next) {
+exports.logout = function (req, res, next) {
   if (req.user) {
     req.logout();
   }
 
   return res.send(200);
+};
 
-
-});
-
-app.post('/login/', function (req, res, next) {
+exports.login = function (req, res, next) {
   passport.authenticate('local', function (err, user, info) {
     if (err) {
       return next(err);
@@ -186,38 +179,36 @@ app.post('/login/', function (req, res, next) {
       return res.send(200);
     });
   })(req, res, next);
-});
+};
 
 //
 // Test extensions
 //
-if (config.enable_test_exts) {
-  app.get('/test/user_api/testusers/', function (req, res, next) {
-    res.send(200, testData.testUsers);
-  });
+exports.getTestUsers = function (req, res, next) {
+  res.send(200, testData.testUsers);
+};
 
-  app.get('/test/user_api/reset/', function (req, res, next) {
-    var testUsers = testData.testUsers,
-      emails = [],
-      i;
+exports.resetTests = function (req, res, next) {
+  var testUsers = testData.testUsers,
+    emails = [],
+    i;
 
-    for (i = 0; i < testUsers.length; i++) {
-      emails.push(testUsers[i].username);
+  for (i = 0; i < testUsers.length; i++) {
+    emails.push(testUsers[i].username);
+  }
+
+  console.log(emails);
+
+  var query = User.find({
+    'email': {
+      $in: emails
     }
-
-    console.log(emails);
-
-    var query = User.find({
-      'email': {
-        $in: emails
-      }
-    });
-    query.exec(function (err, users) {
-      if (err) return next(err);
-      for (i = 0; i < users.length; i++) {
-        users[i].remove();
-      }
-      return res.send(200);
-    });
   });
-}
+  query.exec(function (err, users) {
+    if (err) return next(err);
+    for (i = 0; i < users.length; i++) {
+      users[i].remove();
+    }
+    return res.send(200);
+  });
+};
