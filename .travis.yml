@@ -7,7 +7,9 @@ node_js:
 
 services: mongodb
 
-install: npm install
+install: 
+  - npm install
+  - npm install -g grunt-cli
 before_script: 
   - grunt
   - npm start &
