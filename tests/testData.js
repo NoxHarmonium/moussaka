@@ -1,3 +1,5 @@
+"use strict";
+
 /*
     Shared data used for API testing
 */

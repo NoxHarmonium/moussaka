@@ -1,3 +1,5 @@
+"use strict";
+
 var moment = require('moment'),
   User = require('../schemas/user.js'),
   passport = require("passport"),

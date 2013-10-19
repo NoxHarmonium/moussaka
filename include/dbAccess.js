@@ -1,3 +1,5 @@
+"use strict";
+
 var mongoose = require('mongoose');
 var colors = require('colors');
 var config = require('./config');
