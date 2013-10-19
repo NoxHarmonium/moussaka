@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 /*
     Shared data used for API testing

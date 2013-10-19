@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var configReader = require('yaml-config');
 var colors = require('colors');

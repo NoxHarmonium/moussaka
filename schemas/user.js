@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 // Thanks http://stackoverflow.com/questions/14588032/mongoose-password-hashing
 
 var mongoose = require('mongoose'),
