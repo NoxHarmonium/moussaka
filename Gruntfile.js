@@ -34,15 +34,13 @@ module.exports = function (grunt) {
           unescapeStrings: false,
           wrapLineLength: 80,
           goodStuff: true
+
         }
       }
     },
     jshint: {
       files: srcFiles,
       options: {
-        console: true,
-        modules: true,
-        document: true,
         bitwise: true,
         curly: true,
         eqeqeq: true,
@@ -57,7 +55,11 @@ module.exports = function (grunt) {
         unused: true,
         strict: true,
         trailing: true,
-        maxlen: 80
+        maxlen: 80,
+        globals: {
+          console: true,
+          require: true
+        }
       }
     }
   });
