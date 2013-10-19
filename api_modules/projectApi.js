@@ -8,12 +8,12 @@
   var testData = require('../tests/testData.js');
   var config = require('../include/config.js');
 
-   module.exports = {
+  module.exports = {
 
     listProjects: function (req, res, next) {
       var query = Project.find();
-      query.select('name owner users')
-      query.populate('owner users')
+      query.select('name owner users');
+      query.populate('owner users');
 
       query.exec(function (err, user) {
         if (err) {
