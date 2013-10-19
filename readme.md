@@ -7,5 +7,7 @@ Currently not even close to functioning and is in development.
 
 Version: 0.0.1
 
+The code style I've used for this project is documented [here](http://nodeguide.com/style.html). It is enforced with a jshint grunt task so the Travis build will fail if any of the code doesn't match this style.
+
 [![Build Status](https://travis-ci.org/NoxHarmonium/unity-profiles.png?branch=master)](https://travis-ci.org/NoxHarmonium/unity-profiles)
 
