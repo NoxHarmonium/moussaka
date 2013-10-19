@@ -30,7 +30,6 @@
             version: 1
           }
         },
-        //{ $unwind : "$name" },
 
         function (err, data) {
           if (err) {
@@ -41,18 +40,6 @@
         }
 
       );
-
-
-      //var query = Project.find();
-      //query.select('name owner users');
-      //query.populate('owner users');
-
-      //query.exec(function (err, user) {
-      //  if (err) {
-      //    return next(err);
-      // }
-      // return res.send(user);
-      //});
     },
 
     pProjectName: function (req, res, next, projectName) {
