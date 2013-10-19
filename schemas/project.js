@@ -38,12 +38,13 @@
   });
 
   // Apply compound index over name and version
-  ProjectSchema.index({
-    name: 1,
-    version: 1
-  }, {
-    unique: true
-  });
+  //ProjectSchema.index({
+  //  name: 1,
+  //  version: 1
+  //}, {
+    // Mongo cannot use 2 keys to determine uniqueness
+    //unique: true, dropDups: true 
+  //});
 
   module.exports = mongoose.model('Project', ProjectSchema);
 

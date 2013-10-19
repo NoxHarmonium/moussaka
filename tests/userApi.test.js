@@ -21,7 +21,6 @@
             .to.be.ok();
           done();
         });
-
     });
 
     it('Create user [0]', function (done) {

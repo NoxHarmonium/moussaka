@@ -6,6 +6,7 @@
   var rek = require('rekuire');
   var testData = rek('testData.js');
 
+
   describe('Project API tests', function () {
     var id;
     var users = testData.testUsers;
@@ -38,7 +39,7 @@
         });
     });
 
-    it('Create Project [0]', function (done) {
+    it('Create project [0]', function (done) {
       var project = projects[0];
 
       agent.put('http://localhost:3000/projects/' + project.name + '/' +
@@ -54,7 +55,7 @@
 
     });
 
-    it('Create Project [1]', function (done) {
+    it('Create project [1]', function (done) {
       var project = projects[1];
 
       agent.put('http://localhost:3000/projects/' + project.name + '/' +
@@ -70,7 +71,7 @@
 
     });
 
-    it('Create Project [2]', function (done) {
+    it('Create project [2]', function (done) {
       var project = projects[2];
 
       agent.put('http://localhost:3000/projects/' + project.name + '/' +
@@ -98,17 +99,26 @@
           expect(res.body.length)
             .to.be(3);
           for (var i = 0; i < res.body.length; i++) {
-            var project = res.body[i];
-            // Hacky but easy way to determine if object contents match by value
-            expect(JSON.stringify(projects))
-              .to.match(new RegExp(JSON.stringify('*' + project + '*')));
+            var a = res.body[i];
+            var match = false;
+
+            for (var j = 0; j < projects.length; j++) {
+              var b = projects[j];
+              if (a.name === b.name &&
+                a.version === b.version) {
+                match = true;
+                break;
+              }
+            }
+            expect(match)
+              .to.be(true);
           }
 
           done();
         });
     });
 
-    it('Create Existing Project [0]', function (done) {
+    it('Create existing project [0]', function (done) {
       var project = projects[0];
 
       agent.put('http://localhost:3000/projects/' + project.name + '/' +
@@ -124,7 +134,7 @@
 
     });
 
-    it('Create Existing Project [1]', function (done) {
+    it('Create existing project [1]', function (done) {
       var project = projects[0];
 
       agent.put('http://localhost:3000/projects/' + project.name + '/' +
@@ -140,7 +150,7 @@
 
     });
 
-    it('Create Existing Project [2]', function (done) {
+    it('Create existing project [2]', function (done) {
       var project = projects[0];
 
       agent.put('http://localhost:3000/projects/' + project.name + '/' +
@@ -154,6 +164,77 @@
           done();
         });
 
+    });
+
+    it('Increment version of project [0] to 1', function (done) {
+      var project = projects[0];
+      project.version += 1;
+
+      agent.put('http://localhost:3000/projects/' + project.name + '/' +
+        project.version + '/')
+        .send(project)
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+          done();
+        });
+
+    });
+
+    it('Increment version of project [0] to 2', function (done) {
+      var project = projects[0];
+      project.version += 1;
+
+      agent.put('http://localhost:3000/projects/' + project.name + '/' +
+        project.version + '/')
+        .send(project)
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+          done();
+        });
+
+    });
+
+    it('List projects (Should only show latest versions)', function (done) {
+      agent.get('http://localhost:3000/projects/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          //console.log('\nCurrent Projects:\n' + JSON.stringify(projects));
+          expect(res.body.length)
+            .to.be(3);
+
+          for (var i = 0; i < res.body.length; i++) {
+            var a = res.body[i];
+            var match = false;
+
+            for (var j = 0; j < projects.length; j++) {
+              var b = projects[j];
+              if (a.name === b.name &&
+                a.version === b.version) {
+                match = true;
+                break;
+              }
+            }
+            if (!match) {
+              console.log('\'' + JSON.stringify(a) + '\'not in \'' +
+                JSON.stringify(projects) + '\'');
+            }
+            expect(match)
+              .to.be(true);
+          }
+
+
+          done();
+        });
     });
 
 
