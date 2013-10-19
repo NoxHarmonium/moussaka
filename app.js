@@ -77,7 +77,10 @@
   //
   // Project API
   //
+  app.param('projectName', projectApi.pProjectName);
+  app.param('projectVersion', projectApi.pProjectVersion);
   app.get('/projects/', projectApi.listProjects);
+  app.post('/projects/:projectName/:projectVersion/', projectApi.addProject);
 
   // Rendered HTML pages
   app.get('/login', function (req, res) {

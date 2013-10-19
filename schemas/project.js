@@ -8,10 +8,11 @@
   var ProjectSchema = new Schema({
     name: {
       type: String,
-      required: true,
-      index: {
-        unique: true
-      }
+      required: true
+    },
+    version: {
+      type: Number,
+      required: true
     },
     owner: {
       type: Schema.Types.ObjectId,
@@ -34,6 +35,14 @@
         type: Schema.Types.Mixed
       }
     }]
+  });
+
+  // Apply compound index over name and version
+  ProjectSchema.index({
+    name: 1,
+    version: 1
+  }, {
+    unique: true
   });
 
   module.exports = mongoose.model('Project', ProjectSchema);

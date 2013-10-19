@@ -11,29 +11,85 @@
   module.exports = {
 
     listProjects: function (req, res, next) {
-      var query = Project.find();
-      query.select('name owner users');
-      query.populate('owner users');
+      Project.aggregate({
+          $group: {
+            _id: null,
+            'version': {
+              $max: '$version'
+            }
+          }
+        },
 
-      query.exec(function (err, user) {
+        function (err, data) {
+          if (err) {
+            next(err);
+          }
+          res.send(data);
+        }
+
+      );
+
+
+      //var query = Project.find();
+      //query.select('name owner users');
+      //query.populate('owner users');
+
+      //query.exec(function (err, user) {
+      //  if (err) {
+      //    return next(err);
+      // }
+      // return res.send(user);
+      //});
+    },
+
+    pProjectName: function (req, res, next, projectName) {
+      var query = Project.find({
+        'name': projectName
+      });
+      query.exec(function (err, projects) {
         if (err) {
           return next(err);
         }
-        return res.send(user);
+        req.projects = projects;
+        req.projectQuery = query;
+        next();
       });
     },
 
-    pProject: function (req, res, next, name) {
-      var query = Project.findOne({
-        'name': name
-      });
-      query.exec(function (err, project) {
+    pProjectVersion: function (req, res, next, projectVersion) {
+      var query = req.projectQuery;
+      if (!query) {
+        next(new Error(
+          'The projectVersion param can only be used with the projectName param'
+        ));
+      }
+
+      query.where('version')
+        .equals(projectVersion);
+
+      query.exec(function (err, projects) {
         if (err) {
           return next(err);
         }
-        req.selectedProject = project;
+        req.project = projects;
         next();
       });
+    },
+
+    addProject: function (req, res, next) {
+      var p = new Project(req.body);
+      p.save(function (err) {
+        if (err) {
+          return next(err);
+        }
+
+
+      });
+
+
+
+
+
     }
 
   };
