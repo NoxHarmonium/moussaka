@@ -16,11 +16,11 @@ module.exports = function (grunt) {
       files: srcFiles,
       options: {
         js: {
-          braceStyle: "collapse",
+          braceStyle: 'collapse',
           breakChainedMethods: true,
           e4x: true,
           evalCode: false,
-          indentChar: " ",
+          indentChar: ' ',
           indentLevel: 0,
           indentSize: 2,
           indentWithTabs: false,
@@ -50,16 +50,20 @@ module.exports = function (grunt) {
         newcap: true,
         noarg: true,
         nonew: true,
-        quotmark: "single",
+        quotmark: 'single',
         undef: true,
-        unused: true,
+        unused: false,
         strict: true,
+        globalstrict: true,
         trailing: true,
         maxlen: 80,
         globals: {
-          console: true,
-          require: true
-        }
+          describe: true, // mocha
+          it: true //mocha
+        },
+        node: true,
+        devel: true,
+
       }
     }
   });

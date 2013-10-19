@@ -8,7 +8,6 @@ var express = require('express');
 var userApi = require('./api_modules/userApi.js');
 var http = require('http');
 var path = require('path');
-var mongoose = require('mongoose');
 var colors = require('colors');
 var passport = require('passport');
 var auth = require('./api_modules/auth.js');
@@ -52,6 +51,8 @@ dbAccess.init(function (err) {
   }
 });
 
+auth.init();
+
 // User API
 app.param('user', userApi.pUser);
 
@@ -77,5 +78,6 @@ app.get('/login', function (req, res) {
 
 http.createServer(app)
   .listen(app.get('port'), function () {
-    console.log('Express server listening on port ' + app.get('port'));
+    console.log('Express server listening on port ' + app.get('port')
+      .purple);
   });

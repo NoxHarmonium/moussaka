@@ -7,13 +7,15 @@ var moment = require('moment'),
   config = require('../include/config.js');
 
 
-exports.listUsers = function (req, res) {
+exports.listUsers = function (req, res, next) {
   var query = User.find();
   query.select('email');
 
   query.exec(function (err, user) {
-    if (err) return handleError(err);
-    return sres.send(user);
+    if (err) {
+      return next(err);
+    }
+    return res.send(user);
   });
 };
 
@@ -22,7 +24,9 @@ exports.pUser = function (req, res, next, email) {
     'email': email
   });
   query.exec(function (err, user) {
-    if (err) return next(err);
+    if (err) {
+      return next(err);
+    }
     req.selectedUser = user;
     next();
   });
@@ -40,9 +44,9 @@ exports.getUser = function (req, res) {
   }
 };
 
-exports.deleteUser = function (req, res) {
+exports.deleteUser = function (req, res, next) {
 
-  if (req.user && req.user.email == req.selectedUser.email) {
+  if (req.user && req.user.email === req.selectedUser.email) {
     return req.user.remove(function (err) {
       if (err) {
         next(err);
@@ -55,7 +59,9 @@ exports.deleteUser = function (req, res) {
 };
 
 exports.putUser = function (req, res, next) {
-  //console.log(('Create user request: Username: ' + req.body.username + ' Password:' + req.body.password).green);
+  //console.log(('Create user request: Username: ' + 
+  //  req.body.username + ' Password:' + 
+  //  req.body.password).green);
 
   if (req.selectedUser) {
     //console.log('Warning: User already exists'.yellow);
@@ -85,7 +91,8 @@ exports.changePassword = function (req, res, next) {
     });
   }
 
-  if (req.selectedUser.passwordExpiary && moment(req.selectedUser.passwordExpiary)
+  if (req.selectedUser.passwordExpiary &&
+    moment(req.selectedUser.passwordExpiary)
     .isBefore()) {
     return res.send(401, {
       detail: 'Temporary password has expired. You need to create a new one'
@@ -164,7 +171,7 @@ exports.login = function (req, res, next) {
     }
 
     if (user && user.passwordExpiary) {
-      return reqs.send(401, {
+      return req.send(401, {
         'detail': 'You cannot login with a temporary password. Change it first'
       });
     }
@@ -207,7 +214,9 @@ exports.resetTests = function (req, res, next) {
     }
   });
   query.exec(function (err, users) {
-    if (err) return next(err);
+    if (err) {
+      return next(err);
+    }
     for (i = 0; i < users.length; i++) {
       users[i].remove();
     }
