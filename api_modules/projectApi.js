@@ -19,10 +19,14 @@
             }
           }
         }, {
+          $sort: {
+            'max': 1
+          }
+        }, {
           // NB: aggregate project not API project
           $project: {
             _id: 0,
-            name: '$_id.name',
+            name: '$_id',
             version: 1
           }
         },
@@ -32,6 +36,7 @@
           if (err) {
             next(err);
           }
+          console.log('Sending: ' + JSON.stringify(data));
           res.send(data);
         }
 
@@ -104,7 +109,7 @@
         res.send(200);
       });
 
-      
+
     },
 
     //

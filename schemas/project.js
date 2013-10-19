@@ -42,8 +42,8 @@
   //  name: 1,
   //  version: 1
   //}, {
-    // Mongo cannot use 2 keys to determine uniqueness
-    //unique: true, dropDups: true 
+  // Mongo cannot use 2 keys to determine uniqueness
+  //unique: true, dropDups: true 
   //});
 
   module.exports = mongoose.model('Project', ProjectSchema);
