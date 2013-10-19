@@ -108,6 +108,54 @@
         });
     });
 
+    it('Create Existing Project [0]', function (done) {
+      var project = projects[0];
+
+      agent.put('http://localhost:3000/projects/' + project.name + '/' +
+        project.version + '/')
+        .send(project)
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(409);
+          done();
+        });
+
+    });
+
+    it('Create Existing Project [1]', function (done) {
+      var project = projects[0];
+
+      agent.put('http://localhost:3000/projects/' + project.name + '/' +
+        project.version + '/')
+        .send(project)
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(409);
+          done();
+        });
+
+    });
+
+    it('Create Existing Project [2]', function (done) {
+      var project = projects[0];
+
+      agent.put('http://localhost:3000/projects/' + project.name + '/' +
+        project.version + '/')
+        .send(project)
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(409);
+          done();
+        });
+
+    });
+
 
   });
 
