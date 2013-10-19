@@ -7,26 +7,37 @@
 default: # The default config profile. (With documentation)
 
     # The port that the API listens for requests on
-    listen_port:        80
+    listen_port:            80
 
     # How much work it takes to hash the passwords stored in the database.
     # For testing and development you can set it to something low but in production you
     # would want to set it to a value that makes it as hard a possible for someone to crack
     # whilst maintaining server performance.
-    salt_work_factor:   8
+    salt_work_factor:       8
 
     # The mongodb connection string
-    mongo_url:          "mongodb://localhost/unity-profiles"
+    mongo_url:              "mongodb://localhost/unity-profiles"
 
     # Enable/disable special API extenstions used to make testing easier such as resetting state.
     # Although these test extensions should be designed to only effect test data it is strongly
     # recommended that they be disabled for live environments. (At least until they are protected)
-    enable_test_exts:   false
+    enable_test_exts:       false
+
+    # Show line number and other information when an error occurs
+    show_friendly_errors:   false
 
 
 development: # The development config profile.
-    listen_port:        3000
-    salt_work_factor:   3
-    mongo_url:          "mongodb://localhost/unity-profiles-dev"
-    enable_test_exts:   true 
+    listen_port:            3000
+    salt_work_factor:       3
+    mongo_url:              "mongodb://localhost/unity-profiles-dev"
+    enable_test_exts:       true
+    show_friendly_errors:   true
+
+travis-ci: # The development config profile.
+    listen_port:            3000
+    salt_work_factor:       1 # Reduce the work factor even more for slower VMs
+    mongo_url:              "mongodb://localhost/unity-profiles-dev"
+    enable_test_exts:       true 
+    show_friendly_errors :  true
     

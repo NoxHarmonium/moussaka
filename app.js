@@ -2,10 +2,7 @@
  * Module dependencies.
  */
 
-// Config
-
 var config = require('./include/config');
-
 var express = require('express');
 var userApi = require('./api_modules/userApi.js');
 var http = require('http');
@@ -16,7 +13,9 @@ var passport = require("passport");
 var auth = require('./api_modules/auth.js');
 var dbAccess = require('./include/dbAccess');
 
-
+/**
+ * Main application
+ */
 
 var app = express();
 
@@ -35,22 +34,13 @@ app.use(express.session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-
 app.use(app.router);
 app.use(require('stylus')
   .middleware(__dirname + '/public'));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(function (err, req, res, next) {
-  if (!err) return next();
-  console.log("Unhandled error: ".red + err + "\n" + err.stack);
-  res.send(500, {
-    detail: err
-  });
-});
-
 // development only
-if ('development' == app.get('env')) {
+if (config.show_friendly_errors) {
   app.use(express.errorHandler());
 }
 
