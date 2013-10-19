@@ -38,26 +38,24 @@ module.exports = function (grunt) {
     jshint: {
       files: srcFiles,
       options: {
-        globals: {
-          console: true,
-          modules: true,
-          document: true,
-          bitwise: true,
-          curly: true,
-          eqeqeq: true,
-          immed: true,
-          indent: 2,
-          latedef: true,
-          newcap: true,
-          noarg: true,
-          nonew: true,
-          quotmark: "single",
-          undef: true,
-          unused: true,
-          strict: true,
-          trailing: true,
-          maxlen: 80
-        }
+        console: true,
+        modules: true,
+        document: true,
+        bitwise: true,
+        curly: true,
+        eqeqeq: true,
+        immed: true,
+        indent: 2,
+        latedef: true,
+        newcap: true,
+        noarg: true,
+        nonew: true,
+        quotmark: "single",
+        undef: true,
+        unused: true,
+        strict: true,
+        trailing: true,
+        maxlen: 80
       }
     }
   });
