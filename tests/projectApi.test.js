@@ -4,7 +4,8 @@
   var superagent = require('superagent');
   var expect = require('expect.js');
   var testData = require('./testData.js');
-
+  var utils = require('../include/utils.js');
+  
 
   describe('Project API tests', function () {
     var id;
@@ -97,21 +98,11 @@
           //console.log('\nCurrent Projects:\n' + JSON.stringify(res.body));
           expect(res.body.length)
             .to.be(3);
-          for (var i = 0; i < res.body.length; i++) {
-            var a = res.body[i];
-            var match = false;
 
-            for (var j = 0; j < projects.length; j++) {
-              var b = projects[j];
-              if (a.name === b.name &&
-                a.version === b.version) {
-                match = true;
-                break;
-              }
-            }
-            expect(match)
-              .to.be(true);
-          }
+          var match =
+            utils.arrayMatch(res.body, projects);
+          expect(match)
+            .to.be(true);
 
           done();
         });
@@ -211,25 +202,10 @@
           expect(res.body.length)
             .to.be(3);
 
-          for (var i = 0; i < res.body.length; i++) {
-            var a = res.body[i];
-            var match = false;
-
-            for (var j = 0; j < projects.length; j++) {
-              var b = projects[j];
-              if (a.name === b.name &&
-                a.version === b.version) {
-                match = true;
-                break;
-              }
-            }
-            if (!match) {
-              console.log('\'' + JSON.stringify(a) + '\'not in \'' +
-                JSON.stringify(projects) + '\'');
-            }
-            expect(match)
-              .to.be(true);
-          }
+          var match =
+            utils.arrayMatch(res.body, projects);
+          expect(match)
+            .to.be(true);
 
 
           done();
