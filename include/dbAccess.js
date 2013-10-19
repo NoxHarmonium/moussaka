@@ -1,4 +1,4 @@
-var DbAccess = (function (require, module) {
+(function (require, module) {
   'use strict';
 
   var mongoose = require('mongoose');
