@@ -1,7 +1,7 @@
 'use strict';
 
 var
-passport = require("passport"),
+passport = require('passport'),
   LocalStrategy = require('passport-local')
     .Strategy,
   User = require('../schemas/user.js');

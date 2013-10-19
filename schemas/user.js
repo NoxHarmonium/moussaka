@@ -20,7 +20,7 @@ var UserSchema = mongoose.Schema({
 
 });
 
-UserSchema.pre("save", function (next) {
+UserSchema.pre('save', function (next) {
   var user = this;
 
   if (!user.isModified('password')) return next();
@@ -40,12 +40,12 @@ UserSchema.pre("save", function (next) {
 
 UserSchema.methods.comparePassword = function (candidatePassword, cb) {
   if (!candidatePassword) {
-    cb(new Error("Cannot compare a null password"));
+    cb(new Error('Cannot compare a null password'));
   }
 
   if (!this.password) {
     cb(new Error(
-      "Cannot compare password on a user object with an undefined password"));
+      'Cannot compare password on a user object with an undefined password'));
   }
 
   bcrypt.compare(candidatePassword, this.password, function (err, isMatch) {
@@ -54,4 +54,4 @@ UserSchema.methods.comparePassword = function (candidatePassword, cb) {
   });
 };
 
-module.exports = mongoose.model("User", UserSchema);
+module.exports = mongoose.model('User', UserSchema);

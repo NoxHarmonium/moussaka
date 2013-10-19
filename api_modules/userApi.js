@@ -2,9 +2,9 @@
 
 var moment = require('moment'),
   User = require('../schemas/user.js'),
-  passport = require("passport"),
-  testData = require("../tests/testData.js"),
-  config = require("../include/config.js");
+  passport = require('passport'),
+  testData = require('../tests/testData.js'),
+  config = require('../include/config.js');
 
 
 exports.listUsers = function (req, res) {
@@ -132,7 +132,7 @@ exports.resetPassword = function (req, res, next) {
             next(err);
           }
 
-          console.log("Would send email to user with temp password: " +
+          console.log('Would send email to user with temp password: ' +
             tempPwd);
 
 
@@ -143,7 +143,7 @@ exports.resetPassword = function (req, res, next) {
       });
   } else {
     return res.send(404, {
-      "detail": "User not found"
+      'detail': 'User not found'
     });
   }
 
@@ -165,13 +165,13 @@ exports.login = function (req, res, next) {
 
     if (user && user.passwordExpiary) {
       return reqs.send(401, {
-        "detail": "You cannot login with a temporary password. Change it first"
+        'detail': 'You cannot login with a temporary password. Change it first'
       });
     }
 
     if (!user) {
       return res.send(401, {
-        "detail": "Incorrect username/password"
+        'detail': 'Incorrect username/password'
       });
     }
     req.logIn(user, function (err) {

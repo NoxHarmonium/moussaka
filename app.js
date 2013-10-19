@@ -10,7 +10,7 @@ var http = require('http');
 var path = require('path');
 var mongoose = require('mongoose');
 var colors = require('colors');
-var passport = require("passport");
+var passport = require('passport');
 var auth = require('./api_modules/auth.js');
 var dbAccess = require('./include/dbAccess');
 
