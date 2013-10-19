@@ -3,11 +3,12 @@
   // Thanks 
   // http://stackoverflow.com/questions/14588032/mongoose-password-hashing
 
-  var mongoose = require('mongoose'),
-    bcrypt = require('bcrypt'),
-    config = require('../include/config');
+  var mongoose = require('mongoose');
+  var bcrypt = require('bcrypt');
+  var config = require('../include/config');
+  var Schema = mongoose.Schema;
 
-  var UserSchema = mongoose.Schema({
+  var UserSchema = new Schema({
     email: {
       type: String,
       required: true,
