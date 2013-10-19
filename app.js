@@ -55,8 +55,10 @@ if ('development' == app.get('env')) {
 }
 
 dbAccess.init(function (err) {
-  // Database is required to run. Halt application  
-  process.exit(1);
+  if (err) {
+    console.log('Error: Database is required to run. Halting application'.red);
+    process.exit(1);
+  }
 });
 
 // User API
