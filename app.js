@@ -7,6 +7,7 @@
   var config = require('./include/config');
   var express = require('express');
   var userApi = require('./api_modules/userApi.js');
+  var projectApi = require('./api_modules/projectApi.js');
   var http = require('http');
   var path = require('path');
   var colors = require('colors');
@@ -55,7 +56,9 @@
 
   auth.init();
 
+  //
   // User API
+  //
   app.param('user', userApi.pUser);
 
   app.get('/users/', userApi.listUsers);
@@ -70,6 +73,11 @@
     app.get('/test/user_api/testusers/', userApi.getTestUsers);
     app.get('/test/user_api/reset/', userApi.resetTests);
   }
+
+  //
+  // Project API
+  //
+  app.get('/projects/', projectApi.listProjects);
 
   // Rendered HTML pages
   app.get('/login', function (req, res) {
