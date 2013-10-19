@@ -134,7 +134,7 @@
     });
 
     it('Create existing project [1]', function (done) {
-      var project = projects[0];
+      var project = projects[1];
 
       agent.put('http://localhost:3000/projects/' + project.name + '/' +
         project.version + '/')
@@ -150,7 +150,7 @@
     });
 
     it('Create existing project [2]', function (done) {
-      var project = projects[0];
+      var project = projects[2];
 
       agent.put('http://localhost:3000/projects/' + project.name + '/' +
         project.version + '/')
