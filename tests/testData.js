@@ -16,4 +16,15 @@
     password: 'test_password4'
   }, ];
 
+  exports.testProjects = [{
+    name: 'testProjectA',
+    version: 0
+  }, {
+    name: 'testProjectB',
+    version: 0
+  }, {
+    name: 'testProjectC',
+    version: 0
+  }];
+
 })();

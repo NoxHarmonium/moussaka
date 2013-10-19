@@ -213,7 +213,7 @@
         emails.push(testUsers[i].username);
       }
 
-      console.log(emails);
+      //console.log(emails);
 
       var query = User.find({
         'email': {

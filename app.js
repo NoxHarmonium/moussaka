@@ -80,7 +80,10 @@
   app.param('projectName', projectApi.pProjectName);
   app.param('projectVersion', projectApi.pProjectVersion);
   app.get('/projects/', projectApi.listProjects);
-  app.post('/projects/:projectName/:projectVersion/', projectApi.addProject);
+  app.put('/projects/:projectName/:projectVersion/', projectApi.addProject);
+  if (config.enable_test_exts) {
+    app.get('/test/project_api/reset/', projectApi.resetTests);
+  }
 
   // Rendered HTML pages
   app.get('/login', function (req, res) {
