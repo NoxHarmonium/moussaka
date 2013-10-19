@@ -7,7 +7,7 @@ module.exports = function (grunt) {
     'api_modules/*.js',
     'tests/*.js',
     'schemas/*.js',
-    'routes/*.js'
+    'include/*.js'
   ];
 
   grunt.initConfig({
@@ -54,7 +54,7 @@ module.exports = function (grunt) {
         undef: true,
         unused: false,
         strict: true,
-        globalstrict: true,
+        globalstrict: false,
         trailing: true,
         maxlen: 80,
         globals: {
