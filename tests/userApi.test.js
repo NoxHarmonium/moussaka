@@ -3,7 +3,7 @@
 
   var superagent = require('superagent');
   var expect = require('expect.js');
-  var testData = require('../include/testData.js');
+  var testData = require('./testData.js');
 
   describe('Administration API tests', function () {
     var id;
