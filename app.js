@@ -80,6 +80,7 @@
   app.param('projectName', projectApi.pProjectName);
   app.param('projectVersion', projectApi.pProjectVersion);
   app.get('/projects/', projectApi.listProjects);
+  app.get('/projects/:projectName/:projectVersion/', projectApi.getProject);
   app.put('/projects/:projectName/:projectVersion/', projectApi.addProject);
   if (config.enable_test_exts) {
     app.get('/test/project_api/reset/', projectApi.resetTests);

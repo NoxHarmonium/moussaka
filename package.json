@@ -21,7 +21,8 @@
         "passport-local" : "*",
         "colors" : "*",
 	"yaml-config" : "*",
-	"moment" : "*"
+	"moment" : "*",
+	"deep-equal" : "*"
     },
     "devDependencies" : {
        "grunt": "*",

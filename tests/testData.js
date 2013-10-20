@@ -18,13 +18,27 @@
 
   exports.testProjects = [{
     name: 'testProjectA',
-    version: 0
+    version: 0,
   }, {
     name: 'testProjectB',
-    version: 0
+    version: 0,
   }, {
     name: 'testProjectC',
-    version: 0
+    version: 0,
+  }];
+
+  exports.testProjectsExt = [{
+    name: 'testProjectA',
+    version: 0,
+    users:[]
+  }, {
+    name: 'testProjectB',
+    version: 0,
+    users:[]
+  }, {
+    name: 'testProjectC',
+    version: 0,
+    users:[]
   }];
 
 })();

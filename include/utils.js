@@ -10,15 +10,7 @@
 
         for (var j = 0; j < objArrayB.length; j++) {
           var b = objArrayB[j];
-
-          for (var key in a) {
-            if (a.hasOwnProperty(key)) {
-              match = (a[key] === b[key]);
-              if (match) {
-                break;
-              }
-            }
-          }
+          match = module.exports.objMatch(a, b);
           if (match) {
             break;
           }
@@ -29,6 +21,13 @@
       }
 
       return true;
+    },
+
+    // Checks if 2 objects are identical by their values
+    // rather than reference
+    objMatch: function (objA, objB) {
+      var deepEqual = require('deep-equal')
+      return deepEqual(objA, objB);
     }
   };
 })(require, module);

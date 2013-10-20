@@ -5,12 +5,13 @@
   var expect = require('expect.js');
   var testData = require('./testData.js');
   var utils = require('../include/utils.js');
-  
+
 
   describe('Project API tests', function () {
     var id;
     var users = testData.testUsers;
     var projects = testData.testProjects;
+    var projectsExt = testData.testProjectsExt;
     var agent = superagent.agent();
 
     it('Reset test', function (done) {
@@ -98,6 +99,79 @@
           //console.log('\nCurrent Projects:\n' + JSON.stringify(res.body));
           expect(res.body.length)
             .to.be(3);
+
+          var match =
+            utils.arrayMatch(res.body, projects);
+          expect(match)
+            .to.be(true);
+
+          done();
+        });
+    });
+
+    it('Get existing project [0]', function (done) {
+      var project = projectsExt[0];
+
+      agent.get('http://localhost:3000/projects/' + project.name + '/' +
+        project.version + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+
+          expect(res.ok)
+            .to.be.ok();
+
+          console.log('\'' + JSON.stringify(res.body) + '\' === \'' +
+            JSON.stringify(project) + '\' ?');
+          expect(utils.objMatch(res.body, project))
+            .to.be.ok();
+
+          var match =
+            utils.arrayMatch(res.body, projects);
+          expect(match)
+            .to.be(true);
+
+          done();
+        });
+    });
+
+    it('Get existing project [1]', function (done) {
+      var project = projectsExt[1];
+
+      agent.get('http://localhost:3000/projects/' + project.name + '/' +
+        project.version + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          expect(utils.objMatch(res.body, project))
+            .to.be.ok();
+
+          var match =
+            utils.arrayMatch(res.body, projects);
+          expect(match)
+            .to.be(true);
+
+          done();
+        });
+    });
+
+
+    it('Get existing project [2]', function (done) {
+      var project = projectsExt[2];
+
+      agent.get('http://localhost:3000/projects/' + project.name + '/' +
+        project.version + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          expect(utils.objMatch(res.body, project))
+            .to.be.ok();
 
           var match =
             utils.arrayMatch(res.body, projects);

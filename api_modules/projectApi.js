@@ -95,7 +95,21 @@
         }
         res.send(200);
       });
+    },
 
+    getProject: function (req, res, next) {
+      if (req.project) {
+        return res.send(
+          { 
+            name: req.project.name,
+            version: req.project.version,
+            users : req.project.users
+          });
+      } else {
+        return res.send(404, {
+          detail: 'Project doesn\'t exist'
+        });
+      }
 
     },
 
