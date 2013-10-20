@@ -9,7 +9,8 @@ install:
   - npm install
   - npm install -g grunt-cli
 before_script: 
-  - grunt
+  - grunt lint # Check for style violations
   - NODE_ENV=travis-ci npm start &
-  - sleep 10 # Give it some time to warm up 
-script: npm test
+  - sleep 10   # Give it some time to warm up 
+  
+script: grunt test # Run the tests

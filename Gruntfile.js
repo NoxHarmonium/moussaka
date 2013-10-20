@@ -65,14 +65,30 @@ module.exports = function (grunt) {
         devel: true,
 
       }
+    },
+    mochaTest: {
+      test: {
+        options: {
+          reporter: 'spec',
+          bail: true,
+          colors: true,
+          timeout: 30000
+        },
+        src: ['tests/*.test.js']
+      }
     }
   });
 
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-jsbeautifier');
+  grunt.loadNpmTasks('grunt-mocha-test');
 
+  grunt.registerTask('test', ['mochaTest']);
+  grunt.registerTask('all', ['jsbeautifier', 'jshint', 'mochaTest']);
   grunt.registerTask('default', ['jsbeautifier', 'jshint']);
+  grunt.registerTask('lint', ['jsbeautifier', 'jshint']);
+
 
 
 };

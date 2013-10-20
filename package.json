@@ -5,7 +5,7 @@
     "private": true,
     "scripts": {
         "start": "node app.js",
-        "test" : "bash runtests.sh"
+        "test" : "grunt test"
     },
     "env": {
         "PYTHON": "/usr/bin/python2.7"
@@ -32,7 +32,8 @@
        "expect.js" : "*",
        "superagent" : "*",
        "jsbeautify" : "*",
-       "grunt-jsbeautifier" : "*"
+       "grunt-jsbeautifier" : "*",
+       "grunt-mocha-test": "*"
     },
     "repository" :
     { 
