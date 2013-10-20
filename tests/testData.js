@@ -30,15 +30,15 @@
   exports.testProjectsExt = [{
     name: 'testProjectA',
     version: 0,
-    users:[]
+    users: []
   }, {
     name: 'testProjectB',
     version: 0,
-    users:[]
+    users: []
   }, {
     name: 'testProjectC',
     version: 0,
-    users:[]
+    users: []
   }];
 
 })();
