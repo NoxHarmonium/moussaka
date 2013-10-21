@@ -10,15 +10,14 @@
 
   serverModule.start = function (next) {
 
-    if (serverModule.started)
-    {
+    if (serverModule.started) {
       console.log('The server has already started.'.green);
       return next(null, serverModule.server);
     }
 
-    if (serverModule.starting)
-    {
-      return next(new Error('An instance of the server is already attempting to start.'.yellow));
+    if (serverModule.starting) {
+      return next(new Error(
+        'An instance of the server is already attempting to start.'.yellow));
     }
 
     serverModule.starting = true;

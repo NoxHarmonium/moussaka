@@ -16,10 +16,9 @@
     var agent = superagent.agent();
 
     it('Start server', function (done) {
-      serverModule.start(function(e, server)
-      {
+      serverModule.start(function (e, server) {
         expect(e)
-            .to.eql(null);
+          .to.eql(null);
 
         done();
       });
