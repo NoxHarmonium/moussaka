@@ -35,7 +35,7 @@
           if (err) {
             next(err);
           }
-          console.log('Sending: ' + JSON.stringify(data));
+          //console.log('Sending: ' + JSON.stringify(data));
           res.send(data);
         }
 
@@ -87,7 +87,7 @@
         });
       }
 
-      console.log('Attempting to save: ' + JSON.stringify(req.body));
+      //console.log('Attempting to save: ' + JSON.stringify(req.body));
       var p = new Project(req.body);
       p.save(function (err) {
         if (err) {

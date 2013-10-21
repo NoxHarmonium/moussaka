@@ -132,8 +132,8 @@
           expect(res.ok)
             .to.be.ok();
 
-          console.log('\'' + JSON.stringify(res.body) + '\' === \'' +
-            JSON.stringify(project) + '\' ?');
+          //console.log('\'' + JSON.stringify(res.body) + '\' === \'' +
+          //  JSON.stringify(project) + '\' ?');
           expect(utils.objMatch(res.body, project))
             .to.be.ok();
 
