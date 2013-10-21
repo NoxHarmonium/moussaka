@@ -4,6 +4,7 @@ module.exports = function (grunt) {
   var srcFiles = [
     'Gruntfile.js',
     'app.js',
+    'server.js',
     'api_modules/*.js',
     'tests/*.js',
     'schemas/*.js',

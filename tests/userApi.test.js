@@ -4,12 +4,23 @@
   var superagent = require('superagent');
   var expect = require('expect.js');
   var testData = require('./testData.js');
+  var serverModule = require('../server.js');
+
 
   describe('Administration API tests', function () {
     var id;
     var users = testData.testUsers;
     var agent = superagent.agent();
 
+    it('Start server', function (done) {
+      serverModule.start(function(e, server)
+      {
+        expect(e)
+            .to.eql(null);
+
+        done();
+      });
+    });
 
     it('Reset test', function (done) {
       agent.get('http://localhost:3000/test/user_api/reset/')

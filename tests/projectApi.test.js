@@ -5,6 +5,7 @@
   var expect = require('expect.js');
   var testData = require('./testData.js');
   var utils = require('../include/utils.js');
+  var serverModule = require('../server.js');
 
 
   describe('Project API tests', function () {
@@ -13,6 +14,16 @@
     var projects = testData.testProjects;
     var projectsExt = testData.testProjectsExt;
     var agent = superagent.agent();
+
+    it('Start server', function (done) {
+      serverModule.start(function(e, server)
+      {
+        expect(e)
+            .to.eql(null);
+
+        done();
+      });
+    });
 
     it('Reset test', function (done) {
       agent.get('http://localhost:3000/test/project_api/reset/')
