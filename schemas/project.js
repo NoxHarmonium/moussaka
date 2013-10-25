@@ -10,6 +10,9 @@
       type: String,
       required: true
     },
+    description: {
+      type: String,
+    },
     version: {
       type: Number,
       required: true

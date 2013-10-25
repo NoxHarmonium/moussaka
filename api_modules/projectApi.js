@@ -13,7 +13,11 @@
     listProjects: function (req, res, next) {
       Project.aggregate({
           $group: {
-            '_id': '$name',
+            '_id': {
+              name: '$name',
+              users: '$users',
+              description: '$description'
+            },
             'version': {
               $max: '$version'
             }
@@ -26,7 +30,9 @@
           // NB: aggregate project not API project
           $project: {
             _id: 0,
-            name: '$_id',
+            name: '$_id.name',
+            users: '$_id.users',
+            description: '$_id.description',
             version: 1
           }
         },
@@ -102,7 +108,8 @@
         return res.send({
           name: req.project.name,
           version: req.project.version,
-          users: req.project.users
+          users: req.project.users,
+          description: req.project.description
         });
       } else {
         return res.send(404, {

@@ -19,18 +19,25 @@
   exports.testProjects = [{
     name: 'testProjectA',
     version: 0,
+    users: [],
+    description: 'This one has a description'
   }, {
     name: 'testProjectB',
     version: 0,
+    users: [],
   }, {
     name: 'testProjectC',
     version: 0,
+    users: [],
+    description: 'So does this one'
   }];
 
   exports.testProjectsExt = [{
     name: 'testProjectA',
     version: 0,
-    users: []
+    users: [],
+    description: 'This one has a description'
+
   }, {
     name: 'testProjectB',
     version: 0,
@@ -38,7 +45,8 @@
   }, {
     name: 'testProjectC',
     version: 0,
-    users: []
+    users: [],
+    description: 'So does this one'
   }];
 
 })();
