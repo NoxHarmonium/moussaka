@@ -5,7 +5,8 @@
     // Checks by property values rather than reference.
     arrayMatch: function (objArrayA, objArrayB) {
 
-      //console.log('Match: ' + JSON.stringify(objArrayA) + ' and ' + JSON.stringify(objArrayB) );
+      //console.log('Match: ' + JSON.stringify(objArrayA) + 
+      //   ' and ' + JSON.stringify(objArrayB) );
 
       // Reference Equality
       if (objArrayA === objArrayB) {
