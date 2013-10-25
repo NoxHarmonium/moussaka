@@ -168,16 +168,15 @@ PUT /projects/{proj_name}/{proj_version}/profiles/{profile_id}
 }
 < 201
 
----
+--
 Data Types
-The schemata of unity profiles specific data types are queried here
+The schemata of unity profiles specific data types are queried here.
 These datatypes form the intermediate objects that break down complex objects into
 bundles of simpler primative data types so that the interop between C# (Unity) and Javascript 
 (API, Database, Browser) is straightforward.
----
+--
 
-
-Get the supported schema for this server instance
+Get the supported schemata for this server instance
 GET /datatypes/
 < 200
 < Content-Type: application/json
@@ -187,12 +186,10 @@ GET /datatypes/
         {
             name: "Integer",
             value { type: "Number", roundToPlaces: 0 }
-            
         },
         {
             name: "String",
-            value { type: "String" }
-            
+            value: { type: "String" }
         },
         { 
             name: "Color",
@@ -205,6 +202,7 @@ GET /datatypes/
     ]
 }
 
+Gets a specific schema by name
 GET /datatypes/{name}/
 < 200
 < Content-Type: application/json
