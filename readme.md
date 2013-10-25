@@ -11,3 +11,5 @@ The code style I've used for this project is documented [here](http://nodeguide.
 
 [![Build Status](https://travis-ci.org/NoxHarmonium/unity-profiles.png?branch=master)](https://travis-ci.org/NoxHarmonium/unity-profiles)
 
+The work in progress API documentation can be found at this [Apiary page](http://docs.unityprofiles.apiary.io/)
+
