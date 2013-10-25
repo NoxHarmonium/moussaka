@@ -1,0 +1,182 @@
+HOST: http://api.unityprofiles.com/
+
+--- Unity-Profiles ---
+
+---
+A web application for setting up profiles that define the behavior of your Unity3D games. It aims to provide an easy interface to allow developers to enable designers and managers to do all the tweaking and to be able to share different settings between them.
+The Github repository is hosted at [https://github.com/NoxHarmonium/unity-profiles](https://github.com/NoxHarmonium/unity-profiles)
+---
+
+--
+Administration
+The following is a section of resources related to managing user authentication etc.
+--
+
+Authenicate user and start session.
+Automatically logs out current user if applicable.
+POST /login
+> Accept: application/json
+{ "username": "user@domain.com", "password": "password" }
+< 200
++++++
+< 401
+< Content-Type: application/json
+{ detail: "Incorrect username/password" }
+
+
+
+Create a new user
+PUT /users/{username}
+> Accept: application/json
+{ "username": "user@domain.com", "password": "password" }
+< 201 
++++++
+< 409 
+< Content-Type: application/json
+{ detail: "User already exists" }
+
+
+Get information on a specific user
+GET /users/{username}
+< 200
+< Content-Type: application/json
+{
+   "email" : "test@test.com"
+}
++++++
+< 404 
+{ detail: "User doesn't exist" }
+
+Change a user's password
+The user must be logged out
+POST /users/{username}/password/
+> Accept: application/json
+{ "oldPassword" : "password", "newPassword": "newpassword" }
+< 200
++++++
+< 401
+< Content-Type: application/json
+{ "detail": "Incorrect password"  }
++++++
+< 400
+< Content-Type: application/json
+{ "detail": "Cannot change password when logged in" }
+
+Reset a user's password
+Emails the user with a temporary password that they can use to change their password that is valid for 10 minutes
+POST /usets/{username}/resetpassword/
+< 200
++++++
+< 500
+{ "detail": "There was a problem sending the email" }
+
+Logout the currently authenticated user
+GET /logout
+< 200
+
+
+
+--
+Project Manipulation
+The following is a section of resources related to creating/manipulating the projects that the profiles apply to
+--
+
+
+Gets a list of projects that you are authorised to see. Will only return the latest version
+GET /projects
+< 200
+< Content-Type: application/json
+{
+    projects : [
+        {
+        "name": "Test project",
+        "owner": "user@domain.com",
+        "description": "A test project for unity-profiles",
+        "version" : "0.0.0.1"
+        }
+    ]
+}
+
+Gets information on a the lastest version of a specific project by name
+GET /projects/{proj_name}
+< 200
+< Content-Type: application/json
+{
+    "name": "Test project",
+    "owner": "user@domain.com",
+    "description": "A test project for unity-profiles",
+    "version" : "0.0.0.1"
+}
+
+Gets information on a specific version of a specific project by name
+GET /projects/{proj_name}/{proj_version}
+< 200
+< Content-Type: application/json
+{
+    "name": "Test project",
+    "owner": "user@domain.com",
+    "description": "A test project for unity-profiles",
+    "version" : "0.0.0.1"
+}
+
+Creates a new  project by name and version
+PUT /projects/{proj_name}/{proj_version}
+> Accept: application/json
+> Content-Type: application/json
+{
+    "name": "Test project",
+    "owner": "user@domain.com",
+    "description": "A test project for unity-profiles",
+    "version" : "0.0.0.1"
+}
+< 201 
+
+
+
+
+    
+    
+    
+    
+
+
+
+--
+Profile Manipulation
+The following is a section of resources related to creating/manipulating unity profiles
+--
+
+Gets a profile from its identifier
+GET /projects/{proj_name}/{proj_version}/profiles/{profile_id}
+< 200
+< Content-Type: application/json
+{
+    "owner": "user@domain.com",
+    "overlay":
+    [
+        "a": 1,
+        "b": "2",
+        "c": "three"
+    ],
+    "description" : "Changed a setting to be something different"
+}
+
+Gets a profile from its identifier
+PUT /projects/{proj_name}/{proj_version}/profiles/{profile_id}
+> Accept: application/json
+> Content-Type: application/json
+{
+    "owner": "user@domain.com",
+    "overlay":
+    [
+        "a": 1,
+        "b": "2",
+        "c": "three"
+    ],
+    "description" : "Changed a setting to be something different"
+}
+< 201
+
+
+
+
