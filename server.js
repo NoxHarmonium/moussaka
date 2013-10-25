@@ -36,6 +36,7 @@
     var passport = require('passport');
     var auth = require('./api_modules/auth.js');
     var dbAccess = require('./include/dbAccess');
+    var utils = require('./include/utils');
 
     /**
      * Main application

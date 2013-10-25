@@ -1,5 +1,6 @@
 (function (require, module) {
   'use strict';
+
   module.exports = {
     // Checks if the two arrays hold identical objects 
     // Checks by property values rather than reference.
@@ -54,6 +55,34 @@
 
       var deepEqual = require('deep-equal');
       return deepEqual(objA, objB);
+    },
+
+    // Populates a Mongoose database model with the contents of a JSON file.
+    // WARNING: Will delete all data existing in the database
+    populateDBFromJSON: function (jsonObject, DBModel, next) {
+      var dataArray = jsonObject.data;
+
+      if (!dataArray || typeof dataArray !== 'Array') {
+        return next(
+          new Error(
+            'JSON data not valid'
+          )
+        );
+      }
+
+      DBModel.remove(function (err) {
+        if (err) {
+          next(err);
+        } else {
+          DBModel.collection.insert(dataArray, function (dbErr) {
+            if (dbErr) {
+              return next(dbErr);
+            }
+            next();
+          });
+        }
+
+      });
     }
   };
 })(require, module);

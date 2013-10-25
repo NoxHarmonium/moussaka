@@ -1,0 +1,22 @@
+{
+    "targetmodel": "DataType",
+    "data":
+    [
+        {
+            "name": "Integer",
+            "value": { "type": "Number", "roundToPlaces": 0 }
+        },
+        {
+            "name": "String",
+            "value": { "type": "String" }
+        },
+        { 
+            "name": "Color",
+            "values": {
+             "r": { "type": "Number", "minValue": 0, "maxValue": 255 },
+             "g": { "type": "Number", "minValue": 0, "maxValue": 255 },
+             "b": { "type": "Number", "minValue": 0, "maxValue": 255 }
+            }
+        }
+    ]
+}
