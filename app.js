@@ -4,7 +4,7 @@
   // Bootstrap the server
   var serverModule = require('./server.js');
   serverModule.start(function (err, server) {
-    if (err === null) {
+    if (err !== null) {
       console.log('Error Starting Server. Terminating process.'.red);
       return process.exit(1);
     }
