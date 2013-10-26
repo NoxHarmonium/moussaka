@@ -63,8 +63,7 @@
       var dataArray = jsonObject.data;
 
       if (!dataArray ||
-        typeof dataArray !== 'object' ||
-        !Array.isArray(dataArray)) {
+        typeof dataArray !== 'object' || !Array.isArray(dataArray)) {
         return next(
           new Error(
             'JSON data not valid'
