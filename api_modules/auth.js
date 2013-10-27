@@ -11,12 +11,10 @@
 
   module.exports = {
     init: function (next) {
-
-
       passport.use(new LocalStrategy(
         function (email, password, done) {
           User.findOne({
-            email: email
+            _id: email
           }, function (err, user) {
             if (err) {
               return done(err);

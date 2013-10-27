@@ -89,11 +89,13 @@
 
       //console.log('Attempting to save: ' + JSON.stringify(req.body));
       var p = new Project(req.body);
-      p.save(function (err) {
+      p.save(function (err, data) {
         if (err) {
           return next(err);
         }
-        res.send(200);
+        res.send(200, {
+          '_id': data._id
+        });
       });
     },
 

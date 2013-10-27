@@ -1,43 +1,36 @@
-{
-    "name": "unity-profiles",
-    "description": "A web application for setting up profiles that define the behavior of your Unity3D games. It aims to provide an easy interface to allow developers to enable designers and managers to do all the tweaking and to be able to share different settings between them.",
-    "version": "0.0.1",
-    "private": true,
-    "scripts": {
-        "start": "node app.js",
-        "test" : "grunt test"
+{ "dependencies" : { "bcrypt" : "*",
+      "colors" : "*",
+      "deep-equal" : "*",
+      "express" : "3.4.0",
+      "jade" : "*",
+      "moment" : "*",
+      "mongodb" : "1.3.x",
+      "mongoose" : "*",
+      "passport" : "*",
+      "passport-local" : "*",
+      "stylus" : "*",
+      "yaml-config" : "*",
+      "q": "*"
     },
-    "env": {
-        "PYTHON": "/usr/bin/python2.7"
+  "description" : "A web application for setting up profiles that define the behavior of your Unity3D games. It aims to provide an easy interface to allow developers to enable designers and managers to do all the tweaking and to be able to share different settings between them.",
+  "devDependencies" : { "expect.js" : "*",
+      "grunt" : "*",
+      "grunt-contrib-jshint" : "*",
+      "grunt-contrib-uglify" : "*",
+      "grunt-jsbeautifier" : "*",
+      "grunt-mocha-test" : "*",
+      "jsbeautify" : "*",
+      "mocha" : "*",
+      "superagent" : "*"
     },
-    "dependencies" : {
-	"express": "3.4.0",
-	"mongodb": "1.3.x",
-        "jade": "*",
-        "stylus": "*",
-        "mongoose": "*",
-        "bcrypt": "*",
-        "passport" : "*",
-        "passport-local" : "*",
-        "colors" : "*",
-	"yaml-config" : "*",
-	"moment" : "*",
-	"deep-equal" : "*"
+  "env" : { "PYTHON" : "/usr/bin/python2.7" },
+  "name" : "unity-profiles",
+  "private" : true,
+  "repository" : { "type" : "git",
+      "url" : "https://github.com/NoxHarmonium/unity-profiles.git"
     },
-    "devDependencies" : {
-       "grunt": "*",
-       "grunt-contrib-jshint" : "*",
-       "grunt-contrib-uglify" : "*",
-       "mocha" : "*", 
-       "expect.js" : "*",
-       "superagent" : "*",
-       "jsbeautify" : "*",
-       "grunt-jsbeautifier" : "*",
-       "grunt-mocha-test": "*"
+  "scripts" : { "start" : "node app.js",
+      "test" : "grunt test"
     },
-    "repository" :
-    { 
-        "type" : "git",
-        "url"  : "https://github.com/NoxHarmonium/unity-profiles.git"
-    }
+  "version" : "0.0.1"
 }

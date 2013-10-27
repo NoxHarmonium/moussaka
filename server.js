@@ -116,8 +116,11 @@
     //
     app.get('/projects/:projectName/:projectVersion/profiles/:profileId/',
       profileApi.getProfile);
-    app.put('/projects/:projectName/:projectVersion/profiles/:profileId/',
+    app.put('/projects/:projectName/:projectVersion/profiles/',
       profileApi.addProfile);
+    if (config.enable_test_exts) {
+      app.get('/test/profile_api/reset/', profileApi.resetTests);
+    }
 
     // Rendered HTML pages
     app.get('/login', function (req, res) {

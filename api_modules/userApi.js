@@ -16,19 +16,19 @@
 
     listUsers: function (req, res, next) {
       var query = User.find();
-      query.select('email');
+      query.select('_id');
 
-      query.exec(function (err, user) {
+      query.exec(function (err, users) {
         if (err) {
           return next(err);
         }
-        return res.send(user);
+        return res.send(users);
       });
     },
 
     pUser: function (req, res, next, email) {
       var query = User.findOne({
-        'email': email
+        '_id': email
       });
       query.exec(function (err, user) {
         if (err) {
@@ -53,7 +53,7 @@
 
     deleteUser: function (req, res, next) {
 
-      if (req.user && req.user.email === req.selectedUser.email) {
+      if (req.user && req.user._id === req.selectedUser._id) {
         return req.user.remove(function (err) {
           if (err) {
             next(err);
@@ -66,9 +66,12 @@
     },
 
     putUser: function (req, res, next) {
-      //console.log(('Create user request: Username: ' + 
-      //  req.body.username + ' Password:' + 
-      //  req.body.password).green);
+      /*console.log(('Create user request: Username: ' +
+          req.body.username + ' Password:' +
+          req.body.password)
+        .green);
+
+      console.log('sel: ' + req.selectedUser);*/
 
       if (req.selectedUser) {
         //console.log('Warning: User already exists'.yellow);
@@ -78,7 +81,7 @@
       }
 
       var newUser = new User();
-      newUser.email = req.body.username;
+      newUser._id = req.body.username;
       newUser.password = req.body.password;
       newUser.save(
         function (err) {
@@ -216,7 +219,7 @@
       //console.log(emails);
 
       var query = User.find({
-        'email': {
+        '_id': {
           $in: emails
         }
       });

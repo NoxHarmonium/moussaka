@@ -9,12 +9,9 @@
   var Schema = mongoose.Schema;
 
   var UserSchema = new Schema({
-    email: {
+    _id: {
       type: String,
-      required: true,
-      index: {
-        unique: true
-      }
+      required: true
     },
     password: {
       type: String,

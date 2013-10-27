@@ -1,6 +1,15 @@
 (function (require, module) {
   'use strict';
 
+  Object.getOwnPropertyDescriptors = function (obj) {
+    var ret = {};
+    Object.getOwnPropertyNames(obj)
+      .forEach(function (name) {
+        ret[name] = Object.getOwnPropertyDescriptor(obj, name);
+      });
+    return ret;
+  };
+
   module.exports = {
     // Checks if the two arrays hold identical objects 
     // Checks by property values rather than reference.
@@ -55,6 +64,14 @@
 
       var deepEqual = require('deep-equal');
       return deepEqual(objA, objB);
+    },
+
+    //Thanks: http://stackoverflow.com/a/7915060/1153203
+    shallowClone: function (obj) {
+      return Object.create(
+        Object.getPrototypeOf(obj),
+        Object.getOwnPropertyDescriptors(obj)
+      );
     },
 
     // Populates a Mongoose database model with the contents of a JSON file.
