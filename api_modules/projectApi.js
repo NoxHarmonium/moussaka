@@ -8,6 +8,12 @@
   var testData = require('../tests/testData.js');
   var config = require('../include/config.js');
 
+  // Private functions
+  var _validateProject = function validateProjects(projects) {
+    return projects && Array.isArray(projects) && projects.length === 1;
+  };
+
+  // Public functions
   module.exports = {
 
     listProjects: function (req, res, next) {
@@ -49,9 +55,20 @@
     },
 
     pProjectName: function (req, res, next, projectName) {
+      var version = req.params.projectVersion;
+
       var query = Project.find({
         'name': projectName
-      });
+      })
+        .sort({
+          'version': -1
+        });
+
+      if (version) {
+        query = query.where('version')
+          .equals(version);
+      }
+
       query.exec(function (err, projects) {
         if (err) {
           return next(err);
@@ -59,35 +76,12 @@
         req.projects = projects;
         next();
       });
-    },
 
-    pProjectVersion: function (req, res, next, projectVersion) {
-      var projectName = req.params.projectName;
-
-      if (!projectName) {
-        next(new Error(
-          'The projectVersion param can only be used with the projectName param'
-        ));
-      }
-
-      var query = Project.findOne({
-        'name': projectName
-      });
-
-      query.where('version')
-        .equals(projectVersion);
-
-      query.exec(function (err, project) {
-        if (err) {
-          return next(err);
-        }
-        req.project = project;
-        next();
-      });
     },
 
     addProject: function (req, res, next) {
-      if (req.project) {
+      var projects = req.projects;
+      if (_validateProject(projects)) {
         return res.send(409, {
           detail: 'Project already exists'
         });
@@ -104,12 +98,14 @@
     },
 
     getProject: function (req, res, next) {
-      if (req.project) {
+      var projects = req.projects;
+      if (_validateProject(projects)) {
+        var project = req.projects[0];
         return res.send({
-          name: req.project.name,
-          version: req.project.version,
-          users: req.project.users,
-          description: req.project.description
+          name: project.name,
+          version: project.version,
+          users: project.users,
+          description: project.description
         });
       } else {
         return res.send(404, {

@@ -102,7 +102,7 @@
     // Project API
     //
     app.param('projectName', projectApi.pProjectName);
-    app.param('projectVersion', projectApi.pProjectVersion);
+
     app.get('/projects/', projectApi.listProjects);
     app.get('/projects/:projectName/:projectVersion/', projectApi.getProject);
     app.put('/projects/:projectName/:projectVersion/', projectApi.addProject);
