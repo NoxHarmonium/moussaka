@@ -54,7 +54,7 @@
     },
 
     getProfiles: function (req, res, next) {
-      if (_validateProject(req.projects)) {
+      if (!_validateProject(req.projects)) {
         return res.send(404, {
           detail: 'Project doesn\'t exist'
         });

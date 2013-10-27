@@ -114,6 +114,8 @@
     //
     // Profile API
     //
+    app.get('/projects/:projectName/:projectVersion/profiles/',
+      profileApi.getProfiles);
     app.get('/projects/:projectName/:projectVersion/profiles/:profileId/',
       profileApi.getProfile);
     app.put('/projects/:projectName/:projectVersion/profiles/',

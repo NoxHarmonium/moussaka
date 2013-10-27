@@ -130,8 +130,6 @@
 
     });
 
-
-
     it('Create profile [1] with valid parent id', function (done) {
       var project = projects[0];
 
@@ -170,10 +168,45 @@
             .to.be(400);
           done();
         });
-
     });
 
+    it('List profiles', function (done) {
+      var project = projects[0];
+      var profile = profiles[0];
 
+      agent.get('http://localhost:3000/projects/' + project.name + '/' +
+        project.version + '/profiles/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+
+          expect(res.ok)
+            .to.be.ok();
+
+          expect(res.body.length)
+            .to.be(2);
+
+          for (var i = 0; i < res.body.length; i++) {
+            // Strip API generated propeties
+            // TODO: Filter output from API call to not include things like __v
+            delete res.body[i].__v;
+            delete res.body[i].timestamp;
+
+            //console.log('Comparing: ' + JSON.stringify(res.body[i])
+            //  .yellow + ' with ' + JSON.stringify(profiles[i])
+            //  .cyan);
+
+            var match =
+              utils.objMatch(res.body[i], profiles[i]);
+            expect(match)
+              .to.be(true);
+          }
+
+
+
+          done();
+        });
+    });
 
   });
 
