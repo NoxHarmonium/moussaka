@@ -137,6 +137,28 @@ Profile Manipulation
 The following is a section of resources related to creating/manipulating unity profiles
 --
 
+Gets a list of profiles for a certain project
+GET /projects/{proj_name}/{proj_version}/profiles/
+< 200
+< Content-Type: application/json
+{
+    profiles :
+    [
+        {
+            "owner": "user@domain.com",
+            "overlay":
+            [
+                { name: "a", type: "Integer", value: 1 },
+                { name: "b", type: "String", value : "2"},
+                { name: "c", type: "Color", values : { r: 128, g: 128, b: 128 } }
+            ],
+            "description" : "Changed a setting to be something different",
+            "parentId" : "526c5228e85e4d074e450e44"
+        }
+    ]
+}
+
+
 Gets a profile from its identifier
 GET /projects/{proj_name}/{proj_version}/profiles/{profile_id}
 < 200
