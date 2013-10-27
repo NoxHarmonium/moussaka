@@ -5,7 +5,7 @@
   var config = require('../include/config');
   var Schema = mongoose.Schema;
   var utils = require('../include/utils');
-  var jsonData = require('../data/datatypes.json');
+  var jsonData = require('../public/data/datatypes.json');
 
   var DataTypeSchema = new Schema({
     name: {
