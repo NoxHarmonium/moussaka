@@ -10,9 +10,9 @@
 
   describe('Project API tests', function () {
     var id;
-    var users = testData.testUsers;
-    var projects = testData.testProjects;
-    var projectsExt = testData.testProjectsExt;
+    var users = testData.getTestUsers();
+    var projects = testData.getTestProjects();
+    var projectsExt = testData.getTestProjectsExt();
     var agent = superagent.agent();
 
     it('Start server', function (done) {

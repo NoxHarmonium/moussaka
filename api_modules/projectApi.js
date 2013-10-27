@@ -120,7 +120,7 @@
     //
 
     resetTests: function (req, res, next) {
-      var testProjects = testData.testProjects,
+      var testProjects = testData.getTestProjects(),
         projects = [],
         i;
 

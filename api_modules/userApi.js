@@ -201,11 +201,11 @@
     // Test extensions
     //
     getTestUsers: function (req, res, next) {
-      res.send(200, testData.testUsers);
+      res.send(200, testData.getTestUsers());
     },
 
     resetTests: function (req, res, next) {
-      var testUsers = testData.testUsers,
+      var testUsers = testData.getTestUsers(),
         emails = [],
         i;
 

@@ -9,7 +9,7 @@
 
   describe('Administration API tests', function () {
     var id;
-    var users = testData.testUsers;
+    var users = testData.getTestUsers();
     var agent = superagent.agent();
 
     it('Start server', function (done) {
