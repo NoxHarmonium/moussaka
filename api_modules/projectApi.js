@@ -9,7 +9,7 @@
   var config = require('../include/config.js');
 
   // Private functions
-  var _validateProject = function validateProjects(projects) {
+  var _validateProject = function _validateProject(projects) {
     return projects && Array.isArray(projects) && projects.length === 1;
   };
 
