@@ -25,18 +25,9 @@
       type: Schema.Types.ObjectId,
       ref: 'User'
     }],
-    snapshots: [{
-      timestamp: {
-        type: Date,
-        default: Date.now
-      },
-      publisher: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
-      },
-      overlay: {
-        type: Schema.Types.Mixed
-      }
+    profiles: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Profile'
     }]
   });
 

@@ -30,6 +30,7 @@
     var express = require('express');
     var userApi = require('./api_modules/userApi.js');
     var projectApi = require('./api_modules/projectApi.js');
+    var profileApi = require('./api_modules/profileApi.js');
     var http = require('http');
     var path = require('path');
     var colors = require('colors');
@@ -109,6 +110,14 @@
     if (config.enable_test_exts) {
       app.get('/test/project_api/reset/', projectApi.resetTests);
     }
+
+    //
+    // Profile API
+    //
+    app.get('/projects/:projectName/:projectVersion/profiles/:profileId/',
+      profileApi.getProfile);
+    app.put('/projects/:projectName/:projectVersion/profiles/:profileId/',
+      profileApi.addProfile);
 
     // Rendered HTML pages
     app.get('/login', function (req, res) {
