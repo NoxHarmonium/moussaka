@@ -58,8 +58,8 @@
       var version = req.params.projectVersion;
 
       var query = Project.find({
-        'name': projectName
-      })
+          'name': projectName
+        })
         .sort({
           'version': -1
         });

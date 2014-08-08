@@ -1,36 +1,47 @@
-{ "dependencies" : { "bcrypt" : "*",
-      "colors" : "*",
-      "deep-equal" : "*",
-      "express" : "3.4.0",
-      "jade" : "*",
-      "moment" : "*",
-      "mongodb" : "1.3.x",
-      "mongoose" : "*",
-      "passport" : "*",
-      "passport-local" : "*",
-      "stylus" : "*",
-      "yaml-config" : "*",
-      "q": "*"
+{
+    "dependencies": {
+        "bcrypt": "*",
+        "colors": "*",
+        "deep-equal": "*",
+        "express": "3.4.0",
+        "jade": "*",
+        "moment": "*",
+        "mongodb": "1.3.x",
+        "mongoose": "*",
+        "passport": "*",
+        "passport-local": "*",
+        "stylus": "*",
+        "yaml-config": "*",
+        "q": "*"
     },
-  "description" : "A web application for setting up profiles that define the behavior of your Unity3D games. It aims to provide an easy interface to allow developers to enable designers and managers to do all the tweaking and to be able to share different settings between them.",
-  "devDependencies" : { "expect.js" : "*",
-      "grunt" : "*",
-      "grunt-contrib-jshint" : "*",
-      "grunt-contrib-uglify" : "*",
-      "grunt-jsbeautifier" : "*",
-      "grunt-mocha-test" : "*",
-      "jsbeautify" : "*",
-      "mocha" : "*",
-      "superagent" : "*"
+    "description": "A web application for setting up profiles that define the behavior of your Unity3D games. It aims to provide an easy interface to allow developers to enable designers and managers to do all the tweaking and to be able to share different settings between them.",
+    "devDependencies": {
+        "expect.js": "*",
+        "grunt": "*",
+        "grunt-contrib-jshint": "*",
+        "grunt-contrib-uglify": "*",
+        "grunt-jsbeautifier": "*",
+        "grunt-mocha-test": "*",
+        "grunt-contrib-compass": "*",
+        "jsbeautify": "*",
+        "mocha": "*",
+        "superagent": "*",
+        "sass": "*",
+        "compass": "*",
+        "stylus-modular-scale": "*"
     },
-  "env" : { "PYTHON" : "/usr/bin/python2.7" },
-  "name" : "unity-profiles",
-  "private" : true,
-  "repository" : { "type" : "git",
-      "url" : "https://github.com/NoxHarmonium/unity-profiles.git"
+    "env": {
+        "PYTHON": "/usr/bin/python2.7"
     },
-  "scripts" : { "start" : "node app.js",
-      "test" : "grunt test"
+    "name": "unity-profiles",
+    "private": true,
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/NoxHarmonium/unity-profiles.git"
     },
-  "version" : "0.0.1"
+    "scripts": {
+        "start": "node app.js",
+        "test": "grunt test"
+    },
+    "version": "0.0.1"
 }

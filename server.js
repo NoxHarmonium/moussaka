@@ -17,7 +17,8 @@
 
     if (serverModule.starting) {
       return next(new Error(
-        'An instance of the server is already attempting to start.'.yellow));
+        'An instance of the server is already attempting to start.'.yellow
+      ));
     }
 
     serverModule.starting = true;
@@ -133,7 +134,9 @@
 
     serverModule.server = http.createServer(app)
       .listen(app.get('port'), function () {
-        console.log('Express server listening on port ' + app.get('port').toString().blue);
+        console.log('Express server listening on port ' + app.get('port')
+          .toString()
+          .blue);
         serverModule.started = true;
         next(null, serverModule.server);
       });
