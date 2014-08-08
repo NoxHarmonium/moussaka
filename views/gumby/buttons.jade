@@ -1,0 +1,35 @@
+mixin small_btn(url, text)
+  - var classes = attributes.class ? "small btn " + attributes.class : "small btn default"
+  div(id=attributes.id, class=classes)
+    if block
+      block
+    else
+      a(href=url)=text
+mixin normal_btn(url, text)
+  - var classes = attributes.class ? "normal btn " + attributes.class : "normal btn default"
+  div(id=attributes.id, class=classes)
+    if block
+      block
+    else
+      a(href=url)=text
+mixin medium_btn(url, text)
+  - var classes = attributes.class ? "medium btn " + attributes.class : "medium btn default"
+  div(id=attributes.id, class=classes)
+    if block
+      block
+    else
+      a(href=url)=text
+mixin large_btn(url, text)
+  - var classes = attributes.class ? "large btn " + attributes.class : "large btn default"
+  div(id=attributes.id, class=classes)
+    if block
+      block
+    else
+      a(href=url)=text
+mixin xlarge_btn(url, text)
+  - var classes = attributes.class ? "xlarge btn " + attributes.class : "xlarge btn default"
+  div(id=attributes.id, class=classes)
+    if block
+      block
+    else
+      a(href=url)=text

@@ -1,0 +1,21 @@
+mixin badge(text)
+  - var classes = attributes.class ? "badge " + attributes.class : "badge default"
+  li(id=attributes.id, class=classes)
+    if block
+      block
+    else
+      =text
+mixin label(text)
+  - var classes = attributes.class ? "label " + attributes.class : "label default"
+  li(id=attributes.id, class=classes)
+    if block
+      block
+    else
+      =text
+mixin alert(text)
+  - var classes = attributes.class ? "alert " + attributes.class : "alert default"
+  li(id=attributes.id, class=classes)
+    if block
+      block
+    else
+      =text
