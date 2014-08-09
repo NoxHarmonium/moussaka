@@ -7431,3 +7431,8 @@ table.rounded > tbody:first-child tr:first-child td {
 .ie9 .radio.checked i, .ie9 .checkbox.checked i {
   top: 0;
 }
+
+/* line 2, ../sass/_custom.scss */
+[ng\:cloak], [ng-cloak], .ng-cloak {
+  display: none !important;
+}
