@@ -20,37 +20,21 @@
 
   exports.getTestProjects = function () {
     return [{
+      //_id: 'to be defined',
       name: 'testProjectA',
-      version: 0,
       users: [],
+      admins: ['test.account3@test.com'],
       description: 'This one has a description'
     }, {
+      //_id: 'to be defined',
       name: 'testProjectB',
-      version: 0,
       users: [],
+      admins: ['test.account3@test.com'],
     }, {
+      //_id: 'to be defined',
       name: 'testProjectC',
-      version: 0,
       users: [],
-      description: 'So does this one'
-    }];
-  };
-
-  exports.getTestProjectsExt = function () {
-    return [{
-      name: 'testProjectA',
-      version: 0,
-      users: [],
-      description: 'This one has a description'
-
-    }, {
-      name: 'testProjectB',
-      version: 0,
-      users: []
-    }, {
-      name: 'testProjectC',
-      version: 0,
-      users: [],
+      admins: ['test.account3@test.com'],
       description: 'So does this one'
     }];
   };

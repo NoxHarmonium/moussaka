@@ -9,86 +9,81 @@
   var config = require('../include/config.js');
 
   // Private functions
-  var _validateProject = function _validateProject(projects) {
-    return projects && Array.isArray(projects) && projects.length === 1;
+  var _validateProject = function _validateProject(project) {
+    return project !== undefined && project !== null;
   };
 
   // Public functions
   module.exports = {
 
     listProjects: function (req, res, next) {
-      Project.aggregate({
-          $group: {
-            '_id': {
-              name: '$name',
-              users: '$users',
-              description: '$description'
-            },
-            'version': {
-              $max: '$version'
-            }
-          }
-        }, {
-          $sort: {
-            'max': 1
-          }
-        }, {
-          // NB: aggregate project not API project
-          $project: {
-            _id: 0,
-            name: '$_id.name',
-            users: '$_id.users',
-            description: '$_id.description',
-            version: 1
-          }
-        },
-
-        function (err, data) {
-          if (err) {
-            next(err);
-          }
-          //console.log('Sending: ' + JSON.stringify(data));
-          res.send(data);
-        }
-
-      );
-    },
-
-    pProjectName: function (req, res, next, projectName) {
-      var version = req.params.projectVersion;
-
-      var query = Project.find({
-          'name': projectName
-        })
-        .sort({
-          'version': -1
+      if (!req.user) {
+        return res.send(401, {
+          detail: 'Not logged in'
         });
-
-      if (version) {
-        query = query.where('version')
-          .equals(version);
       }
+
+      // TODO: Pagination and limits and security 
+      // (only see what proj you are part of)
+      var query = Project.find({
+        $or: [{
+          'admins': req.user._id
+        }, {
+          'users': req.user._id
+        }]
+      });
+
+      // Project correct fields
+      query.select('_id name version admins users description');
 
       query.exec(function (err, projects) {
         if (err) {
           return next(err);
         }
-        req.projects = projects;
+        res.send(200, projects);
+      });
+    },
+
+    pProjectId: function (req, res, next, projectId) {
+      // TODO: Universal undefined check fn?
+      if (!projectId || projectId === 'undefined') {
+        return next();
+      }
+
+      var query = Project.findOne({
+        '_id': projectId
+      });
+
+      query.exec(function (err, project) {
+        if (err) {
+          return next(err);
+        }
+        req.project = project;
         next();
       });
 
     },
 
     addProject: function (req, res, next) {
-      var projects = req.projects;
-      if (_validateProject(projects)) {
+      if (!req.user) {
+        return res.send(401, {
+          detail: 'Not logged in'
+        });
+      }
+
+      var project = req.project;
+      if (_validateProject(project)) {
         return res.send(409, {
           detail: 'Project already exists'
         });
       }
 
-      //console.log('Attempting to save: ' + JSON.stringify(req.body));
-      var p = new Project(req.body);
+      var p = new Project({
+        name: req.body.name,
+        description: req.body.description,
+        admins: [req.user._id]
+      });
+
       p.save(function (err, data) {
         if (err) {
           return next(err);
@@ -100,12 +95,19 @@
     },
 
     getProject: function (req, res, next) {
-      var projects = req.projects;
-      if (_validateProject(projects)) {
-        var project = req.projects[0];
+      if (!req.user) {
+        return res.send(401, {
+          detail: 'Not logged in'
+        });
+      }
+
+      var project = req.project;
+      if (_validateProject(project)) {
         return res.send({
+          _id: project._id,
           name: project.name,
           version: project.version,
+          admins: project.admins,
           users: project.users,
           description: project.description
         });
@@ -114,6 +116,101 @@
           detail: 'Project doesn\'t exist'
         });
       }
+    },
+
+    addProjectUser: function (req, res, next) {
+      if (!req.user) {
+        return res.send(401, {
+          detail: 'Not logged in'
+        });
+      }
+
+      var project = req.project;
+      var user = req.selectedUser;
+      if (!_validateProject(project)) {
+        return res.send(404, {
+          detail: 'Specified project doesn\'t exist'
+        });
+      }
+
+      if (!user) {
+        return res.send(404, {
+          detail: 'Specified user doesn\'t exist'
+        });
+      }
+
+      // TODO: Can this be faster with a mongo query?
+      if (project.admins.indexOf(req.user._id) === -1) {
+        return res.send(401, {
+          detail: 'Only admins can change a project user list'
+        });
+      }
+
+      // TODO: Can this be faster with a mongo query?
+      if (project.users.indexOf(user._id) !== -1) {
+        return res.send(409, {
+          detail: 'Specified user already added to project users'
+        });
+      }
+
+      project.users.push(user._id);
+
+      project.save(function (err) {
+        if (err) {
+          return next(err);
+        }
+        res.send(200);
+      });
+
+    },
+
+    removeProjectUser: function (req, res, next) {
+      if (!req.user) {
+        return res.send(401, {
+          detail: 'Not logged in'
+        });
+      }
+
+      var project = req.project;
+      var user = req.selectedUser;
+      if (!_validateProject(project)) {
+        return res.send(404, {
+          detail: 'Specified project doesn\'t exist'
+        });
+      }
+
+      if (!user) {
+        return res.send(404, {
+          detail: 'Specified user doesn\'t exist'
+        });
+      }
+
+      // TODO: Can this be faster with a mongo query?
+      if (project.admins.indexOf(req.user._id) === -1) {
+        return res.send(401, {
+          detail: 'Only admins can change a project user list'
+        });
+      }
+
+      // TODO: Can this be faster with a mongo query?
+      if (req.project.users.indexOf(user._id) === -1) {
+        return res.send(404, {
+          detail: 'User is not a member of this project'
+        });
+      }
+
+      var pUsers = req.project.users;
+
+      pUsers.splice(
+        pUsers.indexOf(user._id), 1
+      );
+
+      project.save(function (err) {
+        if (err) {
+          return next(err);
+        }
+        res.send(200);
+      });
 
     },
 
@@ -129,8 +226,6 @@
       for (i = 0; i < testProjects.length; i++) {
         projects.push(testProjects[i].name);
       }
-
-      //console.log(emails);
 
       var query = Project.find({
         'name': {

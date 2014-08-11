@@ -13,28 +13,13 @@
     description: {
       type: String,
     },
-    version: {
-      type: Number,
-      required: true
-    },
-    owner: {
-      type: Schema.Types.ObjectId,
-      ref: 'User'
-    },
-    users: [{
-      type: Schema.Types.ObjectId,
-      ref: 'User'
-    }],
-    profiles: [{
-      type: Schema.Types.ObjectId,
-      ref: 'Profile'
-    }]
+    admins: [String], // Referencing user email address
+    users: [String] // Referencing user email address
   });
 
-  // Apply compound index over name and version
+  // Apply index over name
   ProjectSchema.index({
-    name: 1,
-    version: 1
+    name: 1
   });
   //, {
   // Mongo cannot use 2 keys to determine uniqueness

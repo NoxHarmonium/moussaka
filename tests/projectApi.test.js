@@ -12,7 +12,6 @@
     var id;
     var users = testData.getTestUsers();
     var projects = testData.getTestProjects();
-    var projectsExt = testData.getTestProjectsExt();
     var agent = superagent.agent();
 
     it('Start server', function (done) {
@@ -35,6 +34,89 @@
         });
     });
 
+    it('List projects before login', function (done) {
+      agent.get('http://localhost:3000/projects/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(401);
+          done();
+        });
+    });
+
+    it('Create project [0] before login', function (done) {
+      var project = projects[0];
+
+      agent.put('http://localhost:3000/projects/')
+        .send(project)
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(401);
+          done();
+        });
+
+    });
+
+    it('Get existing project [0] before login', function (done) {
+      var project = projects[0];
+
+      agent.get('http://localhost:3000/projects/' + project._id + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(401);
+          done();
+        });
+    });
+
+    it('Add user [1] to project [0] before login', function (done) {
+      var project = projects[0];
+      var user = users[1];
+
+      agent.put('http://localhost:3000/projects/' + project._id +
+        '/' + user.username + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(401);
+          done();
+        });
+    });
+
+    it('Remove user [1] from project [0] before login', function (done) {
+      var project = projects[0];
+      var user = users[1];
+
+      agent.del('http://localhost:3000/projects/' + project._id +
+        '/' + user.username + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(401);
+          done();
+        });
+    });
+
+
+    it('Login user [2]', function (done) {
+      agent.post('http://localhost:3000/login/')
+        .send(users[2])
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(200);
+          done();
+        });
+
+    });
+
     it('List projects', function (done) {
       agent.get('http://localhost:3000/projects/')
         .end(function (e, res) {
@@ -44,8 +126,20 @@
             .to.be.ok();
           expect(res.body.length)
             .to.be(0);
-          //console.log('\nCurrent Projects:\n' + JSON.stringify(res.body));
 
+          done();
+        });
+    });
+
+    it('Get project [0] before creation', function (done) {
+      var project = projects[0];
+
+      agent.get('http://localhost:3000/projects/' + project._id + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(404);
           done();
         });
     });
@@ -53,14 +147,17 @@
     it('Create project [0]', function (done) {
       var project = projects[0];
 
-      agent.put('http://localhost:3000/projects/' + project.name + '/' +
-        project.version + '/')
+      agent.put('http://localhost:3000/projects/')
         .send(project)
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
+
+          // Set test data id to the returned id
+          project._id = res.body._id;
+
           done();
         });
 
@@ -69,14 +166,17 @@
     it('Create project [1]', function (done) {
       var project = projects[1];
 
-      agent.put('http://localhost:3000/projects/' + project.name + '/' +
-        project.version + '/')
+      agent.put('http://localhost:3000/projects/')
         .send(project)
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
+
+          // Set test data id to the returned id
+          project._id = res.body._id;
+
           done();
         });
 
@@ -85,14 +185,17 @@
     it('Create project [2]', function (done) {
       var project = projects[2];
 
-      agent.put('http://localhost:3000/projects/' + project.name + '/' +
-        project.version + '/')
+      agent.put('http://localhost:3000/projects/')
         .send(project)
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
+
+          // Set test data id to the returned id
+          project._id = res.body._id;
+
           done();
         });
 
@@ -106,10 +209,8 @@
           expect(res.ok)
             .to.be.ok();
 
-          //console.log('\nCurrent Projects:\n' + JSON.stringify(res.body));
           expect(res.body.length)
             .to.be(3);
-
           var match =
             utils.arrayMatch(res.body, projects);
           expect(match)
@@ -120,36 +221,26 @@
     });
 
     it('Get existing project [0]', function (done) {
-      var project = projectsExt[0];
+      var project = projects[0];
 
-      agent.get('http://localhost:3000/projects/' + project.name + '/' +
-        project.version + '/')
+      agent.get('http://localhost:3000/projects/' + project._id + '/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
-
           expect(res.ok)
             .to.be.ok();
 
-          //console.log('\'' + JSON.stringify(res.body) + '\' === \'' +
-          //  JSON.stringify(project) + '\' ?');
           expect(utils.objMatch(res.body, project))
             .to.be.ok();
-
-          var match =
-            utils.arrayMatch(res.body, projects);
-          expect(match)
-            .to.be(true);
 
           done();
         });
     });
 
     it('Get existing project [1]', function (done) {
-      var project = projectsExt[1];
+      var project = projects[1];
 
-      agent.get('http://localhost:3000/projects/' + project.name + '/' +
-        project.version + '/')
+      agent.get('http://localhost:3000/projects/' + project._id + '/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
@@ -170,10 +261,9 @@
 
 
     it('Get existing project [2]', function (done) {
-      var project = projectsExt[2];
+      var project = projects[2];
 
-      agent.get('http://localhost:3000/projects/' + project.name + '/' +
-        project.version + '/')
+      agent.get('http://localhost:3000/projects/' + project._id + '/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
@@ -192,97 +282,65 @@
         });
     });
 
-    it('Create existing project [0]', function (done) {
+    it('Add user [1] to project [0]', function (done) {
       var project = projects[0];
+      var user = users[1];
 
-      agent.put('http://localhost:3000/projects/' + project.name + '/' +
-        project.version + '/')
-        .send(project)
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.status)
-            .to.be(409);
-          done();
-        });
-
-    });
-
-    it('Create existing project [1]', function (done) {
-      var project = projects[1];
-
-      agent.put('http://localhost:3000/projects/' + project.name + '/' +
-        project.version + '/')
-        .send(project)
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.status)
-            .to.be(409);
-          done();
-        });
-
-    });
-
-    it('Create existing project [2]', function (done) {
-      var project = projects[2];
-
-      agent.put('http://localhost:3000/projects/' + project.name + '/' +
-        project.version + '/')
-        .send(project)
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.status)
-            .to.be(409);
-          done();
-        });
-
-    });
-
-    it('Increment version of project [0] to 1', function (done) {
-      var project = projects[0];
-      project.version += 1;
-
-      agent.put('http://localhost:3000/projects/' + project.name + '/' +
-        project.version + '/')
-        .send(project)
+      agent.put('http://localhost:3000/projects/' + project._id +
+        '/' + user.username + '/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
+
+          project.users.push(user.username);
+
           done();
         });
-
     });
 
-    it('Increment version of project [0] to 2', function (done) {
+    it('Add user [1] to project [0] (duplicate)', function (done) {
       var project = projects[0];
-      project.version += 1;
+      var user = users[1];
 
-      agent.put('http://localhost:3000/projects/' + project.name + '/' +
-        project.version + '/')
-        .send(project)
+      agent.put('http://localhost:3000/projects/' + project._id +
+        '/' + user.username + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(409);
+
+          done();
+        });
+    });
+
+    it('Add user [2] to project [0]', function (done) {
+      var project = projects[0];
+      var user = users[2];
+
+      agent.put('http://localhost:3000/projects/' + project._id +
+        '/' + user.username + '/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
+
+          project.users.push(user.username);
+
           done();
         });
-
     });
 
-    it('List projects (Should only show latest versions)', function (done) {
+    it('List projects after users added', function (done) {
       agent.get('http://localhost:3000/projects/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
-
-          //console.log('\nCurrent Projects:\n' + JSON.stringify(projects));
           expect(res.body.length)
             .to.be(3);
 
@@ -291,10 +349,101 @@
           expect(match)
             .to.be(true);
 
+          done();
+        });
+    });
+
+    it('Get existing project [0] after users added', function (done) {
+      var project = projects[0];
+
+      agent.get('http://localhost:3000/projects/' + project._id + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+
+          expect(res.ok)
+            .to.be.ok();
+
+          expect(res.body.users.length)
+            .to.be(2);
+
+          expect(utils.objMatch(res.body, project))
+            .to.be.ok();
+
+          var match =
+            utils.arrayMatch(res.body, projects);
+          expect(match)
+            .to.be(true);
 
           done();
         });
     });
+
+    it('Remove user [1] from project [0]', function (done) {
+      var project = projects[0];
+      var user = users[1];
+
+      agent.del('http://localhost:3000/projects/' + project._id +
+        '/' + user.username + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          // Delete user from test data
+          project.users.splice(
+            project.users.indexOf(user.username),
+            1);
+
+          done();
+        });
+    });
+
+    it('List projects after user removed', function (done) {
+      agent.get('http://localhost:3000/projects/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          expect(res.body.length)
+            .to.be(3);
+
+          var match =
+            utils.arrayMatch(res.body, projects);
+          expect(match)
+            .to.be(true);
+
+          done();
+        });
+    });
+
+    it('Get existing project [0] after user removed', function (done) {
+      var project = projects[0];
+
+      agent.get('http://localhost:3000/projects/' + project._id + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+          expect(res.body.users.length)
+            .to.be(1);
+
+          expect(utils.objMatch(res.body, project))
+            .to.be.ok();
+
+          var match =
+            utils.arrayMatch(res.body, projects);
+          expect(match)
+            .to.be(true);
+
+          done();
+        });
+    });
+
 
 
   });
