@@ -86,51 +86,53 @@ Gets a list of projects that you are authorised to see. Will only return the lat
 GET /projects
 < 200
 < Content-Type: application/json
-{
-    projects : [
-        {
-        "name": "Test project",
-        "owner": "user@domain.com",
-        "description": "A test project for unity-profiles",
-        "version" : "1"
-        }
-    ]
-}
+
+[
+    {
+    "_id": "{proj_id}",
+    "name": "Test project",
+    "admins": ["owner@domain.com"],
+    "users": ["user1@domain.com", "user2@domain.com"],
+    "description": "A test project for unity-profiles",
+    }
+]
+
 
 Gets information on a the lastest version of a specific project by name
-GET /projects/{proj_name}
+GET /projects/{proj_id}
 < 200
 < Content-Type: application/json
 {
+     "_id": "{proj_id}",
     "name": "Test project",
-    "owner": "user@domain.com",
+    "admins": ["owner@domain.com"],
+    "users": ["user1@domain.com", "user2@domain.com"],
     "description": "A test project for unity-profiles",
-    "version" : "1"
 }
 
-Gets information on a specific version of a specific project by name
-GET /projects/{proj_name}/{proj_version}
-< 200
-< Content-Type: application/json
-{
-    "name": "Test project",
-    "owner": "user@domain.com",
-    "description": "A test project for unity-profiles",
-    "version" : "1"
-}
-
-Creates a new  project by name and version
-PUT /projects/{proj_name}/{proj_version}
+Creates a new project by name with current user in admins list
+PUT /projects/{proj_name}
 > Accept: application/json
 > Content-Type: application/json
 {
     "name": "Test project",
-    "owner": "user@domain.com",
     "description": "A test project for unity-profiles",
-    "version" : "1"
 }
 < 201 
 
+Adds a new project user to the project
+PUT /projects/{proj_name}/{username}
+> Accept: application/json
+> Content-Type: application/json
+{}
+< 200
+
+Removes a project user from the project
+DELETE /projects/{proj_name}/{username}
+> Accept: application/json
+> Content-Type: application/json
+{}
+< 200 
 
 --
 Profile Manipulation
