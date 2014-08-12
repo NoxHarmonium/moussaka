@@ -9,11 +9,6 @@
   var config = require('../include/config.js');
   var _ = require('lodash');
 
-  // Private functions
-  var _validateProject = function _validateProject(project) {
-    return project !== undefined && project !== null;
-  };
-
   // Public functions
   module.exports = {
 
@@ -73,7 +68,7 @@
       }
 
       var project = req.project;
-      if (_validateProject(project)) {
+      if (project) {
         return res.send(409, {
           detail: 'Project already exists'
         });
@@ -103,7 +98,7 @@
       }
 
       var project = req.project;
-      if (_validateProject(project)) {
+      if (project) {
         return res.send({
           _id: project._id,
           name: project.name,
@@ -128,7 +123,7 @@
 
       var project = req.project;
       var user = req.selectedUser;
-      if (!_validateProject(project)) {
+      if (!project) {
         return res.send(404, {
           detail: 'Specified project doesn\'t exist'
         });
@@ -175,7 +170,7 @@
 
       var project = req.project;
       var user = req.selectedUser;
-      if (!_validateProject(project)) {
+      if (!project) {
         return res.send(404, {
           detail: 'Specified project doesn\'t exist'
         });
@@ -223,7 +218,7 @@
 
       var project = req.project;
       var user = req.selectedUser;
-      if (!_validateProject(project)) {
+      if (!project) {
         return res.send(404, {
           detail: 'Specified project doesn\'t exist'
         });
@@ -270,7 +265,7 @@
 
       var project = req.project;
       var user = req.selectedUser;
-      if (!_validateProject(project)) {
+      if (!project) {
         return res.send(404, {
           detail: 'Specified project doesn\'t exist'
         });
