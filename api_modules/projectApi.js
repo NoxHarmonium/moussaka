@@ -46,6 +46,12 @@
         return next();
       }
 
+      // Check for valid object ID
+      // Thanks: http://stackoverflow.com/a/14942113/1153203
+      if (!projectId.match(/^[0-9a-fA-F]{24}$/)) {
+        return next();
+      }
+
       var query = Project.findOne({
         '_id': projectId
       });
@@ -123,6 +129,7 @@
 
       var project = req.project;
       var user = req.selectedUser;
+
       if (!project) {
         return res.send(404, {
           detail: 'Specified project doesn\'t exist'
@@ -135,14 +142,12 @@
         });
       }
 
-      // TODO: Can this be faster with a mongo query?
       if (!_.contains(project.admins, req.user._id)) {
         return res.send(401, {
           detail: 'Only admins can change a project user list'
         });
       }
 
-      // TODO: Can this be faster with a mongo query?
       if (_.contains(project.users, user._id)) {
         return res.send(409, {
           detail: 'Specified user already added to project users'
@@ -170,6 +175,7 @@
 
       var project = req.project;
       var user = req.selectedUser;
+
       if (!project) {
         return res.send(404, {
           detail: 'Specified project doesn\'t exist'
@@ -182,14 +188,12 @@
         });
       }
 
-      // TODO: Can this be faster with a mongo query?
       if (!_.contains(project.admins, req.user._id)) {
         return res.send(401, {
           detail: 'Only admins can change a project user list'
         });
       }
 
-      // TODO: Can this be faster with a mongo query?
       if (!_.contains(req.project.users, user._id)) {
         return res.send(404, {
           detail: 'User is not a member of this project'
@@ -218,6 +222,7 @@
 
       var project = req.project;
       var user = req.selectedUser;
+
       if (!project) {
         return res.send(404, {
           detail: 'Specified project doesn\'t exist'
@@ -230,14 +235,12 @@
         });
       }
 
-      // TODO: Can this be faster with a mongo query?
       if (!_.contains(project.admins, req.user._id)) {
         return res.send(401, {
           detail: 'Only admins can change a project admin list'
         });
       }
 
-      // TODO: Can this be faster with a mongo query?
       if (_.contains(project.admins, user._id)) {
         return res.send(409, {
           detail: 'Specified user already added to project admins'
@@ -265,6 +268,7 @@
 
       var project = req.project;
       var user = req.selectedUser;
+
       if (!project) {
         return res.send(404, {
           detail: 'Specified project doesn\'t exist'
@@ -277,15 +281,19 @@
         });
       }
 
-      // TODO: Can this be faster with a mongo query?
-      if (_.contains(project.admins, req.user._id)) {
+      if (project.admins.length === 1) {
+        return res.send(401, {
+          detail: 'A project must have at least one admin'
+        });
+      }
+
+      if (!_.contains(project.admins, req.user._id)) {
         return res.send(401, {
           detail: 'Only admins can change a project user list'
         });
       }
 
-      // TODO: Can this be faster with a mongo query?
-      if (_.contains(req.project.admins, user._id)) {
+      if (!_.contains(req.project.admins, user._id)) {
         return res.send(404, {
           detail: 'User is not an admin of this project'
         });
@@ -293,6 +301,7 @@
 
       // Remove user from admins array
       _.pull(project.admins, user._id);
+      project.markModified('admins');
 
       project.save(function (err) {
         if (err) {
