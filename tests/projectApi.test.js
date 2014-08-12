@@ -78,7 +78,7 @@
       var user = users[1];
 
       agent.put('http://localhost:3000/projects/' + project._id +
-        '/' + user.username + '/')
+        '/users/' + user.username + '/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
@@ -93,7 +93,7 @@
       var user = users[1];
 
       agent.del('http://localhost:3000/projects/' + project._id +
-        '/' + user.username + '/')
+        '/users/' + user.username + '/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
@@ -287,7 +287,7 @@
       var user = users[1];
 
       agent.put('http://localhost:3000/projects/' + project._id +
-        '/' + user.username + '/')
+        '/users/' + user.username + '/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
@@ -305,7 +305,7 @@
       var user = users[1];
 
       agent.put('http://localhost:3000/projects/' + project._id +
-        '/' + user.username + '/')
+        '/users/' + user.username + '/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
@@ -321,7 +321,7 @@
       var user = users[2];
 
       agent.put('http://localhost:3000/projects/' + project._id +
-        '/' + user.username + '/')
+        '/users/' + user.username + '/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
@@ -384,7 +384,7 @@
       var user = users[1];
 
       agent.del('http://localhost:3000/projects/' + project._id +
-        '/' + user.username + '/')
+        '/users/' + user.username + '/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);

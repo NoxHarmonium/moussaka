@@ -108,8 +108,14 @@
     app.get('/projects/', projectApi.listProjects);
     app.get('/projects/:projectId/', projectApi.getProject);
     app.put('/projects/', projectApi.addProject);
-    app.put('/projects/:projectId/:user/', projectApi.addProjectUser);
-    app.del('/projects/:projectId/:user/', projectApi.removeProjectUser);
+    app.put('/projects/:projectId/users/:user/',
+      projectApi.addProjectUser);
+    app.del('/projects/:projectId/users/:user/',
+      projectApi.removeProjectUser);
+    app.put('/projects/:projectId/admins/:user/',
+      projectApi.addProjectAdmin);
+    app.del('/projects/:projectId/admins/:user/',
+      projectApi.removeProjectAdmin);
     if (config.enable_test_exts) {
       app.get('/test/project_api/reset/', projectApi.resetTests);
     }
