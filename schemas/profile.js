@@ -6,41 +6,20 @@
   var Schema = mongoose.Schema;
 
   var ProfileSchema = new Schema({
-    project: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: 'Project'
-    },
-    timestamp: {
-      type: Date,
-      default: Date.now,
+    projectVersion: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'ProjectVersion',
       required: true
     },
-    owner: {
-      type: String,
-      ref: 'User'
+    profileData: {
+      type: Schema.Types.Mixed,
+      required: true
     },
-    description: {
-      type: String,
-    },
-    overlay: {
-      type: Schema.Types.Mixed
-    },
-    parentProfile: {
-      type: Schema.Types.ObjectId,
-      ref: 'Profile'
-    }
+    timestamp: [{
+      type: Date,
+      default: Date.now
+    }]
   });
-
-  // Apply compound index over name and version
-  ProfileSchema.index({
-    projectName: 1,
-    timestamp: -1,
-  });
-  //, {
-  // Mongo cannot use 2 keys to determine uniqueness
-  //unique: true, dropDups: true 
-  //});
 
   module.exports = mongoose.model('Profile', ProfileSchema);
 
