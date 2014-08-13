@@ -461,6 +461,22 @@
         });
     });
 
+    it('Add current admin as user to project [0]', function (done) {
+      var project = projects[0];
+      var user = users[2];
+
+      agent.put('http://localhost:3000/projects/' + project._id +
+        '/users/' + user.username + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(409);
+
+          done();
+        });
+    });
+
     it('Add user [1] to project [0]', function (done) {
       var project = projects[0];
       var user = users[1];
@@ -495,9 +511,9 @@
         });
     });
 
-    it('Add user [2] to project [0]', function (done) {
+    it('Add user [0] to project [0]', function (done) {
       var project = projects[0];
-      var user = users[2];
+      var user = users[0];
 
       agent.put('http://localhost:3000/projects/' + project._id +
         '/users/' + user.username + '/')
@@ -602,10 +618,28 @@
           expect(res.ok)
             .to.be.ok();
           expect(res.body.users.length)
-            .to.be(1);
+            .to.be(project.users.length);
 
           expect(utils.objMatch(res.body, project))
             .to.be.ok();
+
+          done();
+        });
+    });
+
+    it('Add user [1] to project [0] again', function (done) {
+      var project = projects[0];
+      var user = users[1];
+
+      agent.put('http://localhost:3000/projects/' + project._id +
+        '/users/' + user.username + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          project.users.push(user.username);
 
           done();
         });
@@ -726,7 +760,10 @@
           expect(res.ok)
             .to.be.ok();
 
+          // Make sure user [1] is not in both
+          // the admin and user lists
           project.admins.push(user.username);
+          _.pull(project.users, user.username);
 
           done();
         });

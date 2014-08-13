@@ -154,7 +154,8 @@
       }
 
       var project = req.project;
-      var user = req.selectedUser;
+      var selectedUser = req.selectedUser;
+      var loggedInUser = req.user;
 
       if (!project) {
         return res.send(404, {
@@ -162,26 +163,32 @@
         });
       }
 
-      if (!user) {
+      if (!selectedUser) {
         return res.send(404, {
           detail: 'Specified user doesn\'t exist'
         });
       }
 
-      if (!_.contains(project.admins, req.user._id)) {
+      if (!_.contains(project.admins, loggedInUser._id)) {
         return res.send(401, {
           detail: 'Only admins can change a project user list'
         });
       }
 
-      if (_.contains(project.users, user._id)) {
+      if (_.contains(project.admins, selectedUser._id)) {
+        return res.send(409, {
+          detail: 'Specified user is already an admin of this project.'
+        });
+      }
+
+      if (_.contains(project.users, selectedUser._id)) {
         return res.send(409, {
           detail: 'Specified user already added to project users'
         });
       }
 
       // Add user to users array
-      project.users.push(user._id);
+      project.users.push(selectedUser._id);
 
       project.save(function (err) {
         if (err) {
@@ -200,7 +207,8 @@
       }
 
       var project = req.project;
-      var user = req.selectedUser;
+      var selectedUser = req.selectedUser;
+      var loggedInUser = req.user;
 
       if (!project) {
         return res.send(404, {
@@ -208,26 +216,26 @@
         });
       }
 
-      if (!user) {
+      if (!selectedUser) {
         return res.send(404, {
           detail: 'Specified user doesn\'t exist'
         });
       }
 
-      if (!_.contains(project.admins, req.user._id)) {
+      if (!_.contains(project.admins, loggedInUser._id)) {
         return res.send(401, {
           detail: 'Only admins can change a project user list'
         });
       }
 
-      if (!_.contains(req.project.users, user._id)) {
+      if (!_.contains(req.project.users, selectedUser._id)) {
         return res.send(404, {
           detail: 'User is not a member of this project'
         });
       }
 
       // Remove user from users array
-      _.pull(project.users, user._id);
+      _.pull(project.users, selectedUser._id);
       project.markModified('users');
 
       project.save(function (err) {
@@ -247,7 +255,8 @@
       }
 
       var project = req.project;
-      var user = req.selectedUser;
+      var selectedUser = req.selectedUser;
+      var loggedInUser = req.user;
 
       if (!project) {
         return res.send(404, {
@@ -255,26 +264,32 @@
         });
       }
 
-      if (!user) {
+      if (!selectedUser) {
         return res.send(404, {
           detail: 'Specified user doesn\'t exist'
         });
       }
 
-      if (!_.contains(project.admins, req.user._id)) {
+      if (!_.contains(project.admins, loggedInUser._id)) {
         return res.send(401, {
           detail: 'Only admins can change a project admin list'
         });
       }
 
-      if (_.contains(project.admins, user._id)) {
+      if (_.contains(project.users, selectedUser._id)) {
+        // Promote user to admin
+        _.pull(project.users, selectedUser._id);
+        project.markModified('users');
+      }
+
+      if (_.contains(project.admins, selectedUser._id)) {
         return res.send(409, {
           detail: 'Specified user already added to project admins'
         });
       }
 
       // Add user to admins array
-      project.admins.push(user._id);
+      project.admins.push(selectedUser._id);
 
       project.save(function (err) {
         if (err) {
@@ -293,7 +308,8 @@
       }
 
       var project = req.project;
-      var user = req.selectedUser;
+      var selectedUser = req.selectedUser;
+      var loggedInUser = req.user;
 
       if (!project) {
         return res.send(404, {
@@ -301,7 +317,7 @@
         });
       }
 
-      if (!user) {
+      if (!selectedUser) {
         return res.send(404, {
           detail: 'Specified user doesn\'t exist'
         });
@@ -313,20 +329,20 @@
         });
       }
 
-      if (!_.contains(project.admins, req.user._id)) {
+      if (!_.contains(project.admins, loggedInUser._id)) {
         return res.send(401, {
           detail: 'Only admins can change a project user list'
         });
       }
 
-      if (!_.contains(req.project.admins, user._id)) {
+      if (!_.contains(req.project.admins, selectedUser._id)) {
         return res.send(404, {
           detail: 'User is not an admin of this project'
         });
       }
 
       // Remove user from admins array
-      _.pull(project.admins, user._id);
+      _.pull(project.admins, selectedUser._id);
       project.markModified('admins');
 
       project.save(function (err) {
