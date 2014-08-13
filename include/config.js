@@ -4,15 +4,15 @@
   var configReader = require('yaml-config');
   var colors = require('colors');
 
-  var enviroment = process.env.NODE_ENV;
+  var environment = process.env.NODE_ENV;
 
-  if (!enviroment) {
+  if (!environment) {
     console.log('Warning: '.yellow +
-      'The NODE_ENV enviroment variable isn\'t set.' +
+      'The NODE_ENV environment variable isn\'t set.' +
       ' Defaulting to \'development\'');
-    enviroment = 'development';
+    environment = 'development';
   }
 
-  module.exports = configReader.readConfig('config.yaml', enviroment);
+  module.exports = configReader.readConfig('config.yaml', environment);
 
 })(require, module);
