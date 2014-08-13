@@ -26,6 +26,9 @@ default: # The default config profile. (With documentation)
     # Show line number and other information when an error occurs
     show_friendly_errors:   false
 
+    # Maximum records that can be returned by an rest API query
+    max_records_per_query:  20
+
 
 development: # The development config profile.
     listen_port:            3000
@@ -33,6 +36,7 @@ development: # The development config profile.
     mongo_url:              "mongodb://localhost/unity-profiles-dev"
     enable_test_exts:       true
     show_friendly_errors:   true
+    max_records_per_query:  20
 
 travis-ci: # The development config profile.
     listen_port:            3000
@@ -40,4 +44,5 @@ travis-ci: # The development config profile.
     mongo_url:              "mongodb://localhost/unity-profiles-dev"
     enable_test_exts:       true 
     show_friendly_errors :  true
-    
+    max_records_per_query:  20
+

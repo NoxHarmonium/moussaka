@@ -13,6 +13,9 @@
   module.exports = {
 
     listProjects: function (req, res, next) {
+      var minRecord = req.query.minRecord;
+      var maxRecord = req.query.maxRecord;
+
       if (!req.user) {
         return res.send(401, {
           detail: 'Not logged in'
@@ -31,6 +34,29 @@
 
       // Project correct fields
       query.select('_id name version admins users description');
+
+      query.sort({
+        'name': 'asc'
+      });
+
+      var maxRecordCount = config.max_records_per_query;
+      // Pagination
+      if (minRecord) {
+        query.skip(minRecord);
+      }
+      if (minRecord && maxRecord) {
+        if (maxRecord < minRecord) {
+          return res.send(400, {
+            detail: 'Invalid pagination range'
+          });
+        }
+
+        maxRecordCount = Math.min(
+          maxRecordCount, (maxRecord - minRecord) + 1
+        );
+      }
+
+      query.limit(maxRecordCount);
 
       query.exec(function (err, projects) {
         if (err) {
@@ -311,6 +337,7 @@
       });
 
     },
+
     //
     // Test extensions
     //
@@ -325,9 +352,13 @@
       }
 
       var query = Project.find({
-        'name': {
-          $in: projects
-        }
+        $or: [{
+          'name': {
+            $in: projects
+          }
+        }, {
+          'name': /TEST_DATA_DELETE*/
+        }]
       });
       query.exec(function (err, projects) {
         if (err) {
