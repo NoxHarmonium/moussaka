@@ -5,18 +5,14 @@
   var config = require('../include/config');
   var Schema = mongoose.Schema;
 
-  var ProfileSchema = new Schema({
-    projectId: {
+  var SessionSchema = new Schema({
+    deviceId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Project',
+      ref: 'Device',
       required: true
     },
-    projectVersion: {
+    user: {
       type: String,
-      required: true
-    },
-    profileData: {
-      type: Schema.Types.Mixed,
       required: true
     },
     timestamp: [{
@@ -25,6 +21,6 @@
     }]
   });
 
-  module.exports = mongoose.model('Profile', ProfileSchema);
+  module.exports = mongoose.model('Session', SessionSchema);
 
 })(require, module);

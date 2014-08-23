@@ -5,7 +5,7 @@
   var config = require('../include/config');
   var Schema = mongoose.Schema;
 
-  var ProfileSchema = new Schema({
+  var DeviceSchema = new Schema({
     projectId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Project',
@@ -15,7 +15,15 @@
       type: String,
       required: true
     },
-    profileData: {
+    macAddress: {
+      type: String,
+      required: true
+    },
+    dataSchema: {
+      type: Schema.Types.Mixed,
+      required: true
+    },
+    currentState: {
       type: Schema.Types.Mixed,
       required: true
     },
@@ -25,6 +33,6 @@
     }]
   });
 
-  module.exports = mongoose.model('Profile', ProfileSchema);
+  module.exports = mongoose.model('Device', DeviceSchema);
 
 })(require, module);
