@@ -76,6 +76,28 @@
             z: 30
           }
         }
+      },
+      currentState: {
+        'titleColor': {
+          values: {
+            r: 255,
+            g: 50,
+            b: 0,
+            a: 0
+          }
+        },
+        'rotateSpeed': {
+          values: {
+            n: 3
+          }
+        },
+        'objectPosition': {
+          values: {
+            x: 10,
+            y: 20,
+            z: 30
+          }
+        }
       }
     }];
   };

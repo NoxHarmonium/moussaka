@@ -14,7 +14,10 @@
     var projects = testData.getTestProjects();
     var projectsExt = testData.getTestProjectsExt();
     var profiles = testData.getTestProfiles();
+    var devices = testData.getTestDevices();
     var agent = superagent.agent();
+    var session = null;
+    var profile = null;
 
     it('Start server', function (done) {
       serverModule.start(function (e, server) {
@@ -25,184 +28,64 @@
       });
     });
 
-    it('Reset users test', function (done) {
-      agent.get('http://localhost:3000/test/user_api/reset/')
+    it('Get session created by deviceApi tests', function (done) {
+      var device = devices[0];
+
+      agent.get('http://localhost:3000/sessions/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
-          done();
-        });
-    });
-
-    it('Reset projects test', function (done) {
-      agent.get('http://localhost:3000/test/project_api/reset/')
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.ok)
-            .to.be.ok();
-          done();
-        });
-    });
-
-    it('Reset profiles test', function (done) {
-      agent.get('http://localhost:3000/test/profile_api/reset/')
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.ok)
-            .to.be.ok();
-          done();
-        });
-    });
-
-    it('Create user [0]', function (done) {
-      agent.put('http://localhost:3000/users/' + users[0].username + '/')
-        .send(users[0])
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.status)
-            .to.be(201);
-          done();
-        });
-    });
-
-    it('Create project [0]', function (done) {
-      var project = projects[0];
-
-      agent.put('http://localhost:3000/projects/' + project.name + '/' +
-        project.version + '/')
-        .send(project)
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.ok)
-            .to.be.ok();
-          expect(res.body._id)
-            .to.be.ok();
-          project._id = res.body._id;
-
-          done();
-        });
-
-    });
-
-
-    it('Create profile [0]', function (done) {
-      var project = projects[0];
-      var profile = profiles[0];
-      profile.project = project._id;
-
-      agent.put('http://localhost:3000/projects/' + project.name + '/' +
-        project.version + '/profiles/')
-        .send(profile)
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          //console.log('response: ' + res.body.detail);
-          expect(res.status)
-            .to.be.ok();
-          expect(res.body._id)
-            .to.be.ok();
-          profile._id = res.body._id;
-          done();
-        });
-
-    });
-
-    it('Create profile [1] with invalid parent id', function (done) {
-      var project = projects[0];
-      var profile = profiles[1];
-
-      agent.put('http://localhost:3000/projects/' + project.name + '/' +
-        project.version + '/profiles/')
-        .send(profile)
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.status)
-            .to.be(400);
-          done();
-        });
-
-    });
-
-    it('Create profile [1] with valid parent id', function (done) {
-      var project = projects[0];
-
-      var profile = profiles[1];
-      profile.project = project._id;
-      profile.parentProfile = profiles[0]._id;
-
-      agent.put('http://localhost:3000/projects/' + project.name + '/' +
-        project.version + '/profiles/')
-        .send(profile)
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.status)
-            .to.be(200);
-          expect(res.body._id)
-            .to.be.ok();
-          profile._id = res.body._id;
-          done();
-        });
-
-    });
-
-    it('Create profile [2] with non existant user', function (done) {
-      var project = projects[0];
-      var profile = profiles[2];
-      profile.parentProfile = profiles[1]._id;
-
-      agent.put('http://localhost:3000/projects/' + project.name + '/' +
-        project.version + '/profiles/')
-        .send(profile)
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.status)
-            .to.be(400);
-          done();
-        });
-    });
-
-    it('List profiles', function (done) {
-      var project = projects[0];
-      var profile = profiles[0];
-
-      agent.get('http://localhost:3000/projects/' + project.name + '/' +
-        project.version + '/profiles/')
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-
-          expect(res.ok)
-            .to.be.ok();
-
           expect(res.body.length)
-            .to.be(2);
+            .to.be(1);
+          session = res.body[0];
+          device._id = session.device._id;
 
-          for (var i = 0; i < res.body.length; i++) {
-            // Strip API generated propeties
-            // TODO: Filter output from API call to not include things like __v
-            delete res.body[i].__v;
-            delete res.body[i].timestamp;
+          done();
+        });
+    });
 
-            //console.log('Comparing: ' + JSON.stringify(res.body[i])
-            //  .yellow + ' with ' + JSON.stringify(profiles[i])
-            //  .cyan);
+    it('Save current session as profile [0]', function (done) {
+      var device = devices[0];
+      var data = {
+        sessionId: session._id,
+        profileName: 'test profile 1'
+      };
 
-            var match =
-              utils.objMatch(res.body[i], profiles[i]);
-            expect(match)
-              .to.be(true);
-          }
+      agent.put('http://localhost:3000/profiles/')
+        .send(data)
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+          expect(res.body._id)
+            .to.be.ok();
+          profile = res.body;
 
+          done();
+        });
+    });
 
+    it('Retrieve profile [0]', function (done) {
+      var device = devices[0];
+
+      agent.get('http://localhost:3000/profiles/' + profile._id + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          var savedState = res.body;
+
+          expect(
+            utils.objMatch(
+              session.device.currentState,
+              savedState)
+          )
+            .to.be.ok();
 
           done();
         });
