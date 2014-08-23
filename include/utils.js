@@ -101,6 +101,12 @@
         }
 
       });
+    },
+
+    validateMacAddress: function (macAddress) {
+      // Thanks: http://stackoverflow.com/a/4260512/1153203
+      return (/^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$/i)
+        .test(macAddress);
     }
   };
 })(require, module);

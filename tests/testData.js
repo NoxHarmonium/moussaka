@@ -39,6 +39,47 @@
     }];
   };
 
+  exports.getTestDevices = function () {
+    return [{
+      projectId: '',
+      projectVersion: '',
+      deviceName: 'Jeff\'s iPad',
+      mac: '3D:F2:C9:A6:B3:4F',
+      dataSchema: {
+        'titleColor': {
+          type: 'Color',
+          values: {
+            r: 255,
+            g: 50,
+            b: 0,
+            a: 0
+          }
+        },
+        'rotateSpeed': {
+          type: 'float',
+          min: 0,
+          max: 100,
+          values: {
+            n: 3
+          }
+        },
+        'objectPosition': {
+          type: 'position',
+          lockedAxis: {
+            x: false,
+            y: false,
+            z: true
+          },
+          values: {
+            x: 10,
+            y: 20,
+            z: 30
+          }
+        }
+      }
+    }];
+  };
+
   exports.getTestProfiles = function () {
     return [{
       owner: 'test.account@test.com',
