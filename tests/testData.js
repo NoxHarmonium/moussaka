@@ -42,26 +42,17 @@
   exports.getTestDevices = function () {
     return [{
       projectId: '',
-      projectVersion: '',
+      projectVersion: '0.3',
       deviceName: 'Jeff\'s iPad',
       macAddress: '3D:F2:C9:A6:B3:4F',
       dataSchema: {
         'titleColor': {
-          type: 'Color',
-          values: {
-            r: 255,
-            g: 50,
-            b: 0,
-            a: 0
-          }
+          type: 'Color'
         },
         'rotateSpeed': {
           type: 'float',
           min: 0,
-          max: 100,
-          values: {
-            n: 3
-          }
+          max: 100
         },
         'objectPosition': {
           type: 'position',
@@ -69,11 +60,6 @@
             x: false,
             y: false,
             z: true
-          },
-          values: {
-            x: 10,
-            y: 20,
-            z: 30
           }
         }
       },

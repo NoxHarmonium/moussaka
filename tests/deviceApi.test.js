@@ -106,11 +106,11 @@
 
         // Save correct MAC address and set to invalid
         tempStore.correctMac = device.macAddress;
-        device.mac = chance.string();
+        device.macAddress = encodeURIComponent(chance.string());
 
 
         agent.put('http://localhost:3000/projects/' +
-          project._id + '/devices/')
+          project._id + '/devices/' + device.macAddress + '/')
           .send(device)
           .end(function (e, res) {
             expect(e)
@@ -132,12 +132,12 @@
       ' with invalid project id', function (done) {
         var project = projects[0];
         var device = devices[0];
-        device.projectId = chance.string();
+        device.projectId = encodeURIComponent(chance.string());
         //device.projectVersion = project.version; 
         // TODO: Implement project version stuff
 
         agent.put('http://localhost:3000/projects/' +
-          device.projectId + '/devices/')
+          device.projectId + '/devices/' + device.macAddress + '/')
           .send(device)
           .end(function (e, res) {
             expect(e)
@@ -159,16 +159,13 @@
       // TODO: Implement project version stuff
 
       agent.put('http://localhost:3000/projects/' +
-        device.projectId + '/devices/')
+        device.projectId + '/devices/' + device.macAddress + '/')
         .send(device)
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
-          expect(res.body._id)
-            .to.be.ok();
-          device._id = res.body._id;
 
           done();
         });
@@ -178,12 +175,15 @@
       var device = devices[0];
 
       agent.get('http://localhost:3000/projects/' +
-        device.projectId + '/devices/' + device._id + '/')
+        device.projectId + '/devices/' + device.macAddress + '/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
+
+          device.timestamp = res.body.timestamp;
+
           expect(utils.objMatch(res.body, device))
             .to.be.ok();
 
@@ -205,6 +205,9 @@
           // Scan list for specific device
           var matchFound = false;
           _.every(res.body, function (entry) {
+            console.log('a: ' + JSON.stringify(entry) + '\n');
+            console.log('b: ' + JSON.stringify(device) + '\n');
+
             if (utils.objMatch(entry, device)) {
               matchFound = true;
               return false;
@@ -223,7 +226,7 @@
       var device = devices[0];
 
       agent.del('http://localhost:3000/projects/' +
-        device.projectId + '/devices/' + device._id + '/')
+        device.projectId + '/devices/' + device.macAddress + '/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
@@ -238,7 +241,7 @@
       var device = devices[0];
 
       agent.get('http://localhost:3000/projects/' +
-        device.projectId + '/devices/' + device._id + '/')
+        device.projectId + '/devices/' + device.macAddress + '/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
@@ -287,16 +290,13 @@
       // TODO: Implement project version stuff
 
       agent.put('http://localhost:3000/projects/' +
-        device.projectId + '/devices/')
+        device.projectId + '/devices/' + device.macAddress + '/')
         .send(device)
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
-          expect(res.body._id)
-            .to.be.ok();
-          device._id = res.body._id;
 
           done();
         });
@@ -308,7 +308,7 @@
       var device = devices[0];
 
       agent.put('http://localhost:3000/projects/' +
-        device.projectId + '/sessions/' + device._id + '/')
+        device.projectId + '/sessions/' + device.macAddress + '/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
@@ -338,7 +338,7 @@
       var device = devices[0];
 
       agent.put('http://localhost:3000/projects/' +
-        device.projectId + '/sessions/' + device._id + '/')
+        device.projectId + '/sessions/' + device.macAddress + '/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
@@ -380,7 +380,7 @@
       var device = devices[0];
 
       agent.put('http://localhost:3000/projects/' +
-        device.projectId + '/sessions/' + device._id + '/')
+        device.projectId + '/sessions/' + device.macAddress + '/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
@@ -421,7 +421,7 @@
       var device = devices[0];
 
       agent.get('http://localhost:3000/projects/' +
-        device.projectId + '/devices/' + device._id +
+        device.projectId + '/devices/' + device.macAddress +
         '/schema/')
         .end(function (e, res) {
           expect(e)
@@ -452,7 +452,7 @@
       }];
 
       agent.post('http://localhost:3000/projects/' +
-        device.projectId + '/sessions/' + device._id +
+        device.projectId + '/sessions/' + device.macAddress +
         '/updates/')
         .send(sentUpdates[0])
         .end(function (e, res) {
@@ -469,7 +469,7 @@
       var device = devices[0];
 
       agent.get('http://localhost:3000/projects/' +
-        device.projectId + '/sessions/' + device._id +
+        device.projectId + '/sessions/' + device.macAddress +
         '/updates/')
         .end(function (e, res) {
           expect(e)
@@ -490,7 +490,7 @@
       var device = devices[0];
 
       agent.get('http://localhost:3000/projects/' +
-        device.projectId + '/sessions/' + device._id +
+        device.projectId + '/sessions/' + device.macAddress +
         '/updates/')
         .end(function (e, res) {
           expect(e)
@@ -525,7 +525,7 @@
       // test (schemaValidation.test.js?)
 
       agent.post('http://localhost:3000/projects/' +
-        device.projectId + '/sessions/' + device._id +
+        device.projectId + '/sessions/' + device.macAddress +
         '/updates/')
         .send(sentUpdates[0])
         .end(function (e, res) {
@@ -542,7 +542,7 @@
       var device = devices[0];
 
       agent.get('http://localhost:3000/projects/' +
-        device.projectId + '/sessions/' + device._id +
+        device.projectId + '/sessions/' + device.macAddress +
         '/updates/')
         .end(function (e, res) {
           expect(e)
@@ -605,7 +605,7 @@
         var sendUpdate = function () {
           var deferred = Q.defer();
           agent.post('http://localhost:3000/projects/' +
-            device.projectId + '/sessions/' + device._id +
+            device.projectId + '/sessions/' + device.macAddress +
             '/updates/')
             .send(sentUpdates[currentUpdateIndex])
             .end(function (e, res) {
@@ -632,7 +632,7 @@
       var device = devices[0];
 
       agent.get('http://localhost:3000/projects/' +
-        device.projectId + '/sessions/' + device._id +
+        device.projectId + '/sessions/' + device.macAddress +
         '/updates/')
         .end(function (e, res) {
           expect(e)

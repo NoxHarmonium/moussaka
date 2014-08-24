@@ -17,6 +17,12 @@
     },
     macAddress: {
       type: String,
+      required: true,
+      unique: true,
+      index: true
+    },
+    deviceName: {
+      type: String,
       required: true
     },
     dataSchema: {
