@@ -44,7 +44,7 @@
       projectId: '',
       projectVersion: '',
       deviceName: 'Jeff\'s iPad',
-      mac: '3D:F2:C9:A6:B3:4F',
+      macAddress: '3D:F2:C9:A6:B3:4F',
       dataSchema: {
         'titleColor': {
           type: 'Color',

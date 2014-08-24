@@ -105,11 +105,12 @@
         // TODO: Implement project version stuff
 
         // Save correct MAC address and set to invalid
-        tempStore.correctMac = device.mac;
+        tempStore.correctMac = device.macAddress;
         device.mac = chance.string();
 
 
-        agent.put('http://localhost:3000/devices/')
+        agent.put('http://localhost:3000/projects/' +
+          project._id + '/devices/')
           .send(device)
           .end(function (e, res) {
             expect(e)
@@ -120,7 +121,7 @@
               .to.be(409);
 
             // Restore correct MAC address
-            device.mac = tempStore.correctMac;
+            device.macAddress = tempStore.correctMac;
             delete tempStore.correctMac;
 
             done();
@@ -135,7 +136,8 @@
         //device.projectVersion = project.version; 
         // TODO: Implement project version stuff
 
-        agent.put('http://localhost:3000/devices/')
+        agent.put('http://localhost:3000/projects/' +
+          device.projectId + '/devices/')
           .send(device)
           .end(function (e, res) {
             expect(e)
@@ -156,7 +158,8 @@
       //device.projectVersion = project.version; 
       // TODO: Implement project version stuff
 
-      agent.put('http://localhost:3000/devices/')
+      agent.put('http://localhost:3000/projects/' +
+        device.projectId + '/devices/')
         .send(device)
         .end(function (e, res) {
           expect(e)
@@ -174,7 +177,8 @@
     it('Check device [0] has been added to project [0]', function (done) {
       var device = devices[0];
 
-      agent.get('http://localhost:3000/devices/' + device._id + '/')
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/devices/' + device._id + '/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
@@ -190,7 +194,8 @@
     it('Check devices are listing correctly', function (done) {
       var device = devices[0];
 
-      agent.get('http://localhost:3000/devices/')
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/devices/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
@@ -217,7 +222,8 @@
     it('Disconnect device [0] to server under project [0]', function (done) {
       var device = devices[0];
 
-      agent.del('http://localhost:3000/devices/' + device._id + '/')
+      agent.del('http://localhost:3000/projects/' +
+        device.projectId + '/devices/' + device._id + '/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
@@ -231,7 +237,8 @@
     it('Check device [0] has been removed from project [0]', function (done) {
       var device = devices[0];
 
-      agent.get('http://localhost:3000/devices/' + device._id + '/')
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/devices/' + device._id + '/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
@@ -247,7 +254,8 @@
     it('Check devices are listing correctly', function (done) {
       var device = devices[0];
 
-      agent.get('http://localhost:3000/devices/')
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/devices/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
@@ -278,7 +286,8 @@
       //device.projectVersion = project.version; 
       // TODO: Implement project version stuff
 
-      agent.put('http://localhost:3000/devices/')
+      agent.put('http://localhost:3000/projects/' +
+        device.projectId + '/devices/')
         .send(device)
         .end(function (e, res) {
           expect(e)
@@ -298,7 +307,8 @@
       var project = projects[0];
       var device = devices[0];
 
-      agent.put('http://localhost:3000/sessions/' + device._id + '/')
+      agent.put('http://localhost:3000/projects/' +
+        device.projectId + '/sessions/' + device._id + '/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
@@ -327,7 +337,8 @@
       var project = projects[0];
       var device = devices[0];
 
-      agent.put('http://localhost:3000/sessions/' + device._id + '/')
+      agent.put('http://localhost:3000/projects/' +
+        device.projectId + '/sessions/' + device._id + '/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
@@ -368,7 +379,8 @@
       var project = projects[0];
       var device = devices[0];
 
-      agent.put('http://localhost:3000/sessions/' + device._id + '/')
+      agent.put('http://localhost:3000/projects/' +
+        device.projectId + '/sessions/' + device._id + '/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
@@ -408,7 +420,8 @@
     it('Get schema of device [0]', function (done) {
       var device = devices[0];
 
-      agent.get('http://localhost:3000/devices/' + device._id +
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/devices/' + device._id +
         '/schema/')
         .end(function (e, res) {
           expect(e)
@@ -438,7 +451,8 @@
         }
       }];
 
-      agent.post('http://localhost:3000/sessions/' + device._id +
+      agent.post('http://localhost:3000/projects/' +
+        device.projectId + '/sessions/' + device._id +
         '/updates/')
         .send(sentUpdates[0])
         .end(function (e, res) {
@@ -454,7 +468,8 @@
     it('Check device [0] updates', function (done) {
       var device = devices[0];
 
-      agent.get('http://localhost:3000/devices/' + device._id +
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/sessions/' + device._id +
         '/updates/')
         .end(function (e, res) {
           expect(e)
@@ -474,7 +489,8 @@
       done) {
       var device = devices[0];
 
-      agent.get('http://localhost:3000/devices/' + device._id +
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/sessions/' + device._id +
         '/updates/')
         .end(function (e, res) {
           expect(e)
@@ -508,7 +524,8 @@
       // More extensive value validation testing will be in own
       // test (schemaValidation.test.js?)
 
-      agent.post('http://localhost:3000/sessions/' + device._id +
+      agent.post('http://localhost:3000/projects/' +
+        device.projectId + '/sessions/' + device._id +
         '/updates/')
         .send(sentUpdates[0])
         .end(function (e, res) {
@@ -524,7 +541,8 @@
     it('Check device [0] updates', function (done) {
       var device = devices[0];
 
-      agent.get('http://localhost:3000/devices/' + device._id +
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/sessions/' + device._id +
         '/updates/')
         .end(function (e, res) {
           expect(e)
@@ -586,7 +604,8 @@
 
         var sendUpdate = function () {
           var deferred = Q.defer();
-          agent.post('http://localhost:3000/sessions/' + device._id +
+          agent.post('http://localhost:3000/projects/' +
+            device.projectId + '/sessions/' + device._id +
             '/updates/')
             .send(sentUpdates[currentUpdateIndex])
             .end(function (e, res) {
@@ -612,7 +631,8 @@
     it('Check device [0] updates for ordering', function (done) {
       var device = devices[0];
 
-      agent.get('http://localhost:3000/devices/' + device._id +
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/sessions/' + device._id +
         '/updates/')
         .end(function (e, res) {
           expect(e)
