@@ -8,6 +8,7 @@
   var moment = require('moment');
   var config = require('../include/config.js');
   var _ = require('lodash');
+  var Q = require('q');
   var utils = require('../include/utils.js');
 
   // Public functions
@@ -48,6 +49,7 @@
 
     registerDevice: function (req, res, next) {
       var device = req.body;
+      var project = req.project;
       var existingDevice = req.device;
 
       if (!utils.validateMacAddress(device.macAddress)) {
@@ -57,7 +59,7 @@
         });
       }
 
-      if (!req.project) {
+      if (!project) {
         return res.send(404, {
           detail: 'Project not found'
         });
@@ -101,17 +103,46 @@
       }
     },
 
-    getDevice: function (req, res, next) {
+    deregisterDevice: function (req, res, next) {
       var project = req.project;
       var device = req.device;
 
-      if (!req.project) {
+      if (!project) {
         return res.send(404, {
           detail: 'Project not found'
         });
       }
 
-      if (!req.device) {
+      if (!device) {
+        return res.send(404, {
+          detail: 'Device not found'
+        });
+      }
+
+      var query = Device.remove({
+        'macAddress': device.macAddress
+      });
+
+      query.exec(function (err) {
+        if (err) {
+          return next(err);
+        }
+        res.send(200);
+      });
+
+    },
+
+    getDevice: function (req, res, next) {
+      var project = req.project;
+      var device = req.device;
+
+      if (!project) {
+        return res.send(404, {
+          detail: 'Project not found'
+        });
+      }
+
+      if (!device) {
         return res.send(404, {
           detail: 'Device not found'
         });
@@ -155,6 +186,103 @@
         }
         res.send(200, devices);
       });
+    },
+
+    startSession: function (req, res, next) {
+      var project = req.project;
+      var device = req.device;
+      var loggedInUser = req.user;
+
+      if (!loggedInUser) {
+        return res.send(401, {
+          detail: 'Not logged in'
+        });
+      }
+
+      if (!(_.contains(project.admins, loggedInUser._id) ||
+        _.contains(project.users, loggedInUser._id))) {
+        return res.send(401, {
+          detail: 'Only authorised project members can ' +
+            'start a session on this device'
+        });
+      }
+
+      if (!project) {
+        return res.send(404, {
+          detail: 'Project not found'
+        });
+      }
+
+      if (!device) {
+        return res.send(404, {
+          detail: 'Device not found'
+        });
+      }
+
+
+      var createNew = false;
+
+      // Get existing
+      var getExistingSession = function () {
+        var deferred = Q.defer();
+        var query = Session.findOne({
+          'deviceId': device._id
+        });
+
+        query.exec(function (err, session) {
+          if (err) {
+            deferred.reject(err);
+          }
+          deferred.resolve(session);
+        });
+
+        return deferred.promise;
+      };
+
+      // Save new
+      var saveSessionIfDoesntExist = function (session) {
+        var deferred = Q.defer();
+
+        if (session) {
+          if (session.user === loggedInUser._id) {
+            // User already has session, ignore
+            res.send(200, {
+              '_id': session._id
+            });
+          } else {
+            // Conflict
+            res.send(409, {
+              detail: 'Session already started for this' +
+                ' device with other user.'
+            });
+          }
+          return deferred.resolve();
+        }
+
+        var s = new Session({
+          deviceId: device._id,
+          user: loggedInUser._id
+        });
+
+        s.save(function (err, data) {
+          if (err) {
+            return deferred.reject(err);
+          }
+          res.send(200, {
+            '_id': data._id
+          });
+          return deferred.resolve();
+        });
+
+        return deferred.promise;
+      };
+
+      getExistingSession()
+        .then(saveSessionIfDoesntExist)
+        .catch(function (err) {
+          next(err);
+        })
+        .done();
     },
 
 

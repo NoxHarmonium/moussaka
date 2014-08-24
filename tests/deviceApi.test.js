@@ -245,10 +245,8 @@
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
-          expect(res.ok)
-            .to.be.ok();
-          expect(utils.objMatch(res.body, device))
-            .to.be(false);
+          expect(res.status)
+            .to.be(404);
 
           done();
         });
@@ -387,7 +385,7 @@
           expect(res.ok)
             .to.be(false);
           expect(res.status)
-            .to.be(401);
+            .to.be(409);
 
           done();
         });

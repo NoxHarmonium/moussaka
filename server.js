@@ -147,6 +147,10 @@
     app.get('/projects/:projectId/devices/', deviceApi.listDevices);
     app.get('/projects/:projectId/devices/' +
       ':deviceMacAddr/', deviceApi.getDevice);
+    app.del('/projects/:projectId/devices/' +
+      ':deviceMacAddr/', deviceApi.deregisterDevice);
+    app.put('/projects/:projectId/sessions/' +
+      ':deviceMacAddr/', deviceApi.startSession);
 
     // Rendered HTML pages
     app.get('/projects', function (req, res) {

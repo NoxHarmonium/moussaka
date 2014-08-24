@@ -9,7 +9,8 @@
     deviceId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Device',
-      required: true
+      required: true,
+      unique: true
     },
     user: {
       type: String,
