@@ -18,7 +18,6 @@
     var projects = testData.getTestProjects();
     var devices = testData.getTestDevices();
     var agent = superagent.agent();
-    var session = null;
     var schema = null;
     var sentUpdates = null;
     var tempStore = {};
@@ -342,7 +341,6 @@
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
-          session = res.body;
 
           done();
         });
@@ -474,8 +472,12 @@
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
+          expect(res.body.length)
+            .to.be(1);
 
-          var recvUpdate = res.body[0];
+          console.log(JSON.stringify(res.body));
+
+          var recvUpdate = res.body[0].data;
           expect(recvUpdate.rotateSpeed.values.n)
             .to.be(sentUpdates[0].rotateSpeed.values.n);
 
@@ -645,7 +647,7 @@
           var matchFound = false;
           _.every(
             _.zip(res.body, sentUpdates), function (entry) {
-              if (utils.objMatch(entry[0], entry[1])) {
+              if (utils.objMatch(entry[0].data, entry[1])) {
                 matchFound = true;
                 return false;
               }

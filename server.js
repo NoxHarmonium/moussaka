@@ -149,8 +149,14 @@
       ':deviceMacAddr/', deviceApi.getDevice);
     app.del('/projects/:projectId/devices/' +
       ':deviceMacAddr/', deviceApi.deregisterDevice);
+    app.get('/projects/:projectId/devices/' +
+      ':deviceMacAddr/schema/', deviceApi.getSchema);
     app.put('/projects/:projectId/sessions/' +
       ':deviceMacAddr/', deviceApi.startSession);
+    app.post('/projects/:projectId/sessions/' +
+      ':deviceMacAddr/updates', deviceApi.queueUpdate);
+    app.get('/projects/:projectId/sessions/' +
+      ':deviceMacAddr/updates', deviceApi.getUpdates);
 
     // Rendered HTML pages
     app.get('/projects', function (req, res) {

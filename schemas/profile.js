@@ -1,7 +1,7 @@
 (function (require, module) {
   'use strict';
 
-  var mongoose = require('mongoose');
+  var mongoose = require('mongoose-q')();
   var config = require('../include/config');
   var Schema = mongoose.Schema;
 
@@ -19,10 +19,10 @@
       type: Schema.Types.Mixed,
       required: true
     },
-    timestamp: [{
+    timestamp: {
       type: Date,
       default: Date.now
-    }]
+    }
   });
 
   module.exports = mongoose.model('Profile', ProfileSchema);

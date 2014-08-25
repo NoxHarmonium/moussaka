@@ -3,7 +3,7 @@
   // Thanks 
   // http://stackoverflow.com/questions/14588032/mongoose-password-hashing
 
-  var mongoose = require('mongoose');
+  var mongoose = require('mongoose-q')();
   var bcrypt = require('bcrypt');
   var config = require('../include/config');
   var Schema = mongoose.Schema;

@@ -1,7 +1,7 @@
 (function (require, module) {
   'use strict';
 
-  var mongoose = require('mongoose');
+  var mongoose = require('mongoose-q')();
   var config = require('../include/config');
   var Schema = mongoose.Schema;
 
@@ -33,10 +33,14 @@
       type: Schema.Types.Mixed,
       required: true
     },
-    timestamp: [{
+    sessionUser: {
+      type: String,
+      required: false
+    },
+    timestamp: {
       type: Date,
       default: Date.now
-    }]
+    }
   });
 
   module.exports = mongoose.model('Device', DeviceSchema);

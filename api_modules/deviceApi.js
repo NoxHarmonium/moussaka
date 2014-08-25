@@ -4,7 +4,7 @@
   var Project = require('../schemas/project.js');
   var User = require('../schemas/user.js');
   var Device = require('../schemas/device.js');
-  var Session = require('../schemas/session.js');
+  var Update = require('../schemas/update.js');
   var moment = require('moment');
   var config = require('../include/config.js');
   var _ = require('lodash');
@@ -219,73 +219,157 @@
         });
       }
 
-
       var createNew = false;
 
-      // Get existing
-      var getExistingSession = function () {
-        var deferred = Q.defer();
-        var query = Session.findOne({
-          'deviceId': device._id
-        });
-
-        query.exec(function (err, session) {
-          if (err) {
-            deferred.reject(err);
-          }
-          deferred.resolve(session);
-        });
-
-        return deferred.promise;
-      };
-
-      // Save new
-      var saveSessionIfDoesntExist = function (session) {
-        var deferred = Q.defer();
-
-        if (session) {
-          if (session.user === loggedInUser._id) {
-            // User already has session, ignore
-            res.send(200, {
-              '_id': session._id
-            });
-          } else {
-            // Conflict
-            res.send(409, {
-              detail: 'Session already started for this' +
-                ' device with other user.'
-            });
-          }
-          return deferred.resolve();
+      if (device.sessionUser) {
+        if (device.sessionUser === loggedInUser._id) {
+          // User already has session, ignore
+          return res.send(200);
+        } else {
+          // Conflict
+          return res.send(409, {
+            detail: 'Session already started for this' +
+              ' device with other user.'
+          });
         }
-
-        var s = new Session({
-          deviceId: device._id,
-          user: loggedInUser._id
-        });
-
-        s.save(function (err, data) {
+      } else {
+        device.sessionUser = loggedInUser._id;
+        device.save(function (err, data) {
           if (err) {
-            return deferred.reject(err);
+            return next(err);
           }
           res.send(200, {
             '_id': data._id
           });
-          return deferred.resolve();
         });
+      }
+    },
 
-        return deferred.promise;
-      };
+    getSchema: function (req, res, next) {
+      var project = req.project;
+      var device = req.device;
+      var loggedInUser = req.user;
 
-      getExistingSession()
-        .then(saveSessionIfDoesntExist)
-        .catch(function (err) {
+      if (!loggedInUser) {
+        return res.send(401, {
+          detail: 'Not logged in'
+        });
+      }
+
+      if (!(_.contains(project.admins, loggedInUser._id) ||
+        _.contains(project.users, loggedInUser._id))) {
+        return res.send(401, {
+          detail: 'Only authorised project members can ' +
+            'start a session on this device'
+        });
+      }
+
+      if (!project) {
+        return res.send(404, {
+          detail: 'Project not found'
+        });
+      }
+
+      if (!device) {
+        return res.send(404, {
+          detail: 'Device not found'
+        });
+      }
+
+      return res.send(200,
+        device.dataSchema);
+    },
+
+    queueUpdate: function (req, res, next) {
+      var project = req.project;
+      var device = req.device;
+
+      if (!project) {
+        return res.send(404, {
+          detail: 'Project not found'
+        });
+      }
+
+      if (!device) {
+        return res.send(404, {
+          detail: 'Device not found'
+        });
+      }
+
+      var update = new Update({
+        'targetMacAddress': device.macAddress,
+        'data': req.body
+      });
+
+      // TODO: make all the mongoose queries use promises
+      // like this.
+      update.saveQ()
+        .then(function () {
+          res.send(200);
+        })
+        .fail(function (err) {
           next(err);
         })
         .done();
     },
 
+    getUpdates: function (req, res, next) {
+      var project = req.project;
+      var device = req.device;
 
+      if (!project) {
+        return res.send(404, {
+          detail: 'Project not found'
+        });
+      }
+
+      if (!device) {
+        return res.send(404, {
+          detail: 'Device not found'
+        });
+      }
+
+      var sendMessagesToClient = function (messages) {
+        res.send(messages);
+        return messages;
+      };
+
+      var markMessagesAsReceived = function (messages) {
+        if (messages.length > 0) {
+          var latestTime =
+            _.last(messages)
+            .timestamp;
+
+          return Update.updateQ({
+            timestamp: {
+              $lte: latestTime
+            },
+            received: false
+          }, {
+            $set: {
+              received: true
+            }
+          }, {
+            multi: true
+          });
+
+        } else {
+          return null;
+        }
+      };
+
+
+      Update.findQ({
+        'targetMacAddress': device.macAddress,
+        'received': false
+      }, 'data timestamp')
+        .then(sendMessagesToClient)
+        .then(markMessagesAsReceived)
+        .fail(function (err) {
+          next(err);
+        })
+        .done();
+    },
 
     //
     // Test extensions

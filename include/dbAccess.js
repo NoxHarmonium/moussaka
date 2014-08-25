@@ -1,7 +1,7 @@
 (function (require, module) {
   'use strict';
 
-  var mongoose = require('mongoose');
+  var mongoose = require('mongoose-q')();
   var colors = require('colors');
   var config = require('./config');
 

@@ -13,7 +13,7 @@
   var passport = require('passport');
   var testData = require('../tests/testData.js');
   var config = require('../include/config.js');
-  var mongoose = require('mongoose');
+  var mongoose = require('mongoose-q')();
   var Q = require('q');
 
   // Private functions
