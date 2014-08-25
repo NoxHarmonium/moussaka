@@ -32,6 +32,17 @@
       });
     });
 
+    it('Reset devices test', function (done) {
+      agent.get('http://localhost:3000/test/device_api/reset/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+          done();
+        });
+    });
+
     it('Login user [2]', function (done) {
       agent.post('http://localhost:3000/login/')
         .send(users[2])
@@ -472,10 +483,10 @@
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
+          console.log(JSON.stringify(res.body));
+
           expect(res.body.length)
             .to.be(1);
-
-          console.log(JSON.stringify(res.body));
 
           var recvUpdate = res.body[0].data;
           expect(recvUpdate.rotateSpeed.values.n)
@@ -641,19 +652,23 @@
             .to.be.ok();
           // No valid updates
           expect(res.body.length)
-            .to.be(0);
+            .to.be(3);
 
           // Check for correct ordering of updates
-          var matchFound = false;
+          var matchFound = true;
+
           _.every(
             _.zip(res.body, sentUpdates), function (entry) {
-              if (utils.objMatch(entry[0].data, entry[1])) {
-                matchFound = true;
+              if (!utils.objMatch(entry[0].data, entry[1])) {
+                matchFound = false;
                 return false;
               }
               return true;
             }
           );
+
+          expect(matchFound)
+            .to.be.ok();
 
           done();
         });

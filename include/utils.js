@@ -111,6 +111,10 @@
       } else {
         return false;
       }
+    },
+
+    exists: function (obj) {
+      return obj !== undefined && obj !== null;
     }
   };
 })(require, module);

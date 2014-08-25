@@ -10,6 +10,7 @@
   var _ = require('lodash');
   var Q = require('q');
   var utils = require('../include/utils.js');
+  var controls = require('../shared/controls.js');
 
   // Public functions
   module.exports = {
@@ -296,6 +297,38 @@
         });
       }
 
+      var allSchemas = device.dataSchema;
+      var validationErrors = [];
+
+      _.each(req.body, function (val, key) {
+        var schema = allSchemas[key];
+        var type = schema.type;
+        var control = controls[type];
+
+        //console.log('Validating field: ' + key);
+        //console.log('Type: ' + type);
+        //console.log('Value: ' + JSON.stringify(val));
+
+        var result = control.validate(schema, val);
+
+        //console.log('Schema: ' + JSON.stringify(schema));
+        //console.log('Validation result: ' + JSON.stringify(result));
+
+        if (result.success) {
+          var currentData = device.currentState[key];
+          control.apply(schema, currentData, val);
+        } else {
+          validationErrors.push(result.reason);
+        }
+      });
+
+      if (validationErrors.length > 0) {
+        return res.send(409, {
+          detail: 'There were error/s during data validation: ' +
+            validationErrors.join(', ') + '.'
+        });
+      }
+
       var update = new Update({
         'targetMacAddress': device.macAddress,
         'data': req.body
@@ -304,6 +337,9 @@
       // TODO: make all the mongoose queries use promises
       // like this.
       update.saveQ()
+        .then(function () {
+          return device.saveQ();
+        })
         .then(function () {
           res.send(200);
         })
@@ -376,7 +412,18 @@
     //
 
     resetTests: function (req, res, next) {
-
+      Update.updateQ({}, {
+        $set: {
+          received: true
+        }
+      })
+        .then(function () {
+          res.send(200);
+        })
+        .fail(function (err) {
+          next(err);
+        })
+        .done();
     }
 
   };

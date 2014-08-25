@@ -8,7 +8,8 @@ module.exports = function (grunt) {
     'api_modules/*.js',
     'tests/*.js',
     'schemas/*.js',
-    'include/*.js'
+    'include/*.js',
+    'shared/*.js'
   ];
 
   grunt.initConfig({

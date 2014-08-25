@@ -47,7 +47,7 @@
       macAddress: '3D:F2:C9:A6:B3:4F',
       dataSchema: {
         'titleColor': {
-          type: 'Color'
+          type: 'color'
         },
         'rotateSpeed': {
           type: 'float',
@@ -56,7 +56,7 @@
         },
         'objectPosition': {
           type: 'position',
-          lockedAxis: {
+          lockedValues: {
             x: false,
             y: false,
             z: true

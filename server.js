@@ -138,7 +138,6 @@
     // Device API
     //
     app.param('deviceMacAddr', deviceApi.pDeviceMacAddr);
-
     // TODO: Check for URL format constancy with PUTs
     // i.e. Devices are put with an MAC address as it is known
     // beforehand but projects have no id until creation
@@ -157,6 +156,9 @@
       ':deviceMacAddr/updates', deviceApi.queueUpdate);
     app.get('/projects/:projectId/sessions/' +
       ':deviceMacAddr/updates', deviceApi.getUpdates);
+    if (config.enable_test_exts) {
+      app.get('/test/device_api/reset/', deviceApi.resetTests);
+    }
 
     // Rendered HTML pages
     app.get('/projects', function (req, res) {
