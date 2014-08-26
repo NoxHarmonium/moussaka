@@ -78,6 +78,7 @@ module.exports = function (grunt) {
         },
         src: [
           'tests/utils.test.js',
+          'tests/controlValidation.test.js',
           'tests/userApi.test.js',
           'tests/projectApi.test.js',
           'tests/deviceApi.test.js'

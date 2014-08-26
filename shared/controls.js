@@ -39,6 +39,9 @@
         };
       },
       apply: function (schema, currentData, newData) {
+        if (!utils.exists(newData.values)) {
+          newData.values = {};
+        }
         var keys = ['n'];
         _.forEach(keys, function (key) {
           if (!schema.lockedValues || !schema.lockedValues[key]) {
@@ -54,7 +57,7 @@
 
     'string': {
       validate: function (schema, data) {
-        var value = parseFloat(data.values.s);
+        var value = data.values.s;
 
         if (!utils.exists(value)) {
           return {
@@ -68,7 +71,10 @@
         };
       },
       apply: function (schema, currentData, newData) {
-        var keys = ['n'];
+        if (!utils.exists(newData.values)) {
+          newData.values = {};
+        }
+        var keys = ['s'];
         _.forEach(keys, function (key) {
           if (!schema.lockedValues || !schema.lockedValues[key]) {
             currentData.values[key] = newData.values[key];
@@ -113,7 +119,10 @@
         };
       },
       apply: function (schema, currentData, newData) {
-        var keys = ['n'];
+        if (!utils.exists(newData.values)) {
+          newData.values = {};
+        }
+        var keys = ['r', 'g', 'b', 'a'];
         _.forEach(keys, function (key) {
           if (!schema.lockedValues || !schema.lockedValues[key]) {
             currentData.values[key] = newData.values[key];
@@ -144,7 +153,10 @@
         };
       },
       apply: function (schema, currentData, newData) {
-        var keys = ['n'];
+        if (!utils.exists(newData.values)) {
+          newData.values = {};
+        }
+        var keys = ['x', 'y', 'z'];
         _.forEach(keys, function (key) {
           if (!schema.lockedValues || !schema.lockedValues[key]) {
             currentData.values[key] = newData.values[key];
