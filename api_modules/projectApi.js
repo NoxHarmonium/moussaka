@@ -56,8 +56,6 @@
         });
       }
 
-      // TODO: Pagination and limits and security 
-      // (only see what proj you are part of)
       var getProjects = Project.find({
         $or: [{
           'admins': req.user._id

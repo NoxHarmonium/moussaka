@@ -437,6 +437,21 @@
           });
       });
 
+    it('List projects as user that is not part of a project', function (
+      done) {
+      agent.get('http://localhost:3000/projects/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+          expect(res.body.length)
+            .to.be(0);
+
+          done();
+        });
+    });
+
     it('Logout user [1]', function (done) {
       agent.get('http://localhost:3000/logout/')
         .send()
