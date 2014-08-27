@@ -184,7 +184,7 @@
       };
 
       var returnId = function (savedProfile) {
-        res.send(200, {
+        res.send(201, {
           _id: savedProfile._id
         });
       };

@@ -125,7 +125,7 @@
 
       newProject.saveQ()
         .then(function (data) {
-          res.send(200, {
+          res.send(201, {
             '_id': data._id
           });
         })
@@ -133,9 +133,6 @@
           next(err);
         })
         .done();
-
-      // TODO: All api calls that create something should
-      // respond with 201
     },
 
     getProject: function (req, res, next) {
