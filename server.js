@@ -154,6 +154,8 @@
       ':deviceMacAddr/schema/', deviceApi.getSchema);
     app.put('/projects/:projectId/sessions/' +
       ':deviceMacAddr/', deviceApi.startSession);
+    app.del('/projects/:projectId/sessions/' +
+      ':deviceMacAddr/', deviceApi.stopSession);
     app.post('/projects/:projectId/sessions/' +
       ':deviceMacAddr/updates', deviceApi.queueUpdate);
     app.get('/projects/:projectId/sessions/' +

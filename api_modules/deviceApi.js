@@ -221,8 +221,6 @@
         });
       }
 
-      var createNew = false;
-
       if (device.sessionUser) {
         if (device.sessionUser === loggedInUser._id) {
           // User already has session, ignore
@@ -247,7 +245,57 @@
       }
     },
 
-    // TODO: Stop session
+    stopSession: function (req, res, next) {
+      var project = req.project;
+      var device = req.device;
+      var loggedInUser = req.user;
+
+      if (!loggedInUser) {
+        return res.send(401, {
+          detail: 'Not logged in'
+        });
+      }
+
+      if (!(_.contains(project.admins, loggedInUser._id) ||
+        _.contains(project.users, loggedInUser._id))) {
+        return res.send(401, {
+          detail: 'Only authorised project members can ' +
+            'start a session on this device'
+        });
+      }
+
+      if (!project) {
+        return res.send(404, {
+          detail: 'Project not found'
+        });
+      }
+
+      if (!device) {
+        return res.send(404, {
+          detail: 'Device not found'
+        });
+      }
+
+      if (device.sessionUser) {
+        if (device.sessionUser === loggedInUser._id) {
+          device.sessionUser = null;
+        } else {
+          // Conflict
+          return res.send(409, {
+            detail: 'Cannot stop session you didn\'t start'
+          });
+        }
+      }
+
+      device.saveQ()
+        .then(function () {
+          res.send(200);
+        })
+        .fail(function (err) {
+          next(err);
+        })
+        .done();
+    },
 
     getSchema: function (req, res, next) {
       var project = req.project;
@@ -287,6 +335,7 @@
     queueUpdate: function (req, res, next) {
       var project = req.project;
       var device = req.device;
+      var loggedInUser = req.user;
 
       if (!project) {
         return res.send(404, {
@@ -297,6 +346,13 @@
       if (!device) {
         return res.send(404, {
           detail: 'Device not found'
+        });
+      }
+
+      if (device.sessionUser !== loggedInUser._id) {
+        return res.send(401, {
+          detail: 'Logged in user is not in current session ' +
+            'with this device.'
         });
       }
 

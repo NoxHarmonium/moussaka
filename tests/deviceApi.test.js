@@ -675,6 +675,141 @@
         });
     });
 
+    it('Logout user [2]', function (done) {
+      agent.get('http://localhost:3000/logout/')
+        .send()
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+          done();
+        });
+    });
+
+    it('Login user [1]', function (done) {
+      agent.post('http://localhost:3000/login/')
+        .send(users[1])
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(200);
+          done();
+        });
+    });
+
+    it('Stop session for device [0] with user that didn\'t start it',
+      function (
+        done) {
+        var device = devices[0];
+
+        agent.del('http://localhost:3000/projects/' +
+          device.projectId + '/sessions/' + device.macAddress + '/')
+          .end(function (e, res) {
+            expect(e)
+              .to.eql(null);
+            expect(res.ok)
+              .to.be(false);
+            expect(res.status)
+              .to.be(409);
+
+            done();
+          });
+      });
+
+    it('Logout user [1]', function (done) {
+      agent.get('http://localhost:3000/logout/')
+        .send()
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+          done();
+        });
+    });
+
+    it('Login user [2]', function (done) {
+      agent.post('http://localhost:3000/login/')
+        .send(users[2])
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(200);
+          done();
+        });
+    });
+
+    it('Stop session for device [0] with correct user', function (
+      done) {
+      var device = devices[0];
+
+      agent.del('http://localhost:3000/projects/' +
+        device.projectId + '/sessions/' + device.macAddress + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          done();
+        });
+    });
+
+    it('Send valid control update to device [0] without session', function (
+      done) {
+      var project = projects[0];
+      var device = devices[0];
+
+      sentUpdates = [{
+        'rotateSpeed': {
+          // Schema not needed, only values
+          //type: 'float',
+          //min: 0,
+          //max: 100,
+          values: {
+            n: 6
+          }
+        }
+      }];
+
+      agent.post('http://localhost:3000/projects/' +
+        device.projectId + '/sessions/' + device.macAddress +
+        '/updates/')
+        .send(sentUpdates[0])
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(401);
+
+          done();
+        });
+    });
+
+    it('Check device [0] updates', function (done) {
+      var device = devices[0];
+
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/sessions/' + device.macAddress +
+        '/updates/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+          // Don't need to be logged in to get updates
+          // device uses it's id (MAC) to get updates.
+          // TODO: Maybe device needs a token rather than MAC
+          // to get updates. Can MAC be sniffed out and then
+          // used to mess with users?
+
+          done();
+        });
+    });
+
     // TODO: Somehow simulate device connect timeout for testing
   });
 })(require, describe, it);
