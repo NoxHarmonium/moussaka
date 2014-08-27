@@ -21,6 +21,10 @@
 
   module.exports = {
 
+    //
+    // Parameters
+    //
+
     pProfileId: function (req, res, next, profileId) {
       if (!req.user) {
         return res.send(401, {
@@ -46,6 +50,10 @@
         })
         .done();
     },
+
+    //
+    // API Methods
+    //
 
     getProfile: function (req, res, next) {
       var profile = req.profile;

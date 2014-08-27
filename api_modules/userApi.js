@@ -11,32 +11,47 @@
   var passport = require('passport');
   var testData = require('../tests/testData.js');
   var config = require('../include/config.js');
+  var crypto = require('crypto');
 
   module.exports = {
 
-    listUsers: function (req, res, next) {
-      var query = User.find();
-      query.select('_id');
-
-      query.exec(function (err, users) {
-        if (err) {
-          return next(err);
-        }
-        return res.send(users);
-      });
-    },
+    //
+    // Parameters
+    //
 
     pUser: function (req, res, next, email) {
-      var query = User.findOne({
+      var getUser = User.findOne({
         '_id': email
       });
-      query.exec(function (err, user) {
-        if (err) {
-          return next(err);
-        }
-        req.selectedUser = user;
-        next();
-      });
+
+      getUser.execQ()
+        .then(function (user) {
+          req.selectedUser = user;
+          next();
+        })
+        .fail(function (err) {
+          next(err);
+        })
+        .done();
+    },
+
+    //
+    // API Methods
+    //
+
+    listUsers: function (req, res, next) {
+      var getUsers = User.find();
+
+      getUsers.select('_id');
+
+      getUsers.execQ()
+        .then(function (users) {
+          res.send(users);
+        })
+        .fail(function (err) {
+          next(err);
+        })
+        .done();
     },
 
     getUser: function (req, res) {
@@ -52,45 +67,54 @@
     },
 
     deleteUser: function (req, res, next) {
+      var currentUser = req.user;
+      var selectedUser = req.selectedUser;
 
-      if (req.user && req.user._id === req.selectedUser._id) {
-        return req.user.remove(function (err) {
-          if (err) {
-            next(err);
-          }
-          req.logout();
-          return res.send(200);
+      if (!currentUser) {
+        return res.send(401, {
+          detail: 'You are not logged in as a user'
         });
       }
-      return res.send(401);
+
+      if (currentUser._id !== selectedUser._id) {
+        return res.send(401, {
+          detail: 'A user can only delete their own account'
+        });
+      }
+
+      currentUser.removeQ()
+        .then(function () {
+          req.logout();
+          res.send(200);
+        })
+        .fail(function (err) {
+          next(err);
+        })
+        .done();
     },
 
     putUser: function (req, res, next) {
-      /*console.log(('Create user request: Username: ' +
-          req.body.username + ' Password:' +
-          req.body.password)
-        .green);
-
-      console.log('sel: ' + req.selectedUser);*/
+      var data = req.body;
 
       if (req.selectedUser) {
-        //console.log('Warning: User already exists'.yellow);
         return res.send(409, {
           detail: 'User already exists'
         });
       }
 
-      var newUser = new User();
-      newUser._id = req.body.username;
-      newUser.password = req.body.password;
-      newUser.save(
-        function (err) {
-          if (err) {
-            next(err);
-          }
-          return res.send(201);
-        }
-      );
+      var newUser = new User({
+        _id: data.username,
+        password: data.password
+      });
+
+      newUser.saveQ()
+        .then(function () {
+          res.send(201);
+        })
+        .fail(function (err) {
+          next(err);
+        })
+        .done();
     },
 
     changePassword: function (req, res, next) {
@@ -101,69 +125,65 @@
         });
       }
 
-      if (req.selectedUser.passwordExpiary &&
-        moment(req.selectedUser.passwordExpiary)
+      if (req.selectedUser.passwordExpiry &&
+        moment(req.selectedUser.passwordExpiry)
         .isBefore()) {
         return res.send(401, {
           detail: 'Temporary password has expired. You need to create a new one'
         });
       }
 
-      req.selectedUser.comparePassword(req.body.oldPassword, function (err,
-        isMatch) {
+      req.selectedUser.comparePassword(req.body.oldPassword,
+        function (err, isMatch) {
+          if (err) {
+            return next(err);
+          }
 
-        if (err) {
-          return next(err);
-        }
-
-        if (isMatch) {
-          req.selectedUser.password = req.body.newPassword;
-          req.selectedUser.save(function (err) {
-            if (err) {
-              next(err);
-            }
-
-            return res.send(200);
-          });
-        } else {
-          return res.send(401, {
-            detail: 'Old password was incorrect'
-          });
-        }
-      });
-
-    },
-
-    resetPassword: function (req, res, next) {
-
-      if (req.selectedUser) {
-
-        require('crypto')
-          .randomBytes(8, function (ex, buf) {
-            var tempPwd = buf.toString('hex');
-            req.selectedUser.password = tempPwd;
-            req.selectedUser.passwordExpiary = moment()
-              .add('minutes', 10);
+          if (isMatch) {
+            req.selectedUser.password = req.body.newPassword;
             req.selectedUser.save(function (err) {
               if (err) {
                 next(err);
               }
 
-              console.log('Would send email to user with temp password: ' +
-                tempPwd);
-
-
               return res.send(200);
-
-              // TODO: Actually send email here
             });
-          });
-      } else {
+          } else {
+            return res.send(401, {
+              detail: 'Old password was incorrect'
+            });
+          }
+        });
+
+    },
+
+    resetPassword: function (req, res, next) {
+      var selectedUser = req.selectedUser;
+
+      if (!selectedUser) {
         return res.send(404, {
           'detail': 'User not found'
         });
       }
 
+      crypto.randomBytes(8, function (ex, buf) {
+        var tempPwd = buf.toString('hex');
+        req.selectedUser.password = tempPwd;
+        req.selectedUser.passwordExpiry = moment()
+          .add('minutes', 10);
+
+        selectedUser.saveQ()
+          .then(function () {
+            // TODO: Actually send email to user
+            console.log('Would send email to user with temp password: ' +
+              tempPwd);
+            res.send(200);
+          })
+          .fail(function (err) {
+            next(err);
+          })
+          .done();
+      });
     },
 
     logout: function (req, res, next) {
@@ -180,7 +200,7 @@
           return next(err);
         }
 
-        if (user && user.passwordExpiary) {
+        if (user && user.passwordExpiry) {
           return req.send(401, {
             'detail': 'You cannot login with a temporary password. '
           });

@@ -15,6 +15,10 @@
   // Public functions
   module.exports = {
 
+    //
+    // Parameters
+    //
+
     pDeviceMacAddr: function (req, res, next, macAddress) {
       var project = req.project;
 
@@ -22,8 +26,7 @@
         return next();
       }
 
-      // TODO: Universal undefined check fn?
-      if (!macAddress || macAddress === 'undefined') {
+      if (!utils.exists(macAddress)) {
         return next();
       }
 
@@ -34,19 +37,24 @@
         });
       }
 
-      var query = Device.findOne({
+      var findDevice = Device.findOne({
         'macAddress': macAddress
       });
 
-      query.exec(function (err, device) {
-        if (err) {
-          return next(err);
-        }
-        req.device = device;
-        next();
-      });
-
+      findDevice.execQ()
+        .then(function (device) {
+          req.device = device;
+          next();
+        })
+        .fail(function (err) {
+          next(err);
+        })
+        .done();
     },
+
+    //
+    // API Methods
+    //
 
     registerDevice: function (req, res, next) {
       var device = req.body;
@@ -75,16 +83,17 @@
         existingDevice.currentState = device.currentState;
         existingDevice.timestamp = Date.now();
 
-        existingDevice.save(function (err) {
-          if (err) {
-            return next(err);
-          }
-          return res.send(200);
-        });
-
+        existingDevice.saveQ()
+          .then(function () {
+            res.send(200);
+          })
+          .fail(function (err) {
+            next(err);
+          })
+          .done();
       } else {
         // Else create new
-        var d = new Device({
+        var newDevice = new Device({
           projectId: device.projectId,
           projectVersion: device.projectVersion,
           macAddress: device.macAddress,
@@ -93,14 +102,16 @@
           currentState: device.currentState
         });
 
-        d.save(function (err, data) {
-          if (err) {
-            return next(err);
-          }
-          return res.send(200, {
-            '_id': data._id
-          });
-        });
+        newDevice.saveQ()
+          .then(function (data) {
+            res.send(200, {
+              '_id': data._id
+            });
+          })
+          .fail(function (err) {
+            next(err);
+          })
+          .done();
       }
     },
 
@@ -120,17 +131,18 @@
         });
       }
 
-      var query = Device.remove({
+      var removeDevice = Device.remove({
         'macAddress': device.macAddress
       });
 
-      query.exec(function (err) {
-        if (err) {
-          return next(err);
-        }
-        res.send(200);
-      });
-
+      removeDevice.execQ()
+        .then(function () {
+          res.send(200);
+        })
+        .fail(function (err) {
+          next(err);
+        })
+        .done();
     },
 
     getDevice: function (req, res, next) {
@@ -170,24 +182,26 @@
         });
       }
 
-      var query = Device.find({
+      var getDevices = Device.find({
         projectId: project._id
       });
 
-      query.select('macAddress projectId projectVersion ' +
+      getDevices.select('macAddress projectId projectVersion ' +
         'dataSchema currentState timestamp deviceName');
 
-      query.sort({
+      getDevices.sort({
         'projectVersion': 'asc',
         'timestamp': 'desc'
       });
 
-      query.exec(function (err, devices) {
-        if (err) {
-          return next(err);
-        }
-        res.send(200, devices);
-      });
+      getDevices.execQ()
+        .then(function (devices) {
+          res.send(200, devices);
+        })
+        .fail(function (err) {
+          next(err);
+        })
+        .done();
     },
 
     startSession: function (req, res, next) {
@@ -328,8 +342,7 @@
         });
       }
 
-      return res.send(200,
-        device.dataSchema);
+      res.send(200, device.dataSchema);
     },
 
     queueUpdate: function (req, res, next) {
@@ -388,14 +401,12 @@
         });
       }
 
-      var update = new Update({
+      var newUpdate = new Update({
         'targetMacAddress': device.macAddress,
         'data': req.body
       });
 
-      // TODO: make all the mongoose queries use promises
-      // like this.
-      update.saveQ()
+      newUpdate.saveQ()
         .then(function () {
           return device.saveQ();
         })

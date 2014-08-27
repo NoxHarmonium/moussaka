@@ -13,59 +13,9 @@
   // Public functions
   module.exports = {
 
-    listProjects: function (req, res, next) {
-      var minRecord = req.query.minRecord;
-      var maxRecord = req.query.maxRecord;
-
-      if (!req.user) {
-        return res.send(401, {
-          detail: 'Not logged in'
-        });
-      }
-
-      // TODO: Pagination and limits and security 
-      // (only see what proj you are part of)
-      var query = Project.find({
-        $or: [{
-          'admins': req.user._id
-        }, {
-          'users': req.user._id
-        }]
-      });
-
-      // Project correct fields
-      query.select('_id name version admins users description');
-
-      query.sort({
-        'name': 'asc'
-      });
-
-      var maxRecordCount = config.max_records_per_query;
-      // Pagination
-      if (minRecord) {
-        query.skip(minRecord);
-      }
-      if (minRecord && maxRecord) {
-        if (maxRecord < minRecord) {
-          return res.send(400, {
-            detail: 'Invalid pagination range'
-          });
-        }
-
-        maxRecordCount = Math.min(
-          maxRecordCount, (maxRecord - minRecord) + 1
-        );
-      }
-
-      query.limit(maxRecordCount);
-
-      query.exec(function (err, projects) {
-        if (err) {
-          return next(err);
-        }
-        res.send(200, projects);
-      });
-    },
+    //
+    // Parameters
+    //
 
     pProjectId: function (req, res, next, projectId) {
       if (!utils.exists(projectId)) {
@@ -92,6 +42,67 @@
 
     },
 
+    //
+    // API Methods
+    //
+
+    listProjects: function (req, res, next) {
+      var minRecord = req.query.minRecord;
+      var maxRecord = req.query.maxRecord;
+
+      if (!req.user) {
+        return res.send(401, {
+          detail: 'Not logged in'
+        });
+      }
+
+      // TODO: Pagination and limits and security 
+      // (only see what proj you are part of)
+      var getProjects = Project.find({
+        $or: [{
+          'admins': req.user._id
+        }, {
+          'users': req.user._id
+        }]
+      });
+
+      // Project correct fields
+      getProjects.select('_id name version admins users description');
+
+      getProjects.sort({
+        'name': 'asc'
+      });
+
+      var maxRecordCount = config.max_records_per_query;
+
+      // Pagination
+      if (minRecord) {
+        getProjects.skip(minRecord);
+      }
+      if (minRecord && maxRecord) {
+        if (maxRecord < minRecord) {
+          return res.send(400, {
+            detail: 'Invalid pagination range'
+          });
+        }
+
+        maxRecordCount = Math.min(
+          maxRecordCount, (maxRecord - minRecord) + 1
+        );
+      }
+
+      getProjects.limit(maxRecordCount);
+
+      getProjects.execQ()
+        .then(function (projects) {
+          res.send(200, projects);
+        })
+        .fail(function (err) {
+          next(err);
+        })
+        .done();
+    },
+
     addProject: function (req, res, next) {
       if (!req.user) {
         return res.send(401, {
@@ -106,20 +117,22 @@
         });
       }
 
-      var p = new Project({
+      var newProject = new Project({
         name: req.body.name,
         description: req.body.description,
         admins: [req.user._id]
       });
 
-      p.save(function (err, data) {
-        if (err) {
-          return next(err);
-        }
-        res.send(200, {
-          '_id': data._id
-        });
-      });
+      newProject.saveQ()
+        .then(function (data) {
+          res.send(200, {
+            '_id': data._id
+          });
+        })
+        .fail(function (err) {
+          next(err);
+        })
+        .done();
     },
 
     getProject: function (req, res, next) {
@@ -190,13 +203,14 @@
       // Add user to users array
       project.users.push(selectedUser._id);
 
-      project.save(function (err) {
-        if (err) {
-          return next(err);
-        }
-        res.send(200);
-      });
-
+      project.saveQ()
+        .then(function () {
+          res.send(200);
+        })
+        .fail(function (err) {
+          next(err);
+        })
+        .done();
     },
 
     removeProjectUser: function (req, res, next) {
@@ -238,13 +252,14 @@
       _.pull(project.users, selectedUser._id);
       project.markModified('users');
 
-      project.save(function (err) {
-        if (err) {
-          return next(err);
-        }
-        res.send(200);
-      });
-
+      project.saveQ()
+        .then(function () {
+          res.send(200);
+        })
+        .fail(function (err) {
+          next(err);
+        })
+        .done();
     },
 
     addProjectAdmin: function (req, res, next) {
@@ -291,13 +306,14 @@
       // Add user to admins array
       project.admins.push(selectedUser._id);
 
-      project.save(function (err) {
-        if (err) {
-          return next(err);
-        }
-        res.send(200);
-      });
-
+      project.saveQ()
+        .then(function () {
+          res.send(200);
+        })
+        .fail(function (err) {
+          next(err);
+        })
+        .done();
     },
 
     removeProjectAdmin: function (req, res, next) {
@@ -345,13 +361,14 @@
       _.pull(project.admins, selectedUser._id);
       project.markModified('admins');
 
-      project.save(function (err) {
-        if (err) {
-          return next(err);
-        }
-        res.send(200);
-      });
-
+      project.saveQ()
+        .then(function () {
+          res.send(200);
+        })
+        .fail(function (err) {
+          next(err);
+        })
+        .done();
     },
 
     // TODO: Remove project
