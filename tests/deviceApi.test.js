@@ -111,13 +111,10 @@
         var project = projects[0];
         var device = devices[0];
         device.projectId = project._id;
-        //device.projectVersion = project.version; 
-        // TODO: Implement project version stuff
 
         // Save correct MAC address and set to invalid
         tempStore.correctMac = device.macAddress;
         device.macAddress = encodeURIComponent(chance.string());
-
 
         agent.put('http://localhost:3000/projects/' +
           project._id + '/devices/' + device.macAddress + '/')
@@ -143,8 +140,6 @@
         var project = projects[0];
         var device = devices[0];
         device.projectId = encodeURIComponent(chance.string());
-        //device.projectVersion = project.version; 
-        // TODO: Implement project version stuff
 
         agent.put('http://localhost:3000/projects/' +
           device.projectId + '/devices/' + device.macAddress + '/')
@@ -165,8 +160,6 @@
       var project = projects[0];
       var device = devices[0];
       device.projectId = project._id;
-      //device.projectVersion = project.version; 
-      // TODO: Implement project version stuff
 
       agent.put('http://localhost:3000/projects/' +
         device.projectId + '/devices/' + device.macAddress + '/')
@@ -216,8 +209,6 @@
           // Scan list for specific device
           var matchFound = false;
           _.every(res.body, function (entry) {
-            //console.log('a: ' + JSON.stringify(entry) + '\n');
-            //console.log('b: ' + JSON.stringify(device) + '\n');
 
             if (utils.objMatch(entry, device)) {
               matchFound = true;
@@ -295,8 +286,6 @@
       var project = projects[0];
       var device = devices[0];
       device.projectId = project._id;
-      //device.projectVersion = project.version; 
-      // TODO: Implement project version stuff
 
       agent.put('http://localhost:3000/projects/' +
         device.projectId + '/devices/' + device.macAddress + '/')
