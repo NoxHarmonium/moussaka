@@ -695,6 +695,21 @@
         });
     });
 
+    it('Remove project [0] when not logged in', function (done) {
+      var project = projects[0];
+      var user = users[1];
+
+      agent.del('http://localhost:3000/projects/' + project._id + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(401);
+
+          done();
+        });
+    });
+
     it('Login user [1]', function (done) {
       agent.post('http://localhost:3000/login/')
         .send(users[1])
@@ -723,6 +738,38 @@
             done();
           });
       });
+
+    it('Remove project [0] as user [1] (non admin)', function (done) {
+      var project = projects[0];
+      var user = users[1];
+
+      agent.del('http://localhost:3000/projects/' + project._id + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(401);
+
+          done();
+        });
+    });
+
+    it('Get existing project [0] after removal failed', function (done) {
+      var project = projects[0];
+
+      agent.get('http://localhost:3000/projects/' + project._id + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          expect(utils.objMatch(res.body, project))
+            .to.be.ok();
+
+          done();
+        });
+    });
 
     it('Logout user [1]', function (done) {
       agent.get('http://localhost:3000/logout/')
@@ -894,6 +941,35 @@
             .to.eql(null);
           expect(res.status)
             .to.be(401);
+
+          done();
+        });
+    });
+
+    it('Remove project [0] as user [2] (admin)', function (done) {
+      var project = projects[0];
+      var user = users[2];
+
+      agent.del('http://localhost:3000/projects/' + project._id + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(200);
+
+          done();
+        });
+    });
+
+    it('Get existing project [0] after removal succeeded', function (done) {
+      var project = projects[0];
+
+      agent.get('http://localhost:3000/projects/' + project._id + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(404);
 
           done();
         });

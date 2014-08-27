@@ -108,6 +108,7 @@
 
     app.get('/projects/', projectApi.listProjects);
     app.get('/projects/:projectId/', projectApi.getProject);
+    app.del('/projects/:projectId/', projectApi.removeProject);
     app.put('/projects/', projectApi.addProject);
     app.put('/projects/:projectId/users/:user/',
       projectApi.addProjectUser);

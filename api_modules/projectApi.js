@@ -133,6 +133,9 @@
           next(err);
         })
         .done();
+
+      // TODO: All api calls that create something should
+      // respond with 201
     },
 
     getProject: function (req, res, next) {
@@ -371,7 +374,37 @@
         .done();
     },
 
-    // TODO: Remove project
+    removeProject: function (req, res, next) {
+      var project = req.project;
+      var loggedInUser = req.user;
+
+      if (!loggedInUser) {
+        return res.send(401, {
+          detail: 'Not logged in'
+        });
+      }
+
+      if (!project) {
+        return res.send(404, {
+          detail: 'Specified project doesn\'t exist'
+        });
+      }
+
+      if (!_.contains(project.admins, loggedInUser._id)) {
+        return res.send(401, {
+          detail: 'Only admins can delete a project'
+        });
+      }
+
+      project.removeQ()
+        .then(function () {
+          res.send(200);
+        })
+        .fail(function (err) {
+          next(err);
+        })
+        .done();
+    },
 
     //
     // Test extensions
