@@ -81,8 +81,8 @@ module.exports = function (grunt) {
           'tests/controlValidation.test.js',
           'tests/userApi.test.js',
           'tests/projectApi.test.js',
-          'tests/deviceApi.test.js'
-          //'tests/profileApi.test.js' Disable until refactor
+          'tests/deviceApi.test.js',
+          'tests/profileApi.test.js'
         ]
       }
     },

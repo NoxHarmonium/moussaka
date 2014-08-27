@@ -193,6 +193,7 @@
             .to.be.ok();
 
           device.timestamp = res.body.timestamp;
+          device._id = res.body._id;
 
           expect(utils.objMatch(res.body, device))
             .to.be.ok();
@@ -215,8 +216,8 @@
           // Scan list for specific device
           var matchFound = false;
           _.every(res.body, function (entry) {
-            console.log('a: ' + JSON.stringify(entry) + '\n');
-            console.log('b: ' + JSON.stringify(device) + '\n');
+            //console.log('a: ' + JSON.stringify(entry) + '\n');
+            //console.log('b: ' + JSON.stringify(device) + '\n');
 
             if (utils.objMatch(entry, device)) {
               matchFound = true;

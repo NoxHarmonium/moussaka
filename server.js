@@ -124,12 +124,14 @@
     //
     // Profile API
     //
+    app.param('profileId', profileApi.pProfileId);
+
     app.get('/projects/:projectId/profiles/',
       profileApi.getProfiles);
     app.get('/projects/:projectId/profiles/:profileId/',
       profileApi.getProfile);
     app.put('/projects/:projectId/profiles/',
-      profileApi.addProfile);
+      profileApi.saveProfile);
     if (config.enable_test_exts) {
       app.get('/test/profile_api/reset/', profileApi.resetTests);
     }

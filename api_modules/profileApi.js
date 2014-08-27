@@ -17,10 +17,11 @@
   var mongoose = require('mongoose-q')();
   var Q = require('q');
   var utils = require('../include/utils.js');
+  var _ = require('lodash');
 
   module.exports = {
 
-    pProfile: function (req, res, next, profileId) {
+    pProfileId: function (req, res, next, profileId) {
       if (!req.user) {
         return res.send(401, {
           detail: 'Not logged in'
@@ -33,22 +34,48 @@
         return next();
       }
 
-      var profile = Profile.findOne({
+      Profile.findOneQ({
         '_id': profileId
-      }, function (err, data) {
-        if (err) {
-          return next(err);
-        }
-        req.profile = data;
-      });
+      })
+        .then(function (data) {
+          req.profile = data;
+          next();
+        })
+        .fail(function (err) {
+          next(err);
+        })
+        .done();
     },
 
     getProfile: function (req, res, next) {
       var profile = req.profile;
+      var project = req.project;
+      var loggedInUser = req.user;
+      var projectVersion = req.query.projectVersion;
 
-      if (!profile || profile.length === 0) {
+      if (!loggedInUser) {
+        return res.send(401, {
+          detail: 'Not logged in'
+        });
+      }
+
+      if (!project) {
+        return res.send(404, {
+          detail: 'Specified project doesn\'t exist'
+        });
+      }
+
+      if (!profile) {
         return res.send(404, {
           detail: 'Profile doesn\'t exist'
+        });
+      }
+
+      if (!(_.contains(project.admins, loggedInUser._id) ||
+        _.contains(project.users, loggedInUser._id))) {
+        return res.send(401, {
+          detail: 'Only authorised project members can ' +
+            'see the project\'s profiles.'
         });
       }
 
@@ -78,6 +105,14 @@
         });
       }
 
+      if (!(_.contains(project.admins, loggedInUser._id) ||
+        _.contains(project.users, loggedInUser._id))) {
+        return res.send(401, {
+          detail: 'Only authorised project members can ' +
+            'see the project\'s profiles.'
+        });
+      }
+
       var query = Profile.find();
 
       query.select('_id projectId projectVersion profileName ' +
@@ -99,9 +134,6 @@
           next(err);
         })
         .done();
-
-
-
     },
 
     saveProfile: function (req, res, next) {
@@ -157,6 +189,8 @@
         })
         .done();
     },
+
+    //TODO: Delete profile
 
     //
     // Test extensions

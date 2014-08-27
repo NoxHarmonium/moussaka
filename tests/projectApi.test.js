@@ -1117,7 +1117,17 @@
         });
     });
 
-
+    // Clear out all the test projects
+    it('Reset project test', function (done) {
+      agent.get('http://localhost:3000/test/project_api/reset/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+          done();
+        });
+    });
 
 
   });

@@ -150,6 +150,7 @@
       }
 
       res.send(200, {
+        _id: device._id,
         macAddress: device.macAddress,
         deviceName: device.deviceName,
         projectId: device.projectId,
@@ -173,7 +174,7 @@
         projectId: project._id
       });
 
-      query.select('-_id macAddress projectId projectVersion ' +
+      query.select('macAddress projectId projectVersion ' +
         'dataSchema currentState timestamp deviceName');
 
       query.sort({
