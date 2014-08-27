@@ -8,6 +8,7 @@
 
   var Project = require('../schemas/project.js');
   var Profile = require('../schemas/profile.js');
+  var Device = require('../schemas/device.js');
   var User = require('../schemas/user.js');
   var moment = require('moment');
   var passport = require('passport');
@@ -15,24 +16,25 @@
   var config = require('../include/config.js');
   var mongoose = require('mongoose-q')();
   var Q = require('q');
-
-  // Private functions
-  var _validateProject = function _validateProject(projects) {
-    return projects && Array.isArray(projects) && projects.length === 1;
-  };
+  var utils = require('../include/utils.js');
 
   module.exports = {
 
     pProfile: function (req, res, next, profileId) {
-      if (_validateProject(req.projects)) {
-        return res.send(404, {
-          detail: 'Project doesn\'t exist'
+      if (!req.user) {
+        return res.send(401, {
+          detail: 'Not logged in'
         });
       }
 
+      // Check for valid object ID
+      // Thanks: http://stackoverflow.com/a/14942113/1153203
+      if (!profileId.match(/^[0-9a-fA-F]{24}$/)) {
+        return next();
+      }
+
       var profile = Profile.findOne({
-        '_id': profileId,
-        'project': req.projects[0]._id
+        '_id': profileId
       }, function (err, data) {
         if (err) {
           return next(err);
@@ -50,133 +52,110 @@
         });
       }
 
-      res.send(200, profile);
+      res.send(200, {
+        projectId: profile.projectId,
+        projectVersion: profile.projectVersion,
+        profileName: profile.profileName,
+        profileData: profile.profileData,
+        timestamp: profile.timestamp
+      });
     },
 
     getProfiles: function (req, res, next) {
-      if (!_validateProject(req.projects)) {
-        return res.send(404, {
-          detail: 'Project doesn\'t exist'
+      var project = req.project;
+      var loggedInUser = req.user;
+      var projectVersion = req.query.projectVersion;
+
+      if (!loggedInUser) {
+        return res.send(401, {
+          detail: 'Not logged in'
         });
       }
 
-      Profile.find({
-          'project': req.projects[0]._id
-        },
-        function (err, data) {
-          if (err) {
-            next(err);
-          }
+      if (!project) {
+        return res.send(404, {
+          detail: 'Specified project doesn\'t exist'
+        });
+      }
 
+      var query = Profile.find();
+
+      query.select('_id projectId projectVersion profileName ' +
+        'profileData timestamp');
+
+      query.where('projectId')
+        .equals(project._id);
+
+      if (utils.exists(projectVersion)) {
+        query.where('projectVersion')
+          .equals(projectVersion);
+      }
+
+      query.execQ()
+        .then(function (data) {
           res.send(200, data);
+        })
+        .fail(function (err) {
+          next(err);
+        })
+        .done();
 
-        }
-      );
 
 
     },
 
-    addProfile: function (req, res, next) {
-      var r = req.body;
-      var deps = [];
+    saveProfile: function (req, res, next) {
+      var project = req.project;
+      var loggedInUser = req.user;
+      var data = req.body;
+      var deviceId = req.query.deviceId;
 
-      //console.log('data: ' + JSON.stringify(r));
-
-      if (r.owner) {
-        var checkOwner = Q.defer();
-        deps.push(checkOwner.promise);
-
-        User.findOne({
-          '_id': r.owner
-        }, function (err, data) {
-          if (err) {
-            return next(err);
-          }
-          if (!data) {
-            res.send(400, {
-              'detail': 'Owner doesn\'t exist'
-            });
-            checkOwner.reject();
-          }
-          checkOwner.resolve();
-        });
-      } else {
-        return res.send(400, {
-          detail: 'Owner is a required field'
+      if (!deviceId) {
+        return res.send(409, {
+          detail: 'No device ID specified in query string. ' +
+            '(eg. .../profiles/?deviceId=xxx)'
         });
       }
 
-      if (r.parentProfile) {
-        //console.log('ParentProfile: ' + r.parentProfile);
-        var checkProfile = Q.defer();
-        deps.push(checkProfile.promise);
-
-        var profileId;
-        try {
-          profileId = mongoose.Types.ObjectId(r.parentProfile);
-        } catch (e) {
-          res.send(400, {
-            'detail': 'Parent profile ID is in an invalid format'
-          });
-          return checkProfile.reject();
-        }
-
-        Profile.findOne({
-          '_id': profileId
-        }, function (err, data) {
-          if (err) {
-            return next(err);
-          }
-          if (!data) {
-            res.send(400, {
-              'detail': 'Parent profile doesn\'t exist'
-            });
-            return checkProfile.reject();
-          }
-          checkProfile.resolve();
+      if (!loggedInUser) {
+        return res.send(401, {
+          detail: 'Not logged in'
         });
       }
 
-      if (r.project) {
-        var checkProject = Q.defer();
-        deps.push(checkProject.promise);
-
-        Project.findOne({
-          '_id': r.project
-        }, function (err, data) {
-          if (err) {
-            return next(err);
-          }
-          if (!data) {
-            return res.send(400, {
-              'detail': 'Project doesn\'t exist'
-            });
-          }
-          checkProject.resolve();
-        });
-      } else {
-        return res.send(400, {
-          detail: 'Project is a required field'
+      if (!project) {
+        return res.send(404, {
+          detail: 'Specified project doesn\'t exist'
         });
       }
 
+      var getDevice = Device.findOne({
+        '_id': deviceId
+      });
 
-      Q.all(deps)
-        .then(function () {
-          var p = new Profile(r);
-          p.save(function (err, profile) {
-            if (err) {
-              return next(err);
-            }
-
-            //console.log('data: ' + body);
-
-            res.send(200, {
-              '_id': profile._id
-            });
-          });
+      var createProfile = function (device) {
+        var p = new Profile({
+          projectId: project._id,
+          projectVersion: device.projectVersion,
+          profileName: data.profileName,
+          profileData: device.currentState
         });
+        return p.saveQ();
+      };
 
+      var returnId = function (savedProfile) {
+        res.send(200, {
+          _id: savedProfile._id
+        });
+      };
+
+      getDevice.execQ()
+        .then(createProfile)
+        .then(returnId)
+        .fail(function (err) {
+          next(err);
+        })
+        .done();
     },
 
     //

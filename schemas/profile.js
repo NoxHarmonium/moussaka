@@ -15,6 +15,9 @@
       type: String,
       required: true
     },
+    profileName: {
+      type: String
+    },
     profileData: {
       type: Schema.Types.Mixed,
       required: true

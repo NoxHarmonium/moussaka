@@ -246,6 +246,8 @@
       }
     },
 
+    // TODO: Stop session
+
     getSchema: function (req, res, next) {
       var project = req.project;
       var device = req.device;

@@ -8,6 +8,7 @@
   var testData = require('../tests/testData.js');
   var config = require('../include/config.js');
   var _ = require('lodash');
+  var utils = require('../include/utils.js');
 
   // Public functions
   module.exports = {
@@ -67,8 +68,7 @@
     },
 
     pProjectId: function (req, res, next, projectId) {
-      // TODO: Universal undefined check fn?
-      if (!projectId || projectId === 'undefined') {
+      if (!utils.exists(projectId)) {
         return next();
       }
 
