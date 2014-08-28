@@ -5,12 +5,43 @@
   var expect = require('expect.js');
   var testData = require('./testData.js');
   var serverModule = require('../server.js');
+  var fakeSmtp = require('../include/fakeSmtp.js');
+  var cheerio = require('cheerio');
+  var colors = require('colors');
+  var config = require('../include/config.js');
+  var Q = require('q');
 
+  // Shared functions
+
+  var fakeSmtpServer = null;
+
+  var startFakeSmtpServer = function (emailRecvCallback) {
+    var deferred = Q.defer();
+
+    fakeSmtpServer = fakeSmtp.start(emailRecvCallback, function (
+      err) {
+      if (err) {
+        deferred.reject(err);
+      } else {
+        deferred.resolve();
+      }
+    });
+
+    return deferred.promise;
+  };
+
+  var stopFakeSmtpServer = function () {
+    if (fakeSmtpServer) {
+      fakeSmtpServer.stop();
+    }
+  };
 
   describe('Administration API tests', function () {
     var id;
     var users = testData.getTestUsers();
     var agent = superagent.agent();
+    var emailConfig = config.email_settings;
+    var passwordResetCode = null;
 
     it('Start server', function (done) {
       serverModule.start(function (e, server) {
@@ -291,6 +322,22 @@
         });
     });
 
+    it('Reset password for user [1] while logged in', function (done) {
+      var user = users[1];
+
+      agent.post('http://localhost:3000/users/' + user.username +
+        '/resetpassword/')
+        .send()
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(400);
+          done();
+        });
+
+    });
+
     it('Logout user [1]', function (done) {
       agent.get('http://localhost:3000/logout/')
         .send()
@@ -314,12 +361,125 @@
             .to.be(404);
           done();
         });
+
     });
 
     it('Reset password for user [1]', function (done) {
-      agent.post('http://localhost:3000/users/' + users[1].username +
-        '/resetpassword/')
-        .send()
+      var user = users[1];
+
+      if (!emailConfig.enabled || !emailConfig.fake_smtp) {
+        console.log('Test skipped because email support disabled'.yellow);
+        return done();
+      }
+
+      var emailRecieved = Q.defer();
+      var fakeSmtpServer = null;
+
+      var emailRecvCallback = function (email) {
+        try {
+          var $ = cheerio.load(email.body);
+          var codeEl = $('#resetPasswordCode');
+          if (codeEl.length > 0) {
+            var code = codeEl.text();
+            emailRecieved.resolve(code);
+          } else {
+            emailRecieved.reject(
+              new Error('Code element not found in email.')
+            );
+          }
+        } catch (err) {
+          emailRecieved.reject(err);
+        }
+      };
+
+      var requestPasswordCode = function () {
+        var deferred = Q.defer();
+
+        agent.post('http://localhost:3000/users/' + user.username +
+          '/resetpassword/')
+          .send()
+          .end(function (e, res) {
+            try {
+              expect(e)
+                .to.eql(null);
+              expect(res.ok)
+                .to.be.ok();
+              deferred.resolve();
+            } catch (err) {
+              deferred.reject(err);
+            }
+          });
+        return deferred.promise;
+      };
+
+      var waitForEmail = function () {
+        return emailRecieved.promise;
+      };
+
+      var saveCodeForNextTest = function (code) {
+        passwordResetCode = code;
+      };
+
+      startFakeSmtpServer(emailRecvCallback)
+        .then(requestPasswordCode)
+        .then(waitForEmail)
+        .then(saveCodeForNextTest)
+        .then(stopFakeSmtpServer)
+        .then(done)
+        .done();
+
+    });
+
+    it('Change password for user [1] using wrong temporary code', function (
+      done) {
+      var user = users[1];
+
+      agent.post('http://localhost:3000/users/' + user.username +
+        '/password/')
+        .send({
+          'tempPasswordCode': '',
+          'newPassword': 'resettedPassword'
+
+        })
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(401);
+          done();
+        });
+
+    });
+
+    it('Change password for user [1] using temporary code', function (done) {
+      var user = users[1];
+
+      agent.post('http://localhost:3000/users/' + user.username +
+        '/password/')
+        .send({
+          'tempPasswordCode': passwordResetCode,
+          'newPassword': 'resettedPassword'
+
+        })
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+          done();
+        });
+
+    });
+
+    it('Login user [0] with new password', function (done) {
+      var user = users[1];
+
+      agent.post('http://localhost:3000/login/')
+        .send({
+          username: user.username,
+          password: 'resettedPassword'
+
+        })
         .end(function (e, res) {
           expect(e)
             .to.eql(null);

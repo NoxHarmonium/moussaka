@@ -13,6 +13,7 @@
   var config = require('../include/config.js');
   var crypto = require('crypto');
   var emailSend = require('../include/emailSend.js');
+  var Q = require('q');
 
   var emailConfig = config.email_settings;
 
@@ -32,7 +33,7 @@
           req.selectedUser = user;
           next();
         })
-        .fail(function (err) {
+        .catch(function (err) {
           next(err);
         })
         .done();
@@ -51,7 +52,7 @@
         .then(function (users) {
           res.send(users);
         })
-        .fail(function (err) {
+        .catch(function (err) {
           next(err);
         })
         .done();
@@ -90,7 +91,7 @@
           req.logout();
           res.send(200);
         })
-        .fail(function (err) {
+        .catch(function (err) {
           next(err);
         })
         .done();
@@ -114,54 +115,134 @@
         .then(function () {
           res.send(201);
         })
-        .fail(function (err) {
+        .catch(function (err) {
           next(err);
         })
         .done();
     },
 
     changePassword: function (req, res, next) {
+      var data = req.body;
+      var loggedInUser = req.user;
+      var selectedUser = req.selectedUser;
 
-      if (req.user) {
+      if (loggedInUser) {
         return res.send(400, {
           detail: 'Cannot change password when logged in'
         });
       }
 
-      if (req.selectedUser.passwordExpiry &&
-        moment(req.selectedUser.passwordExpiry)
-        .isBefore()) {
-        return res.send(401, {
-          detail: 'Temporary password has expired. You need to create a new one'
+      if (!selectedUser.tempPasswordCode &&
+        !data.oldPassword) {
+        return res.send(400, {
+          detail: 'You need either \'tempPasswordCode\'' +
+            'or \'oldPassword\' to change your password.'
         });
       }
 
-      req.selectedUser.comparePassword(req.body.oldPassword,
-        function (err, isMatch) {
+      var verifyTempCode = function (tempCode) {
+        var deferred = Q.defer();
+        var exprTime = moment(selectedUser.passwordExpiry);
+
+        if (selectedUser.passwordExpiry &&
+          exprTime.isBefore()) {
+          var err = new Error('Temporary password has expired. ' +
+            'You need to create a new one');
+          // Don't cause 500 error
+          err.sendToClient = {
+            code: 401
+          };
+          deferred.reject(err);
+        } else {
+          var isMatch =
+            data.tempPasswordCode === selectedUser.tempPasswordCode;
+          deferred.resolve(isMatch);
+        }
+        return deferred.promise;
+      };
+
+      var verifyOldPassword = function (oldPassword) {
+        var deferred = Q.defer();
+
+        req.selectedUser.comparePassword(oldPassword, function (err,
+          isMatch) {
+
           if (err) {
-            return next(err);
-          }
-
-          if (isMatch) {
-            req.selectedUser.password = req.body.newPassword;
-            req.selectedUser.save(function (err) {
-              if (err) {
-                next(err);
-              }
-
-              return res.send(200);
-            });
+            deferred.reject(err);
           } else {
-            return res.send(401, {
-              detail: 'Old password was incorrect'
-            });
+            deferred.resolve(isMatch);
           }
         });
+
+        return deferred.promise;
+      };
+
+      var saveNewPassword = function (isMatch) {
+        var deferred = Q.defer();
+
+        if (!isMatch) {
+          var err = new Error('Old password or temporary code is incorrect');
+          // Don't cause 500 error
+          err.sendToClient = {
+            code: 401
+          };
+          deferred.reject(err);
+        } else {
+          selectedUser.password = data.newPassword;
+          selectedUser.passwordExpiry = null;
+          selectedUser.save(function (err) {
+            if (err) {
+              deferred.reject(err);
+            } else {
+              deferred.resolve();
+            }
+          });
+        }
+
+        return deferred.promise;
+      };
+
+      var verifyMethod;
+
+      if (selectedUser.tempPasswordCode) {
+        verifyMethod = verifyTempCode(selectedUser.tempPasswordCode);
+      } else {
+        verifyMethod = verifyOldPassword(data.oldPassword);
+      }
+
+      verifyMethod
+        .then(saveNewPassword)
+        .then(function () {
+          res.send(200);
+        })
+        .catch(function (err) {
+          if (err.sendToClient) {
+            res.send(err.sendToClient.code, {
+              detail: err.sendToClient.message
+            });
+          } else {
+            next(err);
+          }
+        });
+
 
     },
 
     resetPassword: function (req, res, next) {
       var selectedUser = req.selectedUser;
+      var loggedInUser = req.user;
+      var emailInfo = require('../emails.json')
+        .forgottonPassword;
+
+      if (!emailInfo) {
+        next(new Error('Cannot find email template data'));
+      }
+
+      if (loggedInUser) {
+        return res.send(400, {
+          'detail': 'Cannot reset password while logged in'
+        });
+      }
 
       if (!selectedUser) {
         return res.send(404, {
@@ -169,36 +250,78 @@
         });
       }
 
-      crypto.randomBytes(8, function (ex, buf) {
-        var tempPwd = buf.toString('hex');
-        req.selectedUser.password = tempPwd;
-        req.selectedUser.passwordExpiry = moment()
-          .add('minutes', 10);
-
-        selectedUser.saveQ()
-          .then(function () {
-            // TODO: Proper templated emails
-            return emailSend.sendText({
-              from: emailConfig.from,
-              to: req.selectedUser._id,
-              subject: 'Password forgotton',
-              text: 'Here is your temporary password: ' + tempPwd
-            });
-          })
-          .then(function (message) {
-            res.send(200);
-          })
-          .fail(function (err) {
-            if (err.previous) {
-              // emailjs hides the actual error sometimes.
-              // Extract it if it exists.
-              next(err.previous);
+      var generateTempPasswordCode = function () {
+        var deferred = Q.defer();
+        crypto.randomBytes(config.tempPasswordCodeLength,
+          function (err, buf) {
+            if (err) {
+              deferred.reject(err);
             } else {
-              next(err);
+              var tempPwdCode = buf.toString('hex');
+              deferred.resolve(tempPwdCode);
             }
-          })
-          .done();
-      });
+          });
+        return deferred.promise;
+      };
+
+      var saveTempPasswordCode = function (tempPwdCode) {
+        req.selectedUser.tempPasswordCode = tempPwdCode;
+        req.selectedUser.passwordExpiry = moment()
+          .add(20, 'minutes');
+
+        return selectedUser.saveQ();
+      };
+
+      var renderEmail = function (tempPwdCode) {
+        var deferred = Q.defer();
+        // TODO: Have a email template lookup with filenames
+        // and subjects
+        req.app.render(
+          emailInfo.templateFile, {
+            tempPwd: tempPwdCode
+          },
+          function (err, html) {
+            if (err) {
+              deferred.reject(err);
+            } else {
+              deferred.resolve(html);
+            }
+          });
+        return deferred.promise;
+      };
+
+      var sendEmail = function (renderedHtml) {
+        return emailSend.sendText({
+          from: emailConfig.from,
+          to: req.selectedUser._id,
+          subject: emailInfo.subject,
+          text: renderedHtml
+        });
+      };
+
+      generateTempPasswordCode()
+        .then(function (tempPwdCode) {
+          return [
+            saveTempPasswordCode(tempPwdCode),
+            renderEmail(tempPwdCode)
+          ];
+        })
+        .spread(function (saveResult, renderedEmail) {
+          return sendEmail(renderedEmail);
+        })
+        .then(function (message) {
+          res.send(200);
+        })
+        .catch(function (err) {
+          if (err.previous) {
+            // emailjs hides the actual error sometimes.
+            // Extract it if it exists.
+            next(err.previous);
+          } else {
+            next(err);
+          }
+        })
+        .done();
     },
 
     logout: function (req, res, next) {

@@ -46,7 +46,7 @@
           req.device = device;
           next();
         })
-        .fail(function (err) {
+        .catch(function (err) {
           next(err);
         })
         .done();
@@ -87,7 +87,7 @@
           .then(function () {
             res.send(200);
           })
-          .fail(function (err) {
+          .catch(function (err) {
             next(err);
           })
           .done();
@@ -108,7 +108,7 @@
               '_id': data._id
             });
           })
-          .fail(function (err) {
+          .catch(function (err) {
             next(err);
           })
           .done();
@@ -139,7 +139,7 @@
         .then(function () {
           res.send(200);
         })
-        .fail(function (err) {
+        .catch(function (err) {
           next(err);
         })
         .done();
@@ -198,7 +198,7 @@
         .then(function (devices) {
           res.send(200, devices);
         })
-        .fail(function (err) {
+        .catch(function (err) {
           next(err);
         })
         .done();
@@ -305,7 +305,7 @@
         .then(function () {
           res.send(200);
         })
-        .fail(function (err) {
+        .catch(function (err) {
           next(err);
         })
         .done();
@@ -413,7 +413,7 @@
         .then(function () {
           res.send(200);
         })
-        .fail(function (err) {
+        .catch(function (err) {
           next(err);
         })
         .done();
@@ -471,7 +471,7 @@
       }, 'data timestamp')
         .then(sendMessagesToClient)
         .then(markMessagesAsReceived)
-        .fail(function (err) {
+        .catch(function (err) {
           next(err);
         })
         .done();
@@ -490,7 +490,7 @@
         .then(function () {
           res.send(200);
         })
-        .fail(function (err) {
+        .catch(function (err) {
           next(err);
         })
         .done();

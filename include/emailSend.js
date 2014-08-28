@@ -1,6 +1,9 @@
 (function (require, module) {
   'use strict';
 
+  // TODO: Maybe use something like https://github.com/bevacqua/campaign
+  // to use Mandrill
+
   var colors = require('colors');
   var config = require('./config.js');
   var emailConfig = config.email_settings;
@@ -14,7 +17,7 @@
   // Persist connection ver multiple imports
   var emailjs = require('emailjs');
 
-  console.log('Attemping to connect to smtp server at: ' +
+  console.log('emailSend.js: Will connect to smtp server at: ' +
     emailConfig.host + ':' + emailConfig.port);
 
   var server = emailjs.server.connect({

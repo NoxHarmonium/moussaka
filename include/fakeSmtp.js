@@ -7,7 +7,7 @@
   var smtpServer;
 
   module.exports = {
-    start: function (recvCallback) {
+    start: function (recvCallback, errorCallback) {
       var emailConfig = config.email_settings;
 
       console.log(('Starting fake SMTP server on: ' +
@@ -21,7 +21,7 @@
         disableDNSValidation: true
       });
 
-      smtpServer.listen(emailConfig.port);
+      smtpServer.listen(emailConfig.port, errorCallback);
 
       var buffer = '';
 

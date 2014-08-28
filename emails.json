@@ -1,0 +1,6 @@
+{
+    "forgottonPassword": {
+        "subject": "Forgotton Password Request",
+        "templateFile": "../email_templates/tempPassword"
+    }
+}

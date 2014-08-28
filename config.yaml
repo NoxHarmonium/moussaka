@@ -29,6 +29,9 @@ default: # The default config profile. (With documentation)
     # Maximum records that can be returned by an rest API query
     max_records_per_query:  20
 
+    # How many characters to generate for the code sent to the user when they forget their password
+    tempPasswordCodeLength: 8
+
     # The settings so that emails can be sent for things such as lost password.
     # Set enabled to false to avoid errors due to incorrect settings.
     # When fake_smtp is set to true, an SMTP server is started by the server
@@ -52,6 +55,7 @@ development: # The development config profile.
     enable_test_exts:       true
     show_friendly_errors:   true
     max_records_per_query:  20
+    tempPasswordCodeLength: 8
     email_settings: 
         enabled:    true    
         user:       "testUser"
@@ -69,6 +73,7 @@ travis-ci: # The development config profile.
     enable_test_exts:       true 
     show_friendly_errors :  true
     max_records_per_query:  20
+    tempPasswordCodeLength: 8
     email_settings:
         enabled:    true    
         user:       "testUser"

@@ -17,6 +17,12 @@
       type: String,
       required: true
     },
+    tempPasswordCode: {
+      type: String
+    },
+    passwordExpiry: {
+      type: Date
+    }
 
   });
 

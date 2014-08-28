@@ -45,7 +45,7 @@
           req.profile = data;
           next();
         })
-        .fail(function (err) {
+        .catch(function (err) {
           next(err);
         })
         .done();
@@ -138,7 +138,7 @@
         .then(function (data) {
           res.send(200, data);
         })
-        .fail(function (err) {
+        .catch(function (err) {
           next(err);
         })
         .done();
@@ -192,7 +192,7 @@
       getDevice.execQ()
         .then(createProfile)
         .then(returnId)
-        .fail(function (err) {
+        .catch(function (err) {
           next(err);
         })
         .done();

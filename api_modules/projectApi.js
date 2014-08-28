@@ -95,7 +95,7 @@
         .then(function (projects) {
           res.send(200, projects);
         })
-        .fail(function (err) {
+        .catch(function (err) {
           next(err);
         })
         .done();
@@ -127,7 +127,7 @@
             '_id': data._id
           });
         })
-        .fail(function (err) {
+        .catch(function (err) {
           next(err);
         })
         .done();
@@ -205,7 +205,7 @@
         .then(function () {
           res.send(200);
         })
-        .fail(function (err) {
+        .catch(function (err) {
           next(err);
         })
         .done();
@@ -254,7 +254,7 @@
         .then(function () {
           res.send(200);
         })
-        .fail(function (err) {
+        .catch(function (err) {
           next(err);
         })
         .done();
@@ -308,7 +308,7 @@
         .then(function () {
           res.send(200);
         })
-        .fail(function (err) {
+        .catch(function (err) {
           next(err);
         })
         .done();
@@ -363,7 +363,7 @@
         .then(function () {
           res.send(200);
         })
-        .fail(function (err) {
+        .catch(function (err) {
           next(err);
         })
         .done();
@@ -395,7 +395,7 @@
         .then(function () {
           res.send(200);
         })
-        .fail(function (err) {
+        .catch(function (err) {
           next(err);
         })
         .done();

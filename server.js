@@ -4,11 +4,8 @@
   var serverModule = {
     starting: false,
     started: false,
-    server: null,
-    emailQueue: []
+    server: null
   };
-
-  var config = require('./include/config');
 
 
   serverModule.start = function (next) {
@@ -27,22 +24,10 @@
     serverModule.starting = true;
 
     /**
-     *  Fake SMTP server for testing.
-     */
-
-    var emailConfig = config.email_settings;
-
-    if (emailConfig.enabled && emailConfig.fake_smtp) {
-      var fakeSmtp = require('./include/fakeSmtp.js');
-      fakeSmtp.start(function (email) {
-        serverModule.emailQueue.push(email);
-      });
-    }
-
-    /**
      * Module dependencies.
      */
 
+    var config = require('./include/config');
     var express = require('express');
     var userApi = require('./api_modules/userApi.js');
     var projectApi = require('./api_modules/projectApi.js');
@@ -53,10 +38,8 @@
     var colors = require('colors');
     var passport = require('passport');
     var auth = require('./api_modules/auth.js');
-    var dbAccess = require('./include/dbAccess.js');
-    var utils = require('./include/utils.js');
-
-
+    var dbAccess = require('./include/dbAccess');
+    var utils = require('./include/utils');
 
     /**
      * Main application
