@@ -12,6 +12,9 @@
   var testData = require('../tests/testData.js');
   var config = require('../include/config.js');
   var crypto = require('crypto');
+  var emailSend = require('../include/emailSend.js');
+
+  var emailConfig = config.email_settings;
 
   module.exports = {
 
@@ -174,13 +177,25 @@
 
         selectedUser.saveQ()
           .then(function () {
-            // TODO: Actually send email to user
-            console.log('Would send email to user with temp password: ' +
-              tempPwd);
+            // TODO: Proper templated emails
+            return emailSend.sendText({
+              from: emailConfig.from,
+              to: req.selectedUser._id,
+              subject: 'Password forgotton',
+              text: 'Here is your temporary password: ' + tempPwd
+            });
+          })
+          .then(function (message) {
             res.send(200);
           })
           .fail(function (err) {
-            next(err);
+            if (err.previous) {
+              // emailjs hides the actual error sometimes.
+              // Extract it if it exists.
+              next(err.previous);
+            } else {
+              next(err);
+            }
           })
           .done();
       });

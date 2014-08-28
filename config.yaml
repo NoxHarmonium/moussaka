@@ -29,6 +29,21 @@ default: # The default config profile. (With documentation)
     # Maximum records that can be returned by an rest API query
     max_records_per_query:  20
 
+    # The settings so that emails can be sent for things such as lost password.
+    # Set enabled to false to avoid errors due to incorrect settings.
+    # When fake_smtp is set to true, an SMTP server is started by the server
+    # to test the sending of emails. This should be set to false in production.
+    email_settings:     
+        enabled:    false    
+        user:       "testUser"
+        password:   "testPassword"
+        host:       "localhost"
+        port:       3001
+        ssl:        false
+        from:       "forgotpassword@unity-profiles.test"
+        fake_smtp:  false
+
+
 
 development: # The development config profile.
     listen_port:            3000
@@ -37,6 +52,15 @@ development: # The development config profile.
     enable_test_exts:       true
     show_friendly_errors:   true
     max_records_per_query:  20
+    email_settings: 
+        enabled:    true    
+        user:       "testUser"
+        password:   "testPassword"
+        host:       "localhost"
+        port:       3001
+        ssl:        false
+        from:       "forgotpassword@unity-profiles.test"
+        fake_smtp:  true
 
 travis-ci: # The development config profile.
     listen_port:            3000
@@ -45,4 +69,13 @@ travis-ci: # The development config profile.
     enable_test_exts:       true 
     show_friendly_errors :  true
     max_records_per_query:  20
+    email_settings:
+        enabled:    true    
+        user:       "testUser"
+        password:   "testPassword"
+        host:       "localhost"
+        port:       3001
+        ssl:        false
+        from:       "forgotpassword@unity-profiles.test"
+        fake_smtp:  true
 
