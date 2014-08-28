@@ -13,7 +13,7 @@ services: mongodb
 install: 
   - npm install
   - npm install -g grunt-cli
-  
+
 script: 
-    -grunt all # Run the tests
-    -npm run coveralls # Upload coverage
+    - grunt all # Run the tests
+    - npm run coveralls # Upload coverage
