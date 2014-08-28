@@ -59,7 +59,6 @@
       var profile = req.profile;
       var project = req.project;
       var loggedInUser = req.user;
-      var projectVersion = req.query.projectVersion;
 
       if (!loggedInUser) {
         return res.send(401, {
@@ -92,6 +91,7 @@
         projectVersion: profile.projectVersion,
         profileName: profile.profileName,
         profileData: profile.profileData,
+        owner: profile.owner,
         timestamp: profile.timestamp
       });
     },
@@ -124,7 +124,7 @@
       var query = Profile.find();
 
       query.select('_id projectId projectVersion profileName ' +
-        'profileData timestamp');
+        'profileData timestamp owner');
 
       query.where('projectId')
         .equals(project._id);
@@ -178,7 +178,8 @@
           projectId: project._id,
           projectVersion: device.projectVersion,
           profileName: data.profileName,
-          profileData: device.currentState
+          profileData: device.currentState,
+          owner: loggedInUser._id
         });
         return p.saveQ();
       };
@@ -198,7 +199,47 @@
         .done();
     },
 
-    //TODO: Delete profile
+    deleteProfile: function (req, res, next) {
+      var profile = req.profile;
+      var project = req.project;
+      var loggedInUser = req.user;
+
+      if (!loggedInUser) {
+        return res.send(401, {
+          detail: 'Not logged in'
+        });
+      }
+
+      if (!project) {
+        return res.send(404, {
+          detail: 'Specified project doesn\'t exist'
+        });
+      }
+
+      if (!profile) {
+        return res.send(404, {
+          detail: 'Profile doesn\'t exist'
+        });
+      }
+
+      if (!(_.contains(project.admins, loggedInUser._id) ||
+        (profile.owner === loggedInUser._id))) {
+        return res.send(401, {
+          detail: 'Only authorised profile owner or a project' +
+            'admin can delete a profile.'
+        });
+      }
+
+      profile.removeQ()
+        .then(function () {
+          res.send(200);
+        })
+        .catch(function (err) {
+          next(err);
+        })
+        .done();
+
+    },
 
     //
     // Test extensions

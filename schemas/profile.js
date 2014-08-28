@@ -25,6 +25,10 @@
     timestamp: {
       type: Date,
       default: Date.now
+    },
+    owner: {
+      type: String,
+      required: true
     }
   });
 
