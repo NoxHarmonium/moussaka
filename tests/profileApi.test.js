@@ -11,7 +11,6 @@
     var id;
     var users = testData.getTestUsers();
     var projects = testData.getTestProjects();
-    var profiles = testData.getTestProfiles();
     var devices = testData.getTestDevices();
     var agent = superagent.agent();
     var project = null;
@@ -111,6 +110,133 @@
             device.currentState,
             profile.profileData))
             .to.be.ok();
+
+          done();
+        });
+    });
+
+    it('Logout user [2]', function (done) {
+      agent.get('http://localhost:3000/logout/')
+        .send()
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+          done();
+        });
+    });
+
+    it('Login user [1]', function (done) {
+      agent.post('http://localhost:3000/login/')
+        .send(users[1])
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(200);
+          done();
+        });
+    });
+
+
+    it('Delete profile [0] as non owner', function (done) {
+
+      agent.del('http://localhost:3000/projects/' +
+        device.projectId + '/profiles/' + profileId + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+
+          expect(res.status)
+            .to.be(401);
+
+          done();
+        });
+    });
+
+    it('Retrieve profile [0]', function (done) {
+
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/profiles/' + profileId + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          var profile = res.body;
+
+          expect(utils.objMatch(
+            device.currentState,
+            profile.profileData))
+            .to.be.ok();
+
+          done();
+        });
+    });
+
+    it('Logout user [1]', function (done) {
+      agent.get('http://localhost:3000/logout/')
+        .send()
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+          done();
+        });
+    });
+
+    it('Login user [2]', function (done) {
+      agent.post('http://localhost:3000/login/')
+        .send(users[2])
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(200);
+          done();
+        });
+    });
+
+    it('Delete profile [0]', function (done) {
+
+      agent.del('http://localhost:3000/projects/' +
+        device.projectId + '/profiles/' + profileId + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          done();
+        });
+    });
+
+    it('Retrieve profile [0] after deletion', function (done) {
+
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/profiles/' + profileId + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(404);
+
+          done();
+        });
+    });
+
+    it('Delete non existant profile', function (done) {
+
+      agent.del('http://localhost:3000/projects/' +
+        device.projectId + '/profiles/' + 'fdsdfdfsfd' + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(404);
 
           done();
         });

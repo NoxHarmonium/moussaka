@@ -131,6 +131,8 @@
       profileApi.getProfiles);
     app.get('/projects/:projectId/profiles/:profileId/',
       profileApi.getProfile);
+    app.del('/projects/:projectId/profiles/:profileId/',
+      profileApi.deleteProfile);
     app.put('/projects/:projectId/profiles/',
       profileApi.saveProfile);
     if (config.enable_test_exts) {
