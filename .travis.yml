@@ -3,6 +3,7 @@ language: node_js
 before_install:
   - gem install sass
   - gem install compass
+  - gem install coveralls
 
 node_js:
   - "0.10"
@@ -13,4 +14,6 @@ install:
   - npm install
   - npm install -g grunt-cli
   
-script: grunt all # Run the tests
+script: 
+    -grunt all # Run the tests
+    -npm run coveralls # Upload coverage

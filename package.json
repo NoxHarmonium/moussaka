@@ -35,7 +35,10 @@
         "compass": "*",
         "stylus-modular-scale": "*",
         "cheerio": "*",
-        "simplesmtp": "*"
+        "simplesmtp": "*",
+        "istanbul": "*",
+        "coveralls": "*",
+        "mocha-lcov-reporter": "*"
     },
     "env": {
         "PYTHON": "/usr/bin/python2.7"
@@ -48,7 +51,8 @@
     },
     "scripts": {
         "start": "node app.js",
-        "test": "grunt test"
+        "test": "grunt test",
+        "coveralls": "./gencoverage.sh"
     },
     "version": "0.0.1"
 }
