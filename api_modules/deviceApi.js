@@ -177,6 +177,8 @@
     listDevices: function (req, res, next) {
       var project = req.project;
 
+      // TODO: Pagination
+
       if (!req.project) {
         return res.send(404, {
           detail: 'Project not found'

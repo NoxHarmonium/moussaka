@@ -95,6 +95,8 @@
       var loggedInUser = req.user;
       var projectVersion = req.query.projectVersion;
 
+      // TODO: Pagination
+
       if (!loggedInUser) {
         return res.send(401, {
           detail: 'Not logged in'
