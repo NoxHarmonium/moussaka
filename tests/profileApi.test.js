@@ -115,6 +115,41 @@
         });
     });
 
+    it('List profiles [0] of project [0]', function (done) {
+
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/profiles/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          var profile = res.body[0];
+
+          expect(utils.objMatch(
+            device.currentState,
+            profile.profileData))
+            .to.be.ok();
+
+          done();
+        });
+    });
+
+    it('List profiles [0] of non existant project', function (done) {
+
+      agent.get('http://localhost:3000/projects/' +
+        '!@#$%^&**())' + '/profiles/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(404);
+
+          done();
+        });
+    });
+
     it('Logout user [2]', function (done) {
       agent.get('http://localhost:3000/logout/')
         .send()
@@ -123,6 +158,35 @@
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
+          done();
+        });
+    });
+
+    it('Retrieve profile [0] while not logged in', function (done) {
+
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/profiles/' + profileId + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be.ok(401);
+
+          done();
+        });
+    });
+
+    it('List profiles [0] of project [0] while not logged in', function (
+      done) {
+
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/profiles/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(401);
+
           done();
         });
     });
