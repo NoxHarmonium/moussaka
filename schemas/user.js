@@ -26,7 +26,8 @@
     },
     apiKey: {
       type: String,
-      default: uuid.v4
+      default: uuid.v4,
+      unique: true
     }
 
   });
