@@ -40,6 +40,11 @@
     timestamp: {
       type: Date,
       default: Date.now
+    },
+    lastAccess: {
+      type: Date,
+      default: Date.now,
+      expires: config.device_Timeout_Seconds
     }
   });
 

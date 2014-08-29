@@ -82,6 +82,7 @@
         existingDevice.dataSchema = device.dataSchema;
         existingDevice.currentState = device.currentState;
         existingDevice.timestamp = Date.now();
+        existingDevice.lastAccess = Date.now();
 
         existingDevice.saveQ()
           .then(function () {
@@ -236,10 +237,7 @@
       }
 
       if (device.sessionUser) {
-        if (device.sessionUser === loggedInUser._id) {
-          // User already has session, ignore
-          return res.send(200);
-        } else {
+        if (device.sessionUser !== loggedInUser._id) {
           // Conflict
           return res.send(409, {
             detail: 'Session already started for this' +
@@ -247,16 +245,21 @@
           });
         }
       } else {
+        // Start session
         device.sessionUser = loggedInUser._id;
-        device.save(function (err, data) {
-          if (err) {
-            return next(err);
-          }
+      }
+
+      device.lastAccess = Date.now();
+      device.saveQ()
+        .then(function (data) {
           res.send(200, {
             '_id': data._id
           });
-        });
-      }
+        })
+        .catch(function (err) {
+          return next(err);
+        })
+        .done();
     },
 
     stopSession: function (req, res, next) {
@@ -464,6 +467,11 @@
         }
       };
 
+      var updateDeviceAccessTime = function () {
+        device.lastAccess = Date.now();
+        return device.saveQ();
+      };
+
 
       Update.findQ({
         'targetMacAddress': device.macAddress,
@@ -471,6 +479,7 @@
       }, 'data timestamp')
         .then(sendMessagesToClient)
         .then(markMessagesAsReceived)
+        .then(updateDeviceAccessTime)
         .catch(function (err) {
           next(err);
         })
