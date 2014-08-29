@@ -1,5 +1,5 @@
 #!/bin/bash
-if [[ -z "$COVERALLS_REPO_TOKEN" ]];
+if [[ -z "$TRAVIS" ]];
 then
     export COVERALLS_SERVICE_NAME="Adhoc Test Machine";
     export COVERALLS_REPO_TOKEN="1DiClwfewqa0eVver6pMUQY8JnALfgqka";
