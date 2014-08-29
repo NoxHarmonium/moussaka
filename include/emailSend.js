@@ -34,7 +34,7 @@
       var deferred = Q.defer();
 
       // Send simple text string in an email.
-      // TODO: Implement templating
+      // Templating is done as a seperate step using express app.render()
       if (!server) {
         console.log('Cannot send email: Email sending is disabled.'.red);
         deferred.resolve(); // Resolve instead of error because it is expected

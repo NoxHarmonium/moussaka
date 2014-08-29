@@ -143,9 +143,6 @@
     // Device API
     //
     app.param('deviceMacAddr', deviceApi.pDeviceMacAddr);
-    // TODO: Check for URL format constancy with PUTs
-    // i.e. Devices are put with an MAC address as it is known
-    // beforehand but projects have no id until creation
     app.put('/projects/:projectId/devices/' +
       ':deviceMacAddr/', deviceApi.registerDevice);
     app.get('/projects/:projectId/devices/', deviceApi.listDevices);

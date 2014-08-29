@@ -274,8 +274,6 @@
 
       var renderEmail = function (tempPwdCode) {
         var deferred = Q.defer();
-        // TODO: Have a email template lookup with filenames
-        // and subjects
         req.app.render(
           emailInfo.templateFile, {
             tempPwd: tempPwdCode
