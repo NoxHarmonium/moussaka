@@ -7,6 +7,7 @@
   var bcrypt = require('bcrypt');
   var config = require('../include/config');
   var Schema = mongoose.Schema;
+  var uuid = require('node-uuid');
 
   var UserSchema = new Schema({
     _id: {
@@ -22,6 +23,10 @@
     },
     passwordExpiry: {
       type: Date
+    },
+    apiKey: {
+      type: String,
+      default: uuid.v4
     }
 
   });

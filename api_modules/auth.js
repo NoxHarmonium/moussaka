@@ -7,6 +7,13 @@
   var passport = require('passport');
   var LocalStrategy = require('passport-local')
     .Strategy;
+  // TODO: This is so hacky. The original author made a new
+  // version on github but didn't update his npm package so
+  // somebody did a fork. Someday I hope this will be resolved.
+  // SRC: https://github.com/cholalabs/passport-localapikey/issues/9
+  var LocalAPIKeyStrategy = require('passport-localapikey-update')
+    .Strategy;
+
   var User = require('../schemas/user.js');
 
   module.exports = {
@@ -40,6 +47,24 @@
         }
       ));
 
+      passport.use(new LocalAPIKeyStrategy(
+        function (apiKey, done) {
+          User.findOne({
+            apiKey: apiKey
+          }, function (err, user) {
+            if (err) {
+              return done(err);
+            }
+            if (!user) {
+              return done(null, false, {
+                detail: 'Incorrect API key'
+              });
+            }
+            return done(null, user);
+          });
+        }
+      ));
+
       passport.serializeUser(function (user, done) {
         done(null, user.id);
       });
@@ -49,6 +74,21 @@
           done(err, user);
         });
       });
+    },
+    apiKeyAuthoriser: function (req, res, next) {
+      passport.authenticate('localapikey', {
+          session: false
+        },
+        function (err, user, info) {
+          if (err) {
+            return next(err);
+          }
+          if (user) {
+            req.user = user;
+            //console.log('API Authenticated with user: ' + user._id);
+          }
+          next();
+        })(req, res, next);
     }
   };
 })(require, module);

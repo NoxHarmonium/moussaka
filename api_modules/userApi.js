@@ -59,9 +59,11 @@
     },
 
     getUser: function (req, res) {
-      if (req.user) {
+      var loggedInUser = req.user;
+      if (loggedInUser) {
         return res.send({
-          username: req.user.username
+          username: loggedInUser.username,
+          apiKey: loggedInUser.apiKey
         });
       } else {
         return res.send(404, {

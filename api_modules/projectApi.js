@@ -18,6 +18,14 @@
     //
 
     pProjectId: function (req, res, next, projectId) {
+      var loggedInUser = req.user;
+
+      if (!loggedInUser) {
+        return res.send(401, {
+          detail: 'Not logged in'
+        });
+      }
+
       if (!utils.exists(projectId)) {
         return next();
       }
@@ -28,17 +36,28 @@
         return next();
       }
 
-      var query = Project.findOne({
+      var findProject = Project.findOne({
         '_id': projectId
       });
 
-      query.exec(function (err, project) {
-        if (err) {
-          return next(err);
-        }
-        req.project = project;
-        next();
-      });
+      findProject.execQ()
+        .then(function (project) {
+          req.project = project;
+          if (project && !(_.contains(project.admins, loggedInUser._id) ||
+            _.contains(project.users, loggedInUser._id))) {
+            // Need to be a user of the project to see it
+            res.send(401, {
+              detail: 'You do not have permission to access ' +
+                'this project.'
+            });
+          } else {
+            next();
+          }
+        })
+        .catch(function (err) {
+          next(err);
+        })
+        .done();
 
     },
 
@@ -134,12 +153,6 @@
     },
 
     getProject: function (req, res, next) {
-      if (!req.user) {
-        return res.send(401, {
-          detail: 'Not logged in'
-        });
-      }
-
       var project = req.project;
       if (project) {
         return res.send({
@@ -158,12 +171,6 @@
     },
 
     addProjectUser: function (req, res, next) {
-      if (!req.user) {
-        return res.send(401, {
-          detail: 'Not logged in'
-        });
-      }
-
       var project = req.project;
       var selectedUser = req.selectedUser;
       var loggedInUser = req.user;
@@ -212,12 +219,6 @@
     },
 
     removeProjectUser: function (req, res, next) {
-      if (!req.user) {
-        return res.send(401, {
-          detail: 'Not logged in'
-        });
-      }
-
       var project = req.project;
       var selectedUser = req.selectedUser;
       var loggedInUser = req.user;
@@ -261,12 +262,6 @@
     },
 
     addProjectAdmin: function (req, res, next) {
-      if (!req.user) {
-        return res.send(401, {
-          detail: 'Not logged in'
-        });
-      }
-
       var project = req.project;
       var selectedUser = req.selectedUser;
       var loggedInUser = req.user;
@@ -315,12 +310,6 @@
     },
 
     removeProjectAdmin: function (req, res, next) {
-      if (!req.user) {
-        return res.send(401, {
-          detail: 'Not logged in'
-        });
-      }
-
       var project = req.project;
       var selectedUser = req.selectedUser;
       var loggedInUser = req.user;
@@ -372,12 +361,6 @@
     removeProject: function (req, res, next) {
       var project = req.project;
       var loggedInUser = req.user;
-
-      if (!loggedInUser) {
-        return res.send(401, {
-          detail: 'Not logged in'
-        });
-      }
 
       if (!project) {
         return res.send(404, {

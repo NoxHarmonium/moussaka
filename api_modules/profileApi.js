@@ -60,12 +60,6 @@
       var project = req.project;
       var loggedInUser = req.user;
 
-      if (!loggedInUser) {
-        return res.send(401, {
-          detail: 'Not logged in'
-        });
-      }
-
       if (!project) {
         return res.send(404, {
           detail: 'Specified project doesn\'t exist'
@@ -203,12 +197,6 @@
       var profile = req.profile;
       var project = req.project;
       var loggedInUser = req.user;
-
-      if (!loggedInUser) {
-        return res.send(401, {
-          detail: 'Not logged in'
-        });
-      }
 
       if (!project) {
         return res.send(404, {

@@ -61,6 +61,11 @@
     }));
     app.use(passport.initialize());
     app.use(passport.session());
+    auth.init();
+
+    // If the apikey is set, use it rather than a persistant
+    // login (i.e. browser)
+    app.use(auth.apiKeyAuthoriser);
 
     app.use(app.router);
     app.use(require('stylus')
@@ -81,7 +86,7 @@
       }
     });
 
-    auth.init();
+
 
     //
     // User API
