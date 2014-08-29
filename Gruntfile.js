@@ -104,8 +104,10 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-compass');
 
   grunt.registerTask('test', ['mochaTest']);
-  grunt.registerTask('compile', ['compass']);
-  grunt.registerTask('all', ['compass', 'jsbeautifier', 'jshint', 'mochaTest']);
+  //grunt.registerTask('compile', ['compass']);
+  grunt.registerTask('all', [ /*'compass',*/ 'jsbeautifier', 'jshint',
+    'mochaTest'
+  ]);
   grunt.registerTask('default', ['jsbeautifier', 'jshint']);
   grunt.registerTask('lint', ['jsbeautifier', 'jshint']);
 
