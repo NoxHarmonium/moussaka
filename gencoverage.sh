@@ -9,4 +9,4 @@ else
 fi
 
 FILES="tests/utils.test.js tests/controlValidation.test.js tests/userApi.test.js tests/projectApi.test.js tests/deviceApi.test.js tests/profileApi.test.js"
-istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec -b $FILES && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
+istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -t 30000 -R spec -b $FILES && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
