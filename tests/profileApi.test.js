@@ -107,7 +107,7 @@
         };
 
         agent.put('http://localhost:3000/projects/' +
-          '00000000000000000000000' + '/profiles/')
+          '000000000000000000000000' + '/profiles/')
           .send(data)
           .end(function (e, res) {
             expect(e)
@@ -147,7 +147,7 @@
     it('Retrieve profile [0] from non existant project', function (done) {
 
       agent.get('http://localhost:3000/projects/' +
-        '00000000000000000000000/profiles/' + profileId + '/')
+        '000000000000000000000000/profiles/' + profileId + '/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
@@ -203,7 +203,7 @@
     it('List profiles [0] of non existant project', function (done) {
 
       agent.get('http://localhost:3000/projects/' +
-        '00000000000000000000000' + '/profiles/')
+        '000000000000000000000000' + '/profiles/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
@@ -384,7 +384,7 @@
     it('Delete profile [0] from non existant project', function (done) {
 
       agent.del('http://localhost:3000/projects/' +
-        '00000000000000000000000' + '/profiles/' + profileId + '/')
+        '000000000000000000000000' + '/profiles/' + profileId + '/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
