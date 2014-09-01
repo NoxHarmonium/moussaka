@@ -26,12 +26,6 @@
     //
 
     pProfileId: function (req, res, next, profileId) {
-      if (!req.user) {
-        return res.send(401, {
-          detail: 'Not logged in'
-        });
-      }
-
       // Check for valid object ID
       // Thanks: http://stackoverflow.com/a/14942113/1153203
       if (!profileId.match(/^[0-9a-fA-F]{24}$/)) {
