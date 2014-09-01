@@ -40,7 +40,8 @@
         "simplesmtp": "*",
         "istanbul": "*",
         "coveralls": "*",
-        "mocha-lcov-reporter": "*"
+        "mocha-lcov-reporter": "*",
+        "random-mac": "*"
     },
     "env": {
         "PYTHON": "/usr/bin/python2.7"

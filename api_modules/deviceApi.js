@@ -165,8 +165,8 @@
 
     listDevices: function (req, res, next) {
       var project = req.project;
-
-      // TODO: Pagination
+      var minRecord = req.query.minRecord;
+      var maxRecord = req.query.maxRecord;
 
       if (!req.project) {
         return res.send(404, {
@@ -182,9 +182,29 @@
         'dataSchema currentState timestamp deviceName');
 
       getDevices.sort({
-        'projectVersion': 'asc',
-        'timestamp': 'desc'
+        'timestamp': 'desc',
+        'projectVersion': 'asc'
       });
+
+      var maxRecordCount = config.max_records_per_query;
+
+      // Pagination
+      if (minRecord) {
+        getDevices.skip(minRecord);
+      }
+      if (minRecord && maxRecord) {
+        if (maxRecord < minRecord) {
+          return res.send(400, {
+            detail: 'Invalid pagination range'
+          });
+        }
+
+        maxRecordCount = Math.min(
+          maxRecordCount, (maxRecord - minRecord) + 1
+        );
+      }
+
+      getDevices.limit(maxRecordCount);
 
       getDevices.execQ()
         .then(function (devices) {
@@ -440,11 +460,14 @@
     //
 
     resetTests: function (req, res, next) {
-      Update.updateQ({}, {
+      var clearDevice = Device.removeQ({});
+      var clearUpdates = Update.updateQ({}, {
         $set: {
           received: true
         }
-      })
+      });
+
+      Q.all([clearDevice, clearUpdates])
         .then(function () {
           res.send(200);
         })
@@ -452,6 +475,7 @@
           next(err);
         })
         .done();
+
     }
 
   };

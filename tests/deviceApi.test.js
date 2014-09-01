@@ -11,6 +11,14 @@
   var Q = require('q');
   var S = require('string');
   var Chance = require('chance');
+  var randomMac = require('random-mac');
+
+  var _formatTestIndex = function (index) {
+    // Mongo uses alphabetical sorting so simply appending
+    // numbers doesn't sort properly. 
+    return S(index)
+      .padLeft(3, '0');
+  };
 
   describe('Device API tests', function () {
     var id;
@@ -1252,6 +1260,229 @@
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
+
+          done();
+        });
+    });
+
+    it('Connect 200 devices', function (done) {
+      var project = projects[0];
+      var device = devices[0];
+      var user = users[2];
+      var apiKey = user.apiKey;
+
+      var currentProjectIndex = 199;
+      var maxProjectIndex = 199;
+
+      var createTestProject = function (index) {
+        var deferred = Q.defer();
+
+        device.deviceName = 'TEST_DATA_DELETE_' +
+          _formatTestIndex(currentProjectIndex);
+        device.macAddress = randomMac();
+
+        deviceAgent.put('http://localhost:3000/projects/' +
+          device.projectId + '/devices/' + device.macAddress + '/')
+          .set('apikey', apiKey)
+          .send(device)
+          .query({
+            deviceId: device._id
+          })
+          .end(function (e, res) {
+            expect(e)
+              .to.eql(null);
+            expect(res.ok)
+              .to.be.ok();
+            deferred.resolve();
+            currentProjectIndex--;
+          });
+        return deferred.promise;
+      };
+
+      // Chain calls sequentially
+      var result = createTestProject();
+      for (var i = maxProjectIndex; i > 0; i--) {
+        result = result.then(createTestProject);
+      }
+      result.then(function () {
+        done(); // Finish test step
+      });
+    });
+
+    it('List profiles to test record limit', function (done) {
+      var device = devices[0];
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/devices/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          expect(res.body.length)
+            .to.be(config.max_records_per_query);
+          done();
+        });
+    });
+
+    it('Test pagination (20-39)', function (done) {
+      var device = devices[0];
+      var min = 20;
+      var max = 39;
+
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/devices/')
+        .query({
+          minRecord: min
+        })
+        .query({
+          maxRecord: max
+        })
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          expect(res.body.length)
+            .to.be((max - min) + 1);
+
+          console.log(JSON.stringify(res.body));
+
+          for (var i = min; i <= max; i++) {
+            expect(
+              S(res.body[i - min].deviceName)
+              .endsWith(_formatTestIndex(i))
+            )
+              .to.be.ok();
+          }
+
+          done();
+        });
+    });
+
+    it('Test pagination (30-40)', function (done) {
+      var device = devices[0];
+      var min = 30;
+      var max = 40;
+
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/devices/')
+        .query({
+          minRecord: min
+        })
+        .query({
+          maxRecord: max
+        })
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          expect(res.body.length)
+            .to.be((max - min) + 1);
+
+          for (var i = min; i <= max; i++) {
+            expect(
+              S(res.body[i - min].deviceName)
+              .endsWith(_formatTestIndex(i))
+            )
+              .to.be.ok();
+          }
+
+          done();
+        });
+    });
+
+    it('Test pagination (40-30)', function (done) {
+      var device = devices[0];
+      var min = 40;
+      var max = 30;
+
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/devices/')
+        .query({
+          minRecord: min
+        })
+        .query({
+          maxRecord: max
+        })
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(400);
+
+          done();
+        });
+    });
+
+    it('Test pagination (30-30)', function (done) {
+      var device = devices[0];
+      var min = 30;
+      var max = 30;
+
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/devices/')
+        .query({
+          minRecord: min
+        })
+        .query({
+          maxRecord: max
+        })
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          expect(res.body.length)
+            .to.be((max - min) + 1);
+
+          for (var i = min; i <= max; i++) {
+            expect(
+              S(res.body[i - min].deviceName)
+              .endsWith(_formatTestIndex(i))
+            )
+              .to.be.ok();
+          }
+
+          done();
+        });
+    });
+
+    it('Test pagination (10-90)', function (done) {
+      var device = devices[0];
+      var min = 10;
+      var max = 90;
+
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/devices/')
+        .query({
+          minRecord: min
+        })
+        .query({
+          maxRecord: max
+        })
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          max = min + config.max_records_per_query - 1;
+
+          expect(res.body.length)
+            .to.be((max - min) + 1);
+
+          for (var i = min; i <= max; i++) {
+            expect(
+              S(res.body[i - min].deviceName)
+              .endsWith(_formatTestIndex(i))
+            )
+              .to.be.ok();
+          }
 
           done();
         });
