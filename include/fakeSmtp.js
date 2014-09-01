@@ -4,10 +4,18 @@
   var colors = require('colors');
   var config = require('./config.js');
   var simplesmtp = require('simplesmtp');
+  var utils = require('./utils.js');
   var smtpServer;
 
   module.exports = {
-    start: function (recvCallback, errorCallback) {
+    debug: false,
+
+    start: function (recvCallback, errorCallback, debug) {
+      if (!utils.exists(debug)) {
+        debug = false;
+      }
+      module.exports.debug = debug;
+
       var emailConfig = config.email_settings;
 
       console.log(('Starting fake SMTP server on: ' +
@@ -16,7 +24,7 @@
       smtpServer = simplesmtp.createServer({
         enableAuthentication: true,
         requireAuthentication: true,
-        debug: true,
+        debug: debug,
         ignoreTLS: true,
         disableDNSValidation: true
       });
@@ -30,10 +38,12 @@
       });
 
       smtpServer.on('dataReady', function (connection, respCallback) {
-        console.log('simplesmtp: > Email has been received.');
-        console.log('simplesmtp: > req.from: ' + connection.from + '.');
-        console.log('simplesmtp: > message: ' + buffer);
-        console.log('simplesmtp: > accepting.');
+        if (debug) {
+          console.log('simplesmtp: > Email has been received.');
+          console.log('simplesmtp: > req.from: ' + connection.from + '.');
+          console.log('simplesmtp: > message: ' + buffer);
+          console.log('simplesmtp: > accepting.');
+        }
 
         if (recvCallback) {
           recvCallback({
@@ -61,7 +71,9 @@
 
     stop: function () {
       if (smtpServer) {
-        console.log('simplesmtp: > Qutting.');
+        if (module.exports.debug) {
+          console.log('simplesmtp: > Qutting.');
+        }
         smtpServer.quit();
       }
     }

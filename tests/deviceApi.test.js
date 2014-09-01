@@ -892,7 +892,6 @@
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
-          console.log(JSON.stringify(res.body));
 
           expect(res.body.length)
             .to.be(1);
