@@ -912,6 +912,23 @@
           });
       });
 
+    it('Remove user [2] as admin to project [0] ' +
+      'logged in as non admin user', function (done) {
+        var project = projects[0];
+        var user = users[2];
+
+        agent.del('http://localhost:3000/projects/' + project._id +
+          '/admins/' + user.username + '/')
+          .end(function (e, res) {
+            expect(e)
+              .to.eql(null);
+            expect(res.status)
+              .to.be(401);
+
+            done();
+          });
+      });
+
     it('Remove project [0] as user [1] (non admin)', function (done) {
       var project = projects[0];
       var user = users[1];
@@ -1045,6 +1062,56 @@
         });
     });
 
+    it('Remove user [1] as admin from invalid project', function (done) {
+      var project = projects[0];
+      var user = users[1];
+
+      agent.del('http://localhost:3000/projects/' +
+        '000000000000000000000000' +
+        '/admins/' + user.username + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(404);
+
+          done();
+        });
+    });
+
+    it('Remove invalid user as admin from project [0]', function (done) {
+      var project = projects[0];
+      var user = users[1];
+
+      agent.del('http://localhost:3000/projects/' + project._id +
+        '/admins/' + 'fakeuser@nonexistant.com.org' + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(404);
+
+          done();
+        });
+    });
+
+    it('Remove user [3] (non-admin) as admin from project [0]', function (
+      done) {
+      var project = projects[0];
+      var user = users[3];
+
+      agent.del('http://localhost:3000/projects/' + project._id +
+        '/admins/' + user.username + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(404);
+
+          done();
+        });
+    });
+
     it('Remove user [1] as admin from project [0]', function (done) {
       var project = projects[0];
       var user = users[1];
@@ -1114,6 +1181,22 @@
             .to.eql(null);
           expect(res.status)
             .to.be(401);
+
+          done();
+        });
+    });
+
+    it('Remove invalid project as user [2] (admin)', function (done) {
+      var project = projects[0];
+      var user = users[2];
+
+      agent.del('http://localhost:3000/projects/' +
+        '000000000000000000000000' + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(404);
 
           done();
         });
