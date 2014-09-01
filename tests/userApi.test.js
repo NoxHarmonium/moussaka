@@ -144,6 +144,31 @@
 
     });
 
+    it('Get login information for non-existant user', function (done) {
+      agent.get('http://localhost:3000/users/' + 'fake@nonexist.com' +
+        '/')
+        .send()
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(404);
+          done();
+        });
+    });
+
+    it('Get login information for non logged in user [1]', function (done) {
+      agent.get('http://localhost:3000/users/' + users[1].username + '/')
+        .send()
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(401);
+          done();
+        });
+    });
+
     it('Get login information for user', function (done) {
       agent.get('http://localhost:3000/users/' + users[0].username + '/')
         .send()

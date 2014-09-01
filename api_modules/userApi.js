@@ -45,16 +45,27 @@
 
     getUser: function (req, res) {
       var loggedInUser = req.user;
-      if (loggedInUser) {
-        return res.send({
-          username: loggedInUser.username,
-          apiKey: loggedInUser.apiKey
-        });
-      } else {
+      var selectedUser = req.selectedUser;
+
+      // TODO: Should you be able to get limited information
+      // on user who you share a project with?
+
+      if (!selectedUser) {
         return res.send(404, {
           detail: 'User doesn\'t exist'
         });
       }
+
+      if (loggedInUser._id !== selectedUser._id) {
+        return res.send(401, {
+          detail: 'Can only get information on logged in user.'
+        });
+      }
+
+      return res.send({
+        username: loggedInUser.username,
+        apiKey: loggedInUser.apiKey
+      });
     },
 
     deleteUser: function (req, res, next) {
