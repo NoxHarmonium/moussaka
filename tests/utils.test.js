@@ -86,6 +86,69 @@
     f: [111, 222, 333]
   }];
 
+  var objA = {
+    a: 56,
+    b: 67,
+    c: {
+      d: 'test',
+      e: {},
+      f: [3, 5, 5]
+    }
+  };
+
+  var objB = {
+    a: 56,
+    b: 67,
+    c: {
+      d: 'test',
+      e: {},
+      f: [3, 5, 5]
+    }
+  };
+
+  var objC = {
+    a: 23,
+    b: 67,
+    c: {
+      d: 'testdd',
+      e: {},
+      f: [3, 9, 5]
+    }
+  };
+
+  describe('arrayMatch tests', function () {
+
+    it('(objA, objA) === true', function () {
+      expect(utils.objMatch(objA, objA))
+        .to.be.ok();
+    });
+
+    it('(objA, objB) === true', function () {
+      expect(utils.objMatch(objA, objB))
+        .to.be.ok();
+    });
+
+    it('(objA, objC) === false', function () {
+      expect(utils.objMatch(objA, objB))
+        .to.be.ok();
+    });
+
+    it('(objA, objC) === false', function () {
+      expect(utils.objMatch(objA, objB))
+        .to.be.ok();
+    });
+
+    it('(objA, null) === false', function () {
+      expect(utils.objMatch(objA, objB))
+        .to.be.ok();
+    });
+
+    it('(null, objA) === false', function () {
+      expect(utils.objMatch(objA, objB))
+        .to.be.ok();
+    });
+
+  });
 
   describe('arrayMatch tests', function () {
 
