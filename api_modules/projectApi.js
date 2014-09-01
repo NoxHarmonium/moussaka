@@ -326,12 +326,6 @@
         });
       }
 
-      if (project.admins.length === 1) {
-        return res.send(401, {
-          detail: 'A project must have at least one admin'
-        });
-      }
-
       if (!_.contains(project.admins, loggedInUser._id)) {
         return res.send(401, {
           detail: 'Only admins can change a project user list'
@@ -341,6 +335,12 @@
       if (!_.contains(req.project.admins, selectedUser._id)) {
         return res.send(404, {
           detail: 'User is not an admin of this project'
+        });
+      }
+
+      if (project.admins.length === 1) {
+        return res.send(401, {
+          detail: 'A project must have at least one admin'
         });
       }
 
