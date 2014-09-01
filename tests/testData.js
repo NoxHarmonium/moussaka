@@ -15,6 +15,9 @@
     }, {
       username: 'test.account3@test.com',
       password: 'test_password4'
+    }, {
+      username: 'test.account4@test.com',
+      password: 'test_password5'
     }, ];
   };
 

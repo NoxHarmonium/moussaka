@@ -80,6 +80,18 @@
         });
     });
 
+    it('Create user [3]', function (done) {
+      agent.put('http://localhost:3000/users/' + users[3].username + '/')
+        .send(users[3])
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(201);
+          done();
+        });
+    });
+
     it('Reset project test', function (done) {
       agent.get('http://localhost:3000/test/project_api/reset/')
         .end(function (e, res) {
@@ -600,6 +612,55 @@
         });
     });
 
+    it('Remove user [1] from invalid project', function (done) {
+      var project = projects[0];
+      var user = users[1];
+
+      agent.del('http://localhost:3000/projects/' +
+        '000000000000000000000000' +
+        '/users/' + user.username + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(404);
+
+          done();
+        });
+    });
+
+    it('Remove invalid user from project [0]', function (done) {
+      var project = projects[0];
+      var user = users[1];
+
+      agent.del('http://localhost:3000/projects/' + project._id +
+        '/users/' + 'Invalid@fakeemail.incorrect' + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(404);
+
+          done();
+        });
+    });
+
+    it('Remove user [3] (non user) from project [0]', function (done) {
+      var project = projects[0];
+      var user = users[3];
+
+      agent.del('http://localhost:3000/projects/' + project._id +
+        '/users/' + user.username + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(404);
+
+          done();
+        });
+    });
+
     it('Remove user [1] from project [0]', function (done) {
       var project = projects[0];
       var user = users[1];
@@ -672,7 +733,7 @@
 
     it('Login user [0]', function (done) {
       agent.post('http://localhost:3000/login/')
-        .send(users[1])
+        .send(users[0])
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
@@ -699,6 +760,21 @@
         });
     });
 
+    it('Remove user [2] from project [0] as non-admin', function (done) {
+      var project = projects[0];
+      var user = users[1];
+
+      agent.del('http://localhost:3000/projects/' + project._id +
+        '/users/' + user.username + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(401);
+
+          done();
+        });
+    });
 
     it('Logout user [0]', function (done) {
       agent.get('http://localhost:3000/logout/')
