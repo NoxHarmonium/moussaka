@@ -184,5 +184,31 @@
 
   });
 
+  describe('exists(x) tests', function () {
+
+    it('exists(undefined) === false', function () {
+      var x;
+      expect(utils.exists(x))
+        .to.be(false);
+    });
+
+    it('exists(null) === false', function () {
+      expect(utils.exists(null))
+        .to.be(false);
+    });
+
+    it('exists(false) === true', function () {
+      expect(utils.exists(false))
+        .to.be(true);
+    });
+
+    it('exists({}}) === true', function () {
+      var x = {};
+      expect(utils.exists(x))
+        .to.be(true);
+    });
+
+  });
+
 
 })(require, describe, it);

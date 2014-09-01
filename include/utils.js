@@ -114,7 +114,7 @@
     },
 
     exists: function (obj) {
-      return obj !== undefined && obj !== null;
+      return typeof (obj) !== 'undefined' && obj !== null;
     }
   };
 })(require, module);
