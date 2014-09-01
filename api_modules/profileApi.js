@@ -91,12 +91,6 @@
 
       // TODO: Pagination
 
-      if (!loggedInUser) {
-        return res.send(401, {
-          detail: 'Not logged in'
-        });
-      }
-
       if (!project) {
         return res.send(404, {
           detail: 'Specified project doesn\'t exist'
@@ -144,12 +138,6 @@
         return res.send(409, {
           detail: 'No device ID specified in query string. ' +
             '(eg. .../profiles/?deviceId=xxx)'
-        });
-      }
-
-      if (!loggedInUser) {
-        return res.send(401, {
-          detail: 'Not logged in'
         });
       }
 

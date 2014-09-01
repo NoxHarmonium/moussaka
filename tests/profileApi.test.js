@@ -26,6 +26,17 @@
       });
     });
 
+    it('Reset profiles test', function (done) {
+      agent.get('http://localhost:3000/test/profile_api/reset/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+          done();
+        });
+    });
+
     it('Login user [2]', function (done) {
       agent.post('http://localhost:3000/login/')
         .send(users[2])
@@ -69,6 +80,45 @@
         });
     });
 
+    it('Save current session as profile [0] without device ID query string',
+      function (done) {
+        var data = {
+          profileName: 'test profile 1'
+        };
+
+        agent.put('http://localhost:3000/projects/' +
+          device.projectId + '/profiles/')
+          .send(data)
+          .end(function (e, res) {
+            expect(e)
+              .to.eql(null);
+            expect(res.status)
+              .to.be(409);
+
+            done();
+          });
+      });
+
+    it('Save current session as profile [0] with non existant project',
+      function (done) {
+
+        var data = {
+          profileName: 'test profile 1'
+        };
+
+        agent.put('http://localhost:3000/projects/' +
+          '00000000000000000000000' + '/profiles/')
+          .send(data)
+          .end(function (e, res) {
+            expect(e)
+              .to.eql(null);
+            expect(res.status)
+              .to.be(409);
+
+            done();
+          });
+      });
+
     it('Save current session as profile [0]', function (done) {
       var data = {
         profileName: 'test profile 1'
@@ -89,6 +139,20 @@
             .to.be.ok();
 
           profileId = res.body._id;
+
+          done();
+        });
+    });
+
+    it('Retrieve profile [0] from non existant project', function (done) {
+
+      agent.get('http://localhost:3000/projects/' +
+        '00000000000000000000000/profiles/' + profileId + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(404);
 
           done();
         });
@@ -139,7 +203,7 @@
     it('List profiles [0] of non existant project', function (done) {
 
       agent.get('http://localhost:3000/projects/' +
-        '!@#$%^&**())' + '/profiles/')
+        '00000000000000000000000' + '/profiles/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
@@ -252,6 +316,59 @@
         });
     });
 
+    it('Login user [0]', function (done) {
+      var user = users[0];
+      agent.post('http://localhost:3000/login/')
+        .send(user)
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(200);
+          done();
+        });
+    });
+
+    it('Retrieve profile [0] as non project member', function (done) {
+
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/profiles/' + profileId + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(401);
+
+          done();
+        });
+    });
+
+    it('List profiles [0] of project [0] as non member', function (done) {
+
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/profiles/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(401);
+
+          done();
+        });
+    });
+
+    it('Logout user [0]', function (done) {
+      agent.get('http://localhost:3000/logout/')
+        .send()
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+          done();
+        });
+    });
+
     it('Login user [2]', function (done) {
       agent.post('http://localhost:3000/login/')
         .send(users[2])
@@ -260,6 +377,20 @@
             .to.eql(null);
           expect(res.status)
             .to.be(200);
+          done();
+        });
+    });
+
+    it('Delete profile [0] from non existant project', function (done) {
+
+      agent.del('http://localhost:3000/projects/' +
+        '00000000000000000000000' + '/profiles/' + profileId + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(404);
+
           done();
         });
     });
