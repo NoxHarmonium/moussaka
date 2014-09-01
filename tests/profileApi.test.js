@@ -108,12 +108,15 @@
 
         agent.put('http://localhost:3000/projects/' +
           '000000000000000000000000' + '/profiles/')
+          .query({
+            deviceId: device._id
+          })
           .send(data)
           .end(function (e, res) {
             expect(e)
               .to.eql(null);
             expect(res.status)
-              .to.be(409);
+              .to.be(404);
 
             done();
           });

@@ -287,6 +287,22 @@
 
     });
 
+    it('Create project [2] (duplicate name)', function (done) {
+      var project = projects[2];
+
+      agent.put('http://localhost:3000/projects/')
+        .send(project)
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(409);
+
+          done();
+        });
+
+    });
+
     it('List projects', function (done) {
       agent.get('http://localhost:3000/projects/')
         .end(function (e, res) {
@@ -638,6 +654,72 @@
           expect(utils.objMatch(res.body, project))
             .to.be.ok();
 
+          done();
+        });
+    });
+
+    it('Logout user [2]', function (done) {
+      agent.get('http://localhost:3000/logout/')
+        .send()
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+          done();
+        });
+    });
+
+    it('Login user [0]', function (done) {
+      agent.post('http://localhost:3000/login/')
+        .send(users[1])
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(200);
+          done();
+        });
+    });
+
+
+    it('Add user [1] to project [0] as non-admin', function (done) {
+      var project = projects[0];
+      var user = users[1];
+
+      agent.put('http://localhost:3000/projects/' + project._id +
+        '/users/' + user.username + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(401);
+
+          done();
+        });
+    });
+
+
+    it('Logout user [0]', function (done) {
+      agent.get('http://localhost:3000/logout/')
+        .send()
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+          done();
+        });
+    });
+
+    it('Login user [2]', function (done) {
+      agent.post('http://localhost:3000/login/')
+        .send(users[2])
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(200);
           done();
         });
     });

@@ -859,6 +859,25 @@
         });
     });
 
+    it('Check device [0] updates with incorrect API key', function (done) {
+      var user = users[2];
+      var apiKey = '00000000-0000-0000-0000-000000000000';
+      var device = devices[0];
+
+      deviceAgent.get('http://localhost:3000/projects/' +
+        device.projectId + '/sessions/' + device.macAddress +
+        '/updates/')
+        .set('apikey', apiKey)
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(401);
+
+          done();
+        });
+    });
+
     it('Check device [0] updates', function (done) {
       var user = users[2];
       var apiKey = user.apiKey;
