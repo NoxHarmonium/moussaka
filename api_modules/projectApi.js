@@ -127,13 +127,6 @@
         });
       }
 
-      var project = req.project;
-      if (project) {
-        return res.send(409, {
-          detail: 'Project already exists'
-        });
-      }
-
       var newProject = new Project({
         name: req.body.name,
         description: req.body.description,
@@ -147,7 +140,14 @@
           });
         })
         .catch(function (err) {
-          next(err);
+          // Duplicate check
+          if (err.code === 11000) {
+            res.send(409, {
+              'detail': 'A project with this name already exists.'
+            });
+          } else {
+            next(err);
+          }
         })
         .done();
     },
