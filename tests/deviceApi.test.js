@@ -680,7 +680,7 @@
         var project = projects[0];
         var device = devices[0];
 
-        agent.put('http://localhost:3000/projects/' +
+        agent.get('http://localhost:3000/projects/' +
           '0000000000000000000' + '/sessions/' + device.macAddress +
           '/schema/')
           .end(function (e, res) {
@@ -697,7 +697,7 @@
       var project = projects[0];
       var device = devices[0];
 
-      agent.put('http://localhost:3000/projects/' +
+      agent.get('http://localhost:3000/projects/' +
         device.projectId + '/sessions/' + '01-23-45-67-89-ab' +
         '/schema/')
         .end(function (e, res) {
