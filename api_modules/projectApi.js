@@ -121,9 +121,17 @@
     },
 
     addProject: function (req, res, next) {
+      var name = req.body.name;
+
       if (!req.user) {
         return res.send(401, {
           detail: 'Not logged in'
+        });
+      }
+
+      if (!utils.isNonEmptyString(name)) {
+        return res.send(409, {
+          detail: 'A name field is required'
         });
       }
 

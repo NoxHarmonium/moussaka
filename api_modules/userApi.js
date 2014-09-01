@@ -14,6 +14,7 @@
   var crypto = require('crypto');
   var emailSend = require('../include/emailSend.js');
   var Q = require('q');
+  var utils = require('../include/utils.js');
 
   var emailConfig = config.email_settings;
 
@@ -101,6 +102,13 @@
       if (req.selectedUser) {
         return res.send(409, {
           detail: 'User already exists'
+        });
+      }
+
+      if (!utils.isNonEmptyString(data.username) ||
+        !utils.isNonEmptyString(data.password)) {
+        return res.send(409, {
+          detail: 'Both username and password fields are required'
         });
       }
 

@@ -48,6 +48,34 @@
         });
     });
 
+    it('Create user [0] without username', function (done) {
+      agent.put('http://localhost:3000/users/' + users[0].username + '/')
+        .send({
+          password: users[0].password
+        })
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(409);
+          done();
+        });
+    });
+
+    it('Create user [0] without password', function (done) {
+      agent.put('http://localhost:3000/users/' + users[0].username + '/')
+        .send({
+          username: users[0].username
+        })
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(409);
+          done();
+        });
+    });
+
     it('Create user [0]', function (done) {
       agent.put('http://localhost:3000/users/' + users[0].username + '/')
         .send(users[0])
