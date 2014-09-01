@@ -201,20 +201,6 @@
       var device = req.device;
       var loggedInUser = req.user;
 
-      if (!loggedInUser) {
-        return res.send(401, {
-          detail: 'Not logged in'
-        });
-      }
-
-      if (!(_.contains(project.admins, loggedInUser._id) ||
-        _.contains(project.users, loggedInUser._id))) {
-        return res.send(401, {
-          detail: 'Only authorised project members can ' +
-            'start a session on this device'
-        });
-      }
-
       if (!project) {
         return res.send(404, {
           detail: 'Project not found'
@@ -257,20 +243,6 @@
       var project = req.project;
       var device = req.device;
       var loggedInUser = req.user;
-
-      if (!loggedInUser) {
-        return res.send(401, {
-          detail: 'Not logged in'
-        });
-      }
-
-      if (!(_.contains(project.admins, loggedInUser._id) ||
-        _.contains(project.users, loggedInUser._id))) {
-        return res.send(401, {
-          detail: 'Only authorised project members can ' +
-            'start a session on this device'
-        });
-      }
 
       if (!project) {
         return res.send(404, {
