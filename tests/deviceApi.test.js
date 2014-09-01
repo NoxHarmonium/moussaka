@@ -242,23 +242,26 @@
         });
     });
 
-    it('Disconnect device [0] to server under project [0] with invalid project', function (done) {
-      var user = users[2];
-      var apiKey = user.apiKey;
-      var device = devices[0];
+    it(
+      'Disconnect device [0] to server under project [0] with invalid project',
+      function (done) {
+        var user = users[2];
+        var apiKey = user.apiKey;
+        var device = devices[0];
 
-      deviceAgent.del('http://localhost:3000/projects/' +
-        '000000000000000000000000' + '/devices/' + device.macAddress + '/')
-        .set('apikey', apiKey)
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.ok)
-            .to.be.ok();
+        deviceAgent.del('http://localhost:3000/projects/' +
+          '000000000000000000000000' + '/devices/' + device.macAddress +
+          '/')
+          .set('apikey', apiKey)
+          .end(function (e, res) {
+            expect(e)
+              .to.eql(null);
+            expect(res.status)
+              .to.be(404);
 
-          done();
-        });
-    });
+            done();
+          });
+      });
 
     it('Disconnect device [0] to server under project [0]', function (done) {
       var user = users[2];
@@ -278,23 +281,24 @@
         });
     });
 
-    it('Disconnect device [0] to server under project [0] after removal', function (done) {
-      var user = users[2];
-      var apiKey = user.apiKey;
-      var device = devices[0];
+    it('Disconnect device [0] to server under project [0] after removal',
+      function (done) {
+        var user = users[2];
+        var apiKey = user.apiKey;
+        var device = devices[0];
 
-      deviceAgent.del('http://localhost:3000/projects/' +
-        device.projectId + '/devices/' + device.macAddress + '/')
-        .set('apikey', apiKey)
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.status)
-            .to.be(404);
+        deviceAgent.del('http://localhost:3000/projects/' +
+          device.projectId + '/devices/' + device.macAddress + '/')
+          .set('apikey', apiKey)
+          .end(function (e, res) {
+            expect(e)
+              .to.eql(null);
+            expect(res.status)
+              .to.be(404);
 
-          done();
-        });
-    });
+            done();
+          });
+      });
 
     it('Check device [0] has been removed from project [0]', function (done) {
       var device = devices[0];
