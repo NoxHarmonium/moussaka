@@ -141,6 +141,7 @@
       var loggedInUser = req.user;
       var data = req.body;
       var deviceId = req.query.deviceId;
+      var profileName = data.profileName;
 
       if (!deviceId) {
         return res.send(409, {
@@ -152,6 +153,12 @@
       if (!project) {
         return res.send(404, {
           detail: 'Specified project doesn\'t exist'
+        });
+      }
+
+      if (!utils.isNonEmptyString(profileName)) {
+        return res.send(409, {
+          detail: 'A projectName field is required'
         });
       }
 
@@ -225,17 +232,14 @@
     // Test extensions
     //
     resetTests: function (req, res, next) {
-      Profile.find(function (err, data) {
-        if (err) {
-          return next(err);
-        }
-
-        for (var i = 0; i < data.length; i++) {
-          data[i].remove();
-        }
-
-        return res.send(200);
-      });
+      Profile.removeQ({})
+        .then(function () {
+          res.send(200);
+        })
+        .catch(function (err) {
+          next(err);
+        })
+        .done();
     }
 
 

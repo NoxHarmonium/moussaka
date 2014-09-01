@@ -135,6 +135,25 @@
           });
       });
 
+    it('Save current session as profile [0] with no name', function (done) {
+      var data = {};
+
+      agent.put('http://localhost:3000/projects/' +
+        device.projectId + '/profiles/')
+        .query({
+          deviceId: device._id
+        })
+        .send(data)
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(409);
+
+          done();
+        });
+    });
+
     it('Save current session as profile [0]', function (done) {
       var data = {
         profileName: 'test profile 1'
@@ -452,8 +471,6 @@
           done();
         });
     });
-
-    // TODO: Empty profile name
 
     it('Create 200 profiles', function (done) {
       var profile = {
