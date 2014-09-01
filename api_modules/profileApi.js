@@ -66,14 +66,6 @@
         });
       }
 
-      if (!(_.contains(project.admins, loggedInUser._id) ||
-        _.contains(project.users, loggedInUser._id))) {
-        return res.send(401, {
-          detail: 'Only authorised project members can ' +
-            'see the project\'s profiles.'
-        });
-      }
-
       res.send(200, {
         projectId: profile.projectId,
         projectVersion: profile.projectVersion,
@@ -94,14 +86,6 @@
       if (!project) {
         return res.send(404, {
           detail: 'Specified project doesn\'t exist'
-        });
-      }
-
-      if (!(_.contains(project.admins, loggedInUser._id) ||
-        _.contains(project.users, loggedInUser._id))) {
-        return res.send(401, {
-          detail: 'Only authorised project members can ' +
-            'see the project\'s profiles.'
         });
       }
 

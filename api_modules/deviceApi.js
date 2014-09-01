@@ -61,13 +61,6 @@
       var project = req.project;
       var existingDevice = req.device;
 
-      if (!utils.validateMacAddress(device.macAddress)) {
-        return res.send(409, {
-          detail: 'Invalid MAC address format. Should be IEEE 802 format. ' +
-            '(01-23-45-67-89-ab)'
-        });
-      }
-
       if (!project) {
         return res.send(404, {
           detail: 'Project not found'
