@@ -235,6 +235,52 @@
         });
     });
 
+    it('List profiles [0] of project [0] filtered to ' +
+      'project version \'0.3\'', function (done) {
+
+        agent.get('http://localhost:3000/projects/' +
+          device.projectId + '/profiles/')
+          .query({
+            projectVersion: '0.3'
+          })
+          .end(function (e, res) {
+            expect(e)
+              .to.eql(null);
+            expect(res.ok)
+              .to.be.ok();
+
+            var profile = res.body[0];
+
+            expect(utils.objMatch(
+              device.currentState,
+              profile.profileData))
+              .to.be.ok();
+
+            done();
+          });
+      });
+
+    it('List profiles [0] of project [0] filtered to ' +
+      'project version \'0.4\'', function (done) {
+
+        agent.get('http://localhost:3000/projects/' +
+          device.projectId + '/profiles/')
+          .query({
+            projectVersion: '0.4'
+          })
+          .end(function (e, res) {
+            expect(e)
+              .to.eql(null);
+            expect(res.ok)
+              .to.be.ok();
+
+            expect(res.body.length)
+              .to.be(0);
+
+            done();
+          });
+      });
+
     it('List profiles [0] of non existant project', function (done) {
 
       agent.get('http://localhost:3000/projects/' +
