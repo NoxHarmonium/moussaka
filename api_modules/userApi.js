@@ -43,21 +43,6 @@
     // API Methods
     //
 
-    listUsers: function (req, res, next) {
-      var getUsers = User.find();
-
-      getUsers.select('_id');
-
-      getUsers.execQ()
-        .then(function (users) {
-          res.send(users);
-        })
-        .catch(function (err) {
-          next(err);
-        })
-        .done();
-    },
-
     getUser: function (req, res) {
       var loggedInUser = req.user;
       if (loggedInUser) {

@@ -93,7 +93,6 @@
     //
     app.param('user', userApi.pUser);
 
-    app.get('/users/', userApi.listUsers);
     app.get('/users/:user/', userApi.getUser);
     app.del('/users/:user/', userApi.deleteUser);
     app.put('/users/:user/', userApi.putUser);
