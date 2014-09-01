@@ -675,6 +675,41 @@
         });
     });
 
+    it('Get schema of device [0] with user [2] with invalid project id',
+      function (done) {
+        var project = projects[0];
+        var device = devices[0];
+
+        agent.put('http://localhost:3000/projects/' +
+          '0000000000000000000' + '/sessions/' + device.macAddress +
+          '/schema/')
+          .end(function (e, res) {
+            expect(e)
+              .to.eql(null);
+            expect(res.status)
+              .to.be(404);
+
+            done();
+          });
+      });
+
+    it('Get schema for invalid device with user [2]', function (done) {
+      var project = projects[0];
+      var device = devices[0];
+
+      agent.put('http://localhost:3000/projects/' +
+        device.projectId + '/sessions/' + '01-23-45-67-89-ab' +
+        '/schema/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(404);
+
+          done();
+        });
+    });
+
     it('Get schema of device [0]', function (done) {
       var device = devices[0];
 
@@ -691,6 +726,69 @@
           done();
         });
     });
+
+    it('Send valid control update to device [0] with user [2] ' +
+      'with invalid project id',
+      function (done) {
+        var project = projects[0];
+        var device = devices[0];
+
+        sentUpdates = [{
+          'rotateSpeed': {
+            // Schema not needed, only values
+            //type: 'float',
+            //min: 0,
+            //max: 100,
+            values: {
+              n: 6
+            }
+          }
+        }];
+
+        agent.post('http://localhost:3000/projects/' +
+          '0000000000000000000' + '/sessions/' + device.macAddress +
+          '/updates/')
+          .send(sentUpdates[0])
+          .end(function (e, res) {
+            expect(e)
+              .to.eql(null);
+            expect(res.status)
+              .to.be(404);
+
+            done();
+          });
+      });
+
+    it('Send valid control update to invalid device with user [2]',
+      function (done) {
+        var project = projects[0];
+        var device = devices[0];
+
+        sentUpdates = [{
+          'rotateSpeed': {
+            // Schema not needed, only values
+            //type: 'float',
+            //min: 0,
+            //max: 100,
+            values: {
+              n: 6
+            }
+          }
+        }];
+
+        agent.post('http://localhost:3000/projects/' +
+          device.projectId + '/sessions/' + '01-23-45-67-89-ab' +
+          '/updates/')
+          .send(sentUpdates[0])
+          .end(function (e, res) {
+            expect(e)
+              .to.eql(null);
+            expect(res.status)
+              .to.be(404);
+
+            done();
+          });
+      });
 
     it('Send valid control update to device [0]', function (
       done) {
@@ -718,6 +816,44 @@
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
+
+          done();
+        });
+    });
+
+    it('Check device [0] updates with invalid project', function (done) {
+      var user = users[2];
+      var apiKey = user.apiKey;
+      var device = devices[0];
+
+      deviceAgent.get('http://localhost:3000/projects/' +
+        '0000000000000000000' + '/sessions/' + device.macAddress +
+        '/updates/')
+        .set('apikey', apiKey)
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(404);
+
+          done();
+        });
+    });
+
+    it('Check invalid device updates', function (done) {
+      var user = users[2];
+      var apiKey = user.apiKey;
+      var device = devices[0];
+
+      deviceAgent.get('http://localhost:3000/projects/' +
+        device.projectId + '/sessions/' + '01-23-45-67-89-ab' +
+        '/updates/')
+        .set('apikey', apiKey)
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(404);
 
           done();
         });
