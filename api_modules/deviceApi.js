@@ -26,10 +26,6 @@
         return next();
       }
 
-      if (!utils.exists(macAddress)) {
-        return next();
-      }
-
       if (!utils.validateMacAddress(macAddress)) {
         return res.send(409, {
           detail: 'Invalid MAC address format. Should be IEEE 802 format. ' +
