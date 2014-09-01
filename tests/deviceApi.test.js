@@ -524,6 +524,58 @@
         });
     });
 
+    it('Connect device [0] to server under project [0] when already ' +
+      'connected (with different data)', function (done) {
+        var user = users[2];
+        var apiKey = user.apiKey;
+        var project = projects[0];
+        var device = devices[0];
+
+        device.dataSchema.rotateSpeed.max = 50;
+
+        deviceAgent.put('http://localhost:3000/projects/' +
+          device.projectId + '/devices/' + device.macAddress + '/')
+          .set('apikey', apiKey)
+          .send(device)
+          .end(function (e, res) {
+            expect(e)
+              .to.eql(null);
+            expect(res.ok)
+              .to.be.ok();
+
+            done();
+          });
+      });
+
+    it('Check devices are listing correctly', function (done) {
+      var device = devices[0];
+
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/devices/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          // Scan list for specific device
+          var matchFound = false;
+          _.every(res.body, function (entry) {
+            if (utils.objMatch(entry, device)) {
+              matchFound = true;
+              return false;
+            }
+            return true;
+          });
+
+          expect(matchFound)
+            .to.be(false);
+
+          done();
+        });
+    });
+
+
     it('Logout user [2]', function (done) {
       agent.get('http://localhost:3000/logout/')
         .send()
