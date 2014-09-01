@@ -6,6 +6,18 @@
   var testData = require('./testData.js');
   var utils = require('../include/utils.js');
   var serverModule = require('../server.js');
+  var config = require('../include/config.js');
+  var _ = require('lodash');
+  var Q = require('q');
+  var S = require('string');
+
+  var _formatTestIndex = function (index) {
+    // Mongo uses alphabetical sorting so simply appending
+    // numbers doesn't sort properly. 
+    return S(index)
+      .padLeft(3, '0');
+  };
+
 
   describe('Project API tests', function () {
     var id;
@@ -16,6 +28,7 @@
     var project = null;
     var profileId = null;
     var device = null;
+
 
     it('Start server', function (done) {
       serverModule.start(function (e, server) {
@@ -435,6 +448,220 @@
             .to.eql(null);
           expect(res.status)
             .to.be(404);
+
+          done();
+        });
+    });
+
+    // TODO: Empty profile name
+
+    it('Create 200 profiles', function (done) {
+      var profile = {
+        profileName: 'TEST_DATA_DELETE'
+      };
+
+      var currentProjectIndex = 0;
+      var maxProjectIndex = 200;
+
+      var createTestProject = function (index) {
+        var deferred = Q.defer();
+
+        profile.profileName = 'TEST_DATA_DELETE_' +
+          _formatTestIndex(currentProjectIndex);
+
+        agent.put('http://localhost:3000/projects/' +
+          device.projectId + '/profiles/')
+          .query({
+            deviceId: device._id
+          })
+          .send(profile)
+          .end(function (e, res) {
+            expect(e)
+              .to.eql(null);
+            expect(res.ok)
+              .to.be.ok();
+            deferred.resolve();
+            currentProjectIndex++;
+          });
+        return deferred.promise;
+      };
+
+      // Chain calls sequentially
+      var result = createTestProject();
+      for (var i = 1; i < maxProjectIndex; i++) {
+        result = result.then(createTestProject);
+      }
+      result.then(function () {
+        done(); // Finish test step
+      });
+    });
+
+    it('List profiles to test record limit', function (done) {
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/profiles/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          expect(res.body.length)
+            .to.be(config.max_records_per_query);
+          done();
+        });
+    });
+
+    it('Test pagination (20-39)', function (done) {
+      var min = 20;
+      var max = 39;
+
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/profiles/')
+        .query({
+          minRecord: min
+        })
+        .query({
+          maxRecord: max
+        })
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          expect(res.body.length)
+            .to.be((max - min) + 1);
+
+          for (var i = min; i <= max; i++) {
+            expect(
+              S(res.body[i - min].profileName)
+              .endsWith(_formatTestIndex(i))
+            )
+              .to.be.ok();
+          }
+
+          done();
+        });
+    });
+
+    it('Test pagination (30-40)', function (done) {
+      var min = 30;
+      var max = 40;
+
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/profiles/')
+        .query({
+          minRecord: min
+        })
+        .query({
+          maxRecord: max
+        })
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          expect(res.body.length)
+            .to.be((max - min) + 1);
+
+          for (var i = min; i <= max; i++) {
+            expect(
+              S(res.body[i - min].profileName)
+              .endsWith(_formatTestIndex(i))
+            )
+              .to.be.ok();
+          }
+
+          done();
+        });
+    });
+
+    it('Test pagination (40-30)', function (done) {
+      var min = 40;
+      var max = 30;
+
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/profiles/')
+        .query({
+          minRecord: min
+        })
+        .query({
+          maxRecord: max
+        })
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(400);
+
+          done();
+        });
+    });
+
+    it('Test pagination (30-30)', function (done) {
+      var min = 30;
+      var max = 30;
+
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/profiles/')
+        .query({
+          minRecord: min
+        })
+        .query({
+          maxRecord: max
+        })
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          expect(res.body.length)
+            .to.be((max - min) + 1);
+
+          for (var i = min; i <= max; i++) {
+            expect(
+              S(res.body[i - min].profileName)
+              .endsWith(_formatTestIndex(i))
+            )
+              .to.be.ok();
+          }
+
+          done();
+        });
+    });
+
+    it('Test pagination (10-90)', function (done) {
+      var min = 10;
+      var max = 90;
+
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/profiles/')
+        .query({
+          minRecord: min
+        })
+        .query({
+          maxRecord: max
+        })
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          max = min + config.max_records_per_query - 1;
+
+          expect(res.body.length)
+            .to.be((max - min) + 1);
+
+          for (var i = min; i <= max; i++) {
+            expect(
+              S(res.body[i - min].profileName)
+              .endsWith(_formatTestIndex(i))
+            )
+              .to.be.ok();
+          }
 
           done();
         });
