@@ -101,7 +101,6 @@
     app.get('/logout/', userApi.logout);
     app.post('/login/', userApi.login);
     if (config.enable_test_exts) {
-      app.get('/test/user_api/testusers/', userApi.getTestUsers);
       app.get('/test/user_api/reset/', userApi.resetTests);
     }
 

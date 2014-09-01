@@ -357,9 +357,6 @@
     //
     // Test extensions
     //
-    getTestUsers: function (req, res, next) {
-      res.send(200, testData.getTestUsers());
-    },
 
     resetTests: function (req, res, next) {
       var testUsers = testData.getTestUsers(),

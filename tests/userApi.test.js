@@ -455,6 +455,23 @@
 
     });
 
+    it('Change password for user [1] without code or old password',
+      function (
+        done) {
+        var user = users[1];
+
+        agent.post('http://localhost:3000/users/' + user.username +
+          '/password/')
+          .end(function (e, res) {
+            expect(e)
+              .to.eql(null);
+            expect(res.status)
+              .to.be(401);
+            done();
+          });
+
+      });
+
     it('Change password for user [1] using wrong temporary code', function (
       done) {
       var user = users[1];
