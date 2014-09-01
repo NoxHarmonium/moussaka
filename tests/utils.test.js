@@ -210,5 +210,51 @@
 
   });
 
+  describe('isNonEmptyString(x) tests', function () {
+
+    it('isNonEmptyString(undefined) === false', function () {
+      var x;
+      expect(utils.isNonEmptyString(x))
+        .to.be(false);
+    });
+
+    it('isNonEmptyString(null) === false', function () {
+      expect(utils.isNonEmptyString(null))
+        .to.be(false);
+    });
+
+    it('isNonEmptyString(false) === false', function () {
+      expect(utils.isNonEmptyString(false))
+        .to.be(false);
+    });
+
+    it('isNonEmptyString({}) === false', function () {
+      var x = {};
+      expect(utils.isNonEmptyString(x))
+        .to.be(false);
+    });
+    it('isNonEmptyString(5) === false', function () {
+      var x = 5;
+      expect(utils.isNonEmptyString(x))
+        .to.be(false);
+    });
+
+    it('isNonEmptyString(\'\') === false', function () {
+      var x = '';
+      expect(utils.isNonEmptyString(x))
+        .to.be(false);
+    });
+
+    it('isNonEmptyString(\'abcd\') === true', function () {
+      var x = 'abcd';
+      expect(utils.isNonEmptyString(x))
+        .to.be(true);
+    });
+
+  });
+
+
+
+
 
 })(require, describe, it);

@@ -115,6 +115,12 @@
 
     exists: function (obj) {
       return typeof (obj) !== 'undefined' && obj !== null;
+    },
+
+    isNonEmptyString: function (str) {
+      return module.exports.exists(str) &&
+        typeof (str) === 'string' &&
+        str.trim() !== '';
     }
   };
 })(require, module);
