@@ -116,6 +116,38 @@
     // Don't need to be logged in to connect device, only need api key
 
     it('Connect device [0] to server under project [0]' +
+      ' with no mac', function (done) {
+        var user = users[2];
+        var apiKey = user.apiKey;
+        var project = projects[0];
+        var device = devices[0];
+        device.projectId = project._id;
+
+        // Save correct MAC address and set to invalid
+        tempStore.correctMac = device.macAddress;
+        device.macAddress = '';
+
+        deviceAgent.put('http://localhost:3000/projects/' +
+          project._id + '/devices/' + device.macAddress + '/')
+          .set('apikey', apiKey)
+          .send(device)
+          .end(function (e, res) {
+            expect(e)
+              .to.eql(null);
+            expect(res.ok)
+              .to.be(false);
+            expect(res.status)
+              .to.be(404);
+
+            // Restore correct MAC address
+            device.macAddress = tempStore.correctMac;
+            delete tempStore.correctMac;
+
+            done();
+          });
+      });
+
+    it('Connect device [0] to server under project [0]' +
       ' with invalid mac', function (done) {
         var user = users[2];
         var apiKey = user.apiKey;
