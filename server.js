@@ -102,6 +102,8 @@
     app.post('/login/', userApi.login);
     if (config.enable_test_exts) {
       app.get('/test/user_api/reset/', userApi.resetTests);
+      app.post('/test/user_api/expirePassword/:user/',
+        userApi.expireTempPassword);
     }
 
     //

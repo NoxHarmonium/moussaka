@@ -130,7 +130,7 @@
         });
       }
 
-      if (!selectedUser.tempPasswordCode &&
+      if (!data.tempPasswordCode &&
         !data.oldPassword) {
         return res.send(400, {
           detail: 'You need either \'tempPasswordCode\'' +
@@ -148,7 +148,7 @@
             'You need to create a new one');
           // Don't cause 500 error
           err.sendToClient = {
-            code: 401
+            code: 400
           };
           deferred.reject(err);
         } else {
@@ -182,7 +182,7 @@
           var err = new Error('Old password or temporary code is incorrect');
           // Don't cause 500 error
           err.sendToClient = {
-            code: 401
+            code: 400
           };
           deferred.reject(err);
         } else {
@@ -334,12 +334,6 @@
           return next(err);
         }
 
-        if (user && user.passwordExpiry) {
-          return req.send(401, {
-            'detail': 'You cannot login with a temporary password. '
-          });
-        }
-
         if (!user) {
           return res.send(401, {
             'detail': 'Incorrect username/password'
@@ -383,7 +377,22 @@
         }
         return res.send(200);
       });
+    },
+
+    expireTempPassword: function (req, res, next) {
+      var selectedUser = req.selectedUser;
+      selectedUser.passwordExpiry = moment();
+
+      selectedUser.saveQ()
+        .then(function () {
+          res.send(200);
+        })
+        .catch(function (err) {
+          next(err);
+        })
+        .done();
     }
+
   };
 
 

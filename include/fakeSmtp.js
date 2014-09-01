@@ -5,23 +5,28 @@
   var config = require('./config.js');
   var simplesmtp = require('simplesmtp');
   var utils = require('./utils.js');
-  var smtpServer;
+  var Q = require('q');
+
+  var self = module.exports;
 
   module.exports = {
     debug: false,
+    smtpServer: null,
 
-    start: function (recvCallback, errorCallback, debug) {
+    start: function (recvCallback, debug) {
+      var deferred = Q.defer();
+
       if (!utils.exists(debug)) {
         debug = false;
       }
-      module.exports.debug = debug;
+      self.debug = debug;
 
       var emailConfig = config.email_settings;
 
       console.log(('Starting fake SMTP server on: ' +
         emailConfig.host + ':' + emailConfig.port));
 
-      smtpServer = simplesmtp.createServer({
+      var smtpServer = simplesmtp.createServer({
         enableAuthentication: true,
         requireAuthentication: true,
         debug: debug,
@@ -29,7 +34,14 @@
         disableDNSValidation: true
       });
 
-      smtpServer.listen(emailConfig.port, errorCallback);
+      smtpServer.listen(emailConfig.port, function (
+        err) {
+        if (err) {
+          deferred.reject(err);
+        } else {
+          deferred.resolve();
+        }
+      });
 
       var buffer = '';
 
@@ -58,7 +70,8 @@
         buffer = '';
       });
 
-      smtpServer.on('authorizeUser', function (connection, username, password,
+      smtpServer.on('authorizeUser', function (connection, username,
+        password,
         authCallback) {
         if (username === emailConfig.user &&
           password === emailConfig.password) {
@@ -67,15 +80,30 @@
           authCallback(null, false);
         }
       });
+
+      self.smtpServer = smtpServer;
+
+      return deferred.promise;
     },
 
     stop: function () {
-      if (smtpServer) {
-        if (module.exports.debug) {
-          console.log('simplesmtp: > Qutting.');
+      var deferred = Q.defer();
+      var smtpServer = self.smtpServer;
+      try {
+        if (smtpServer) {
+          if (self.debug) {
+            console.log('simplesmtp: > Qutting.');
+          }
+          smtpServer.end(function () {
+            deferred.resolve();
+          });
+        } else {
+          deferred.resolve();
         }
-        smtpServer.quit();
+      } catch (err) {
+        deferred.reject(err);
       }
+      return deferred.promise;
     }
   };
 })(require, module);
