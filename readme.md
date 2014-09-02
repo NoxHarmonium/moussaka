@@ -3,9 +3,7 @@ unity-profiles
 
 ### Version 0.1
 
-[![Build Status](https://travis-ci.org/NoxHarmonium/unity-profiles.png?branch=master)](https://travis-ci.org/NoxHarmonium/unity-profiles)
-
-[![Coverage Status](https://img.shields.io/coveralls/NoxHarmonium/unity-profiles.svg)](https://coveralls.io/r/NoxHarmonium/unity-profiles?branch=)
+[![Build Status](https://travis-ci.org/NoxHarmonium/unity-profiles.png?branch=master)](https://travis-ci.org/NoxHarmonium/unity-profiles) [![Coverage Status](https://img.shields.io/coveralls/NoxHarmonium/unity-profiles.svg)](https://coveralls.io/r/NoxHarmonium/unity-profiles?branch=)
 
 ## Summary
 
@@ -24,7 +22,7 @@ In game development it is sometimes necessary to expose game variables in a way 
 - A menu on device can be fiddly and hard to adjust, especially if the input triggers the on screen keyboard.
 - If the user finds different configurations they like and want to compare them there is no easy way to store configurations and compare them.
 
-The main premise of Unity Profiles to allow a developer to simply add an attribute to a property of a game object, and have it exposed in a separate web interface that can accessed on a separate computer or device. The user can then play with different configurations, save them and quickly swap between them to compare. The could then share the configuration with other people who could then apply their own tweaks. Finally after a consensus is reached the configuration could then be downloaded and included with the project for deployment.
+The main premise of Unity Profiles to allow a developer to simply add an [attribute](http://msdn.microsoft.com/en-us/library/z0w1kczw.aspx) to properties of a game object, and have them exposed in a separate web interface that can accessed on a separate computer or device. This web interface would allow the user to tweak the game properties in real time. The user can then play with different configurations, save them and quickly swap between them to compare. The could then share the configuration with other people who could then apply their own tweaks. Finally after a consensus is reached the configuration could then be downloaded and included with the project for deployment.
 
 ## Development 
 
