@@ -26,7 +26,7 @@
         "expect.js": "*",
         "gulp": "*",
         "gulp-jshint": "*",
-        "gulp-js-prettify": "*",
+        "gulp-jsbeautifier": "*",
         "gulp-mocha": "*",
         "gulp-istanbul": "*",
         "gulp-cached": "*",
