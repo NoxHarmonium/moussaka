@@ -1,72 +1,70 @@
 {
-  "dependencies": {
-    "bcrypt": "*",
-    "colors": "*",
-    "deep-equal": "*",
-    "express": "3.4.0",
-    "jade": "*",
-    "moment": "*",
-    "mongodb": "1.3.x",
-    "mongoose": "*",
-    "passport": "*",
-    "passport-local": "*",
-    "passport-localapikey-update": "*",
-    "stylus": "*",
-    "yaml-config": "*",
-    "q": "*",
-    "lodash": "*",
-    "string": "*",
-    "chance": "*",
-    "mongoose-q": "*",
-    "emailjs": "*",
-    "node-uuid": "*"
-  },
-  "description": "A web application for setting up profiles that define the behavior of your Unity3D games. It aims to provide an easy interface to allow developers to enable designers and managers to do all the tweaking and to be able to share different settings between them.",
-  "devDependencies": {
-    "expect.js": "*",
-    "grunt": "*",
-    "grunt-contrib-jshint": "*",
-    "grunt-contrib-uglify": "*",
-    "grunt-jsbeautifier": "*",
-    "grunt-mocha-test": "*",
-    "grunt-contrib-compass": "*",
-    "grunt-contrib-less": "*",
-    "jsbeautify": "*",
-    "mocha": "*",
-    "superagent": "*",
-    "sass": "*",
-    "compass": "*",
-    "stylus-modular-scale": "*",
-    "cheerio": "*",
-    "simplesmtp": "*",
-    "istanbul": "*",
-    "coveralls": "*",
-    "mocha-lcov-reporter": "*",
-    "random-mac": "*",
-    "browserify": "*",
-    "napa": "^0.4.1",
-    "grunt-browserify": "^3.0.0",
-    "grunt-contrib-watch": "^0.6.1"
-  },
-  "env": {
-    "PYTHON": "/usr/bin/python2.7"
-  },
-  "name": "unity-profiles",
-  "private": true,
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/NoxHarmonium/unity-profiles.git"
-  },
-  "scripts": {
-    "start": "node src/app.js",
-    "test": "grunt test",
-    "coveralls": "./gencoverage.sh",
-    "install": "napa"
-  },
-  "version": "0.0.1",
-  "napa": {
-    "angular": "angular/bower-angular",
-    "angular-route": "angular/bower-angular-route",
-    "angular-resource": "angular/bower-angular-resource"
-  }
+    "dependencies": {
+        "bcrypt": "*",
+        "colors": "*",
+        "deep-equal": "*",
+        "express": "3.4.0",
+        "jade": "*",
+        "moment": "*",
+        "mongodb": "1.3.x",
+        "mongoose": "*",
+        "passport": "*",
+        "passport-local": "*",
+        "passport-localapikey-update": "*",
+        "stylus": "*",
+        "yaml-config": "*",
+        "q": "*",
+        "lodash": "*",
+        "string": "*",
+        "chance": "*",
+        "mongoose-q": "*",
+        "emailjs": "*",
+        "node-uuid": "*"
+    },
+    "description": "A web application for setting up profiles that define the behavior of your Unity3D games. It aims to provide an easy interface to allow developers to enable designers and managers to do all the tweaking and to be able to share different settings between them.",
+    "devDependencies": {
+        "expect.js": "*",
+        "gulp": "*",
+        "gulp-jshint": "*",
+        "gulp-js-prettify": "*",
+        "gulp-mocha": "*",
+        "gulp-istanbul": "*",
+        "gulp-cached": "*",
+        "jshint-stylish": "*",
+        "gulp-changed": "*",
+        "mocha": "*",
+        "superagent": "*",a
+        "gulp-less": "*",
+        "stylus-modular-scale": "*",
+        "cheerio": "*",
+        "simplesmtp": "*",
+        "istanbul": "*",
+        "coveralls": "*",
+        "mocha-lcov-reporter": "*",
+        "random-mac": "*",
+		"browserify": "*",
+    	"napa": "^0.4.1",
+    	"grunt-browserify": "^3.0.0",
+    	"grunt-contrib-watch": "^0.6.1"
+    },
+    "env": {
+        "PYTHON": "/usr/bin/python2.7"
+    },
+    "name": "unity-profiles",
+    "private": true,
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/NoxHarmonium/unity-profiles.git"
+    },
+    "scripts": {
+        "start": "node app.js",
+        "test": "grunt test",
+        "coveralls": "./gencoverage.sh"
+    },
+    "version": "0.0.1",
+	"napa": {
+		"angular": "angular/bower-angular",
+		"angular-route": "angular/bower-angular-route",
+		"angular-resource": "angular/bower-angular-resource"
+	  }
 }
