@@ -170,10 +170,16 @@
     }
 
     // Rendered HTML pages
-    app.get('/login', function (req, res) {
-      res.render('login', {
-        title: 'Login'
-      });
+    app.get('/auth', function (req, res) {
+      res.render('auth');
+    });
+
+    app.get('/partials/login', function (req, res) {
+      res.render('partials/login');
+    });
+
+    app.get('/partials/createAccount', function (req, res) {
+      res.render('partials/createAccount');
     });
 
     serverModule.server = http.createServer(app)

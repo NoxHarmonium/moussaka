@@ -1,0 +1,40 @@
+div.viewContainer
+
+    div(class="loginbox") 
+        h1.text-centered UNITY PROFILES
+
+        h4.text-centered LOGIN BELOW
+
+        form(method="post" action="" class="forms")
+            label Email
+                div.input-groups
+                    input(type="email" name="user-email" class="width-100" ng-model="username" ngDisabled="loading")
+                    span.input-append
+                        i(class="fa fa-user")
+            label Password
+                div.input-groups
+                    input(type="password" name="user-password" class="width-100" ng-model="password" ngDisabled="loading")
+                    span.input-append   
+                        i(class="fa fa-lock")
+                div.forms-desc.ng-hide(ng-hide="hideError")
+                    span.error 
+                        i.fa.fa-exclamation
+                        span &nbsp; {{ errorMessage }}
+        
+            div.loginError
+                
+
+            p
+                button.btn-blue.width-100(ng-click="formLogin()" ngDisabled="loading") Log in &nbsp; 
+                    i.fa.fa-refresh.fa-spin.ng-hide(ng-hide="!loading")
+
+        hr
+
+        div.units-row.text-centered 
+            div.unit-50
+                a(href="#/createAccount")
+                    button.btn.width-100 Create account
+            div.unit-50
+                button.btn.width-100 Forgot password?
+
+

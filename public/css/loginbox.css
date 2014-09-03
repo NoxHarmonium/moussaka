@@ -16,7 +16,7 @@ div.loginbox {
         margin-right: auto;
         padding: 50px;
         padding-bottom: 20px;
-        width: 450px;
+        width: 475px;
 
         -webkit-border-radius: 10px;
         -moz-border-radius: 10px;
@@ -59,6 +59,11 @@ div.loginbox {
     background: #3F333D;
 }
 
+.loginbox button.btn-blue:hover {
+    background: #5E4C5B;
+}
+
 .loginbox hr {
     border-top-color: #FFFFFF;
 }
+

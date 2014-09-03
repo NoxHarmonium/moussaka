@@ -1,0 +1,15 @@
+doctype html
+html(ng-app="authModule")
+head
+    title Login Page
+    link(href='/css/kube.css', rel='stylesheet')
+    link(href='/css/loginbox.css', rel='stylesheet')
+    link(href='//fonts.googleapis.com/css?family=Ubuntu:500' rel='stylesheet' type='text/css')
+    link(href='//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css' rel='stylesheet')
+    link(href='//fonts.googleapis.com/css?family=Open+Sans:600' rel='stylesheet' type='text/css')
+
+body(ng-controller="loginController")
+     div(ng-view)
+
+
+script(src="/js/bundle.js")
