@@ -1,20 +1,24 @@
-extend layout
-block content
-    h3 Login
-    div.content
-        form(action='/login', method='post')
-            .row.collapse
-                .large-2.columns
-                    label Username:
-                .large-6.columns
-                    input(type='text', name='username')
-            .row.collapse
-                .large-2.columns
-                    label Password:
-                .large-6.columns
-                    input(type='password', name='password')
-            .row.collapse
-                .large-8.columns
-                    input(type='submit', value='Log In', class='small button')
-                    a(href='./sign_up' class='small button') Sign Up
+doctype html
+html(ng-app="authModule")
+head
+    title Login Page
+    link(href='/css/kube.css', rel='stylesheet')
 
+body(ng-controller="loginController")
+
+    div(class="units-row")
+        div(class="unit-50") Hello world
+            p {{ username }}
+        
+        div(class="unit-50") It's Kube Grid System
+            form(method="post" action="" class="forms")
+                label Email
+                    input(type="email" name="user-email" class="width-50" ng-model="username")
+                label Password
+                    input(type="password" name="user-password" class="width-50" ng-model="password")
+                p
+                    button(class="btn-blue width-50") Log in
+                    button(class="btn") Cancel
+
+
+    script(src="/js/bundle.js")

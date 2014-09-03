@@ -94,7 +94,28 @@ module.exports = function (grunt) {
           loadAll: 'public/sass/extensions'
         }
       }
-    }
+    },
+    browserify: {
+      options: {
+        debug: true,
+        //transform: ['reactify'],
+        //extensions: ['.jsx'],
+      },
+      dev: {
+        //options: {
+        //  alias: ['react:']  // Make React available externally for dev tools
+        //},
+        src: ['client/authModule.js'],
+        dest: 'public/js/bundle.js'
+      },
+      //production: {
+      //  options: {
+      //    debug: false
+      //  },
+      //  src: '<%= browserify.dev.src %>',
+      //  dest: 'build/bundle.js'
+      //}
+    },
   });
 
 
@@ -102,13 +123,15 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-jsbeautifier');
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-contrib-compass');
+  grunt.loadNpmTasks('grunt-browserify');
 
   grunt.registerTask('test', ['mochaTest']);
   //grunt.registerTask('compile', ['compass']);
   grunt.registerTask('all', [ /*'compass',*/ 'jsbeautifier', 'jshint',
-    'mochaTest'
+    'mochaTest', 'browserify'
   ]);
-  grunt.registerTask('default', ['jsbeautifier', 'jshint']);
+  grunt.registerTask('default', ['jsbeautifier', 'jshint',
+    'browserify']);
   grunt.registerTask('lint', ['jsbeautifier', 'jshint']);
 
 

@@ -170,9 +170,9 @@
     }
 
     // Rendered HTML pages
-    app.get('/projects', function (req, res) {
-      res.render('projects', {
-        title: 'Projects'
+    app.get('/login', function (req, res) {
+      res.render('login', {
+        title: 'Login'
       });
     });
 
