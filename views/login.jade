@@ -3,22 +3,39 @@ html(ng-app="authModule")
 head
     title Login Page
     link(href='/css/kube.css', rel='stylesheet')
+    link(href='/css/loginbox.css', rel='stylesheet')
+    link(href='//fonts.googleapis.com/css?family=Ubuntu:500' rel='stylesheet' type='text/css')
+    link(href='//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css' rel='stylesheet')
+    link(href='//fonts.googleapis.com/css?family=Open+Sans:600' rel='stylesheet' type='text/css')
 
 body(ng-controller="loginController")
 
-    div(class="units-row")
-        div(class="unit-50") Hello world
-            p {{ username }}
-        
-        div(class="unit-50") It's Kube Grid System
+        div(class="loginbox") 
+            h1.text-centered UNITY PROFILES
+
+            h4.text-centered LOGIN BELOW
+
             form(method="post" action="" class="forms")
                 label Email
-                    input(type="email" name="user-email" class="width-50" ng-model="username")
+                    div.input-groups
+                        input(type="email" name="user-email" class="width-100" ng-model="username")
+                        span.input-append
+                            i(class="fa fa-user")
                 label Password
-                    input(type="password" name="user-password" class="width-50" ng-model="password")
+                    div.input-groups
+                        input(type="password" name="user-password" class="width-100" ng-model="password")
+                        span.input-append   
+                            i(class="fa fa-lock")
                 p
-                    button(class="btn-blue width-50") Log in
-                    button(class="btn") Cancel
+                    button(class="btn-blue width-100") Log in
+
+            hr
+
+            div.units-row.text-centered 
+                div.unit-50
+                    button.btn.width-100 Create account
+                div.unit-50
+                    button.btn.width-100 Forgot password?
 
 
     script(src="/js/bundle.js")

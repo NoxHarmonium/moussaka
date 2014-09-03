@@ -1,0 +1,64 @@
+body {
+    background: #8C8C90;
+}
+
+
+div.loginbox {
+    background-color: #CFC6BC;
+    padding: 50px;
+}
+
+@media (min-width: 767px) {
+    div.loginbox {
+        margin-top: 100px;
+        margin-bottom: 100px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 50px;
+        padding-bottom: 20px;
+        width: 450px;
+
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+    }
+
+    body {
+        background: url('/img/bg.jpg') no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+    }   
+}
+
+.loginbox {
+    font-family: 'Open Sans', sans-serif;
+}
+
+.loginbox > form.forms > label {
+    color: #3F333D;
+}
+
+.loginbox > h1 {
+    color: #3F333D;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 44px;
+}
+
+.loginbox > h4 {
+    color: #8C8C90;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.loginbox a {
+    color: #3F333D;
+}
+
+.loginbox button.btn-blue {
+    background: #3F333D;
+}
+
+.loginbox hr {
+    border-top-color: #FFFFFF;
+}
