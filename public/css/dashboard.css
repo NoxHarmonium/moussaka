@@ -64,18 +64,32 @@ div.dashboard-outer div#projects .project div.project-title > * {
   display: inline-block;
   vertical-align: middle;
 }
+div.dashboard-outer div#projects .project a {
+  text-decoration: none;
+}
 div.dashboard-outer div#projects .project a.remove-icon {
   margin-left: 10px;
   margin-bottom: 0.25em;
   color: #8C8C90;
 }
-div.dashboard-outer div#projects .project a {
-  text-decoration: none;
-}
-div.dashboard-outer div#projects .project > .project-description {
+div.dashboard-outer div#projects .project p.project-description {
   max-height: 3.5em;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-bottom: 10px;
+}
+div.dashboard-outer div#projects .project p.project-info-summary {
+  font-size: 0.68em;
+  color: #A6A6A6;
+  margin-bottom: 0.6472em;
+}
+div.dashboard-outer div#projects .project p.project-info-summary i {
+  margin-left: 4px;
+  margin-right: 6px;
+  line-height: 0.68em;
+  font-size: 6px;
+  vertical-align: middle;
+  margin-bottom: 2px;
 }
 div.dashboard-sidebar-container {
   position: relative;

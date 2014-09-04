@@ -8,6 +8,10 @@
                 a.remove-icon(href="#") 
                         i.fa.fa-remove 
             p.project-description(ng-hide="!project.description")     {{project.description}}
+            p.project-info-summary
+                span {{project.users.length + project.admins.length}} Contributors 
+                i.fa.fa-circle 
+                span 2 Connected Devices
 
         hr
                 

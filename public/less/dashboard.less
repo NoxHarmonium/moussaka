@@ -14,6 +14,8 @@
 @side-bar-font: 'Open Sans', sans-serif;
 @side-bar-spacing: 25px;
 
+@project-info-summary-size: @font-size-base * 0.8;
+
 @header-color: #8C8C90;
 
 
@@ -26,7 +28,7 @@ header.dashboard-header {
     height: @header-height;
     background-color: @header-color;
     width: 100%;
-
+ 
     div.nav-wrapper {
         width: @center-width;
         height: 100%;
@@ -90,21 +92,39 @@ div.dashboard-outer {
             vertical-align: middle;
         }
 
+        a {
+            text-decoration: none;
+        }
+
         a.remove-icon {
             margin-left: 10px;
             margin-bottom: 0.25em;
             color: #8C8C90;
         }
-    }
 
-    div#projects .project a{
-        text-decoration: none;
-    }
+        p.project-description {
+            max-height: 3.5em;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 10px;
+        }
 
-    div#projects .project > .project-description {
-        max-height: 3.5em;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        p.project-info-summary {
+
+            font-size: @project-info-summary-size;
+            color: #A6A6A6;
+            margin-bottom: @base-line * 0.4;
+
+            i {
+                margin-left: 4px;
+                margin-right: 6px;
+                line-height: @project-info-summary-size;
+                font-size: 6px;
+                vertical-align: middle;
+                margin-bottom: 2px;
+
+            }
+        }
     }
 }
 
