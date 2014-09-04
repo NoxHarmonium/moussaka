@@ -1,9 +1,14 @@
-#projects.dashboard-view
+#projects
     #projectRow.row
         .project(ng-repeat="project in projects" ng-cloak)
-            h4.projectName          {{project.name}}
-            .projectVersion         Project {{project.version}}
-            .projectDescription     {{project.description}}
-            .projectContribs        {{project.users.length}} contributors
-            .medium.primary.btn
-                a(href='#') Edit
+            hr
+            div.project-title
+                a(ng-href="#/viewProject/{{project._id}}/")
+                    h3.project-name          {{project.name}}  {{project.version}}
+                a.remove-icon(href="#") 
+                        i.fa.fa-remove 
+            p.project-description(ng-hide="!project.description")     {{project.description}}
+
+        hr
+                
+

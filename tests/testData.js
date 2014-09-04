@@ -24,21 +24,27 @@
   exports.getTestProjects = function () {
     return [{
       //_id: 'to be defined',
-      name: 'testProjectA',
+      name: 'Star Wars: Knights of the Old Republic',
       users: [],
       admins: ['test.account3@test.com'],
-      description: 'This one has a description'
+      description: 'Star Wars: Knights of the Old Republic is a role-playing video game developed by BioWare and published by LucasArts. Written by Drew Karpyshyn, the soundtrack for the game was composed by Jeremy Soule. '
     }, {
       //_id: 'to be defined',
-      name: 'testProjectB',
+      name: 'FTL: Faster Than Light',
       users: [],
       admins: ['test.account3@test.com'],
+      description: 'FTL: Faster Than Light is a top-down, real time strategy video game created by indie developers Subset Games. In the game, the player controls the crew of a single spacecraft, holding critical information to be delivered to an allied fleet several sectors away, while being pursued by a large rebel fleet. '
     }, {
       //_id: 'to be defined',
-      name: 'testProjectC',
+      name: 'The Stanley Parable',
       users: [],
       admins: ['test.account3@test.com'],
-      description: 'So does this one'
+      description: 'The Stanley Parable is an interactive story modification built on the Source game engine, developed by Davey Wreden and released in July 2011. A high-definition remastered stand-alone version, including new story elements, was developed by Wreden and Source modeler William Pugh under the Galactic Cafe development team name. '
+    },{
+      //_id: 'to be defined',
+      name: 'A Project Without A Description',
+      users: [],
+      admins: ['test.account1@test.com'],
     }];
   };
 

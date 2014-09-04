@@ -23,7 +23,7 @@ dashboardModule.factory('Projects', function($resource){
 
 
 dashboardModule.controller('listController', ['$scope', 'Projects', function($scope, Projects) {
-    $scope.projects = [];//testProjects;
+    $scope.projects = testProjects;
    
     //Projects.query(function(response) {
     //  $scope.projects = response;

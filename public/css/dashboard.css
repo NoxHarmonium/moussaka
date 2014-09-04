@@ -7,91 +7,106 @@
     A set of useful LESS mixins
     More info at: http://lesselements.com
   ---------------------------------------------------*/
-body {
-  background-color: #3f333d;
+.inline-block > * {
+  display: inline-block;
 }
-div.dashboard-outer {
-  background-color: #CFC6BC;
-  padding: 0px;
-}
-div.dashboard-view {
-  padding: 50px;
-}
-div.header {
+header.dashboard-header {
+  height: 50px;
+  background-color: #8c8c90;
   width: 100%;
-  height: 80px;
-  border-bottom: solid 1px #222222;
-  background-color: #8C8C90;
-  -webkit-border-top-right-radius: 5px;
-  -webkit-border-bottom-right-radius: 0px;
-  -webkit-border-bottom-left-radius: 0px;
-  -webkit-border-top-left-radius: 5px;
-  -moz-border-radius-topright: 5px;
-  -moz-border-radius-bottomright: 0px;
-  -moz-border-radius-bottomleft: 0px;
-  -moz-border-radius-topleft: 5px;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 0px;
-  border-bottom-left-radius: 0px;
-  border-top-left-radius: 5px;
-  -moz-background-clip: padding-box;
-  -webkit-background-clip: padding-box;
-  background-clip: padding-box;
 }
-div.header-right-box {
-  margin: 0;
-  margin-left: auto;
-  border-left: solid 1px #222222;
-  width: 20%;
+header.dashboard-header div.nav-wrapper {
+  width: 580px;
   height: 100%;
-  background-color: #3F333D;
+  margin-top: 0px;
+  margin-left: auto;
+  margin-right: auto;
 }
-div.header-right-box > h2,
-h3 {
+header.dashboard-header div.nav-wrapper > nav.navbar {
+  height: 100%;
+  margin: 0;
+}
+header.dashboard-header div.nav-wrapper > nav.navbar ul {
+  height: 100%;
+  margin: 0;
+}
+header.dashboard-header div.nav-wrapper > nav.navbar ul li {
+  width: 100px;
+  height: 100%;
+  background-color: #EEEEEE;
   text-align: center;
+}
+header.dashboard-header div.nav-wrapper > nav.navbar ul li a,
+header.dashboard-header div.nav-wrapper > nav.navbar ul li a > * {
+  line-height: 50px;
+}
+div.dashboard-outer div.dashboard-view {
+  margin-top: 0px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 580px;
+  padding: 50px;
+  padding-top: 30px;
+  background-color: #FFFFFF;
+  min-height: 600px;
+}
+div.dashboard-outer div#projects {
+  margin-top: 0px;
+}
+div.dashboard-outer div#projects .project {
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+div.dashboard-outer div#projects .project div.project-title {
+  line-height: 1.445em;
+}
+div.dashboard-outer div#projects .project div.project-title > * {
+  display: inline-block;
+  vertical-align: middle;
+}
+div.dashboard-outer div#projects .project a.remove-icon {
+  margin-left: 10px;
+  margin-bottom: 0.25em;
+  color: #8C8C90;
+}
+div.dashboard-outer div#projects .project a {
+  text-decoration: none;
+}
+div.dashboard-outer div#projects .project > .project-description {
+  max-height: 3.5em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+div.dashboard-sidebar-container {
+  position: relative;
+  width: 980px;
+  margin: auto;
+  z-index: 1;
+}
+div.dashboard-sidebar-container div.dashboard-sidebar {
+  float: left;
+  width: 200px;
+  margin: auto;
+  background-color: rgba(0, 0, 0, 0);
+  margin-top: 30px;
+}
+div.dashboard-sidebar-container hr {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+div.dashboard-sidebar-container ul {
+  padding: 0;
+  margin: 0;
+}
+div.dashboard-sidebar-container ul li {
+  list-style: none;
+  line-height: 2.36785715em;
+}
+div.dashboard-sidebar-container ul li a {
+  text-decoration: none;
   font-family: 'Open Sans', sans-serif;
+  color: #3f333d;
 }
-div.header-right-box > h3 {
-  padding-top: 10px;
-  color: #FFFFFF;
-}
-div.header-right-box > h2 {
-  color: #FFFFFF;
-}
-@media (min-width: 767px) {
-  div.dashboard-outer {
-    margin-top: 20px;
-    margin-bottom: 100px;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 0px;
-    padding-bottom: 20px;
-    width: 90%;
-    border: solid 1px #222222;
-    -webkit-border-top-right-radius: 5px;
-    -webkit-border-bottom-right-radius: 5px;
-    -webkit-border-bottom-left-radius: 5px;
-    -webkit-border-top-left-radius: 5px;
-    -moz-border-radius-topright: 5px;
-    -moz-border-radius-bottomright: 5px;
-    -moz-border-radius-bottomleft: 5px;
-    -moz-border-radius-topleft: 5px;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-    border-bottom-left-radius: 5px;
-    border-top-left-radius: 5px;
-    -moz-background-clip: padding-box;
-    -webkit-background-clip: padding-box;
-    background-clip: padding-box;
-    -webkit-box-shadow: 1px 1px 20px rgba(0, 0, 0, 0.2);
-    -moz-box-shadow: 1px 1px 20px rgba(0, 0, 0, 0.2);
-    box-shadow: 1px 1px 20px rgba(0, 0, 0, 0.2);
-  }
-  body {
-    background: url('/img/bg.jpg') no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-  }
+div.dashboard-sidebar-container ul li.active {
+  font-weight: 600;
 }

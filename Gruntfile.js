@@ -96,7 +96,7 @@ module.exports = function (grunt) {
         //options: {
         //  alias: ['react:']  // Make React available externally for dev tools
         //},
-        src: ['client/authModule.js','client/projectModule.js'],
+        src: ['client/authModule.js','client/dashboardModule.js'],
         dest: 'public/js/bundle.js'
       },
       //production: {

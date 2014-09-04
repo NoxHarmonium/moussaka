@@ -7,6 +7,9 @@
     A set of useful LESS mixins
     More info at: http://lesselements.com
   ---------------------------------------------------*/
+body {
+  font-family: 'Open Sans', sans-serif;
+}
 div.loginbox {
   background-color: #CFC6BC;
   padding: 50px;

@@ -1,3 +1,6 @@
+@import url(http://fonts.googleapis.com/css?family=Montserrat);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600);
+@import url(http://fonts.googleapis.com/css?family=Ubuntu:400,500);
 /*
 	Kube CSS-Framework 3.1
 */
@@ -241,7 +244,7 @@ img {
 /* =Typography
 -----------------------------------------------------------------------------*/
 body {
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Tahoma, sans-serif;
   font-size: 0.85em;
   line-height: 1.618em;
   background: #cfc6bc;
@@ -265,7 +268,7 @@ h4,
 h5,
 h6 {
   font-family: 'Ubuntu', sans-serif;
-  font-weight: bold;
+  font-weight: 500;
   color: #3f333d;
   text-rendering: optimizeLegibility;
 }
@@ -523,7 +526,7 @@ button,
 input,
 textarea,
 select {
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Tahoma, sans-serif;
   font-size: 1em;
   box-shadow: none;
 }
@@ -1759,7 +1762,7 @@ input[type="search"] {
 .btn {
   display: inline-block;
   vertical-align: top;
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Tahoma, sans-serif;
   font-size: 1em;
   font-weight: 400;
   line-height: 1.618em;
