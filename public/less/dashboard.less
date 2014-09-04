@@ -1,0 +1,79 @@
+/*
+    Dashboard View CSS
+*/
+
+@import "mixins.less";
+@import "variables.less";
+@import "elements.less";
+
+body {
+    background-color: #3f333d;
+}
+
+div.dashboard-outer {
+    background-color: #CFC6BC;
+    padding: 0px;
+}
+
+div.dashboard-view {
+    padding: 50px;
+}
+
+div.header {
+    width: 100%;
+    height: 80px;
+    border-bottom: solid 1px #222222;
+    background-color: #8C8C90;
+    .border-radius(5px, 0px, 0px, 5px);
+}
+
+div.header-right-box {
+    margin: 0;
+    margin-left: auto;
+    border-left: solid 1px #222222;
+    width: 20%;
+    height: 100%;
+    background-color: #3F333D;
+
+}
+
+div.header-right-box > h2, h3 {
+    text-align: center;
+    font-family: 'Open Sans', sans-serif;
+}
+
+div.header-right-box > h3 {
+    padding-top: 10px;
+    color: #FFFFFF;
+}
+
+div.header-right-box > h2 {
+    color: #FFFFFF;
+}
+
+@media (min-width: 767px) {
+    div.dashboard-outer {
+        margin-top: 20px;
+        margin-bottom: 100px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 0px;
+        padding-bottom: 20px;
+        width: 90%;
+
+        border: solid 1px #222222;
+
+        .border-radius(5px, 5px, 5px, 5px);
+        .drop-shadow(1px, 1px, 20px, 0.2);
+    }
+    
+    body {
+        background: url('/img/bg.jpg') no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+    } 
+}
+
+

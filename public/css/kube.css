@@ -1,7 +1,6 @@
 /*
 	Kube CSS-Framework 3.1
 */
-
 /* =Reset
 -----------------------------------------------------------------------------*/
 *,
@@ -242,10 +241,10 @@ img {
 /* =Typography
 -----------------------------------------------------------------------------*/
 body {
-  font-family: "Helvetica Neue", Helvetica, Tahoma, sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 0.85em;
   line-height: 1.618em;
-  background: #ffffff;
+  background: #cfc6bc;
   color: #333333;
 }
 /* =Links
@@ -265,9 +264,9 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Helvetica Neue", Helvetica, Tahoma, sans-serif;
+  font-family: 'Ubuntu', sans-serif;
   font-weight: bold;
-  color: #222222;
+  color: #3f333d;
   text-rendering: optimizeLegibility;
 }
 h1 {
@@ -281,7 +280,7 @@ h2 {
   margin-bottom: .25em;
 }
 h3 {
-  font-size: 1.4449999999999998em;
+  font-size: 1.445em;
   line-height: 1.333em;
   margin-bottom: .25em;
 }
@@ -296,7 +295,7 @@ h5 {
   margin-bottom: .25em;
 }
 h6 {
-  font-size: 0.7224999999999999em;
+  font-size: 0.7225em;
   text-transform: uppercase;
   line-height: 1.618em;
   margin-bottom: .25em;
@@ -319,21 +318,21 @@ h5.subheading {
   font-weight: 300;
 }
 h1.subheading {
-  font-size: 1.4166666666666667em;
+  font-size: 1.41666667em;
 }
 h2.subheading {
-  font-size: 1.1333333333333333em;
+  font-size: 1.13333333em;
 }
 h3.subheading {
-  font-size: 0.9633333333333333em;
+  font-size: 0.96333333em;
 }
 h4.subheading {
   margin-top: .2em;
-  font-size: 0.9208333333333334em;
+  font-size: 0.92083333em;
 }
 h5.subheading {
   margin-top: .2em;
-  font-size: 0.7555555555555555em;
+  font-size: 0.75555556em;
 }
 /* =Lead
 -----------------------------------------------------------------------------*/
@@ -417,7 +416,7 @@ dl dt {
   font-weight: bold;
 }
 dd {
-  margin-left: 1.0786666666666667em;
+  margin-left: 1.07866667em;
 }
 /* =Text-level
 -----------------------------------------------------------------------------*/
@@ -524,7 +523,7 @@ button,
 input,
 textarea,
 select {
-  font-family: "Helvetica Neue", Helvetica, Tahoma, sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 1em;
   box-shadow: none;
 }
@@ -650,14 +649,14 @@ table {
 }
 table caption {
   text-transform: uppercase;
-  padding: 0 1.0786666666666667em;
+  padding: 0 1.07866667em;
   color: rgba(0, 0, 0, 0.4);
   font-size: 0.85em;
 }
 table th,
 table td {
   border-bottom: 1px solid #eee;
-  padding: 0.809em 1.0786666666666667em;
+  padding: 0.809em 1.07866667em;
 }
 table tfoot th,
 table tfoot td {
@@ -676,7 +675,7 @@ table tfoot td {
     line-height: 1.25;
   }
   h3 {
-    font-size: 1.4449999999999998em;
+    font-size: 1.445em;
     line-height: 1.25;
   }
   h4 {
@@ -687,22 +686,22 @@ table tfoot td {
     font-size: 0.85em;
   }
   h6 {
-    font-size: 0.7224999999999999em;
+    font-size: 0.7225em;
   }
   h1.subheading {
-    font-size: 1.4166666666666667em;
+    font-size: 1.41666667em;
   }
   h2.subheading {
-    font-size: 1.1333333333333333em;
+    font-size: 1.13333333em;
   }
   h3.subheading {
-    font-size: 0.9633333333333333em;
+    font-size: 0.96333333em;
   }
   h4.subheading {
-    font-size: 0.9208333333333334em;
+    font-size: 0.92083333em;
   }
   h5.subheading {
-    font-size: 0.7555555555555555em;
+    font-size: 0.75555556em;
   }
 }
 /* Landscape phone to portrait tablet */
@@ -720,29 +719,29 @@ table tfoot td {
     line-height: 1.13636364;
   }
   h4 {
-    font-size: 0.9562499999999999em;
+    font-size: 0.95625em;
     line-height: 1.11111111;
   }
   h5 {
     font-size: 0.85em;
   }
   h6 {
-    font-size: 0.7224999999999999em;
+    font-size: 0.7225em;
   }
   h1.subheading {
-    font-size: 1.1333333333333333em;
+    font-size: 1.13333333em;
   }
   h2.subheading {
     font-size: 0.85em;
   }
   h3.subheading {
-    font-size: 0.7791666666666667em;
+    font-size: 0.77916667em;
   }
   h4.subheading {
     font-size: 0.796875em;
   }
   h5.subheading {
-    font-size: 0.7555555555555555em;
+    font-size: 0.75555556em;
   }
   .lead {
     font-size: 1.2em;
@@ -767,15 +766,8 @@ table tfoot td {
   display: table;
   clear: both;
 }
-.units-container:after,
-.units-row:after {
-  content: "";
-  display: table;
-  clear: both;
-}
 .units-container {
   /* it's the trick to not collapse padding-top in the child element */
-
   padding-top: 1px;
   margin-top: -1px;
 }
@@ -906,13 +898,13 @@ select.unit-100 {
   width: 69.1%;
 }
 .units-row .unit-66 {
-  width: 65.66666666666666%;
+  width: 65.66666667%;
 }
 .units-row .unit-65 {
-  width: 65.66666666666666%;
+  width: 65.66666667%;
 }
 .units-row .unit-60 {
-  width: 58.800000000000004%;
+  width: 58.8%;
 }
 .units-row .unit-50 {
   width: 48.5%;
@@ -921,10 +913,10 @@ select.unit-100 {
   width: 38.2%;
 }
 .units-row .unit-35 {
-  width: 31.333333333333332%;
+  width: 31.33333333%;
 }
 .units-row .unit-33 {
-  width: 31.333333333333332%;
+  width: 31.33333333%;
 }
 .units-row .unit-30 {
   width: 27.9%;
@@ -968,13 +960,13 @@ select.unit-100 {
   left: 72.1%;
 }
 .unit-push-66 {
-  left: 68.66666666666666%;
+  left: 68.66666667%;
 }
 .unit-push-65 {
-  left: 68.66666666666666%;
+  left: 68.66666667%;
 }
 .unit-push-60 {
-  left: 61.800000000000004%;
+  left: 61.8%;
 }
 .unit-push-50 {
   left: 51.5%;
@@ -983,10 +975,10 @@ select.unit-100 {
   left: 41.2%;
 }
 .unit-push-35 {
-  left: 34.33333333333333%;
+  left: 34.33333333%;
 }
 .unit-push-33 {
-  left: 34.33333333333333%;
+  left: 34.33333333%;
 }
 .unit-push-30 {
   left: 30.9%;
@@ -1192,15 +1184,6 @@ select.unit-100 {
   display: table;
   clear: both;
 }
-.blocks-2:after,
-.blocks-3:after,
-.blocks-4:after,
-.blocks-5:after,
-.blocks-6:after {
-  content: "";
-  display: table;
-  clear: both;
-}
 .blocks-2 li,
 .blocks-3 li,
 .blocks-4 li,
@@ -1215,7 +1198,7 @@ select.unit-100 {
   width: 47%;
 }
 .blocks-3 > li {
-  width: 30.333333333333332%;
+  width: 30.33333333%;
 }
 .blocks-4 > li {
   width: 22%;
@@ -1224,7 +1207,7 @@ select.unit-100 {
   width: 17%;
 }
 .blocks-6 > li {
-  width: 13.666666666666666%;
+  width: 13.66666667%;
 }
 .block-first {
   clear: both;
@@ -1262,7 +1245,7 @@ select.unit-100 {
     width: 47%;
   }
   .blocks-mobile-33 > li {
-    width: 30.333333333333332%;
+    width: 30.33333333%;
   }
 }
 /* =Tables
@@ -1312,7 +1295,7 @@ table.table-hovered tbody tr:hover td {
 -----------------------------------------------------------------------------*/
 .forms label {
   display: block;
-  margin-bottom: 1.0786666666666667em;
+  margin-bottom: 1.07866667em;
 }
 .forms input[type="text"],
 .forms input[type="password"],
@@ -1358,7 +1341,7 @@ table.table-hovered tbody tr:hover td {
 .forms-inline-list {
   margin: 0;
   padding: 0;
-  margin-bottom: 1.0786666666666667em;
+  margin-bottom: 1.07866667em;
   list-style: none;
 }
 .forms-list label,
@@ -1529,11 +1512,6 @@ input[type="search"] {
   display: table;
   clear: both;
 }
-.navbar:after {
-  content: "";
-  display: table;
-  clear: both;
-}
 .navbar-left {
   float: left;
 }
@@ -1543,11 +1521,6 @@ input[type="search"] {
 .navbar ul {
   list-style: none;
   margin: 0;
-}
-.navbar ul:after {
-  content: "";
-  display: table;
-  clear: both;
 }
 .navbar ul:after {
   content: "";
@@ -1673,21 +1646,11 @@ input[type="search"] {
   display: table;
   clear: both;
 }
-.breadcrumbs:after {
-  content: "";
-  display: table;
-  clear: both;
-}
 .breadcrumbs ul {
   font-size: .9em;
   color: rgba(0, 0, 0, 0.4);
   list-style: none;
   margin: 0;
-}
-.breadcrumbs ul:after {
-  content: "";
-  display: table;
-  clear: both;
 }
 .breadcrumbs ul:after {
   content: "";
@@ -1735,11 +1698,6 @@ input[type="search"] {
   left: -9px;
   margin-left: 0;
   list-style: none;
-}
-.pagination:after {
-  content: "";
-  display: table;
-  clear: both;
 }
 .pagination:after {
   content: "";
@@ -1801,7 +1759,7 @@ input[type="search"] {
 .btn {
   display: inline-block;
   vertical-align: top;
-  font-family: "Helvetica Neue", Helvetica, Tahoma, sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 1em;
   font-weight: 400;
   line-height: 1.618em;
@@ -1867,12 +1825,12 @@ input[type="search"] {
 }
 .btn-blue.btn-outline {
   background: none;
-  border-color: #3d58a8;
-  color: #3d58a8;
+  border-color: #3f333d;
+  color: #3f333d;
 }
 .btn-blue.btn-outline:hover {
   color: rgba(255, 255, 255, 0.9);
-  background: #3d58a8;
+  background: #3f333d;
 }
 .btn-red.btn-outline {
   background: none;
@@ -1902,10 +1860,10 @@ input[type="search"] {
   background: #0f0f0f;
 }
 .btn-blue {
-  background: #3d58a8;
+  background: #3f333d;
 }
 .btn-blue:hover {
-  background: #2f4483;
+  background: #5b4a58;
 }
 .btn-red {
   background: #d70a16;
@@ -2011,7 +1969,7 @@ input[type="search"] {
   border-bottom-color: #ddd;
 }
 .btn-blue.btn-active {
-  border-color: #2f4483;
+  border-color: #231c22;
 }
 .btn-green.btn-active {
   border-color: #0f6a53;
@@ -2033,7 +1991,7 @@ input[type="search"] {
 .btn-blue.btn-active,
 .btn-blue.btn-disabled,
 .btn-blue[disabled] {
-  background: #2f4483;
+  background: #231c22;
 }
 .btn-red.btn-active,
 .btn-red.btn-disabled,
@@ -2057,11 +2015,6 @@ input[type="search"] {
 }
 /* =Helpers
 -----------------------------------------------------------------------------*/
-.group:after {
-  content: "";
-  display: table;
-  clear: both;
-}
 .group:after {
   content: "";
   display: table;

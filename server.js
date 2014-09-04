@@ -170,16 +170,29 @@
     }
 
     // Rendered HTML pages
-    app.get('/auth', function (req, res) {
+    app.get('/views/auth', function (req, res) {
       res.render('auth');
     });
 
-    app.get('/partials/login', function (req, res) {
+    app.get('/views/test', function (req, res) {
+      res.render('test');
+    });
+
+    app.get('/views/dashboard', function (req, res) {
+      res.render('dashboard');
+    });
+
+
+    app.get('/views/partials/login', function (req, res) {
       res.render('partials/login');
     });
 
-    app.get('/partials/createAccount', function (req, res) {
+    app.get('/views/partials/createAccount', function (req, res) {
       res.render('partials/createAccount');
+    });
+
+     app.get('/views/partials/listProjects', function (req, res) {
+      res.render('partials/listProjects');
     });
 
     serverModule.server = http.createServer(app)

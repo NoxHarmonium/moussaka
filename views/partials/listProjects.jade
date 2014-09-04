@@ -1,0 +1,9 @@
+#projects.dashboard-view
+    #projectRow.row
+        .project(ng-repeat="project in projects" ng-cloak)
+            h4.projectName          {{project.name}}
+            .projectVersion         Project {{project.version}}
+            .projectDescription     {{project.description}}
+            .projectContribs        {{project.users.length}} contributors
+            .medium.primary.btn
+                a(href='#') Edit

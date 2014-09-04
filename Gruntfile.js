@@ -86,15 +86,6 @@ module.exports = function (grunt) {
         ]
       }
     },
-    compass: { // Task
-      dev: { // target
-        options: {
-          sassDir: 'public/sass',
-          cssDir: 'public/css',
-          loadAll: 'public/sass/extensions'
-        }
-      }
-    },
     browserify: {
       options: {
         debug: true,
@@ -105,7 +96,7 @@ module.exports = function (grunt) {
         //options: {
         //  alias: ['react:']  // Make React available externally for dev tools
         //},
-        src: ['client/authModule.js'],
+        src: ['client/authModule.js','client/projectModule.js'],
         dest: 'public/js/bundle.js'
       },
       //production: {
@@ -116,18 +107,40 @@ module.exports = function (grunt) {
       //  dest: 'build/bundle.js'
       //}
     },
+    less: {
+      development: {
+        options: {
+        },
+        files: {
+          "public/css/kube.css": "public/less/kube.less",
+          "public/css/auth.css": "public/less/auth.less",
+          "public/css/dashboard.css": "public/less/dashboard.less",
+        }
+      }
+    },
+    watch: {
+      less: {
+        files: ['public/less/**/*.less'],
+        tasks: ['less'],
+      },
+      clientCode: {
+        files: ['client/*.js'],
+        tasks: ['browserify'],
+      },
+    },
   });
 
-
+  grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-jsbeautifier');
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-contrib-compass');
   grunt.loadNpmTasks('grunt-browserify');
+  grunt.loadNpmTasks('grunt-contrib-less');
 
   grunt.registerTask('test', ['mochaTest']);
-  //grunt.registerTask('compile', ['compass']);
-  grunt.registerTask('all', [ /*'compass',*/ 'jsbeautifier', 'jshint',
+  grunt.registerTask('compile', ['less', 'browserify']);
+  grunt.registerTask('all', [ 'less', 'jsbeautifier', 'jshint',
     'mochaTest', 'browserify'
   ]);
   grunt.registerTask('default', ['jsbeautifier', 'jshint',

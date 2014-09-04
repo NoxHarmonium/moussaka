@@ -1,15 +1,22 @@
 doctype html
-html(ng-app="authModule")
+html(ng-app="dashboardModule")
 head
-    title Authentication
+    title Projects
     link(href='/css/kube.css', rel='stylesheet')
-    link(href='/css/auth.css', rel='stylesheet')
+    link(href='/css/dashboard.css', rel='stylesheet')
     link(href='//fonts.googleapis.com/css?family=Ubuntu:500' rel='stylesheet' type='text/css')
     link(href='//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css' rel='stylesheet')
     link(href='//fonts.googleapis.com/css?family=Open+Sans:600' rel='stylesheet' type='text/css')
 
 body
-     div(ng-view)
+     div.dashboard-outer
+        div.header
+            div.header-right-box 
+                h3 Now viewing
+                h2 Projects
+
+
+        div(ng-view)
 
 
 script(src="/js/bundle.js")

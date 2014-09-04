@@ -30,6 +30,7 @@
     "grunt-jsbeautifier": "*",
     "grunt-mocha-test": "*",
     "grunt-contrib-compass": "*",
+    "grunt-contrib-less": "*",
     "jsbeautify": "*",
     "mocha": "*",
     "superagent": "*",
@@ -44,7 +45,8 @@
     "random-mac": "*",
     "browserify": "*",
     "napa": "^0.4.1",
-    "grunt-browserify": "^3.0.0"
+    "grunt-browserify": "^3.0.0",
+    "grunt-contrib-watch": "^0.6.1"
   },
   "env": {
     "PYTHON": "/usr/bin/python2.7"
@@ -64,6 +66,7 @@
   "version": "0.0.1",
   "napa": {
     "angular": "angular/bower-angular",
-    "angular-route": "angular/bower-angular-route"
+    "angular-route": "angular/bower-angular-route",
+    "angular-resource": "angular/bower-angular-resource"
   }
 }

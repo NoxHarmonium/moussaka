@@ -1,6 +1,10 @@
-body {
-    background: #8C8C90;
-}
+/*
+    Authentication View CSS
+*/
+
+@import "mixins.less";
+@import "variables.less";
+@import "elements.less";
 
 
 div.loginbox {
@@ -18,9 +22,8 @@ div.loginbox {
         padding-bottom: 20px;
         width: 475px;
 
-        -webkit-border-radius: 10px;
-        -moz-border-radius: 10px;
-        border-radius: 10px;
+        .border-radius(10px, 10px, 10px, 10px);
+
     }
 
     body {
@@ -32,35 +35,9 @@ div.loginbox {
     }   
 }
 
-.loginbox {
-    font-family: 'Open Sans', sans-serif;
-}
-
-.loginbox > form.forms > label {
-    color: #3F333D;
-}
 
 .loginbox > h1 {
-    color: #3F333D;
-    font-family: 'Ubuntu', sans-serif;
     font-size: 44px;
-}
-
-.loginbox > h4 {
-    color: #8C8C90;
-    font-family: 'Ubuntu', sans-serif;
-}
-
-.loginbox a {
-    color: #3F333D;
-}
-
-.loginbox button.btn-blue {
-    background: #3F333D;
-}
-
-.loginbox button.btn-blue:hover {
-    background: #5E4C5B;
 }
 
 .loginbox hr {
