@@ -7,6 +7,15 @@
     A set of useful LESS mixins
     More info at: http://lesselements.com
   ---------------------------------------------------*/
+@media (min-width: 767px) {
+  body {
+    background: url('/img/bg.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
+}
 body {
   font-family: 'Open Sans', sans-serif;
 }
@@ -38,13 +47,6 @@ div.loginbox {
     -moz-background-clip: padding-box;
     -webkit-background-clip: padding-box;
     background-clip: padding-box;
-  }
-  body {
-    background: url('/img/bg.jpg') no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
   }
 }
 .loginbox > h1 {
