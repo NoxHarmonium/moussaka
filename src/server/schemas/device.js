@@ -2,7 +2,7 @@
   'use strict';
 
   var mongoose = require('mongoose-q')();
-  var config = require('../include/config');
+  var config = require('../../shared/config.js');
   var Schema = mongoose.Schema;
 
   var DeviceSchema = new Schema({

@@ -4,9 +4,9 @@
   var superagent = require('superagent');
   var expect = require('expect.js');
   var testData = require('./testData.js');
-  var utils = require('../include/utils.js');
-  var serverModule = require('../server.js');
-  var config = require('../include/config.js');
+  var utils = require('../src/shared/utils.js');
+  var serverModule = require('../src/server.js');
+  var config = require('../src/shared/config.js');
   var _ = require('lodash');
   var Q = require('q');
   var S = require('string');

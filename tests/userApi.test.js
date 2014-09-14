@@ -4,11 +4,11 @@
   var superagent = require('superagent');
   var expect = require('expect.js');
   var testData = require('./testData.js');
-  var serverModule = require('../server.js');
-  var fakeSmtp = require('../include/fakeSmtp.js');
+  var serverModule = require('../src/server.js');
+  var fakeSmtp = require('../src/server/fakeSmtp.js');
   var cheerio = require('cheerio');
   var colors = require('colors');
-  var config = require('../include/config.js');
+  var config = require('../src/shared/config.js');
   var Q = require('q');
 
   // Shared functions

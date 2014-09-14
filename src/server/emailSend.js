@@ -5,7 +5,7 @@
   // to use Mandrill
 
   var colors = require('colors');
-  var config = require('./config.js');
+  var config = require('../shared/config.js');
   var emailConfig = config.email_settings;
   var Q = require('q');
 

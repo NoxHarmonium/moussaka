@@ -5,7 +5,7 @@
 
   var mongoose = require('mongoose-q')();
   var bcrypt = require('bcrypt');
-  var config = require('../include/config');
+  var config = require('../../shared/config.js');
   var Schema = mongoose.Schema;
   var uuid = require('node-uuid');
 

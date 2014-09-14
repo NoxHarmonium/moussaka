@@ -3,13 +3,10 @@
 module.exports = function (grunt) {
   var srcFiles = [
     'Gruntfile.js',
-    'app.js',
-    'server.js',
-    'api_modules/*.js',
+    'src/app.js',
+    'src/server.js',
+    'src/**/*.js',
     'tests/*.js',
-    'schemas/*.js',
-    'include/*.js',
-    'shared/*.js'
   ];
 
   grunt.initConfig({
@@ -61,7 +58,8 @@ module.exports = function (grunt) {
         maxlen: 80,
         globals: {
           describe: true, // mocha
-          it: true //mocha
+          it: true, //mocha,
+          angular: true // angular.js (see issue #12)
         },
         node: true,
         devel: true,
@@ -96,7 +94,7 @@ module.exports = function (grunt) {
         //options: {
         //  alias: ['react:']  // Make React available externally for dev tools
         //},
-        src: ['client/authModule.js', 'client/dashboardModule.js'],
+        src: ['src/client/authModule.js', 'src/client/dashboardModule.js'],
         dest: 'public/js/bundle.js'
       },
       //production: {
@@ -123,7 +121,7 @@ module.exports = function (grunt) {
         tasks: ['less'],
       },
       clientCode: {
-        files: ['client/*.js'],
+        files: ['src/client/*.js'],
         tasks: ['browserify'],
       },
     },

@@ -1,14 +1,14 @@
 (function (require, module) {
   'use strict';
 
-  var Project = require('../schemas/project.js');
-  var User = require('../schemas/user.js');
+  var Project = require('./schemas/project.js');
+  var User = require('./schemas/user.js');
   var moment = require('moment');
   var passport = require('passport');
-  var testData = require('../tests/testData.js');
-  var config = require('../include/config.js');
+  var testData = require('../../tests/testData.js');
+  var config = require('../shared/config.js');
   var _ = require('lodash');
-  var utils = require('../include/utils.js');
+  var utils = require('../shared/utils.js');
 
   // Public functions
   module.exports = {

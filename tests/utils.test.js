@@ -1,6 +1,6 @@
 (function (require, describe, it) {
   'use strict';
-  var utils = require('../include/utils.js');
+  var utils = require('../src/shared/utils.js');
   var expect = require('expect.js');
 
   var arrayA = [{

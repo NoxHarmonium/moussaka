@@ -7,14 +7,14 @@
   'use strict';
 
   var moment = require('moment');
-  var User = require('../schemas/user.js');
+  var User = require('./schemas/user.js');
   var passport = require('passport');
-  var testData = require('../tests/testData.js');
-  var config = require('../include/config.js');
+  var testData = require('../../tests/testData.js');
+  var config = require('../shared/config.js');
   var crypto = require('crypto');
-  var emailSend = require('../include/emailSend.js');
+  var emailSend = require('./emailSend.js');
   var Q = require('q');
-  var utils = require('../include/utils.js');
+  var utils = require('../shared/utils.js');
 
   var emailConfig = config.email_settings;
 
