@@ -96,7 +96,7 @@ module.exports = function (grunt) {
         //options: {
         //  alias: ['react:']  // Make React available externally for dev tools
         //},
-        src: ['client/authModule.js','client/dashboardModule.js'],
+        src: ['client/authModule.js', 'client/dashboardModule.js'],
         dest: 'public/js/bundle.js'
       },
       //production: {
@@ -109,12 +109,11 @@ module.exports = function (grunt) {
     },
     less: {
       development: {
-        options: {
-        },
+        options: {},
         files: {
-          "public/css/kube.css": "public/less/kube.less",
-          "public/css/auth.css": "public/less/auth.less",
-          "public/css/dashboard.css": "public/less/dashboard.less",
+          'public/css/kube.css': 'public/less/kube.less',
+          'public/css/auth.css': 'public/less/auth.less',
+          'public/css/dashboard.css': 'public/less/dashboard.less',
         }
       }
     },
@@ -140,11 +139,12 @@ module.exports = function (grunt) {
 
   grunt.registerTask('test', ['mochaTest']);
   grunt.registerTask('compile', ['less', 'browserify']);
-  grunt.registerTask('all', [ 'less', 'jsbeautifier', 'jshint',
+  grunt.registerTask('all', ['less', 'jsbeautifier', 'jshint',
     'mochaTest', 'browserify'
   ]);
   grunt.registerTask('default', ['jsbeautifier', 'jshint',
-    'browserify']);
+    'browserify'
+  ]);
   grunt.registerTask('lint', ['jsbeautifier', 'jshint']);
 
 
