@@ -237,7 +237,7 @@
     resetPassword: function (req, res, next) {
       var selectedUser = req.selectedUser;
       var loggedInUser = req.user;
-      var emailInfo = require('../emails.json')
+      var emailInfo = require('../../emails.json')
         .forgottonPassword;
 
       if (!emailInfo) {
