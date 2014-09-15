@@ -17,7 +17,10 @@
     "maxlen": 80,
     "globals": {
       "describe": true, // mocha
-      "it": true //mocha
+      "before": true, // mocha
+      "after": true, // mocha
+      "it": true, // mocha
+      "angular": true //angular
     },
     "node": true,
     "devel": true
