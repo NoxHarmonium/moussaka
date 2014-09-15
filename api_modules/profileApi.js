@@ -6,17 +6,17 @@
 
   'use strict';
 
-  var Project = require('./schemas/project.js');
-  var Profile = require('./schemas/profile.js');
-  var Device = require('./schemas/device.js');
-  var User = require('./schemas/user.js');
+  var Project = require('../schemas/project.js');
+  var Profile = require('../schemas/profile.js');
+  var Device = require('../schemas/device.js');
+  var User = require('../schemas/user.js');
   var moment = require('moment');
   var passport = require('passport');
-  var testData = require('../../tests/testData.js');
-  var config = require('../shared/config.js');
+  var testData = require('../tests/testData.js');
+  var config = require('../include/config.js');
   var mongoose = require('mongoose-q')();
   var Q = require('q');
-  var utils = require('../shared/utils.js');
+  var utils = require('../include/utils.js');
   var _ = require('lodash');
 
   module.exports = {

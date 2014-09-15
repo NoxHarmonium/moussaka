@@ -2,7 +2,7 @@
   'use strict';
 
   var _ = require('lodash');
-  var utils = require('./utils.js');
+  var utils = require('../include/utils.js');
 
   // Alias for self reference
   var self = module.exports;

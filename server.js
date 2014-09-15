@@ -27,19 +27,19 @@
      * Module dependencies.
      */
 
-    var config = require('./shared/config.js');
+    var config = require('./include/config');
     var express = require('express');
-    var userApi = require('./server/userApi.js');
-    var projectApi = require('./server/projectApi.js');
-    var profileApi = require('./server/profileApi.js');
-    var deviceApi = require('./server/deviceApi.js');
+    var userApi = require('./api_modules/userApi.js');
+    var projectApi = require('./api_modules/projectApi.js');
+    var profileApi = require('./api_modules/profileApi.js');
+    var deviceApi = require('./api_modules/deviceApi.js');
     var http = require('http');
     var path = require('path');
     var colors = require('colors');
     var passport = require('passport');
-    var auth = require('./server/auth.js');
-    var dbAccess = require('./server/dbAccess');
-    var utils = require('./shared/utils');
+    var auth = require('./api_modules/auth.js');
+    var dbAccess = require('./include/dbAccess');
+    var utils = require('./include/utils');
 
     /**
      * Main application
@@ -191,7 +191,7 @@
       res.render('partials/createAccount');
     });
 
-    app.get('/views/partials/listProjects', function (req, res) {
+     app.get('/views/partials/listProjects', function (req, res) {
       res.render('partials/listProjects');
     });
 

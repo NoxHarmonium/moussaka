@@ -1,8 +1,8 @@
 (function (require, describe, it) {
   'use strict';
-  var utils = require('../src/shared/utils.js');
+  var utils = require('../include/utils.js');
   var expect = require('expect.js');
-  var controls = require('../src/shared/controls.js');
+  var controls = require('../shared/controls.js');
   var _ = require('lodash');
 
   describe('Numeric control', function () {
