@@ -42,7 +42,7 @@ var paths = {
 };
 
 gulp.task('less', function () {
-  return gulp.src(lessSrc, { base: './' })
+  return gulp.src(paths.lessSrc, { base: './' })
     .pipe(less())
     .pipe(gulp.dest('./public/css'));
 });
