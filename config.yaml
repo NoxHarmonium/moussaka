@@ -49,6 +49,11 @@ default: # The default config profile. (With documentation)
         from:       "forgotpassword@unity-profiles.test"
         fake_smtp:  false
 
+    # Settings to do with code generation (less/browserify etc.) and minification
+    code_generation:
+        browserify:
+            debug: true
+
 
 
 development: # The development config profile.
@@ -69,6 +74,9 @@ development: # The development config profile.
         ssl:        false
         from:       "forgotpassword@unity-profiles.test"
         fake_smtp:  true
+    code_generation:
+        browserify:
+            debug: true
 
 travis-ci: # The development config profile.
     listen_port:            3000
@@ -88,4 +96,7 @@ travis-ci: # The development config profile.
         ssl:        false
         from:       "forgotpassword@unity-profiles.test"
         fake_smtp:  true
+    code_generation:
+        browserify:
+            debug: true
 

@@ -33,6 +33,7 @@
     "gulp-browserify": "^0.5.0",
     "gulp-cached": "*",
     "gulp-changed": "*",
+    "gulp-concat": "^2.4.0",
     "gulp-istanbul": "*",
     "gulp-jsbeautifier": "*",
     "gulp-jshint": "*",

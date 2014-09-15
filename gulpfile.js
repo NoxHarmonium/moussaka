@@ -8,7 +8,9 @@ var gulp = require('gulp'),
   changed = require('gulp-changed'),
   cache = require('gulp-cached'),
   browserify = require('gulp-browserify'),
-  less = require('gulp-less');
+  less = require('gulp-less'),
+  config = require('./src/shared/config.js'),
+  concat = require('gulp-concat');
 
 var isWatching = false;
 
@@ -33,7 +35,7 @@ var paths = {
     'src/client/authModule.js', 
     'src/client/dashboardModule.js'
   ],
-  browserifyDest: 'public/js/bundle.js',
+  browserifyDest: 'public/js/',
   lessSrc: [ 
     'public/less/kube.less',
     'public/less/auth.less',
@@ -48,13 +50,13 @@ gulp.task('less', function () {
 });
 
 gulp.task('browserify', function() {
-    return gulp.src(paths.browserifySrc, {
-      base: './'
-    })
+    var debug = config.code_generation.browserify.debug;
+    return gulp.src(paths.browserifySrc)
         .pipe(browserify({
           insertGlobals : true,
-          debug : !gulp.env.production
+          debug : debug
         }))
+        .pipe(concat('bundle.js'))
         .pipe(gulp.dest(paths.browserifyDest));
 });
 
@@ -101,6 +103,11 @@ gulp.task('watch', function () {
 
 gulp.task('default', ['jshint', 'prettify', 'browserify', ]);
 
+// Hack to stop gulp from hanging after mocha test
+// Follow:
+// https://github.com/gulpjs/gulp/issues/167
+// https://github.com/sindresorhus/gulp-mocha/issues/1
+// https://github.com/sindresorhus/gulp-mocha/issues/54
 gulp.on('stop', function () {
   if (!isWatching) {
     process.nextTick(function () {
