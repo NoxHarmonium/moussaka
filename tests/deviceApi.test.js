@@ -32,15 +32,6 @@
     var tempStore = {};
     var chance = new Chance();
 
-    it('Start server', function (done) {
-      serverModule.start(function (e, server) {
-        expect(e)
-          .to.eql(null);
-
-        done();
-      });
-    });
-
     it('Reset devices test', function (done) {
       agent.get('http://localhost:3000/test/device_api/reset/')
         .end(function (e, res) {
@@ -319,7 +310,8 @@
         });
     });
 
-    it('Check device [0] has been added to invalid project', function (done) {
+    it('Check device [0] has been added to invalid project', function (
+      done) {
       var device = devices[0];
 
       agent.get('http://localhost:3000/projects/' +
@@ -357,21 +349,22 @@
         });
     });
 
-    it('Check devices are listing correctly from invalid project', function (
-      done) {
-      var device = devices[0];
+    it('Check devices are listing correctly from invalid project',
+      function (
+        done) {
+        var device = devices[0];
 
-      agent.get('http://localhost:3000/projects/' +
-        '000000000000000000000000' + '/devices/')
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.status)
-            .to.be(404);
+        agent.get('http://localhost:3000/projects/' +
+          '000000000000000000000000' + '/devices/')
+          .end(function (e, res) {
+            expect(e)
+              .to.eql(null);
+            expect(res.status)
+              .to.be(404);
 
-          done();
-        });
-    });
+            done();
+          });
+      });
 
     it('Check devices are listing correctly', function (done) {
       var device = devices[0];
@@ -403,7 +396,8 @@
     });
 
     it(
-      'Disconnect device [0] to server under project [0] with invalid project',
+      'Disconnect device [0] to server under project [0] ' +
+      'with invalid project',
       function (done) {
         var user = users[2];
         var apiKey = user.apiKey;
@@ -423,7 +417,8 @@
           });
       });
 
-    it('Disconnect device [0] to server under project [0]', function (done) {
+    it('Disconnect device [0] to server under project [0]', function (
+      done) {
       var user = users[2];
       var apiKey = user.apiKey;
       var device = devices[0];
@@ -441,7 +436,8 @@
         });
     });
 
-    it('Disconnect device [0] to server under project [0] after removal',
+    it(
+      'Disconnect device [0] to server under project [0] after removal',
       function (done) {
         var user = users[2];
         var apiKey = user.apiKey;
@@ -460,7 +456,8 @@
           });
       });
 
-    it('Check device [0] has been removed from project [0]', function (done) {
+    it('Check device [0] has been removed from project [0]', function (
+      done) {
       var device = devices[0];
 
       agent.get('http://localhost:3000/projects/' +
@@ -503,7 +500,8 @@
         });
     });
 
-    it('Reconnect device [0] to server under project [0]', function (done) {
+    it('Reconnect device [0] to server under project [0]', function (
+      done) {
       var user = users[2];
       var apiKey = user.apiKey;
       var project = projects[0];
@@ -588,24 +586,25 @@
         });
     });
 
-    it('Start session for device [0] with user [2] without login', function (
-      done) {
-      var project = projects[0];
-      var device = devices[0];
+    it('Start session for device [0] with user [2] without login',
+      function (
+        done) {
+        var project = projects[0];
+        var device = devices[0];
 
-      agent.put('http://localhost:3000/projects/' +
-        device.projectId + '/sessions/' + device.macAddress + '/')
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.ok)
-            .to.be(false);
-          expect(res.status)
-            .to.be(401);
+        agent.put('http://localhost:3000/projects/' +
+          device.projectId + '/sessions/' + device.macAddress + '/')
+          .end(function (e, res) {
+            expect(e)
+              .to.eql(null);
+            expect(res.ok)
+              .to.be(false);
+            expect(res.status)
+              .to.be(401);
 
-          done();
-        });
-    });
+            done();
+          });
+      });
 
     it('Login user [2]', function (done) {
       agent.post('http://localhost:3000/login/')
@@ -619,13 +618,15 @@
         });
     });
 
-    it('Start session for device [0] with user [2] with invalid project id',
+    it(
+      'Start session for device [0] with user [2] with invalid project id',
       function (done) {
         var project = projects[0];
         var device = devices[0];
 
         agent.put('http://localhost:3000/projects/' +
-          '0000000000000000000' + '/sessions/' + device.macAddress + '/')
+          '0000000000000000000' + '/sessions/' + device.macAddress +
+          '/')
           .end(function (e, res) {
             expect(e)
               .to.eql(null);
@@ -692,24 +693,25 @@
         });
     });
 
-    it('Start conflicting session for device [0] with user [2]', function (
-      done) {
-      var project = projects[0];
-      var device = devices[0];
+    it('Start conflicting session for device [0] with user [2]',
+      function (
+        done) {
+        var project = projects[0];
+        var device = devices[0];
 
-      agent.put('http://localhost:3000/projects/' +
-        device.projectId + '/sessions/' + device.macAddress + '/')
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.ok)
-            .to.be(false);
-          expect(res.status)
-            .to.be(409);
+        agent.put('http://localhost:3000/projects/' +
+          device.projectId + '/sessions/' + device.macAddress + '/')
+          .end(function (e, res) {
+            expect(e)
+              .to.eql(null);
+            expect(res.ok)
+              .to.be(false);
+            expect(res.status)
+              .to.be(409);
 
-          done();
-        });
-    });
+            done();
+          });
+      });
 
     it('Logout user [1]', function (done) {
       agent.get('http://localhost:3000/logout/')
@@ -919,7 +921,8 @@
         });
     });
 
-    it('Check device [0] updates with incorrect API key', function (done) {
+    it('Check device [0] updates with incorrect API key', function (
+      done) {
       var user = users[2];
       var apiKey = '00000000-0000-0000-0000-000000000000';
       var device = devices[0];
@@ -964,27 +967,28 @@
         });
     });
 
-    it('Check device [0] updates have been cleared after read', function (
-      done) {
-      var user = users[2];
-      var apiKey = user.apiKey;
-      var device = devices[0];
+    it('Check device [0] updates have been cleared after read',
+      function (
+        done) {
+        var user = users[2];
+        var apiKey = user.apiKey;
+        var device = devices[0];
 
-      deviceAgent.get('http://localhost:3000/projects/' +
-        device.projectId + '/sessions/' + device.macAddress +
-        '/updates/')
-        .set('apikey', apiKey)
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.ok)
-            .to.be.ok();
-          expect(res.body.length)
-            .to.be(0);
+        deviceAgent.get('http://localhost:3000/projects/' +
+          device.projectId + '/sessions/' + device.macAddress +
+          '/updates/')
+          .set('apikey', apiKey)
+          .end(function (e, res) {
+            expect(e)
+              .to.eql(null);
+            expect(res.ok)
+              .to.be.ok();
+            expect(res.body.length)
+              .to.be(0);
 
-          done();
-        });
-    });
+            done();
+          });
+      });
 
     it('Send invalid control update to device [0]', function (
       done) {
@@ -1218,13 +1222,15 @@
         });
     });
 
-    it('Stop session for device [0] with user [2] with invalid project id',
+    it(
+      'Stop session for device [0] with user [2] with invalid project id',
       function (done) {
         var project = projects[0];
         var device = devices[0];
 
         agent.del('http://localhost:3000/projects/' +
-          '0000000000000000000' + '/sessions/' + device.macAddress + '/')
+          '0000000000000000000' + '/sessions/' + device.macAddress +
+          '/')
           .end(function (e, res) {
             expect(e)
               .to.eql(null);
@@ -1267,36 +1273,37 @@
         });
     });
 
-    it('Send valid control update to device [0] without session', function (
-      done) {
-      var project = projects[0];
-      var device = devices[0];
+    it('Send valid control update to device [0] without session',
+      function (
+        done) {
+        var project = projects[0];
+        var device = devices[0];
 
-      sentUpdates = [{
-        'rotateSpeed': {
-          // Schema not needed, only values
-          //type: 'float',
-          //min: 0,
-          //max: 100,
-          values: {
-            n: 6
+        sentUpdates = [{
+          'rotateSpeed': {
+            // Schema not needed, only values
+            //type: 'float',
+            //min: 0,
+            //max: 100,
+            values: {
+              n: 6
+            }
           }
-        }
-      }];
+        }];
 
-      agent.post('http://localhost:3000/projects/' +
-        device.projectId + '/sessions/' + device.macAddress +
-        '/updates/')
-        .send(sentUpdates[0])
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.status)
-            .to.be(401);
+        agent.post('http://localhost:3000/projects/' +
+          device.projectId + '/sessions/' + device.macAddress +
+          '/updates/')
+          .send(sentUpdates[0])
+          .end(function (e, res) {
+            expect(e)
+              .to.eql(null);
+            expect(res.status)
+              .to.be(401);
 
-          done();
-        });
-    });
+            done();
+          });
+      });
 
     it('Check device [0] updates', function (done) {
       var user = users[2];

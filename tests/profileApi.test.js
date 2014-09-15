@@ -18,7 +18,6 @@
       .padLeft(3, '0');
   };
 
-
   describe('Project API tests', function () {
     var id;
     var users = testData.getTestUsers();
@@ -28,16 +27,6 @@
     var project = null;
     var profileId = null;
     var device = null;
-
-
-    it('Start server', function (done) {
-      serverModule.start(function (e, server) {
-        expect(e)
-          .to.eql(null);
-
-        done();
-      });
-    });
 
     it('Reset profiles test', function (done) {
       agent.get('http://localhost:3000/test/profile_api/reset/')
@@ -93,7 +82,8 @@
         });
     });
 
-    it('Save current session as profile [0] without device ID query string',
+    it(
+      'Save current session as profile [0] without device ID query string',
       function (done) {
         var data = {
           profileName: 'test profile 1'
@@ -135,7 +125,8 @@
           });
       });
 
-    it('Save current session as profile [0] with no name', function (done) {
+    it('Save current session as profile [0] with no name', function (
+      done) {
       var data = {};
 
       agent.put('http://localhost:3000/projects/' +

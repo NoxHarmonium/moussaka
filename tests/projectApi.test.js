@@ -24,15 +24,6 @@
     var projects = testData.getTestProjects();
     var agent = superagent.agent();
 
-    it('Start server', function (done) {
-      serverModule.start(function (e, server) {
-        expect(e)
-          .to.eql(null);
-
-        done();
-      });
-    });
-
     it('Reset users test', function (done) {
       agent.get('http://localhost:3000/test/user_api/reset/')
         .end(function (e, res) {
@@ -44,8 +35,20 @@
         });
     });
 
+    it('Reset projects test', function (done) {
+      agent.get('http://localhost:3000/test/project_api/reset/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+          done();
+        });
+    });
+
     it('Create user [0]', function (done) {
-      agent.put('http://localhost:3000/users/' + users[0].username + '/')
+      agent.put('http://localhost:3000/users/' + users[0].username +
+        '/')
         .send(users[0])
         .end(function (e, res) {
           expect(e)
@@ -57,7 +60,8 @@
     });
 
     it('Create user [1]', function (done) {
-      agent.put('http://localhost:3000/users/' + users[1].username + '/')
+      agent.put('http://localhost:3000/users/' + users[1].username +
+        '/')
         .send(users[1])
         .end(function (e, res) {
           expect(e)
@@ -69,7 +73,8 @@
     });
 
     it('Create user [2]', function (done) {
-      agent.put('http://localhost:3000/users/' + users[2].username + '/')
+      agent.put('http://localhost:3000/users/' + users[2].username +
+        '/')
         .send(users[2])
         .end(function (e, res) {
           expect(e)
@@ -81,7 +86,8 @@
     });
 
     it('Create user [3]', function (done) {
-      agent.put('http://localhost:3000/users/' + users[3].username + '/')
+      agent.put('http://localhost:3000/users/' + users[3].username +
+        '/')
         .send(users[3])
         .end(function (e, res) {
           expect(e)
@@ -157,7 +163,8 @@
         });
     });
 
-    it('Add user [1] as admin to project [0] before login', function (done) {
+    it('Add user [1] as admin to project [0] before login', function (
+      done) {
       var project = projects[0];
       var user = users[1];
 
@@ -187,21 +194,22 @@
         });
     });
 
-    it('Remove user [1] as admin from project [0] before login', function (
-      done) {
-      var project = projects[0];
-      var user = users[1];
+    it('Remove user [1] as admin from project [0] before login',
+      function (
+        done) {
+        var project = projects[0];
+        var user = users[1];
 
-      agent.del('http://localhost:3000/projects/' + project._id +
-        '/admins/' + user.username + '/')
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.status)
-            .to.be(401);
-          done();
-        });
-    });
+        agent.del('http://localhost:3000/projects/' + project._id +
+          '/admins/' + user.username + '/')
+          .end(function (e, res) {
+            expect(e)
+              .to.eql(null);
+            expect(res.status)
+              .to.be(401);
+            done();
+          });
+      });
 
     it('Login user [2]', function (done) {
       agent.post('http://localhost:3000/login/')
@@ -1024,7 +1032,8 @@
         });
     });
 
-    it('Add user [1] as admin to project [0] (duplicate)', function (done) {
+    it('Add user [1] as admin to project [0] (duplicate)', function (
+      done) {
       var project = projects[0];
       var user = users[1];
 
@@ -1113,22 +1122,23 @@
         });
     });
 
-    it('Remove user [3] (non-admin) as admin from project [0]', function (
-      done) {
-      var project = projects[0];
-      var user = users[3];
+    it('Remove user [3] (non-admin) as admin from project [0]',
+      function (
+        done) {
+        var project = projects[0];
+        var user = users[3];
 
-      agent.del('http://localhost:3000/projects/' + project._id +
-        '/admins/' + user.username + '/')
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.status)
-            .to.be(404);
+        agent.del('http://localhost:3000/projects/' + project._id +
+          '/admins/' + user.username + '/')
+          .end(function (e, res) {
+            expect(e)
+              .to.eql(null);
+            expect(res.status)
+              .to.be(404);
 
-          done();
-        });
-    });
+            done();
+          });
+      });
 
     it('Remove user [1] as admin from project [0]', function (done) {
       var project = projects[0];
@@ -1235,7 +1245,8 @@
         });
     });
 
-    it('Get existing project [0] after removal succeeded', function (done) {
+    it('Get existing project [0] after removal succeeded', function (
+      done) {
       var project = projects[0];
 
       agent.get('http://localhost:3000/projects/' + project._id + '/')

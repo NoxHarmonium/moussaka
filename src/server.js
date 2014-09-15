@@ -195,14 +195,25 @@
       res.render('partials/listProjects');
     });
 
-    serverModule.server = http.createServer(app)
-      .listen(app.get('port'), function () {
-        console.log('Express server listening on port ' + app.get('port')
-          .toString()
-          .blue);
-        serverModule.started = true;
-        next(null, serverModule.server);
+    var server = http.createServer(app);
+
+    server.listen(app.get('port'), function () {
+      console.log('Express server listening on port ' + app.get('port')
+        .toString()
+        .blue);
+      serverModule.started = true;
+      next(null, serverModule.server);
+    });
+
+    serverModule.server = server;
+  };
+
+  serverModule.stop = function () {
+    if (serverModule.started) {
+      serverModule.server.close(function () {
+        serverModule.started = false;
       });
+    }
   };
 
   module.exports = serverModule;
