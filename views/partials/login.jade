@@ -1,17 +1,17 @@
 div.viewContainer
 
     div(class="loginbox") 
-        h1.text-centered UNITY PROFILES
+        h1.text-centered= t("app.name").toUpperCase()
 
-        h4.text-centered LOGIN BELOW
+        h4.text-centered= t("app.loginForm.subtitle").toUpperCase()
 
         form(method="post" action="" class="forms")
-            label Email
+            label= t("app.sharedForm.email")
                 div.input-groups
                     input(type="email" name="user-email" class="width-100" ng-model="username" ngDisabled="loading")
                     span.input-append
                         i(class="fa fa-user")
-            label Password
+            label= t("app.sharedForm.password")
                 div.input-groups
                     input(type="password" name="user-password" class="width-100" ng-model="password" ngDisabled="loading")
                     span.input-append   
@@ -25,7 +25,8 @@ div.viewContainer
                 
 
             p
-                button.btn-blue.width-100(ng-click="formLogin()" ngDisabled="loading") Log in &nbsp; 
+                button.btn-blue.width-100(ng-click="formLogin()" ngDisabled="loading")= t("app.loginForm.login") 
+                    span &nbsp; 
                     i.fa.fa-refresh.fa-spin.ng-hide(ng-hide="!loading")
 
         hr
@@ -33,8 +34,8 @@ div.viewContainer
         div.units-row.text-centered 
             div.unit-50
                 a(href="#/createAccount")
-                    button.btn.width-100 Create account
+                    button.btn.width-100= t("app.loginForm.createAccount")
             div.unit-50
-                button.btn.width-100 Forgot password?
+                button.btn.width-100= t("app.loginForm.forgotPassword")
 
 

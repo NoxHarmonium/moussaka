@@ -9,6 +9,9 @@ default: # The default config profile. (With documentation)
     # The port that the API listens for requests on
     listen_port:            80
 
+    # The locale that application will run with (eg. en-US)
+    locale:                 "en-US"
+
     # How much work it takes to hash the passwords stored in the database.
     # For testing and development you can set it to something low but in production you
     # would want to set it to a value that makes it as hard a possible for someone to crack
@@ -58,6 +61,7 @@ default: # The default config profile. (With documentation)
 
 development: # The development config profile.
     listen_port:            3000
+    locale:                 "en-US"
     salt_work_factor:       3
     mongo_url:              "mongodb://localhost/unity-profiles-dev"
     enable_test_exts:       true
@@ -80,6 +84,7 @@ development: # The development config profile.
 
 travis-ci: # The development config profile.
     listen_port:            3000
+    locale:                 "en-US"
     salt_work_factor:       1 # Reduce the work factor even more for slower VMs
     mongo_url:              "mongodb://localhost/unity-profiles-dev"
     enable_test_exts:       true 

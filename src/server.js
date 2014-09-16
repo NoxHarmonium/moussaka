@@ -40,16 +40,27 @@
     var auth = require('./server/auth.js');
     var dbAccess = require('./server/dbAccess');
     var utils = require('./shared/utils');
+    var i18n = require('i18next');
 
     /**
      * Main application
      */
 
+    i18n.init({
+      ns: { namespaces: ['ns.app'], defaultNs: 'ns.app'},
+      resSetPath: 'locales/__lng__/new.__ns__.json',
+      saveMissing: true,
+      debug: true,
+      sendMissingTo: 'fallback',
+      supportedLngs: 'en-US',
+      lng: config.locale 
+    });
+
     var app = express();
 
     // all environments
     app.set('port', config.listen_port || process.env.PORT || 3000);
-    app.set('views', __dirname + '/views');
+    app.set('views', path.join(__dirname, '../views'));
     app.set('view engine', 'jade');
     app.use(express.favicon());
     app.use(express.logger('dev'));
@@ -67,10 +78,9 @@
     // login (i.e. browser)
     app.use(auth.apiKeyAuthoriser);
 
+    app.use(i18n.handle);
     app.use(app.router);
-    app.use(require('stylus')
-      .middleware(__dirname + '/public'));
-    app.use(express.static(path.join(__dirname, 'public')));
+    app.use(express.static(path.join(__dirname, '../public')));
 
     // development only
     if (config.show_friendly_errors) {
@@ -86,7 +96,7 @@
       }
     });
 
-
+    i18n.registerAppHelper(app);
 
     //
     // User API
