@@ -57,7 +57,7 @@
     "url": "https://github.com/NoxHarmonium/unity-profiles.git"
   },
   "scripts": {
-    "start": "node app.js",
+    "start": "node src/app.js",
     "test": "grunt test",
     "coveralls": "./gencoverage.sh",
     "install": "napa"

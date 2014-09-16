@@ -3,7 +3,7 @@
 
   var mongoose = require('mongoose-q')();
   var colors = require('colors');
-  var config = require('./config');
+  var config = require('../shared/config.js');
 
   module.exports = {
     init: function (next) {

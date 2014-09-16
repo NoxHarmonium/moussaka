@@ -14,7 +14,7 @@
   var LocalAPIKeyStrategy = require('passport-localapikey-update')
     .Strategy;
 
-  var User = require('../schemas/user.js');
+  var User = require('./schemas/user.js');
 
   module.exports = {
     init: function (next) {
