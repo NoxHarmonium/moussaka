@@ -65,9 +65,9 @@ gulp.task('prettify', ['jshint'], function () {
     .pipe(gulp.dest('./'));
 });
 
-gulp.task('less', ['jshint'], function () {
+gulp.task('less', function () {
   return gulp.src(paths.lessSrc, {
-      base: './'
+      base: './public/less/'
     })
     .pipe(cache('less'))
     .pipe(less())
