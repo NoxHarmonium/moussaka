@@ -27,8 +27,6 @@
     "cheerio": "*",
     "coveralls": "*",
     "expect.js": "*",
-    "grunt-browserify": "^3.0.0",
-    "grunt-contrib-watch": "^0.6.1",
     "gulp": "*",
     "gulp-browserify": "^0.5.0",
     "gulp-cached": "*",

@@ -32,36 +32,17 @@ var paths = {
     'tests/profileApi.test.js'
   ],
   browserifySrc: [
-    'src/client/authModule.js', 
+    'src/client/authModule.js',
     'src/client/dashboardModule.js'
   ],
   browserifyDest: 'public/js/',
   lessDir: 'public/less/**/*.less',
-  lessSrc: [ 
+  lessSrc: [
     'public/less/kube.less',
     'public/less/auth.less',
     'public/less/dashboard.less'
   ]
 };
-
-gulp.task('less', function () {
-  return gulp.src(paths.lessSrc, { base: './' })
-    .pipe(cache('less'))
-    .pipe(less())
-    .pipe(gulp.dest('./public/css'));
-});
-
-gulp.task('browserify', function() {
-    var debug = config.code_generation.browserify.debug;
-    return gulp.src(paths.browserifySrc)
-        .pipe(cache('browserify'))
-        .pipe(browserify({
-          insertGlobals : true,
-          debug : debug
-        }))
-        .pipe(concat('bundle.js'))
-        .pipe(gulp.dest(paths.browserifyDest));
-});
 
 gulp.task('jshint', function () {
   return gulp.src(paths.scripts, {
@@ -73,7 +54,7 @@ gulp.task('jshint', function () {
     .pipe(jshint.reporter('fail'));
 });
 
-gulp.task('prettify', function () {
+gulp.task('prettify', ['jshint'], function () {
   return gulp.src(paths.scripts, {
       base: './'
     })
@@ -84,7 +65,28 @@ gulp.task('prettify', function () {
     .pipe(gulp.dest('./'));
 });
 
-gulp.task('test', function () {
+gulp.task('less', ['jshint'], function () {
+  return gulp.src(paths.lessSrc, {
+      base: './'
+    })
+    .pipe(cache('less'))
+    .pipe(less())
+    .pipe(gulp.dest('./public/css'));
+});
+
+gulp.task('browserify', ['jshint'], function () {
+  var debug = config.code_generation.browserify.debug;
+  return gulp.src(paths.browserifySrc)
+    .pipe(cache('browserify'))
+    .pipe(browserify({
+      insertGlobals: true,
+      debug: debug
+    }))
+    .pipe(concat('bundle.js'))
+    .pipe(gulp.dest(paths.browserifyDest));
+});
+
+gulp.task('test', ['compile'], function () {
   return gulp.src(paths.tests, {
       read: false
     })
@@ -94,19 +96,17 @@ gulp.task('test', function () {
       colors: true,
       timeout: 30000
     }));
-
 });
-
 
 gulp.task('watch', function () {
   isWatching = true;
-  gulp.watch(paths.scripts, ['jshint', 'browserify']);
+  gulp.watch(paths.scripts, ['browserify', 'prettify']);
   gulp.watch(paths.lessDir, ['less']);
 });
 
-gulp.task('compile', ['jshint', 'browserify', 'less' ]);
-
-gulp.task('default', ['jshint', 'prettify', 'browserify', 'less', 'test' ]);
+gulp.task('default', ['test']);
+gulp.task('compile', ['browserify', 'less']);
+gulp.task('all', ['test', 'prettify']);
 
 // Hack to stop gulp from hanging after mocha test
 // Follow:

@@ -13,5 +13,5 @@ install:
   - npm install -g gulp
 
 script: 
-    - gulp all # Run the tests
+    - gulp test # Run linting, compliation and tests
     - npm run coveralls # Upload coverage
