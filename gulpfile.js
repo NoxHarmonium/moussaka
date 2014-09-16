@@ -36,6 +36,7 @@ var paths = {
     'src/client/dashboardModule.js'
   ],
   browserifyDest: 'public/js/',
+  lessDir: 'public/less/**/*.less',
   lessSrc: [ 
     'public/less/kube.less',
     'public/less/auth.less',
@@ -45,6 +46,7 @@ var paths = {
 
 gulp.task('less', function () {
   return gulp.src(paths.lessSrc, { base: './' })
+    .pipe(cache('less'))
     .pipe(less())
     .pipe(gulp.dest('./public/css'));
 });
@@ -52,6 +54,7 @@ gulp.task('less', function () {
 gulp.task('browserify', function() {
     var debug = config.code_generation.browserify.debug;
     return gulp.src(paths.browserifySrc)
+        .pipe(cache('browserify'))
         .pipe(browserify({
           insertGlobals : true,
           debug : debug
@@ -74,7 +77,6 @@ gulp.task('prettify', function () {
   return gulp.src(paths.scripts, {
       base: './'
     })
-    .pipe(cache('format-js'))
     .pipe(prettify({
       config: '.jsbeautifyrc',
       mode: 'VERIFY_AND_WRITE'
@@ -98,10 +100,13 @@ gulp.task('test', function () {
 
 gulp.task('watch', function () {
   isWatching = true;
-  gulp.watch(paths.scripts, ['jshint']);
+  gulp.watch(paths.scripts, ['jshint', 'browserify']);
+  gulp.watch(paths.lessDir, ['less']);
 });
 
-gulp.task('default', ['jshint', 'prettify', 'browserify', ]);
+gulp.task('compile', ['jshint', 'browserify', 'less' ]);
+
+gulp.task('default', ['jshint', 'prettify', 'browserify', 'less', 'test' ]);
 
 // Hack to stop gulp from hanging after mocha test
 // Follow:
