@@ -9,8 +9,9 @@ node_js:
 services: mongodb
 
 install: 
-  - npm install
   - npm install -g gulp
+  - npm install -g napa
+  - npm install
 
 script: 
     - gulp test # Run linting, compliation and tests
