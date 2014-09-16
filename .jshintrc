@@ -1,0 +1,27 @@
+{
+    "bitwise": true,
+    "curly": true,
+    "eqeqeq": true,
+    "immed": true,
+    "indent": 2,
+    "latedef": true,
+    "newcap": true,
+    "noarg": true,
+    "nonew": true,
+    "quotmark": "single",
+    "undef": true,
+    "unused": false,
+    "strict": true,
+    "globalstrict": false,
+    "trailing": true,
+    "maxlen": 80,
+    "globals": {
+      "describe": true, // mocha
+      "before": true, // mocha
+      "after": true, // mocha
+      "it": true, // mocha
+      "angular": true //angular
+    },
+    "node": true,
+    "devel": true
+}

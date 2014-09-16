@@ -1,8 +1,6 @@
 language: node_js
 
 before_install:
-  - gem install sass
-  - gem install compass
   - gem install coveralls
 
 node_js:
@@ -12,8 +10,8 @@ services: mongodb
 
 install: 
   - npm install
-  - npm install -g grunt-cli
+  - npm install -g gulp
 
 script: 
-    - grunt all # Run the tests
+    - gulp test # Run linting, compliation and tests
     - npm run coveralls # Upload coverage
