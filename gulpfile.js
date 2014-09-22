@@ -100,7 +100,6 @@ gulp.task('less', function () {
 
 gulp.task('browserify', ['jshint'], function () {
   return gulp.src(paths.browserifySrc)
-    .pipe(cache('browserify'))
     .pipe(browserify(browserifyOptions))
     .pipe(concat('bundle.js'))
     .pipe(gulp.dest(paths.browserifyDest));
