@@ -1,8 +1,8 @@
 (function (module, require) {
-    'use strict';
+  'use strict';
 
-    module.exports = function ($scope, Projects) {
-        $scope.projects = Projects;
-    };
+  module.exports = function ($scope, Projects) {
+    $scope.projects = Projects.query();
+  };
 
 })(module, require);

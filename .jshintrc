@@ -20,7 +20,8 @@
       "before": true, // mocha
       "after": true, // mocha
       "it": true, // mocha
-      "angular": true //angular
+      "angular": true, //angular
+      "window": true //browserify scripts
     },
     "node": true,
     "devel": true
