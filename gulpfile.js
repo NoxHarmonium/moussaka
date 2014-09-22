@@ -32,8 +32,7 @@ var paths = {
     'tests/profileApi.test.js'
   ],
   browserifySrc: [
-    'src/client/authModule.js',
-    'src/client/dashboardModule.js'
+    'src/client/app.js',
   ],
   browserifyDest: 'public/js/',
   lessDir: 'public/less/**/*.less',
@@ -42,6 +41,31 @@ var paths = {
     'public/less/auth.less',
     'public/less/dashboard.less'
   ]
+};
+
+var browserifyOptions = {
+  insertGlobals: true,
+  debug: config.code_generation.browserify.debug,
+  shim: {
+    'angular': {
+      path: './node_modules/angular/angular.js',
+      exports: 'angular'
+    },
+    'angular-route': {
+      path: './node_modules/angular-route/angular-route.js',
+      exports: 'ngRoute',
+      depends: {
+        angular: 'angular'
+      }
+    },
+    'angular-resource': {
+      path: './node_modules/angular-resource/angular-resource.js',
+      exports: 'ngResource',
+      depends: {
+        angular: 'angular'
+      }
+    }
+  }
 };
 
 gulp.task('jshint', function () {
@@ -75,13 +99,9 @@ gulp.task('less', function () {
 });
 
 gulp.task('browserify', ['jshint'], function () {
-  var debug = config.code_generation.browserify.debug;
   return gulp.src(paths.browserifySrc)
     .pipe(cache('browserify'))
-    .pipe(browserify({
-      insertGlobals: true,
-      debug: debug
-    }))
+    .pipe(browserify(browserifyOptions))
     .pipe(concat('bundle.js'))
     .pipe(gulp.dest(paths.browserifyDest));
 });
@@ -95,7 +115,8 @@ gulp.task('test', ['compile'], function () {
       bail: true,
       colors: true,
       timeout: 30000
-    }));
+    }))
+    .pipe(gulp.dest('./'));
 });
 
 gulp.task('watch', function () {
