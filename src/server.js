@@ -47,13 +47,16 @@
      */
 
     i18n.init({
-      ns: { namespaces: ['ns.app'], defaultNs: 'ns.app'},
+      ns: {
+        namespaces: ['ns.app'],
+        defaultNs: 'ns.app'
+      },
       resSetPath: 'locales/__lng__/new.__ns__.json',
       saveMissing: true,
-      debug: true,
+      debug: false, // Set to true for very verbose messages
       sendMissingTo: 'fallback',
       supportedLngs: 'en-US',
-      lng: config.locale 
+      lng: config.locale
     });
 
     var app = express();
