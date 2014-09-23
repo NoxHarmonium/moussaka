@@ -13,31 +13,49 @@
 @header-height: 50px;
 
 @side-bar-top: 30px;
+@side-bar-min-left: 10px;
 @side-bar-font: 'Open Sans', sans-serif;
 @side-bar-spacing: 25px;
+
+@body-fixed-margin-width: (@center-width + (@sidebar-width * 2) + (@side-bar-min-left * 2));
+@body-reduced-width: (@center-width + (@sidebar-width) + (@side-bar-min-left * 2));
+@body-width-mobile: 95%;
 
 @project-info-summary-size: @font-size-base * 0.8;
 
 @header-color: #8C8C90;
 
-
-@media (min-width: 767px) {
-    body {
-        background: url('/img/bg-fade.jpg') no-repeat center center fixed;
-    }   
-}
-
-
 .inline-block > * {
     display: inline-block;
 }
 
+body {
+    background: url('/img/bg-fade.jpg') no-repeat center center fixed;
+} 
 
 header.dashboard-header {
 
     height: @header-height;
     background-color: @header-color;
     width: 100%;
+
+    div.title {
+        overflow: hidden;
+        display: inline;
+
+        span {
+            font-family: @font-family-headings;
+            font-size: @font-size-h2-lg;
+            color: @color-headings;
+            float: left;
+            margin-left: 18px;
+            margin-top: 14px;
+        }
+
+        img {
+            float: left;
+        }
+    }
  
     div.nav-wrapper {
         width: @center-width;
@@ -78,7 +96,7 @@ div.dashboard-outer {
         margin-top: 0px;
         margin-left: auto;
         margin-right: auto;
-        width: 580px;
+        width: @center-width;
         padding: 50px;
         padding-top: 30px;
         background-color: #FFFFFF;
@@ -150,9 +168,10 @@ div.dashboard-sidebar-container {
     z-index: 1;
 
     div.dashboard-sidebar {
+        margin-left: auto;
+        position: static;
         float: left;
         width: @sidebar-width;
-        margin: auto;
         background-color:rgba(0,0,0,0);
         margin-top: @side-bar-top;
     }
@@ -182,6 +201,102 @@ div.dashboard-sidebar-container {
             font-weight: 600;
         }
     }
-
-
 }
+
+@media (min-width: 768px) and (max-width: @body-fixed-margin-width) {
+    header.dashboard-header {
+        div.nav-wrapper {
+            margin-left: @sidebar-width + 10px;
+        }
+    }
+
+    div.dashboard-outer {
+        div.dashboard-view {
+            margin-left: @sidebar-width + 10px;
+        }
+    }
+
+    div.dashboard-sidebar-container {
+        margin-left: 10px;
+    }
+}
+
+@media (max-width: @body-reduced-width) {
+    div.dashboard-outer {
+        div.dashboard-view {
+            width: (@center-width - 50px);
+        }
+    }
+}
+
+/*
+@media (min-width: 794px) and (max-width: 1010px) {
+    // Fix sidebar in place
+    div.dashboard-sidebar-container {
+        div.dashboard-sidebar {
+            position: fixed;
+            left: 10px;
+        }
+    }
+
+    header.dashboard-header {
+        div.nav-wrapper {
+            margin-left: 210px;
+        }
+    }
+}
+
+@media (min-width: 1010px) {
+    div.dashboard-outer {
+        div.dashboard-view {
+            margin-left: auto;
+        }
+    }
+}*/
+
+
+@media (max-width: 768px) {
+    body {
+        background: @color-bg;
+    } 
+
+    header.dashboard-header {
+        div.nav-wrapper {
+            margin: 0;
+        }
+    }
+
+    header.dashboard-header {
+        height: auto;
+
+        div.title {
+            display: block;
+        }
+    }
+
+    div.dashboard-outer {
+        div.dashboard-view {
+            width: @body-width-mobile;
+        }
+    }
+
+    div.dashboard-outer {
+        div.dashboard-view {
+            clear: left;
+        }
+    }
+
+    div.dashboard-sidebar-container {
+        width: 100%;
+        margin: 0;
+
+        div.dashboard-sidebar {
+            margin-left: @side-bar-spacing;
+            margin-bottom: @side-bar-spacing;
+            padding-right: @side-bar-spacing * 2;
+            float: none;
+            width: 100%;
+        }
+    }
+}
+

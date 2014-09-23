@@ -1,6 +1,7 @@
 div.viewContainer
 
     div(class="loginbox") 
+        img.title(src='/img/logo-s.png' alt= t("app.altTags.applicationLogo"))
         h1.text-centered= t("app.name").toUpperCase()
 
         h4.text-centered= t("app.loginForm.subtitle").toUpperCase()
@@ -14,7 +15,7 @@ div.viewContainer
                         required
                         )
                     span.input-append
-                        i(class="fa fa-user")
+                        i(class="fa fa-at")
                 div.forms-desc.error(ng-show="emailFieldRequired()")  Email is required.
                 div.forms-desc.error(ng-show="emailFieldFormat()")  Email is in the wrong format.
             label= t("app.sharedForm.password")

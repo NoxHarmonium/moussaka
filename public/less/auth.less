@@ -13,8 +13,17 @@ body {
 
 
 div.loginbox {
-    background-color: #CFC6BC;
+    background-color: @color-bg;
     padding: 50px;
+
+    img.title {
+        float: left;
+        width: 50px;
+    }
+
+    h1 {
+        margin-top: 27px;
+    }
 }
 
 @media (min-width: 767px) {
@@ -28,6 +37,11 @@ div.loginbox {
         width: 475px;
 
         .border-radius(10px, 10px, 10px, 10px);
+
+        
+        img.title {
+            margin-left: 10px;
+        }
 
     }
 }

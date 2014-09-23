@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "Unity Profiles",
+    "name": "Moussaka",
     "dashboardTitle": "Dashboard",
 
     "nav": {
@@ -15,7 +15,7 @@
     },
 
     "loginForm": {
-        "subtitle": "Login Below",
+        "subtitle": "Game Prototyping System",
         "login": "Log in",
         "createAccount": "Create account",
         "forgotPassword": "Forgot password?"
@@ -35,6 +35,10 @@
     "actions": {
         "createProject": "Create Project",
         "help": "Help"
+    },
+
+    "altTags": {
+        "applicationLogo": "Application Logo"
     }
   }
 }
