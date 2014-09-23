@@ -1,7 +1,8 @@
-unity-profiles
+![Moussaka Logo](https://raw.githubusercontent.com/NoxHarmonium/unity-profiles/master/public/img/logo-s.png "Moussaka")
 ==============
+### Game Prototyping Framework
 
-### Version 0.1
+#### Version 0.1
 
 [![Build Status](https://travis-ci.org/NoxHarmonium/unity-profiles.png?branch=master)](https://travis-ci.org/NoxHarmonium/unity-profiles) [![Coverage Status](https://img.shields.io/coveralls/NoxHarmonium/unity-profiles.svg)](https://coveralls.io/r/NoxHarmonium/unity-profiles?branch=)
 
