@@ -1,4 +1,4 @@
-![Moussaka Logo](https://raw.githubusercontent.com/NoxHarmonium/unity-profiles/master/public/img/logo-s.png "Moussaka")
+![Moussaka Logo](https://raw.githubusercontent.com/NoxHarmonium/unity-profiles/master/public/img/logo-text.png "Moussaka")
 ==============
 ### Game Prototyping Framework
 
