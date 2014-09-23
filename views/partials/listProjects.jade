@@ -1,6 +1,6 @@
 #projects
     #projectRow.row
-        .noResults(ng-show='!projects')
+        .noResults(ng-show='!projects.length')
             p Looks like there are no projects here
         .project(ng-repeat="project in projects" ng-cloak)
             hr
