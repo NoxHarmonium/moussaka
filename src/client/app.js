@@ -17,7 +17,7 @@ var dashboardModule = angular.module('dashboardModule',
 
 dashboardModule.config(['$resourceProvider', function ($resourceProvider) {
   // Don't strip trailing slashes from calculated URLs
-  //$resourceProvider.defaults.stripTrailingSlashes = false;
+  $resourceProvider.defaults.stripTrailingSlashes = false;
 }]); 
 
 dashboardModule.factory('Projects', function ($resource) {
