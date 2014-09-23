@@ -5,17 +5,30 @@ div.viewContainer
 
         h4.text-centered= t("app.loginForm.subtitle").toUpperCase()
 
-        form(method="post" action="" class="forms")
+        form(method="post" ng-submit="formLogin()" class="forms" name="loginForm" novalidate)
             label= t("app.sharedForm.email")
                 div.input-groups
-                    input(type="email" name="user-email" class="width-100" ng-model="username" ngDisabled="loading")
+                    input(
+                        type="email" name="email" class="width-100" 
+                        ng-model="email" ng-Disabled="loading" 
+                        required
+                        )
                     span.input-append
                         i(class="fa fa-user")
+                div.forms-desc.error(ng-show="emailFieldRequired()")  Email is required.
+                div.forms-desc.error(ng-show="emailFieldFormat()")  Email is in the wrong format.
             label= t("app.sharedForm.password")
                 div.input-groups
-                    input(type="password" name="user-password" class="width-100" ng-model="password" ngDisabled="loading")
+                    input(
+                        type="password" name="password" class="width-100" 
+                        ng-model="password" ng-disabled="loading" 
+                        required
+                        )
                     span.input-append   
                         i(class="fa fa-lock")
+                div.forms-desc.error(ng-show="passwordFieldInvalid()") Password is required.
+
+
                 div.forms-desc.ng-hide(ng-hide="hideError")
                     span.error 
                         i.fa.fa-exclamation
@@ -25,7 +38,7 @@ div.viewContainer
                 
 
             p
-                button.btn-blue.width-100(ng-click="formLogin()" ngDisabled="loading")= t("app.loginForm.login") 
+                button.btn-blue.width-100(type="submit" ng-disabled="loading")= t("app.loginForm.login") 
                     span &nbsp; 
                     i.fa.fa-refresh.fa-spin.ng-hide(ng-hide="!loading")
 

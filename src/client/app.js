@@ -17,7 +17,7 @@ var dashboardModule = angular.module('dashboardModule',
 
 dashboardModule.config(['$resourceProvider', function ($resourceProvider) {
   // Don't strip trailing slashes from calculated URLs
-  $resourceProvider.defaults.stripTrailingSlashes = false;
+  //$resourceProvider.defaults.stripTrailingSlashes = false;
 }]); 
 
 dashboardModule.factory('Projects', function ($resource) {
@@ -38,8 +38,8 @@ dashboardModule.config(['$httpProvider', function($httpProvider) {
 // Auth Module
 
 var authModule = angular.module('authModule', ['ngRoute']);
-authModule.controller('loginController',
-  require('./controllers/loginController.js'));
+authModule.controller('loginController', ['$scope', '$http',
+  require('./controllers/loginController.js')]);
 authModule.controller('createAccountController',
   require('./controllers/createAccountController.js'));
 authModule.config(require('./config/authRoute.js')); 

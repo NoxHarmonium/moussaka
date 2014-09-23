@@ -4,7 +4,7 @@
     function ($routeProvider) {
       $routeProvider.
       when('/listProjects', {
-        templateUrl: 'partials/listProjects',
+        templateUrl: '/views/partials/listProjects',
         controller: 'listController'
       })
         .

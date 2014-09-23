@@ -1,9 +1,8 @@
 (function (module, require) {
   'use strict';
-  var userApi = require('../api/userApi.js');
 
   // createAccountController.js
-  module.exports = function ($scope) {
+  module.exports = function createAccountController($scope) {
     $scope.username = '';
     $scope.password = '';
     $scope.loading = false;
@@ -12,6 +11,7 @@
 
     $scope.formCreateAccount = function () {
       $scope.loading = true;
+      /*
       userApi.putUser({
         username: $scope.username,
         password: $scope.password
@@ -35,6 +35,7 @@
           $scope.$apply();
         })
         .done();
+        */
     };
   };
 })(module, require);

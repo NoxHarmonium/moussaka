@@ -1,7 +1,7 @@
 (function (module, require) {
   'use strict';
 
-  module.exports = function ($scope, Projects) {
+  module.exports = function projectsListController($scope, Projects) {
     $scope.projects = Projects.query();
   };
 
