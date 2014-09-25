@@ -27,19 +27,19 @@
      * Module dependencies.
      */
 
-    var config = require('./shared/config.js');
+    var config = require('../shared/config.js');
     var express = require('express');
-    var userApi = require('./server/userApi.js');
-    var projectApi = require('./server/projectApi.js');
-    var profileApi = require('./server/profileApi.js');
-    var deviceApi = require('./server/deviceApi.js');
+    var userApi = require('./userApi.js');
+    var projectApi = require('./projectApi.js');
+    var profileApi = require('./profileApi.js');
+    var deviceApi = require('./deviceApi.js');
     var http = require('http');
     var path = require('path');
     var colors = require('colors');
     var passport = require('passport');
-    var auth = require('./server/auth.js');
-    var dbAccess = require('./server/dbAccess');
-    var utils = require('./shared/utils');
+    var auth = require('./auth.js');
+    var dbAccess = require('./dbAccess');
+    var utils = require('../shared/utils');
     var i18n = require('i18next');
 
     /**

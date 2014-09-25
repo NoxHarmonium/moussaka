@@ -4,7 +4,7 @@
   var superagent = require('superagent');
   var expect = require('expect.js');
   var testData = require('./testData.js');
-  var serverModule = require('../src/server.js');
+  var serverModule = require('../src/server/server.js');
   var fakeSmtp = require('../src/server/fakeSmtp.js');
   var cheerio = require('cheerio');
   var colors = require('colors');

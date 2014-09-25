@@ -59,8 +59,8 @@
     "url": "https://github.com/NoxHarmonium/moussaka.git"
   },
   "scripts": {
-    "start": "node src/app.js",
-    "test": "grunt test",
+    "start": "node src/server/app.js",
+    "test": "gulp test",
     "coveralls": "./gencoverage.sh",
     "install": "napa"
   },

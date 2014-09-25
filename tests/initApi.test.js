@@ -1,7 +1,7 @@
 (function (require, describe, it, before, after) {
   'use strict';
 
-  var serverModule = require('../src/server.js');
+  var serverModule = require('../src/server/server.js');
   var expect = require('expect.js');
   var colors = require('colors');
 

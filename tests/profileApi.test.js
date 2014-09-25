@@ -5,7 +5,7 @@
   var expect = require('expect.js');
   var testData = require('./testData.js');
   var utils = require('../src/shared/utils.js');
-  var serverModule = require('../src/server.js');
+  var serverModule = require('../src/server/server.js');
   var config = require('../src/shared/config.js');
   var _ = require('lodash');
   var Q = require('q');

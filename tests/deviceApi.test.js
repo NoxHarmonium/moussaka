@@ -6,7 +6,7 @@
   var testData = require('./testData.js');
   var utils = require('../src/shared/utils.js');
   var config = require('../src/shared/config.js');
-  var serverModule = require('../src/server.js');
+  var serverModule = require('../src/server/server.js');
   var _ = require('lodash');
   var Q = require('q');
   var S = require('string');
