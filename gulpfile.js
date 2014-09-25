@@ -7,10 +7,12 @@ var gulp = require('gulp'),
   istanbul = require('gulp-istanbul'),
   changed = require('gulp-changed'),
   cache = require('gulp-cached'),
-  browserify = require('gulp-browserify'),
+  source = require('vinyl-source-stream'),
+  browserify = require('browserify'),
   less = require('gulp-less'),
   config = require('./src/shared/config.js'),
-  concat = require('gulp-concat');
+  concat = require('gulp-concat'),
+  browserifyShim = require('browserify-shim');
 
 var isWatching = false;
 
@@ -32,7 +34,7 @@ var paths = {
     'tests/profileApi.test.js'
   ],
   browserifySrc: [
-    'src/client/app.js',
+    './src/client/app.js',
   ],
   browserifyDest: 'public/js/',
   lessDir: 'public/less/**/*.less',
@@ -45,27 +47,7 @@ var paths = {
 
 var browserifyOptions = {
   insertGlobals: true,
-  debug: config.code_generation.browserify.debug,
-  shim: {
-    'angular': {
-      path: './node_modules/angular/angular.js',
-      exports: 'angular'
-    },
-    'angular-route': {
-      path: './node_modules/angular-route/angular-route.js',
-      exports: 'ngRoute',
-      depends: {
-        angular: 'angular'
-      }
-    },
-    'angular-resource': {
-      path: './node_modules/angular-resource/angular-resource.js',
-      exports: 'ngResource',
-      depends: {
-        angular: 'angular'
-      }
-    }
-  }
+  debug: config.code_generation.browserify.debug
 };
 
 gulp.task('jshint', function () {
@@ -99,9 +81,11 @@ gulp.task('less', function () {
 });
 
 gulp.task('browserify', ['jshint'], function () {
-  return gulp.src(paths.browserifySrc)
-    .pipe(browserify(browserifyOptions))
-    .pipe(concat('bundle.js'))
+  var b = browserify(browserifyOptions);
+  b.add(paths.browserifySrc);
+  b.transform(browserifyShim);
+  return b.bundle()
+    .pipe(source('bundle.js'))
     .pipe(gulp.dest(paths.browserifyDest));
 });
 
@@ -125,8 +109,8 @@ gulp.task('watch', function () {
 });
 
 gulp.task('default', ['test']);
-gulp.task('compile', ['browserify', 'less']);
-gulp.task('all', ['test', 'prettify']);
+gulp.task('compile', ['browserify', 'less', 'prettify']);
+gulp.task('all', ['test']);
 
 // Hack to stop gulp from hanging after mocha test
 // Follow:
