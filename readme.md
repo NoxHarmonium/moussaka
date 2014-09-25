@@ -3,7 +3,7 @@
 
 #### Version 0.1
 
-[![Build Status](https://travis-ci.org/NoxHarmonium/unity-profiles.png?branch=master)](https://travis-ci.org/NoxHarmonium/unity-profiles) [![Coverage Status](https://img.shields.io/coveralls/NoxHarmonium/unity-profiles.svg)](https://coveralls.io/r/NoxHarmonium/unity-profiles?branch=)
+[![Build Status](https://travis-ci.org/NoxHarmonium/moussaka.png?branch=master)](https://travis-ci.org/NoxHarmonium/moussaka) [![Coverage Status](https://img.shields.io/coveralls/NoxHarmonium/moussaka.svg)](https://coveralls.io/r/NoxHarmonium/moussaka?branch=)
 
 ## Summary
 
