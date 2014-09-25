@@ -5,12 +5,16 @@
       $routeProvider.
       when('/listProjects', {
         templateUrl: '/views/partials/listProjects',
-        controller: 'listController'
+        controller: 'projectsListController'
       })
         .
-      otherwise({
-        redirectTo: '/listProjects'
-      });
+      when('/editProject', {
+        templateUrl: '/views/partials/editProject',
+        controller: 'editProjectController'
+      })
+        .otherwise({
+          redirectTo: '/listProjects'
+        });
     }
   ];
 })(module, require);

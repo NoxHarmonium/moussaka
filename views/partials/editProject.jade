@@ -1,0 +1,23 @@
+#editProjects
+    form(method="post" ng-submit="saveProject()" class="forms" name="projectEditForm" novalidate)
+        label= t("app.projectEditForm.projectName")
+            div.input-groups.width-100
+                input(type="text" name="projectName" ng-model="projectName" 
+                    ng-Disabled="loading" required)
+        label= t("app.projectEditForm.projectDesc")
+            div.input-groups.width-100
+                textarea(rows="5" name="projectDesc" ng-model="projectDesc" 
+                    ng-Disabled="loading" required)
+        label= t("app.projectEditForm.projectAdmins")
+            div.input-groups.width-100
+                ul
+                    li Jeff Fergurson&nbsp;
+                        i.fa.fa-remove
+
+        label= t("app.projectEditForm.projectUsers")
+            div.input-groups.width-100
+                ul
+                    li No users are added to this project
+                    
+
+                //div.forms-desc.error(ng-show="firstNameFieldRequired()")= t("app.validationMessages.firstNameRequired")

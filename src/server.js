@@ -208,6 +208,10 @@
       res.render('partials/listProjects');
     });
 
+    app.get('/views/partials/editProject', function (req, res) {
+      res.render('partials/editProject');
+    });
+
     var server = http.createServer(app);
 
     server.listen(app.get('port'), function () {

@@ -13,8 +13,12 @@ var dashboardModule = angular.module('dashboardModule', ['ngRoute']);
 dashboardModule.factory('Projects',
   require('./resources/projectResource.js'));
 
-dashboardModule.controller('listController', ['$scope', 'Projects',
+dashboardModule.controller('projectsListController', ['$scope', 'Projects',
   require('./controllers/projectsListController.js')
+]);
+
+dashboardModule.controller('projectEditController', ['$scope', 'Projects',
+  require('./controllers/projectEditController.js')
 ]);
 
 dashboardModule.config(require('./config/dashboardRoute.js'));

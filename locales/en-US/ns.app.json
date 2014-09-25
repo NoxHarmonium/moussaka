@@ -28,6 +28,14 @@
         "submit": "Create Account"
     },
 
+    "projectEditForm" : {
+        "title" : "Edit Project",
+        "projectName" : "Name",
+        "projectDesc" : "Description",
+        "projectAdmins" : "Admins",
+        "projectUsers": "Users"
+    },
+
     "sorting": {
         "sortNameAsc": "Sort by Name (A-Z)",
         "sortNameDesc": "Sort by Name (Z-A)",
@@ -49,6 +57,12 @@
         "passwordRequired": "Password is required.",
         "firstNameRequired": "First Name is required.",
         "lastNameRequired": "Last Name is required."
+    },
+
+    "projectList" : {
+        "noProjectsMessage1": "You currently have no projects you can view. You could ",
+        "noProjectsMessage2": "create a new one",
+        "noProjectsMessage3": " or get invited to someone else's project."
     }
   }
 }
