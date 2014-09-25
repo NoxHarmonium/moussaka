@@ -121,6 +121,32 @@
       return module.exports.exists(str) &&
         typeof (str) === 'string' &&
         str.trim() !== '';
+    },
+
+    // Stolen from Angular.js codebase 
+    extend: function (dst) {
+      for (var i = 1, ii = arguments.length; i < ii; i++) {
+        var obj = arguments[i];
+        if (obj) {
+          var keys = Object.keys(obj);
+          for (var j = 0, jj = keys.length; j < jj; j++) {
+            var key = keys[j];
+            dst[key] = obj[key];
+          }
+        }
+      }
+      return dst;
+    },
+
+    // Stolen from Angular.js codebase 
+    inherit: function (parent, extra) {
+      return module.exports.extend(
+        new(module.exports.extend(
+          function () {}, {
+            prototype: parent
+          }))(),
+        extra);
     }
+
   };
 })(require, module);

@@ -1,8 +1,10 @@
 (function (module, require, window) {
   'use strict';
-  // loginController
 
-  module.exports = function loginController($scope, $http) {
+  var ApiError = require('../exceptions/apiError.js');
+
+  // loginController
+  module.exports = function loginController($scope, $http, User) {
     $scope.username = '';
     $scope.password = '';
     $scope.loading = false;
@@ -17,42 +19,52 @@
       }
 
       $scope.loading = true;
-      $http.post('/login/', {
-        username: $scope.email,
-        password: $scope.password
-      })
-      .success(function(data, status) {
-        var success = (status === 200);
-        $scope.hideError = success;
-        if (!success) {
-          $scope.errorMessage = 'There was a problem logging you in: ' +
-            data.detail + '.';
-        } else {
+
+
+      User.login($scope.email, $scope.password)
+        .then(function (response) {
           window.location = '/views/dashboard/';
-        }
-        $scope.loading = false;
-        $scope.$apply();
-      })
-      .error(function(data, status) {
-        $scope.hideError = false;
-        $scope.errorMessage = 'There was an error contacting the server.';
-        $scope.loading = false;
-        $scope.$apply();
-      });
+          return response;
+        })
+        .catch(function (error) {
+          var detail;
+          if (error instanceof ApiError) {
+            // ApiError messages come from the server so they
+            // are use friendly (i.e. user exists)
+            detail = error.message;
+          } else {
+            // Don't tell the user a generic error
+            // They wont know what it means
+            // TODO: i18n (generic error)
+            detail = 'There was an error processing your request.';
+          }
+
+          $scope.hideError = false;
+          $scope.errorMessage = detail;
+
+        })
+        .finally(function () {
+          $scope.loading = false;
+        });
     };
 
-    $scope.emailFieldRequired = function() {
-      return ($scope.submitted) && 
+    $scope.fieldHasChanged = function () {
+      $scope.submitted = false;
+      $scope.hideError = true;
+    };
+
+    $scope.emailFieldRequired = function () {
+      return ($scope.submitted) &&
         $scope.loginForm.email.$error.required;
     };
 
-    $scope.emailFieldFormat = function() {
-      return ($scope.submitted) && 
+    $scope.emailFieldFormat = function () {
+      return ($scope.submitted) &&
         $scope.loginForm.email.$error.email;
     };
 
-    $scope.passwordFieldInvalid = function() {
-      return ($scope.submitted) && 
+    $scope.passwordFieldInvalid = function () {
+      return ($scope.submitted) &&
         $scope.loginForm.password.$error.required;
     };
 

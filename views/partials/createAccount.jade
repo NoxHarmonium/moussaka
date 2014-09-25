@@ -1,36 +1,57 @@
 div.viewContainer
 
     div(class="loginbox") 
-
+        img.title(src='/img/logo-s.png' alt= t("app.altTags.applicationLogo"))
         h1.text-centered= t("app.name").toUpperCase()
 
         h4.text-centered= t("app.newAccountForm.subtitle").toUpperCase()
 
-        form(method="post" action="" class="forms")
-            label= t("app.sharedForm.email")
-                div.input-groups
-                    input(type="email" name="user-email" class="width-100" ng-model="username" ngDisabled="loading")
+        form(method="post" ng-submit="formCreateAccount()" class="forms" name="createAccountForm" novalidate)
+            label= t("app.sharedForm.firstName")
+                div.input-groups.width-100
+                    input(type="text" name="firstName" ng-model="firstName" 
+                        watch-change="fieldHasChanged()" ng-Disabled="loading" required)
                     span.input-append
                         i(class="fa fa-user")
+                div.forms-desc.error(ng-show="firstNameFieldRequired()")= t("app.validationMessages.firstNameRequired")
+
+            label= t("app.sharedForm.lastName")
+                div.input-groups.width-100
+                    input(type="text" name="lastName" ng-model="lastName" 
+                        watch-change="fieldHasChanged()" ng-Disabled="loading" required)
+                    span.input-append
+                        i(class="fa fa-user")
+                div.forms-desc.error(ng-show="lastNameFieldRequired()")= t("app.validationMessages.lastNameRequired")
+
+            label= t("app.sharedForm.email")
+                div.input-groups.width-100
+                    input(type="email" name="email" ng-model="email" 
+                        watch-change="fieldHasChanged()" ng-Disabled="loading" required)
+                    span.input-append
+                        i(class="fa fa-at")
+                div.forms-desc.error(ng-show="emailFieldRequired()")= t("app.validationMessages.emailRequired")
+                div.forms-desc.error(ng-show="emailFieldFormat()")= t("app.validationMessages.emailWrongFormat")
+
             label= t("app.sharedForm.password")
-                div.input-groups
-                    input(type="password" name="user-password" class="width-100" ng-model="password" ngDisabled="loading")
+                div.input-groups.width-100
+                    input(type="password" name="password" ng-model="password" 
+                        watch-change="fieldHasChanged()" ng-Disabled="loading" required)
                     span.input-append   
                         i(class="fa fa-lock")
-                div.forms-desc.ng-hide(ng-hide="hideError")
-                    span.error 
-                        i.fa.fa-exclamation
-                        span &nbsp; {{ errorMessage }}
-        
-            div.loginError
-                
+                div.forms-desc.error(ng-show="passwordFieldInvalid()")= t("app.validationMessages.passwordRequired")
+           
+            div.loginError.ng-hide(ng-hide="hideError")
+                p.error 
+                    i.fa.fa-info-circle
+                    span &nbsp; {{ errorMessage }}   
+
 
             div.units-row.text-centered 
                 div.unit-50
                     a(href="#/login")
                         button.btn-blue.btn.width-100= t("app.sharedForm.back")
                 div.unit-50
-                    button.btn-blue.width-100(ng-click="formCreateAccount()" ngDisabled="loading")= t("app.newAccountForm.submit")
+                    button.btn-blue.width-100(type="submit" ng-disabled="loading")= t("app.newAccountForm.submit") 
                         span &nbsp; 
                         i.fa.fa-refresh.fa-spin.ng-hide(ng-hide="!loading")
 

@@ -67,7 +67,6 @@
   "napa": {
     "angular": "angular/bower-angular",
     "angular-route": "angular/bower-angular-route",
-    "angular-resource": "angular/bower-angular-resource"
   },
   "browserify": {
     "transform": [

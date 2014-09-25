@@ -3,7 +3,7 @@
   module.exports =
     function () {
       return {
-        'responseError': function(response) {
+        'responseError': function (response) {
           var status = response.status;
 
           if (status === 401) {
@@ -11,10 +11,10 @@
             window.location = '/views/auth#/login';
             return;
           }
-          
+
           // otherwise
           return response;
         }
       };
-    };
+  };
 })(module, require, window);

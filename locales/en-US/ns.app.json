@@ -11,7 +11,9 @@
         "username": "Username",
         "email": "Email",
         "password": "Password",
-        "back": "Back"
+        "back": "Back",
+        "firstName": "First Name",
+        "lastName": "Last Name"   
     },
 
     "loginForm": {
@@ -39,6 +41,14 @@
 
     "altTags": {
         "applicationLogo": "Application Logo"
+    },
+
+    "validationMessages" : {
+        "emailRequired": "Email is required.",
+        "emailWrongFormat": "Email is in the wrong format.",
+        "passwordRequired": "Password is required.",
+        "firstNameRequired": "First Name is required.",
+        "lastNameRequired": "Last Name is required."
     }
   }
 }

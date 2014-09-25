@@ -1,41 +1,99 @@
-(function (module, require) {
+(function (module, require, window) {
   'use strict';
 
-  // createAccountController.js
-  module.exports = function createAccountController($scope) {
-    $scope.username = '';
+  var ApiError = require('../exceptions/apiError.js');
+
+  // createAccountController
+  module.exports = function createAccountController($scope, $http, User) {
+    $scope.firstName = '';
+    $scope.lastName = '';
     $scope.password = '';
+    $scope.email = '';
     $scope.loading = false;
     $scope.hideError = true;
     $scope.errorMessage = '';
 
     $scope.formCreateAccount = function () {
+      $scope.submitted = true;
+      $scope.hideError = true;
+
+      console.log($scope.createAccountForm.$invalid);
+
+      if ($scope.createAccountForm.$invalid) {
+        return;
+      }
+
       $scope.loading = true;
-      /*
-      userApi.putUser({
-        username: $scope.username,
+      var user = new User({
+        username: $scope.email,
+        firstName: $scope.firstName,
+        lastName: $scope.lastName,
         password: $scope.password
-      })
-        .then(function (result) {
-          $scope.hideError = result.success;
-          if (!result.success) {
-            $scope.errorMessage =
-              'There was a problem creating your account: ' + result.detail +
-              '.';
-          } else {
-            console.log('Redirect to create success.');
-          }
+      });
+
+      var result = user.create()
+        .then(function (response) {
+          return $http.post('/login/', {
+            username: $scope.email,
+            password: $scope.password
+          });
         })
-        .catch(function (err) {
+        .then(function (response) {
+          window.location = '/views/dashboard/';
+          return response;
+        })
+        .catch(function (error) {
+          var detail;
+          if (error instanceof ApiError) {
+            // ApiError messages come from the server so they
+            // are use friendly (i.e. user exists)
+            detail = error.message;
+          } else {
+            // Don't tell the user a generic error
+            // They wont know what it means
+            // TODO: i18n (generic error)
+            detail = 'There was an error processing your request.';
+          }
+
           $scope.hideError = false;
-          $scope.errorMessage = 'There was an error contacting the server.';
+          $scope.errorMessage = detail;
+
         })
         .finally(function () {
           $scope.loading = false;
-          $scope.$apply();
-        })
-        .done();
-        */
+        });
     };
+
+    $scope.fieldHasChanged = function () {
+      $scope.submitted = false;
+      $scope.hideError = true;
+    };
+
+    $scope.firstNameFieldRequired = function () {
+      return ($scope.submitted) &&
+        $scope.createAccountForm.firstName.$error.required;
+    };
+
+    $scope.lastNameFieldRequired = function () {
+      return ($scope.submitted) &&
+        $scope.createAccountForm.lastName.$error.required;
+    };
+
+    $scope.emailFieldRequired = function () {
+      return ($scope.submitted) &&
+        $scope.createAccountForm.email.$error.required;
+    };
+
+    $scope.emailFieldFormat = function () {
+      return ($scope.submitted) &&
+        $scope.createAccountForm.email.$error.email;
+    };
+
+    $scope.passwordFieldInvalid = function () {
+      return ($scope.submitted) &&
+        $scope.createAccountForm.password.$error.required;
+    };
+
   };
-})(module, require);
+
+})(module, require, window);
