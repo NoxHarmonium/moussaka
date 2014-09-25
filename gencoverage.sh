@@ -2,7 +2,7 @@
 if [[ -z "$TRAVIS" ]];
 then
     export COVERALLS_SERVICE_NAME="Adhoc Test Machine";
-    export COVERALLS_REPO_TOKEN="1DiClwfewqa0eVver6pMUQY8JnALfgqka";
+    export COVERALLS_REPO_TOKEN="Nnw8P3qd6ayOH75hqIStPU1pLdYpaK4jl";
     echo "Not on Travis CI? The the correct ENV vars have been set for you.";
 else 
     echo "Coveralls info is already set. This should be so on Travis CI."
