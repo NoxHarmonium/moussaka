@@ -12,7 +12,8 @@ pids
 logs
 results
 
-public/js/bundle.js
+public/js/app.js
+public/js/libs.js
 public/css/*
 
 npm-debug.log
