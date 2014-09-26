@@ -36,7 +36,7 @@ div.viewContainer
                     span &nbsp; {{ errorMessage }}   
 
             p
-                button.btn-blue.width-100(type="submit" ng-disabled="loading")= t("app.loginForm.login") 
+                button.btn.btn-blue.width-100(type="submit" ng-disabled="loading")= t("app.loginForm.login") 
                     span &nbsp; 
                     i.fa.fa-refresh.fa-spin.ng-hide(ng-hide="!loading")
 
@@ -45,8 +45,8 @@ div.viewContainer
         div.units-row.text-centered 
             div.unit-50
                 a(href="#/createAccount")
-                    button.btn.width-100= t("app.loginForm.createAccount")
+                    button.btn.btn-smaller.width-100= t("app.loginForm.createAccount")
             div.unit-50
-                button.btn.width-100= t("app.loginForm.forgotPassword")
+                button.btn.btn-smaller.width-100= t("app.loginForm.forgotPassword")
 
 

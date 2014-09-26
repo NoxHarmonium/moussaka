@@ -1,23 +1,44 @@
 /*
-	Kube CSS-Framework 3.1
+    Kube Framework 4
 */
 
-@import "mixins.less";
+@kube-path: "../../bower_components/kube/less";
+
+@import "@{kube-path}/mixins.less";
 @import "variables.less";
 
-@import "reset.less";
-@import "typography.less";
+@import "@{kube-path}/reset.less";
+@import "@{kube-path}/typography.less";
 
-@import "grid.less";
-@import "blocks.less";
+@import "@{kube-path}/grid.less";
+@import "@{kube-path}/blocks.less";
 
-@import "tables.less";
-@import "forms.less";
+@import "@{kube-path}/tables.less";
+@import "@{kube-path}/forms.less";
 
-@import "navigation.less";
-@import "buttons.less";
+@import "@{kube-path}/navigation.less";
+@import "@{kube-path}/buttons.less";
 
-@import "helpers.less";
-@import "prettyprint.less";
+@import "@{kube-path}/notifications.less";
+@import "@{kube-path}/labels.less";
 
-@import "print.less";
+@import "@{kube-path}/progress.less";
+@import "@{kube-path}/accordion.less";
+@import "@{kube-path}/filterbox.less";
+@import "@{kube-path}/tooltip.less";
+@import "@{kube-path}/dropdown.less";
+@import "@{kube-path}/livesearch.less";
+@import "@{kube-path}/upload.less";
+@import "@{kube-path}/autocomplete.less";
+@import "@{kube-path}/modal.less";
+
+@import "@{kube-path}/helpers.less";
+@import "@{kube-path}/prettyprint.less";
+
+@import "@{kube-path}/grid-responsive.less";
+@import "@{kube-path}/blocks-responsive.less";
+@import "@{kube-path}/typography-responsive.less";
+@import "@{kube-path}/navigation-responsive.less";
+@import "@{kube-path}/forms-responsive.less";
+
+@import "@{kube-path}/print.less";

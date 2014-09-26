@@ -1,3 +1,9 @@
+@kube-path: "../../bower_components/kube/less";
+
+@import "@{kube-path}/mixins.less";
+@import "elements.less";
+@import "variables.less";
+
 @media (min-width: 767px) {
     body {
         background: url('/img/bg.jpg') no-repeat center center fixed;
@@ -13,4 +19,9 @@
 .ng-cloak, .x-ng-cloak,
 .ng-hide {
   display: none !important;
+}
+
+// Cube override. Ubuntu font looks bad bold at smaller sizes
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 500;
 }
