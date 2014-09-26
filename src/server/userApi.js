@@ -289,6 +289,8 @@
 
       var renderEmail = function (tempPwdCode) {
         var deferred = Q.defer();
+        // Remember!: Render is relative to the app views directory
+        // i.e. <appdir>/views/
         req.app.render(
           emailInfo.templateFile, {
             tempPwd: tempPwdCode
