@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Moussaka by NoxHarmonium</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Moussaka</h1>
+        <p>Open Source Game Prototyping Framework</p>
+
+        <p class="view"><a href="https://github.com/NoxHarmonium/moussaka">View the Project on GitHub <small>NoxHarmonium/moussaka</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/NoxHarmonium/moussaka/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/NoxHarmonium/moussaka/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/NoxHarmonium/moussaka">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <p><img src="https://raw.githubusercontent.com/NoxHarmonium/unity-profiles/master/public/img/logo-with-text.png" alt="Moussaka Logo" title="Moussaka"></p>
+
+<h3>
+<a name="open-source-game-prototyping-framework" class="anchor" href="#open-source-game-prototyping-framework"><span class="octicon octicon-link"></span></a>Open Source Game Prototyping Framework</h3>
+
+<h4>
+<a name="version-01" class="anchor" href="#version-01"><span class="octicon octicon-link"></span></a>Version 0.1</h4>
+
+<p><a href="https://travis-ci.org/NoxHarmonium/moussaka"><img src="https://travis-ci.org/NoxHarmonium/moussaka.png?branch=master" alt="Build Status"></a> <a href="https://coveralls.io/r/NoxHarmonium/moussaka?branch="><img src="https://img.shields.io/coveralls/NoxHarmonium/moussaka.svg" alt="Coverage Status"></a></p>
+
+<h2>
+<a name="summary" class="anchor" href="#summary"><span class="octicon octicon-link"></span></a>Summary</h2>
+
+<p>Moussaka is a web application with the goal of improving the prototyping and development of video games on mobile devices. It aims to provide an easy-to-use interface which designers and product owners can use to tweak game parameters in real-time. It will then allow them to then save different sets of parameters, easily switch between them for comparison and then even share them with others. When a set of parameters has been decided on, the developer can download the profile and drop it straight into the game for deployment.</p>
+
+<p>The first version of the server side REST API is now complete with extensive unit tests. The current goal (version 0.2) is writing the first version of the browser front end which is coming along rapidly.  </p>
+
+<p>The API documentation can be found at this <a href="http://docs.unityprofiles.apiary.io/">Apiary page</a></p>
+
+<h2>
+<a name="description" class="anchor" href="#description"><span class="octicon octicon-link"></span></a>Description</h2>
+
+<p>In mobile game development it is sometimes necessary to expose game variables in a way that enables designers, QA and project owners to tweak them while running the game on a device to find the optimum values. In Unity3D you can expose these variables by creating a temporary menu with the built in UI but it has several disadvantages:</p>
+
+<ul>
+<li>It covers part of the game playing area.</li>
+<li>It takes developer time to implement the menu especially if the variable is more complex than a boolean or a number.</li>
+<li>A menu on device can be fiddly and hard to adjust, especially if the input triggers the on screen keyboard.</li>
+<li>If the user finds different configurations they like and want to compare them there is no easy way to store configurations and compare them.</li>
+</ul><p>It is also hard to share with other people when you find an optimum configuration. You may have to write down every value manually and might even lose it altogether if the game crashes. </p>
+
+<p>The main premise of Moussaka is to allow a developer to simply add an <a href="http://msdn.microsoft.com/en-us/library/z0w1kczw.aspx">attribute</a> to properties of a game object. When the game is loaded, a plugin will use reflection to find properties with these attributes and then send them to a server running Moussaka.</p>
+
+<p>The user would then use the web application, select the relevant device and then get presented with javascript web controls that manipulate these properties in real-time. A particular configuration of these properties could be saved a profile which can be retrieved at a later date and shared with other people.</p>
+
+<h2>
+<a name="why-is-the-project-called-moussaka" class="anchor" href="#why-is-the-project-called-moussaka"><span class="octicon octicon-link"></span></a>Why is the project called Moussaka?</h2>
+
+<p>It is a very tasty dish and everyone knows that open source projects have very random names.</p>
+
+<h2>
+<a name="development" class="anchor" href="#development"><span class="octicon octicon-link"></span></a>Development</h2>
+
+<p>The backend is developed in <a href="nodejs.org">node.js</a> and backed by <a href="mongodb.org">mongodb</a>.
+The REST API is serviced by <a href="expressjs.com">express</a> which also renders the website views and partial templates using <a href="jade-lang.com">jade</a>. 
+The frontend uses <a href="https://angularjs.org/">angular.js</a> to do most of the work in presenting the webpage.
+I have used <a href="http://imperavi.com/kube/">kube</a> as the base responsive CSS framework that I build on and use <a href="lesscss.org/">less</a> as a CSS preprocessor.
+To prevent code duplication, code written for node.js can be used client side through the magic of <a href="http://browserify.org/">browserify</a>.
+The API tests run on <a href="visionmedia.github.io/mocha/">mocha</a> but I am still determining what will run the end-to-end tests on the frontend interface although it will most likely be <a href="karma-runner.github.io/">karma</a> with <a href="phantomjs.org">phantomjs</a>.</p>
+
+<p>The code style I've used for this project is documented <a href="http://nodeguide.com/style.html">here</a>. It is enforced with a jshint grunt task so the Travis build will fail if any of the code doesn't match this style.</p>
+
+<h2>
+<a name="running-moussaka" class="anchor" href="#running-moussaka"><span class="octicon octicon-link"></span></a>Running Moussaka</h2>
+
+<p>If you want to try it out (although there isn't alot to see yet) follow these instructions.</p>
+
+<ol>
+<li>Make sure you have node.js and npm installed.</li>
+<li>Make sure you have mongodb installed.</li>
+<li>Clone the repository locally.</li>
+</ol><pre lang="shell"><code># git clone git@github.com:NoxHarmonium/moussaka.git
+</code></pre>
+
+<ol>
+<li>Make sure you have gulp and bower installed globally.</li>
+</ol><pre lang="shell"><code># npm install -g gulp
+# npm install -g bower
+</code></pre>
+
+<ol>
+<li>Install all the server dependencies.</li>
+</ol><pre lang="shell"><code># npm install
+</code></pre>
+
+<ol>
+<li>Install all the client dependencies.</li>
+</ol><pre lang="shell"><code># bower install
+</code></pre>
+
+<ol>
+<li>Compile all the client side javascript and CSS bundles.</li>
+</ol><pre lang="shell"><code># gulp compile
+</code></pre>
+
+<ol>
+<li>Run the unit tests to make sure everything is functioning correctly.</li>
+</ol><pre lang="shell"><code># gulp test
+</code></pre>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/NoxHarmonium">NoxHarmonium</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
