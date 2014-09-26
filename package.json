@@ -65,38 +65,5 @@
     "coveralls": "./gencoverage.sh",
     "install": "napa"
   },
-  "version": "0.0.1",
-  "napa": {
-    "angular": "angular/bower-angular",
-    "angular-route": "angular/bower-angular-route",
-    "jquery": "git://github.com/components/jquery.git",
-    "kube": "imperavi/kube"
-  },
-  "browserify": {
-    "transform": [
-      "browserify-shim"
-    ]
-  },
-  "browser": {
-    "angular": "./node_modules/angular/angular.js",
-    "angular-route": "./node_modules/angular-route/angular-route.js",
-    "jQuery": "./node_modules/jquery/jquery.js",
-    "kube-dropdown": "./node_modules/kube/js/dropdown.js"
-  },
-  "browserify-shim": {
-    "angular": {
-      "exports": "angular"
-    },
-    "angular-route": {
-      "depends": [
-        "angular"
-      ]
-    },
-    "jQuery": "jQuery",
-    "kube-dropdown": {
-      "depends": [
-        "jquery"
-      ]
-    }
-  }
+  "version": "0.0.1"
 }
