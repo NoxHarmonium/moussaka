@@ -1,0 +1,11 @@
+// Shim angular so it isn't global
+
+// Include the full jQuery so angular doens't use the 
+// light version it comes with
+window.$ = window.jQuery = require('./jQuery.js');
+
+// Load angular and packages into global scope
+require('_angular');
+require('_angular-route');
+
+module.exports = window.angular;

@@ -12,7 +12,8 @@ var gulp = require('gulp'),
   less = require('gulp-less'),
   config = require('./src/shared/config.js'),
   concat = require('gulp-concat'),
-  browserifyShim = require('browserify-shim');
+  bowerResolve = require('bower-resolve');
+
 
 var isWatching = false;
 
@@ -46,7 +47,7 @@ var paths = {
 };
 
 var browserifyOptions = {
-  insertGlobals: true,
+  insertGlobals: false,
   debug: config.code_generation.browserify.debug
 };
 
@@ -80,13 +81,39 @@ gulp.task('less', function () {
     .pipe(gulp.dest('./public/css'));
 });
 
-gulp.task('browserify', ['jshint'], function () {
+gulp.task('browserifyLibs', ['jshint'], function (cb) {
+  // build out angular and jquery to a library file called libs.js
+  bowerResolve.init(function () {
+    var b = browserify(browserifyOptions);
+    b.require(bowerResolve('angular'), {
+      expose: '_angular'
+    });
+    b.require(bowerResolve('angular-route'), {
+      expose: '_angular-route'
+    });
+    b.require(bowerResolve('jquery'), {
+      expose: '_jquery'
+    });
+    b.bundle()
+      .pipe(source('libs.js'))
+      .pipe(gulp.dest(paths.browserifyDest))
+      .on('end', cb);
+  });
+});
+
+gulp.task('browserifyApp', ['browserifyLibs'], function (cb) {
+  // Compile the main app bundle using the libs bundle
   var b = browserify(browserifyOptions);
   b.add(paths.browserifySrc);
-  b.transform(browserifyShim);
-  return b.bundle()
-    .pipe(source('bundle.js'))
-    .pipe(gulp.dest(paths.browserifyDest));
+  b.external('_angular');
+  b.external('_angular-route');
+  b.external('_jquery');
+  b.transform('debowerify');
+  b.transform('deamdify');
+  b.bundle()
+    .pipe(source('app.js'))
+    .pipe(gulp.dest(paths.browserifyDest))
+    .on('end', cb);
 });
 
 gulp.task('test', ['compile'], function () {
@@ -109,7 +136,7 @@ gulp.task('watch', function () {
 });
 
 gulp.task('default', ['test']);
-gulp.task('compile', ['browserify', 'less', 'prettify']);
+gulp.task('compile', ['browserifyApp', 'less', 'prettify']);
 gulp.task('all', ['test']);
 
 // Hack to stop gulp from hanging after mocha test

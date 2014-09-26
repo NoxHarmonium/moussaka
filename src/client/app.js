@@ -1,10 +1,5 @@
 'use strict';
-
-var angular = require('angular');
-var angularRoute = require('angular-route');
-
-var jQuery = require('jQuery');
-require('kube-dropdown');
+var angular = require('./libs/angular.js');
 
 // Dashboard Module
 

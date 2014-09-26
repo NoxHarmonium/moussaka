@@ -24,10 +24,12 @@
   },
   "description": "A web application for setting up profiles that define the behavior of your Unity3D games. It aims to provide an easy interface to allow developers to enable designers and managers to do all the tweaking and to be able to share different settings between them.",
   "devDependencies": {
+    "bower-resolve": "^2.2.0",
     "browserify": "*",
-    "browserify-shim": "*",
     "cheerio": "*",
     "coveralls": "*",
+    "deamdify": "^0.1.1",
+    "debowerify": "^0.8.1",
     "expect.js": "*",
     "gulp": "*",
     "gulp-cached": "*",
@@ -45,7 +47,6 @@
     "napa": "^0.4.1",
     "random-mac": "*",
     "simplesmtp": "*",
-    "stylus-modular-scale": "*",
     "superagent": "*",
     "vinyl-source-stream": "^1.0.0"
   },
@@ -92,7 +93,7 @@
       ]
     },
     "jQuery": "jQuery",
-    "kube-dropdown" : {
+    "kube-dropdown": {
       "depends": [
         "jquery"
       ]

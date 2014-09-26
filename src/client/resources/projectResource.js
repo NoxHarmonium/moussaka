@@ -1,8 +1,10 @@
 (function (module, require) {
   'use strict';
-  module.exports = ['$resource',
-    function ($resource) {
-      return $resource('/projects/ ', {});
+  module.exports = ['$http',
+    function ($http) {
+      // TODO: Implement!
+      return require('../../../tests/testData.js')
+        .getTestProjects();
     }
   ];
 })(module, require);

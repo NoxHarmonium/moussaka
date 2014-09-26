@@ -1,0 +1,24 @@
+{
+  "name": "moussaka",
+  "version": "0.0.1",
+  "homepage": "https://github.com/NoxHarmonium/moussaka",
+  "authors": [
+    "Sean Dawson <contact@seandawson.info>"
+  ],
+  "description": "A web application for setting up profiles that define the behavior of your Unity3D games. It aims to provide an easy interface to allow developers to enable designers and managers to do all the tweaking and to be able to share different settings between them.",
+  "main": "./src/client/app.js",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.1",
+    "angular": "~1.2.25",
+    "angular-route": "~1.2.25",
+    "kube": "git@github.com:imperavi/kube.git#a8883da0acf520d683310cbea66cf1bcbd45a521"
+  }
+}

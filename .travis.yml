@@ -10,7 +10,7 @@ services: mongodb
 
 install: 
   - npm install -g gulp
-  - npm install -g napa
+  - npm install -g bower
   - npm install
 
 script: 
