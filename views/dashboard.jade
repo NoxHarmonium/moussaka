@@ -7,13 +7,23 @@ head
     link(href='//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css' rel='stylesheet')
 
 body
-    header.dashboard-header
+    header.dashboard-header(ng-controller="navigationController")
         div.title
             img(src='/img/logo-xs.png' alt= t("app.altTags.applicationLogo"))
             span= t("app.name")
 
         div.userInfo
-            span #{userFirstName} #{userLastName} 
+            a(href="#")
+                h5(data-tools="dropdown" data-target="#user-dropdown") #{userFirstName} #{userLastName }
+            ul(id="user-dropdown" class="dropdown")
+                li
+                    a(href="#")
+                        i.fa.fa-gear &nbsp; &nbsp;
+                        span= t("app.nav.userPreferences")
+                li
+                    a(href="#" ng-click="logout()")
+                        i.fa.fa-ban &nbsp; &nbsp;
+                        span= t("app.nav.logout")
 
         // TODO: This will be dynamic depending on current view
         div.nav-wrapper

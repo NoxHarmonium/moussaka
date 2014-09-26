@@ -1,7 +1,8 @@
 (function (module, require) {
   'use strict';
 
-  var utils = require('../../shared/utils.js');
+  var util = require('util');
+  var extend = require('extend');
   var BaseResource = require('./baseResource.js');
 
   module.exports = ['$http',
@@ -13,11 +14,11 @@
         this.base();
         // TODO: Validation?
 
-        utils.extend(this, data);
+        extend(this, data);
       };
 
       // Inherit from BaseResource
-      utils.inherit(BaseResource, Project);
+      util.inherits(Project, BaseResource);
 
       // Static Methods
 

@@ -85,15 +85,27 @@ gulp.task('browserifyLibs', ['jshint'], function (cb) {
   // build out angular and jquery to a library file called libs.js
   bowerResolve.init(function () {
     var b = browserify(browserifyOptions);
+
+    // Modules that only work globally and require shimming
+    // (Denoted by underscore prefix)
     b.require(bowerResolve('angular'), {
       expose: '_angular'
     });
     b.require(bowerResolve('angular-route'), {
       expose: '_angular-route'
     });
-    b.require(bowerResolve('jquery'), {
-      expose: '_jquery'
+
+    b.require(bowerResolve('kube'), {
+      expose: '_kube'
     });
+
+    // Modules that work well with requireJs
+    b.require(bowerResolve('jquery'), {
+      expose: 'jquery'
+    });
+
+    b.transform('deamdify');
+    b.transform('debowerify');
     b.bundle()
       .pipe(source('libs.js'))
       .pipe(gulp.dest(paths.browserifyDest))
@@ -107,9 +119,11 @@ gulp.task('browserifyApp', ['browserifyLibs'], function (cb) {
   b.add(paths.browserifySrc);
   b.external('_angular');
   b.external('_angular-route');
-  b.external('_jquery');
-  b.transform('debowerify');
+  b.external('_kube');
+
+  b.external('jquery');
   b.transform('deamdify');
+  b.transform('debowerify');
   b.bundle()
     .pipe(source('app.js'))
     .pipe(gulp.dest(paths.browserifyDest))
@@ -132,6 +146,11 @@ gulp.task('test', ['compile'], function () {
 gulp.task('watch', function () {
   isWatching = true;
   gulp.watch(paths.scripts, ['browserify']);
+  gulp.watch(paths.lessDir, ['less']);
+});
+
+gulp.task('watchLess', function () {
+  isWatching = true;
   gulp.watch(paths.lessDir, ['less']);
 });
 

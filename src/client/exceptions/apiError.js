@@ -1,7 +1,7 @@
 (function (module, require) {
   'use strict';
 
-  var utils = require('../../shared/utils.js');
+  var util = require('util');
 
   function ApiError(response) {
 
@@ -24,7 +24,7 @@
     return this;
   }
 
-  utils.inherit(Error, ApiError);
+  util.inherits(ApiError, Error);
 
   module.exports = ApiError;
 

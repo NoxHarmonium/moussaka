@@ -39,6 +39,24 @@ header.dashboard-header {
         float: right;
         line-height: @header-height;
         padding-right: 25px;
+        padding-left: 25px;
+        background-color: #DDDDDD;
+
+        > a {
+            height: @header-height;
+            text-decoration: none;
+            > h5 {
+                display: inline;
+            }
+
+            > b {
+                color: @color-headings;
+            }
+        }
+
+        > i {
+            vertical-align: middle;
+        }
     }
 
     div.title {
@@ -81,7 +99,7 @@ header.dashboard-header {
         ul li {
             width: 100px;
             height: 100%;
-            background-color: #EEEEEE;
+            background-color: #DDDDDD;
             text-align: center;
         }
 

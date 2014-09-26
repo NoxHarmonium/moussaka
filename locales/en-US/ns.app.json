@@ -4,7 +4,9 @@
     "dashboardTitle": "Dashboard",
 
     "nav": {
-        "projects": "Projects"
+        "projects": "Projects",
+        "userPreferences": "User Preferences",
+        "logout": "Logout"
     },
 
     "sharedForm": {

@@ -19,6 +19,6 @@
     "jquery": "~2.1.1",
     "angular": "~1.2.25",
     "angular-route": "~1.2.25",
-    "kube": "https://github.com/imperavi/kube.git#a8883da0acf520d683310cbea66cf1bcbd45a521"
+    "kube": "https://github.com/noxharmonium/kube.git#master"
   }
 }

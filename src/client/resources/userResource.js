@@ -1,7 +1,8 @@
 (function (module, require) {
   'use strict';
 
-  var utils = require('../../shared/utils.js');
+  var util = require('util');
+  var extend = require('extend');
   var BaseResource = require('./baseResource.js');
   /*
     app.get('/users/:user/', userApi.getUser);
@@ -17,11 +18,11 @@
         this.base();
         // TODO: Validation?
 
-        utils.extend(this, data);
+        extend(this, data);
       };
 
       // Inherit from BaseResource
-      utils.inherit(BaseResource, User);
+      util.inherits(User, BaseResource);
 
       // Static Methods
 
@@ -53,6 +54,13 @@
             }, BaseResource.handleError);
       };
 
+      User.logout = function () {
+        return $http.post('/logout/')
+          .then(function (response) {
+            return response;
+          }, BaseResource.handleError);
+      };
+
       // Instance Methods
 
       User.prototype.create = function () {
@@ -61,13 +69,6 @@
         return $http.put('/users/' + that.username + '/', that)
           .then(function (response) {
             return that;
-          }, BaseResource.handleError);
-      };
-
-      User.prototype.logout = function () {
-        return $http.post('/logout/')
-          .then(function (response) {
-            return response;
           }, BaseResource.handleError);
       };
 

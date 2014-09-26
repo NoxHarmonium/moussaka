@@ -21,7 +21,9 @@
       "after": true, // mocha
       "it": true, // mocha
       "angular": true, //angular
-      "window": true //browserify scripts
+      "window": true, //browserify scripts
+      "jQuery": true, // jquery
+      "$": true // jquery
     },
     "node": true,
     "devel": true

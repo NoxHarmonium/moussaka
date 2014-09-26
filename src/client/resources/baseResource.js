@@ -3,6 +3,8 @@
 
   var ApiError = require('../exceptions/apiError.js');
 
+  var jQuery = require('jquery');
+
   var BaseResource = function () {};
 
   // Classify the type of error and throw
