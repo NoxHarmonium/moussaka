@@ -11,7 +11,8 @@ services: mongodb
 install: 
   - npm install -g gulp
   - npm install -g bower
-  - npm install
+  - bower install   # Client side depenencies
+  - npm install     # Server side dependencies
 
 script: 
     - gulp test # Run linting, compliation and tests
