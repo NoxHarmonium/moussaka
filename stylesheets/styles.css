@@ -253,3 +253,11 @@ footer {
     color:#444;
   }
 }
+
+div.dual-image > * {
+  display: inline-block;
+  width: 48%;
+  margin: 0;
+  padding: 0;
+}
+
