@@ -4,96 +4,98 @@
   var ApiError = require('../exceptions/apiError.js');
 
   // createAccountController
-  module.exports = function createAccountController($scope, $http, User) {
-    $scope.firstName = '';
-    $scope.lastName = '';
-    $scope.password = '';
-    $scope.email = '';
-    $scope.loading = false;
-    $scope.hideError = true;
-    $scope.errorMessage = '';
-
-    $scope.formCreateAccount = function () {
-      $scope.submitted = true;
+  module.exports = ['$scope', '$http', 'User',
+    function createAccountController($scope, $http, User) {
+      $scope.firstName = '';
+      $scope.lastName = '';
+      $scope.password = '';
+      $scope.email = '';
+      $scope.loading = false;
       $scope.hideError = true;
+      $scope.errorMessage = '';
 
-      console.log($scope.createAccountForm.$invalid);
+      $scope.formCreateAccount = function () {
+        $scope.submitted = true;
+        $scope.hideError = true;
 
-      if ($scope.createAccountForm.$invalid) {
-        return;
-      }
+        console.log($scope.createAccountForm.$invalid);
 
-      $scope.loading = true;
-      var user = new User({
-        username: $scope.email,
-        firstName: $scope.firstName,
-        lastName: $scope.lastName,
-        password: $scope.password
-      });
+        if ($scope.createAccountForm.$invalid) {
+          return;
+        }
 
-      var result = user.create()
-        .then(function (response) {
-          return $http.post('/login/', {
-            username: $scope.email,
-            password: $scope.password
-          });
-        })
-        .then(function (response) {
-          window.location = '/views/dashboard/';
-          return response;
-        })
-        .catch(function (error) {
-          var detail;
-          if (error instanceof ApiError) {
-            // ApiError messages come from the server so they
-            // are use friendly (i.e. user exists)
-            detail = error.message;
-          } else {
-            // Don't tell the user a generic error
-            // They wont know what it means
-            // TODO: i18n (generic error)
-            detail = 'There was an error processing your request.';
-          }
-
-          $scope.hideError = false;
-          $scope.errorMessage = detail;
-
-        })
-        .finally(function () {
-          $scope.loading = false;
+        $scope.loading = true;
+        var user = new User({
+          username: $scope.email,
+          firstName: $scope.firstName,
+          lastName: $scope.lastName,
+          password: $scope.password
         });
-    };
 
-    $scope.fieldHasChanged = function () {
-      $scope.submitted = false;
-      $scope.hideError = true;
-    };
+        var result = user.create()
+          .then(function (response) {
+            return $http.post('/login/', {
+              username: $scope.email,
+              password: $scope.password
+            });
+          })
+          .then(function (response) {
+            window.location = '/views/dashboard/';
+            return response;
+          })
+          .catch(function (error) {
+            var detail;
+            if (error instanceof ApiError) {
+              // ApiError messages come from the server so they
+              // are use friendly (i.e. user exists)
+              detail = error.message;
+            } else {
+              // Don't tell the user a generic error
+              // They wont know what it means
+              // TODO: i18n (generic error)
+              detail = 'There was an error processing your request.';
+            }
 
-    $scope.firstNameFieldRequired = function () {
-      return ($scope.submitted) &&
-        $scope.createAccountForm.firstName.$error.required;
-    };
+            $scope.hideError = false;
+            $scope.errorMessage = detail;
 
-    $scope.lastNameFieldRequired = function () {
-      return ($scope.submitted) &&
-        $scope.createAccountForm.lastName.$error.required;
-    };
+          })
+          .finally(function () {
+            $scope.loading = false;
+          });
+      };
 
-    $scope.emailFieldRequired = function () {
-      return ($scope.submitted) &&
-        $scope.createAccountForm.email.$error.required;
-    };
+      $scope.fieldHasChanged = function () {
+        $scope.submitted = false;
+        $scope.hideError = true;
+      };
 
-    $scope.emailFieldFormat = function () {
-      return ($scope.submitted) &&
-        $scope.createAccountForm.email.$error.email;
-    };
+      $scope.firstNameFieldRequired = function () {
+        return ($scope.submitted) &&
+          $scope.createAccountForm.firstName.$error.required;
+      };
 
-    $scope.passwordFieldInvalid = function () {
-      return ($scope.submitted) &&
-        $scope.createAccountForm.password.$error.required;
-    };
+      $scope.lastNameFieldRequired = function () {
+        return ($scope.submitted) &&
+          $scope.createAccountForm.lastName.$error.required;
+      };
 
-  };
+      $scope.emailFieldRequired = function () {
+        return ($scope.submitted) &&
+          $scope.createAccountForm.email.$error.required;
+      };
+
+      $scope.emailFieldFormat = function () {
+        return ($scope.submitted) &&
+          $scope.createAccountForm.email.$error.email;
+      };
+
+      $scope.passwordFieldInvalid = function () {
+        return ($scope.submitted) &&
+          $scope.createAccountForm.password.$error.required;
+      };
+
+    }
+  ];
 
 })(module, require, window);

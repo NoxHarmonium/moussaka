@@ -1,6 +1,6 @@
 (function (module, require, window) {
   'use strict';
-  module.exports =
+  module.exports = ['$q',
     function ($q) {
       var jQuery = require('jquery');
       return {
@@ -30,5 +30,6 @@
           return response;
         }
       };
-  };
+    }
+  ];
 })(module, require, window);

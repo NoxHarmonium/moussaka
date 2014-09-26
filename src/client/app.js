@@ -16,26 +16,26 @@ dashboardModule.factory('Projects',
 
 // Controllers
 
-dashboardModule.controller('navigationController', ['$scope', 'User',
+dashboardModule.controller('navigationController',
   require('./controllers/navigationController.js')
-]);
+);
 
-dashboardModule.controller('projectsListController', ['$scope', 'Projects',
+dashboardModule.controller('projectsListController',
   require('./controllers/projectsListController.js')
-]);
+);
 
-dashboardModule.controller('projectEditController', ['$scope', 'Projects',
+dashboardModule.controller('projectEditController',
   require('./controllers/projectEditController.js')
-]);
+);
 
 // Routes
 
-dashboardModule.config(require('./config/dashboardRoute.js'));
+dashboardModule.config(require('./routes/dashboardRoute.js'));
 
 // Interceptors
 
-dashboardModule.factory('authIntercept', ['$q', require(
-  './config/authIntercept.js')]);
+dashboardModule.factory('authIntercept', require(
+  './config/authIntercept.js'));
 dashboardModule.config(['$httpProvider',
   function ($httpProvider) {
     $httpProvider.interceptors.push('authIntercept');
@@ -57,13 +57,13 @@ authModule.factory('User',
 
 // Controllers
 
-authModule.controller('loginController', ['$scope', '$http', 'User',
+authModule.controller('loginController',
   require('./controllers/loginController.js')
-]);
+);
 
-authModule.controller('createAccountController', ['$scope', '$http', 'User',
+authModule.controller('createAccountController',
   require('./controllers/createAccountController.js')
-]);
+);
 
 // Routes
-authModule.config(require('./config/authRoute.js'));
+authModule.config(require('./routes/authRoute.js'));
