@@ -2,7 +2,7 @@
   'use strict';
 
   module.exports = function projectsListController($scope, Projects) {
-    $scope.projects = Projects.query();
+    $scope.projects = Projects.get();
   };
 
 })(module, require);
