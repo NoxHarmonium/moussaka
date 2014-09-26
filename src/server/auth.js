@@ -7,6 +7,8 @@
   var passport = require('passport');
   var LocalStrategy = require('passport-local')
     .Strategy;
+  var S = require('string');
+  var _ = require('lodash');
   // TODO: This is so hacky. The original author made a new
   // version on github but didn't update his npm package so
   // somebody did a fork. Someday I hope this will be resolved.
@@ -89,6 +91,23 @@
           }
           next();
         })(req, res, next);
+    },
+    ensureAuth: function (req, res, next) {
+      var path = S(req.path)
+        .chompRight('/');
+      var isView = path.startsWith('/views/');
+      var publicViews = [
+        '/views/auth',
+        '/views/partials/login',
+        '/views/partials/createAccount'
+      ];
+      console.log('req.path: ', path.s);
+
+      if (isView && !_.contains(publicViews, path.s) && !req.user) {
+        res.redirect('/views/auth/#/login');
+      } else {
+        next();
+      }
     }
   };
 })(require, module);

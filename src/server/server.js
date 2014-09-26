@@ -63,7 +63,7 @@
 
     // all environments
     app.set('port', config.listen_port || process.env.PORT || 3000);
-    app.set('views', path.join(__dirname, '../views'));
+    app.set('views', path.join(__dirname, '../../views'));
     app.set('view engine', 'jade');
     app.use(express.favicon());
     app.use(express.logger('dev'));
@@ -80,10 +80,11 @@
     // If the apikey is set, use it rather than a persistant
     // login (i.e. browser)
     app.use(auth.apiKeyAuthoriser);
+    app.use(auth.ensureAuth);
 
     app.use(i18n.handle);
     app.use(app.router);
-    app.use(express.static(path.join(__dirname, '../public')));
+    app.use(express.static(path.join(__dirname, '../../public')));
 
     // development only
     if (config.show_friendly_errors) {
@@ -192,7 +193,11 @@
     });
 
     app.get('/views/dashboard', function (req, res) {
-      res.render('dashboard');
+      var user = req.user || {};
+      res.render('dashboard', {
+        userFirstName: user.firstName,
+        userLastName: user.lastName
+      });
     });
 
 

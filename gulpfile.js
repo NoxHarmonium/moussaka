@@ -104,7 +104,7 @@ gulp.task('test', ['compile'], function () {
 
 gulp.task('watch', function () {
   isWatching = true;
-  gulp.watch(paths.scripts, ['browserify', 'prettify']);
+  gulp.watch(paths.scripts, ['browserify']);
   gulp.watch(paths.lessDir, ['less']);
 });
 

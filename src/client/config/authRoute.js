@@ -4,12 +4,12 @@
     function ($routeProvider) {
       $routeProvider.
       when('/login', {
-        templateUrl: 'partials/login',
+        templateUrl: '/views/partials/login',
         controller: 'loginController'
       })
         .
       when('/createAccount', {
-        templateUrl: 'partials/createAccount',
+        templateUrl: '/views/partials/createAccount',
         controller: 'createAccountController'
       })
         .

@@ -65,7 +65,9 @@
 
       return res.send({
         username: loggedInUser.username,
-        apiKey: loggedInUser.apiKey
+        apiKey: loggedInUser.apiKey,
+        firstName: loggedInUser.firstName,
+        lastName: loggedInUser.lastName
       });
     },
 
@@ -114,12 +116,19 @@
 
       var newUser = new User({
         _id: data.username,
-        password: data.password
+        password: data.password,
+        firstName: data.firstName,
+        lastName: data.lastName
       });
 
       newUser.saveQ()
-        .then(function () {
-          res.send(201);
+        .then(function (savedUser) {
+          res.send(201, {
+            username: savedUser.username,
+            apiKey: savedUser.apiKey,
+            firstName: savedUser.firstName,
+            lastName: savedUser.lastName
+          });
         })
         .catch(function (err) {
           next(err);

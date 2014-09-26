@@ -8,16 +8,24 @@
   exports.getTestUsers = function () {
     return [{
       username: 'test.account@test.com',
-      password: 'test_password'
+      password: 'test_password',
+      firstName: 'firstName',
+      lastName: 'lastName',
     }, {
       username: 'test.account2@test.com',
-      password: 'test_password3'
+      password: 'test_password3',
+      firstName: 'firstName2',
+      lastName: 'lastName2',
     }, {
       username: 'test.account3@test.com',
-      password: 'test_password4'
+      password: 'test_password4',
+      firstName: 'firstName2',
+      lastName: 'lastName2',
     }, {
       username: 'test.account4@test.com',
-      password: 'test_password5'
+      password: 'test_password5',
+      firstName: 'firstName2',
+      lastName: 'lastName2',
     }, ];
   };
 

@@ -3,8 +3,8 @@
 var angular = require('angular');
 var angularRoute = require('angular-route');
 
-var testProjects = require('../../tests/testData')
-  .getTestProjects();
+var jQuery = require('jQuery');
+require('kube-dropdown');
 
 // Dashboard Module
 
