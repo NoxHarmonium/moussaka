@@ -37,7 +37,7 @@
         return $http.delete('/users/' + email + '/')
           .then(
             function (response) {
-              return new User(response.data);
+              return response;
             }, BaseResource.handleError);
       };
 
