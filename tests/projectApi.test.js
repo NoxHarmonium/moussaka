@@ -350,8 +350,6 @@
           expect(res.ok)
             .to.be.ok();
 
-          console.log(JSON.stringify(res.body));
-
           expect(res.body.length)
             .to.be(3);
           var match =
