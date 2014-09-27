@@ -127,6 +127,7 @@
 
     app.get('/projects/', projectApi.listProjects);
     app.get('/projects/:projectId/', projectApi.getProject);
+    app.post('/projects/:projectId/', projectApi.updateProject);
     app.del('/projects/:projectId/', projectApi.removeProject);
     app.put('/projects/', projectApi.addProject);
     app.put('/projects/:projectId/users/:user/',

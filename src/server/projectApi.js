@@ -9,7 +9,7 @@
   var config = require('../shared/config.js');
   var _ = require('lodash');
   var utils = require('../shared/utils.js');
-
+  var extend = require('extend');
   // Public functions
   module.exports = {
 
@@ -158,6 +158,30 @@
           }
         })
         .done();
+    },
+
+    updateProject: function (req, res, next) {
+      var project = req.project;
+      if (project) {
+        var query = {
+          '_id': project._id
+        };
+
+        Project.findOneAndUpdateQ(query, req.body)
+          .then(function (data) {
+            res.send(200);
+          })
+          .catch(function (err) {
+            next(err);
+          })
+          .done();
+
+      } else {
+        return res.send(404, {
+          detail: 'Project doesn\'t exist'
+        });
+      }
+
     },
 
     getProject: function (req, res, next) {

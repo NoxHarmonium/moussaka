@@ -10,6 +10,7 @@
   var _ = require('lodash');
   var Q = require('q');
   var S = require('string');
+  var extend = require('extend');
 
   var _formatTestIndex = function (index) {
     // Mongo uses alphabetical sorting so simply appending
@@ -349,12 +350,85 @@
           expect(res.ok)
             .to.be.ok();
 
+          console.log(JSON.stringify(res.body));
+
           expect(res.body.length)
             .to.be(3);
           var match =
             utils.arrayMatch(res.body, projects);
           expect(match)
             .to.be(true);
+
+          done();
+        });
+    });
+
+
+    it('Update project [0] with invalid project id', function (done) {
+      var project = projects[0];
+      project.name += ' (updated)';
+
+      agent.post('http://localhost:3000/projects/' +
+        'invalidprojectid' + '/')
+        .send(project)
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(404);
+
+          done();
+        });
+    });
+
+    it('Update project [0]', function (done) {
+      var project = projects[0];
+
+      agent.post('http://localhost:3000/projects/' +
+        project._id + '/')
+        .send(project)
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          done();
+        });
+    });
+
+    it('Get existing project [0]', function (done) {
+      var project = projects[0];
+
+      agent.get('http://localhost:3000/projects/' + project._id + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          expect(utils.objMatch(res.body, project))
+            .to.be.ok();
+
+          done();
+        });
+    });
+
+    it('Update project [0] with invalid fields', function (done) {
+      // Copy project 
+      var projectCopy = extend({}, projects[0]);
+
+      // Set a field not in the schema
+      projectCopy.invalidField = 'blah blah blah';
+
+      agent.post('http://localhost:3000/projects/' +
+        projectCopy._id + '/')
+        .send(projectCopy)
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
 
           done();
         });
