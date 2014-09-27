@@ -101,8 +101,6 @@
         '/views/partials/login',
         '/views/partials/createAccount'
       ];
-      console.log('req.path: ', path.s);
-
       if (isView && !_.contains(publicViews, path.s) && !req.user) {
         res.redirect('/views/auth/#/login');
       } else {
