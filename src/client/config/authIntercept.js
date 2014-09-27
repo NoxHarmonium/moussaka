@@ -3,31 +3,42 @@
   module.exports = ['$q',
     function ($q) {
       var jQuery = require('jquery');
+      var progressShown = false;
+      var showProgress = function () {
+        if (!progressShown) {
+          jQuery.progress.show();
+          progressShown = true;
+        }
+      };
+
+      var hideProgress = function () {
+        if (progressShown) {
+          jQuery.progress.hide();
+          progressShown = false;
+        }
+      };
+
+
       return {
         'request': function (config) {
-          jQuery.progress.show();
           return config;
         },
         'requestError': function (rejection) {
-          jQuery.progress.hide();
           return $q.reject(rejection);
         },
         'response': function (response) {
-          jQuery.progress.hide();
           return response;
         },
         'responseError': function (response) {
-          jQuery.progress.hide();
           var status = response.status;
 
           if (status === 401) {
             // Redirect to login
             window.location = '/views/auth#/login';
-            return;
           }
 
           // otherwise
-          return response;
+          return;
         }
       };
     }

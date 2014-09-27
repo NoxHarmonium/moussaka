@@ -11,7 +11,7 @@ var dashboardModule = angular.module('dashboardModule', ['ngRoute']);
 dashboardModule.factory('User',
   require('./resources/userResource.js'));
 
-dashboardModule.factory('Projects',
+dashboardModule.factory('Project',
   require('./resources/projectResource.js'));
 
 // Controllers

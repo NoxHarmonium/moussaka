@@ -2,22 +2,36 @@
     form(method="post" ng-submit="saveProject()" class="forms" name="projectEditForm" novalidate)
         label= t("app.projectEditForm.projectName")
             div.input-groups.width-100
-                input(type="text" name="projectName" ng-model="projectName" 
+                input(type="text" name="projectName" ng-model="project.name" 
                     ng-Disabled="loading" required)
+            div.forms-desc.error(ng-show="projectNameFieldRequired()")= t("app.validationMessages.projectNameRequired")
+
         label= t("app.projectEditForm.projectDesc")
             div.input-groups.width-100
-                textarea(rows="5" name="projectDesc" ng-model="projectDesc" 
-                    ng-Disabled="loading" required)
-        label= t("app.projectEditForm.projectAdmins")
+                textarea(rows="5" name="projectDesc" ng-model="project.description" 
+                    ng-Disabled="loading")
+        
+        label(ng-hide="newProject")= t("app.projectEditForm.projectAdmins")
             div.input-groups.width-100
                 ul
                     li Jeff Fergurson&nbsp;
                         i.fa.fa-remove
 
-        label= t("app.projectEditForm.projectUsers")
+        label(ng-hide="newProject")= t("app.projectEditForm.projectUsers")
             div.input-groups.width-100
                 ul
                     li No users are added to this project
+
+        div.loginError.ng-hide(ng-hide="hideError")
+                p.error 
+                    i.fa.fa-info-circle
+                    span &nbsp; {{ errorMessage }}   
+
+        p 
+            button.btn.btn-blue(href="#/listProjects")= t("app.projectEditForm.cancel") 
+
+            button.btn.btn-blue(type="submit" ng-disabled="loading")= t("app.projectEditForm.save") 
+                span &nbsp; 
+                i.fa.fa-refresh.fa-spin.ng-hide(ng-hide="!loading")
                     
 
-                //div.forms-desc.error(ng-show="firstNameFieldRequired()")= t("app.validationMessages.firstNameRequired")

@@ -56,13 +56,14 @@
         var that = this;
         return $http.put('/projects/', that)
           .then(function (response) {
+            that._id = response.data._id;
             return that;
           }, BaseResource.handleError);
       };
 
       Project.prototype.update = function () {
         var that = this;
-        return $http.post('/projects/' + this.id + '/', that)
+        return $http.post('/projects/' + this._id + '/', that)
           .then(function (response) {
             return that;
           }, BaseResource.handleError);

@@ -18,8 +18,6 @@
         $scope.submitted = true;
         $scope.hideError = true;
 
-        console.log($scope.createAccountForm.$invalid);
-
         if ($scope.createAccountForm.$invalid) {
           return;
         }

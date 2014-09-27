@@ -8,13 +8,19 @@
         controller: 'projectsListController'
       })
         .
-      when('/editProject', {
+      when('/editProject/', {
         templateUrl: '/views/partials/editProject',
-        controller: 'editProjectController'
+        controller: 'projectEditController'
       })
-        .otherwise({
-          redirectTo: '/listProjects'
-        });
+        .
+      when('/editProject/:projectId', {
+        templateUrl: '/views/partials/editProject',
+        controller: 'projectEditController'
+      })
+
+      .otherwise({
+        redirectTo: '/listProjects'
+      });
     }
   ];
 })(module, require);

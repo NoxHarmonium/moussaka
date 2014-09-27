@@ -35,7 +35,9 @@
         "projectName" : "Name",
         "projectDesc" : "Description",
         "projectAdmins" : "Admins",
-        "projectUsers": "Users"
+        "projectUsers": "Users",
+        "save": "Save",
+        "cancel": "Cancel"
     },
 
     "sorting": {
@@ -58,7 +60,8 @@
         "emailWrongFormat": "Email is in the wrong format.",
         "passwordRequired": "Password is required.",
         "firstNameRequired": "First Name is required.",
-        "lastNameRequired": "Last Name is required."
+        "lastNameRequired": "Last Name is required.",
+        "projectNameRequired": "Project Name is required."
     },
 
     "projectList" : {
