@@ -168,7 +168,7 @@
         };
 
         // Make sure that the id is not included
-        _.omit(req.body,'_id');
+        req.body = _.omit(req.body, '_id');
 
         Project.findOneAndUpdateQ(query, req.body)
           .then(function (data) {
