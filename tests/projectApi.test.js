@@ -395,6 +395,41 @@
         });
     });
 
+    it('Update project [0] with different user/admin list', function (done) {
+      var projectCopy = extend({}, projects[0]);
+      projectCopy.users = [users[1]._id, users[2]._id];
+      projectCopy.admins = [users[0]._id];
+
+      agent.post('http://localhost:3000/projects/' +
+        projectCopy._id + '/')
+        .send(projectCopy)
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          done();
+        });
+    });
+
+    it('Update project [0]', function (done) {
+      var project = projects[0];
+
+      agent.post('http://localhost:3000/projects/' +
+        project._id + '/')
+        .send(project)
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          done();
+        });
+    });
+
+
     it('Get existing project [0]', function (done) {
       var project = projects[0];
 

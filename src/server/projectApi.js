@@ -170,6 +170,11 @@
         // Make sure that the id is not included
         req.body = _.omit(req.body, '_id');
 
+        // Changes to user and admin lists need to be done
+        // through the respective commands.
+        req.body = _.omit(req.body, 'users');
+        req.body = _.omit(req.body, 'admins');
+
         Project.findOneAndUpdateQ(query, req.body)
           .then(function (data) {
             res.send(200);
