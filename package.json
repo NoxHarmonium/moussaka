@@ -70,7 +70,8 @@
   "scripts": {
     "start": "node src/server/app.js",
     "test": "gulp test",
-    "coveralls": "./gencoverage.sh"
+    "coveralls": "./gencoverage.sh",
+    "install": "gulp compile"
   },
   "version": "0.0.1"
 }
