@@ -60,7 +60,7 @@
   "env": {
     "PYTHON": "/usr/bin/python2.7"
   },
-  "name": "unity-profiles",
+  "name": "moussaka",
   "private": true,
   "repository": {
     "type": "git",
