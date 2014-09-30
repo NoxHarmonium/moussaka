@@ -45,7 +45,6 @@
     "jshint-stylish": "*",
     "mocha": "*",
     "mocha-lcov-reporter": "*",
-    "napa": "^0.4.1",
     "random-mac": "*",
     "simplesmtp": "*",
     "superagent": "*",
@@ -63,8 +62,7 @@
   "scripts": {
     "start": "node src/server/app.js",
     "test": "gulp test",
-    "coveralls": "./gencoverage.sh",
-    "install": "napa"
+    "coveralls": "./gencoverage.sh"
   },
   "version": "0.0.1"
 }
