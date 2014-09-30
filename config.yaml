@@ -107,7 +107,7 @@ travis-ci: # The development config profile.
 
 # TODO: Enable a real email client
 heroku:
-    listen_port:            80
+    listen_port:            5000
     locale:                 "en-US"
     salt_work_factor:       1 # Reduce the work factor even more for slower VMs
     mongo_url:              "mongodb://moussaka:moussaka@ds039960.mongolab.com:39960/moussaka"
