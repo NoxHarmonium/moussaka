@@ -27,13 +27,20 @@
      * Module dependencies.
      */
 
-    var config = require('../shared/config.js');
     var express = require('express');
+    var favicon = require('serve-favicon');
+    var logger = require('morgan');
+    var methodOverride = require('method-override');
+    var session = require('express-session');
+    var bodyParser = require('body-parser');
+    var multer = require('multer');
+    var errorHandler = require('errorhandler');
+
+    var config = require('../shared/config.js');
     var userApi = require('./userApi.js');
     var projectApi = require('./projectApi.js');
     var profileApi = require('./profileApi.js');
     var deviceApi = require('./deviceApi.js');
-    var http = require('http');
     var path = require('path');
     var colors = require('colors');
     var passport = require('passport');
@@ -66,14 +73,20 @@
     app.set('port', process.env.PORT || config.listen_port || 3000);
     app.set('views', path.join(rootDir, './views/'));
     app.set('view engine', 'jade');
-    app.use(express.favicon());
-    app.use(express.logger('dev'));
-    app.use(express.bodyParser());
-    app.use(express.methodOverride());
-    app.use(express.cookieParser('your secret here'));
-    app.use(express.session({
-      secret: 'keyboard cat'
+    app.use(favicon(path.join(rootDir, './public/img/favicon/favicon.ico')));
+    app.use(logger('dev'));
+    app.use(methodOverride());
+    app.use(session({
+      resave: true,
+      saveUninitialized: true,
+      secret: config.session_secret
     }));
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({
+      extended: true
+    }));
+    app.use(multer());
+    app.use(express.static(path.join(__dirname, 'public')));
     app.use(passport.initialize());
     app.use(passport.session());
     auth.init();
@@ -84,12 +97,10 @@
     app.use(auth.ensureAuth);
 
     app.use(i18n.handle);
-    app.use(app.router);
-    app.use(express.static(path.join(rootDir, './public/')));
 
     // development only
     if (config.show_friendly_errors) {
-      app.use(express.errorHandler());
+      app.use(errorHandler());
     }
 
     dbAccess.init(function (err) {
@@ -219,17 +230,13 @@
       res.render('partials/editProject');
     });
 
-    var server = http.createServer(app);
-
-    server.listen(app.get('port'), function () {
+    serverModule.server = app.listen(app.get('port'), function () {
       console.log('Express server listening on port ' + app.get('port')
         .toString()
         .blue);
       serverModule.started = true;
       next(null, serverModule.server);
     });
-
-    serverModule.server = server;
   };
 
   serverModule.stop = function () {
