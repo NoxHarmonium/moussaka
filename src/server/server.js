@@ -86,7 +86,7 @@
       extended: true
     }));
     app.use(multer());
-    app.use(express.static(path.join(__dirname, 'public')));
+    app.use(express.static(path.join(rootDir, './public/')));
     app.use(passport.initialize());
     app.use(passport.session());
     auth.init();
