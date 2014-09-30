@@ -120,7 +120,7 @@
     app.param('user', userApi.pUser);
 
     app.get('/users/:user/', userApi.getUser);
-    app.del('/users/:user/', userApi.deleteUser);
+    app.delete('/users/:user/', userApi.deleteUser);
     app.put('/users/:user/', userApi.putUser);
     app.post('/users/:user/password/', userApi.changePassword);
     app.post('/users/:user/resetpassword/', userApi.resetPassword);
@@ -140,15 +140,15 @@
     app.get('/projects/', projectApi.listProjects);
     app.get('/projects/:projectId/', projectApi.getProject);
     app.post('/projects/:projectId/', projectApi.updateProject);
-    app.del('/projects/:projectId/', projectApi.removeProject);
+    app.delete('/projects/:projectId/', projectApi.removeProject);
     app.put('/projects/', projectApi.addProject);
     app.put('/projects/:projectId/users/:user/',
       projectApi.addProjectUser);
-    app.del('/projects/:projectId/users/:user/',
+    app.delete('/projects/:projectId/users/:user/',
       projectApi.removeProjectUser);
     app.put('/projects/:projectId/admins/:user/',
       projectApi.addProjectAdmin);
-    app.del('/projects/:projectId/admins/:user/',
+    app.delete('/projects/:projectId/admins/:user/',
       projectApi.removeProjectAdmin);
     if (config.enable_test_exts) {
       app.get('/test/project_api/reset/', projectApi.resetTests);
@@ -163,7 +163,7 @@
       profileApi.getProfiles);
     app.get('/projects/:projectId/profiles/:profileId/',
       profileApi.getProfile);
-    app.del('/projects/:projectId/profiles/:profileId/',
+    app.delete('/projects/:projectId/profiles/:profileId/',
       profileApi.deleteProfile);
     app.put('/projects/:projectId/profiles/',
       profileApi.saveProfile);
@@ -180,13 +180,13 @@
     app.get('/projects/:projectId/devices/', deviceApi.listDevices);
     app.get('/projects/:projectId/devices/' +
       ':deviceMacAddr/', deviceApi.getDevice);
-    app.del('/projects/:projectId/devices/' +
+    app.delete('/projects/:projectId/devices/' +
       ':deviceMacAddr/', deviceApi.deregisterDevice);
     app.get('/projects/:projectId/devices/' +
       ':deviceMacAddr/schema/', deviceApi.getSchema);
     app.put('/projects/:projectId/sessions/' +
       ':deviceMacAddr/', deviceApi.startSession);
-    app.del('/projects/:projectId/sessions/' +
+    app.delete('/projects/:projectId/sessions/' +
       ':deviceMacAddr/', deviceApi.stopSession);
     app.post('/projects/:projectId/sessions/' +
       ':deviceMacAddr/updates', deviceApi.queueUpdate);
