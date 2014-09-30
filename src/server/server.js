@@ -35,6 +35,7 @@
     var bodyParser = require('body-parser');
     var multer = require('multer');
     var errorHandler = require('errorhandler');
+    var lactate = require('lactate');
 
     var config = require('../shared/config.js');
     var userApi = require('./userApi.js');
@@ -68,6 +69,7 @@
 
     var app = express();
     var rootDir = process.cwd();
+    var staticFiles = lactate.dir(path.join(rootDir, './public/'), {});
 
     console.log('###rootDir: ', rootDir);
 
@@ -89,8 +91,8 @@
     }));
     app.use(multer());
 
-    console.log('Hosting static files at: ', path.join(rootDir, './public/'));
-    app.use(express.static(path.join(rootDir, './public/')));
+    app.use(staticFiles.toMiddleware());
+
     app.use(passport.initialize());
     app.use(passport.session());
     auth.init();
