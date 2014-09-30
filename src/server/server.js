@@ -71,8 +71,6 @@
     var rootDir = process.cwd();
     var staticFiles = lactate.dir(path.join(rootDir, './public/'), {});
 
-    console.log('###rootDir: ', rootDir);
-
     // all environments
     app.set('port', process.env.PORT || config.listen_port || 3000);
     app.set('views', path.join(rootDir, './views/'));

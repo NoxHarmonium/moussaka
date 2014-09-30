@@ -93,8 +93,6 @@
         })(req, res, next);
     },
     ensureAuth: function (req, res, next) {
-      console.log('###path: ', path);
-
       var path = S(req.path)
         .chompRight('/');
       var isView = path.startsWith('/views/');
