@@ -88,6 +88,8 @@
       extended: true
     }));
     app.use(multer());
+
+    console.log('Hosting static files at: ', path.join(rootDir, './public/'));
     app.use(express.static(path.join(rootDir, './public/')));
     app.use(passport.initialize());
     app.use(passport.session());
