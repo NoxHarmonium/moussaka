@@ -64,7 +64,7 @@
 
     // all environments
     app.set('port', process.env.PORT || config.listen_port || 3000);
-    app.set('views', path.join(rootDir, './views'));
+    app.set('views', path.join(rootDir, './views/'));
     app.set('view engine', 'jade');
     app.use(express.favicon());
     app.use(express.logger('dev'));
@@ -85,7 +85,7 @@
 
     app.use(i18n.handle);
     app.use(app.router);
-    app.use(express.static(path.join(rootDir, './public')));
+    app.use(express.static(path.join(rootDir, './public/')));
 
     // development only
     if (config.show_friendly_errors) {
