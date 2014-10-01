@@ -44,6 +44,12 @@ The code style I've used for this project is documented [here](http://nodeguide.
 
 If you want to try it out (although there isn't alot to see yet) follow these instructions.
 
+### Using Heroku
+
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+
+### On Your Machine
+
 1. Make sure you have node.js and npm installed.
 2. Make sure you have mongodb installed.
 3. Clone the repository locally.
