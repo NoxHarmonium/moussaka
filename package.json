@@ -71,7 +71,8 @@
   "scripts": {
     "start": "node src/server/app.js",
     "test": "gulp test",
-    "coveralls": "./gencoverage.sh"
+    "coveralls": "./gencoverage.sh",
+    "postinstall": "./postinstall.sh"
   },
   "version": "0.0.1"
 }
