@@ -69,9 +69,8 @@
   },
   "scripts": {
     "start": "node src/server/app.js",
-    "test": "node ./node_modules/gulp/bin/gulp.js test",
-    "coveralls": "./gencoverage.sh",
-    "install": "node ./node_modules/gulp/bin/gulp.js compile"
+    "test": "gulp test",
+    "coveralls": "./gencoverage.sh"
   },
   "version": "0.0.1"
 }

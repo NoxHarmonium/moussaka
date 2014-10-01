@@ -154,6 +154,9 @@ gulp.task('watchLess', function () {
   gulp.watch(paths.lessDir, ['less']);
 });
 
+// Compile dependencies on heroku compile
+gulp.task('heroku:heroku', ['compile']);
+
 gulp.task('default', ['test']);
 gulp.task('compile', ['browserifyApp', 'less', 'prettify']);
 gulp.task('all', ['test']);
