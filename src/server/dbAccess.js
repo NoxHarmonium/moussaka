@@ -1,4 +1,4 @@
-(function (require, module) {
+(function (require, module, process) {
   'use strict';
 
   var mongoose = require('mongoose-q')();
@@ -24,12 +24,13 @@
       });
 
       try {
-        mongoose.connect(config.mongo_url);
+        var mongooseUrl = process.env.MONGO_URL || config.mongo_url;
+        mongoose.connect(mongooseUrl);
         var db = mongoose.connection;
-        console.log('Started connection on ' + (config.mongo_url)
+        console.log('Started connection on ' + (mongooseUrl)
           .cyan + ', waiting for it to open...'.grey);
       } catch (err) {
-        console.log(('Setting up failed to connect to ' + config.mongo_url)
+        console.log(('Setting up failed to connect to ' + mongooseUrl)
           .red, err.message);
         next(err);
       }
@@ -38,4 +39,4 @@
 
 
 
-})(require, module);
+})(require, module, process);

@@ -4,6 +4,11 @@
 #    unity-profiles config file
 #
 
+# The following config keys can be overridden by the specified environment variables.
+#   listen_port:    $PORT
+#   mongo_url:      $MONGO_URL
+#   session_secret: $SESSION_SECRET
+
 default: # The default config profile. (With documentation)
 
     # The port that the API listens for requests on
@@ -115,13 +120,11 @@ heroku:
     listen_port:            5000
     locale:                 "en-US"
     salt_work_factor:       1 # Reduce the work factor even more for slower VMs
-    mongo_url:              "mongodb://moussaka:moussaka@ds039960.mongolab.com:39960/moussaka"
     enable_test_exts:       true 
     show_friendly_errors :  true
     max_records_per_query:  20
     tempPasswordCodeLength: 8
     device_Timeout_Seconds: 300
-    session_secret:         6zRckBzE
     email_settings:
         enabled:    true    
         user:       "testUser"

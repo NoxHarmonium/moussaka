@@ -13,6 +13,8 @@
   ],
   "addons": [],
   "env": {
-    "NODE_ENV": "heroku"
+    "NODE_ENV": "heroku",
+    "MONGO_URL": "<your mongo url here>",
+    "SESSION_SECRET": "<your random session secret here>"
   }
 }

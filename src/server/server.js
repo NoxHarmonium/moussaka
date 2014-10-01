@@ -81,7 +81,7 @@
     app.use(session({
       resave: true,
       saveUninitialized: true,
-      secret: config.session_secret
+      secret: process.env.SESSION_SECRET || config.session_secret
     }));
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({
