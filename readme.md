@@ -45,12 +45,11 @@ The code style I've used for this project is documented [here](http://nodeguide.
 If you want to try it out (although there isn't alot to see yet) follow these instructions.
 
 ### Using Heroku
-
-1. Simply click this button:
+If you want to try it out in just a few clicks, get a [free Heroku acccount](https://www.heroku.com/pricing) and click the button below to automatically deploy Moussaka.
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
-Make sure you specify a valid mongodb URL. You can just create a free account with [mongolab](https://mongolab.com/) which will give you about 500 MB to work with which is plenty. 
+Make sure you specify a valid MongoDB URL. You can also create a free account with [MongoLab](https://mongolab.com/) which will give you a cloud hosted MongoDB instance with about 500 MB to work with.
 
 ### On Your Machine
 
