@@ -72,7 +72,7 @@
     "start": "node src/server/app.js",
     "test": "gulp test",
     "coveralls": "./gencoverage.sh",
-    "postinstall": "./postinstall.sh"
+    "postinstall": "echo $PWD && bash ./postinstall.sh"
   },
   "version": "0.0.1"
 }
