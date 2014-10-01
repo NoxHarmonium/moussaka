@@ -10,4 +10,4 @@ echo "Running bower to download client dependencies..."
 $BOWER install
 
 echo "Running gulp to compile css and js bundles..."
-node $GULP compile
+$GULP compile
