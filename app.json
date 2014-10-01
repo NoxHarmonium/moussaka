@@ -1,0 +1,18 @@
+{
+  "name": "moussaka",
+  "description": "Open Source Game Prototyping Framework",
+  "repository": "https://github.com/NoxHarmonium/moussaka.git",
+  "website": "http://noxharmonium.github.io/moussaka/",
+  "logo": "https://raw.githubusercontent.com/NoxHarmonium/moussaka/master/public/img/logo-xl.png",
+  "success_url": "/views/auth#/login",
+  "keywords": [
+    "game",
+    "prototyping",
+    "web application",
+    "open source"
+  ],
+  "addons": [],
+  "env": {
+    "NODE_ENV": "heroku"
+  }
+}

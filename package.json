@@ -47,7 +47,7 @@
     "yaml-config": "*",
     "vinyl-source-stream": "^1.0.0"
   },
-  "description": "A web application for setting up profiles that define the behavior of your Unity3D games. It aims to provide an easy interface to allow developers to enable designers and managers to do all the tweaking and to be able to share different settings between them.",
+  "description": "Open Source Game Prototyping Framework",
   "devDependencies": {
     "cheerio": "*",
     "coveralls": "*",
@@ -74,5 +74,24 @@
     "coveralls": "./gencoverage.sh",
     "postinstall": "bash ./postinstall.sh"
   },
-  "version": "0.0.1"
+  "version": "0.0.1",
+  "bugs": {
+    "url": "https://github.com/NoxHarmonium/moussaka/issues"
+  },
+  "homepage": "http://noxharmonium.github.io/moussaka/",
+  "main": "src/server/app.js",
+  "directories": {
+    "doc": "doc",
+    "test": "tests"
+  },
+  "keywords": [
+    "game",
+    "prototyping",
+    "web",
+    "application",
+    "open",
+    "source"
+  ],
+  "author": "Sean Dawson <contact@seandawson.info>",
+  "license": "MIT"
 }
