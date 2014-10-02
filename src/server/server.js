@@ -222,22 +222,12 @@
       });
     });
 
-
-    app.get('/views/partials/login', function (req, res) {
-      res.render('partials/login');
+    app.param('partialName', function (req, res, next, partialName) {
+      res.render('partials/' + partialName);
+      next();
     });
 
-    app.get('/views/partials/createAccount', function (req, res) {
-      res.render('partials/createAccount');
-    });
-
-    app.get('/views/partials/listProjects', function (req, res) {
-      res.render('partials/listProjects');
-    });
-
-    app.get('/views/partials/editProject', function (req, res) {
-      res.render('partials/editProject');
-    });
+    app.get('/views/partials/:partialName', function (req, res) {});
 
     serverModule.server = app.listen(app.get('port'), function () {
       console.log('Express server listening on port ' + app.get('port')
