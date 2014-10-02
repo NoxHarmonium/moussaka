@@ -71,6 +71,11 @@
     var rootDir = process.cwd();
     var staticFiles = lactate.dir(path.join(rootDir, './public/'), {});
 
+    // Make jade render pretty
+    // Stops whitespace dependant inline-block elements
+    // from breaking.
+    app.locals.pretty = true;
+
     // all environments
     app.set('port', process.env.PORT || config.listen_port || 3000);
     app.set('views', path.join(rootDir, './views/'));
