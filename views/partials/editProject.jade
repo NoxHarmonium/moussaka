@@ -11,16 +11,29 @@
                 textarea(rows="5" name="projectDesc" ng-model="project.description" 
                     ng-Disabled="loading")
         
-        label(ng-hide="newProject")= t("app.projectEditForm.projectAdmins")
+        label(ng-hide="newProject")= t("app.projectEditForm.projectAdmins") 
+            &nbsp 
+            a(ng-click="addAdmin()")
+                i.fa.fa-plus
             div.input-groups.width-100
-                ul
-                    li Jeff Fergurson&nbsp;
-                        i.fa.fa-remove
+                ul(ng-repeat="admin in project.admins" ng-cloak)
+                    li {{admin}}  &nbsp
+                        a(ng-hide="project.admins.length < 2" ng-click="removeAdmin(admin)")
+                            i.fa.fa-remove
 
         label(ng-hide="newProject")= t("app.projectEditForm.projectUsers")
+            &nbsp 
+            a(ng-click="addUser()")
+                i.fa.fa-plus
             div.input-groups.width-100
-                ul
+                ul(ng-show="project.users.length" ng-repeat="user in project.users" ng-cloak)
+                    li {{user}} &nbsp
+                        a(ng-click="removeUser(user)")
+                            i.fa.fa-remove
+                
+                ul(ng-hide="project.users.length") 
                     li No users are added to this project
+
 
         div.loginError.ng-hide(ng-hide="hideError")
                 p.error 
@@ -28,7 +41,7 @@
                     span &nbsp; {{ errorMessage }}   
 
         p 
-            button.btn.btn-blue(href="#/listProjects")= t("app.projectEditForm.cancel") 
+            a.btn.btn-blue(href="#/listProjects")= t("app.projectEditForm.cancel") 
 
             button.btn.btn-blue(type="submit" ng-disabled="loading")= t("app.projectEditForm.save") 
                 span &nbsp; 

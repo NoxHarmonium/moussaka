@@ -1,6 +1,6 @@
 #projects
     #projectRow.row
-        .noResults(ng-show='!projects.length')
+        .noResults(ng-show='!projects.length' ng-cloak)
             i.fa.fa-info-circle.fa-3x 
             p
                 span= t("app.projectList.noProjectsMessage1")
