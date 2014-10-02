@@ -12,27 +12,29 @@
                     ng-Disabled="loading")
         
         label(ng-hide="newProject")= t("app.projectEditForm.projectAdmins") 
-            &nbsp 
-            a(ng-click="addAdmin()")
-                i.fa.fa-plus
             div.input-groups.width-100
-                ul(ng-repeat="admin in project.admins" ng-cloak)
-                    li {{admin}}  &nbsp
+                div(ng-repeat="admin in project.admins" ng-cloak)
+                    span.label.label-green {{ admin }} 
                         a(ng-hide="project.admins.length < 2" ng-click="removeAdmin(admin)")
                             i.fa.fa-remove
+                a(href="/views/partials/addUserPopup" class="ajax-popup-link")
+                    &nbsp
+                    i.fa.fa-plus
+
+                            
 
         label(ng-hide="newProject")= t("app.projectEditForm.projectUsers")
-            &nbsp 
-            a(ng-click="addUser()")
-                i.fa.fa-plus
             div.input-groups.width-100
-                ul(ng-show="project.users.length" ng-repeat="user in project.users" ng-cloak)
-                    li {{user}} &nbsp
-                        a(ng-click="removeUser(user)")
+                div(ng-repeat="user in project.users" ng-cloak)
+                    span.label.label-green {{ admin }} 
+                        a(ng-hide="project.users.length < 2" ng-click="removeUser(user)")
                             i.fa.fa-remove
-                
-                ul(ng-hide="project.users.length") 
-                    li No users are added to this project
+                    a(ng-show="$last" ng-click="addAdmin()")
+                        &nbsp
+                        i.fa.fa-plus
+                div(ng-show="project.users.length < 2")
+                    i.fa.fa-info-circle &nbsp
+                    = t("app.projectEditForm.noProjectUsers")
 
 
         div.loginError.ng-hide(ng-hide="hideError")

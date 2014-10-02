@@ -43,7 +43,8 @@ var paths = {
     'public/less/kube.less',
     'public/less/auth.less',
     'public/less/dashboard.less',
-    'public/less/font-awesome.less'
+    'public/less/font-awesome.less',
+    'public/less/bower-include.less'
   ],
   fontSrc: [
     'bower_components/font-awesome/fonts/*'
@@ -104,9 +105,11 @@ gulp.task('browserifyLibs', ['jshint'], function (cb) {
     b.require(bowerResolve('angular-route'), {
       expose: '_angular-route'
     });
-
     b.require(bowerResolve('kube'), {
       expose: '_kube'
+    });
+    b.require(bowerResolve('magnific-popup'), {
+      expose: '_magnific-popup'
     });
 
     // Modules that work well with requireJs

@@ -37,7 +37,8 @@
         "projectAdmins" : "Admins",
         "projectUsers": "Users",
         "save": "Save",
-        "cancel": "Back"
+        "cancel": "Back",
+        "noProjectUsers": "There are no project users"
     },
 
     "sorting": {
