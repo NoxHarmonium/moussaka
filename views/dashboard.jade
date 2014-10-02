@@ -2,10 +2,9 @@ doctype html
 html(ng-app="dashboardModule")
     head
         title= t("app.dashboardTitle")
-        link(href='/css/kube.css', rel='stylesheet')
-        link(href='/css/dashboard.css', rel='stylesheet')
-        link(href='//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css' rel='stylesheet')
-        include ./favicon.jade
+        include ./includes/css.jade
+        link(href='/css/dashboard.css', rel='stylesheet')       
+        include ./includes/favicon.jade
 
     body
         header.dashboard-header(ng-controller="navigationController")
@@ -62,5 +61,5 @@ html(ng-app="dashboardModule")
             div.dashboard-view(ng-view)
 
 
-    script(src="/js/libs.js")
-    script(src="/js/app.js")
+        script(src="/js/libs.js")
+        script(src="/js/app.js")

@@ -15,6 +15,7 @@ results
 public/js/app.js
 public/js/libs.js
 public/css/*
+public/fonts/*
 
 npm-debug.log
 node_modules

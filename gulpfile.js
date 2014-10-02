@@ -42,8 +42,13 @@ var paths = {
   lessSrc: [
     'public/less/kube.less',
     'public/less/auth.less',
-    'public/less/dashboard.less'
-  ]
+    'public/less/dashboard.less',
+    'public/less/font-awesome.less'
+  ],
+  fontSrc: [
+    'bower_components/font-awesome/fonts/*'
+  ],
+  fontDest: 'public/fonts/'
 };
 
 var browserifyOptions = {
@@ -79,6 +84,11 @@ gulp.task('less', function () {
     .pipe(cache('less'))
     .pipe(less())
     .pipe(gulp.dest('./public/css'));
+});
+
+gulp.task('copyFonts', function () {
+  return gulp.src(paths.fontSrc)
+    .pipe(gulp.dest(paths.fontDest));
 });
 
 gulp.task('browserifyLibs', ['jshint'], function (cb) {
@@ -155,7 +165,7 @@ gulp.task('watchLess', function () {
 });
 
 gulp.task('default', ['test']);
-gulp.task('compile', ['browserifyApp', 'less', 'prettify']);
+gulp.task('compile', ['browserifyApp', 'less', 'copyFonts', 'prettify']);
 gulp.task('all', ['test']);
 
 // Hack to stop gulp from hanging after mocha test
