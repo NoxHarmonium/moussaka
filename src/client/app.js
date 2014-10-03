@@ -14,6 +14,10 @@ var dashboardModule = angular.module(
 
 dashboardModule.factory('locationPatched', require('./config/locationFix.js'));
 
+// Directives
+
+dashboardModule.directive('ngEnter', require('./directives/ngEnter.js'));
+
 // Resources
 
 dashboardModule.factory('User',

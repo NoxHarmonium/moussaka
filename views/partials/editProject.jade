@@ -39,7 +39,7 @@
                         td 
                             input.width-100(type="email" placeholder=t("app.projectEditForm.emailOrName") 
                                 name="newProjMembEmail" ng-model="newProjMemb.email" ng-Disabled="loading" 
-                                ng-change="projMembFieldHasChanged()" required)
+                                ng-change="projMembFieldHasChanged()" ng-enter="addNewProjectMember()" required)
                         td
                             select(name="newProjMembType" ng-model="newProjMemb.type" ng-Disabled="loading" 
                                 ng-change="projMembFieldHasChanged()")

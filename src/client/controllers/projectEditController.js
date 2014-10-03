@@ -160,6 +160,14 @@
           .then(function (project) {
             $scope.project = project;
             $scope.projectMembers = generateTableData(project);
+            // Reset the text box
+            newProj.email = '';
+            // Turn off error messages
+            $scope.newProjMembSubmitted = false;
+
+            // Return focus
+            // TODO: This isn't working 
+            $('form input[name=newProjMembEmail]').focus();
           })
           .catch(function (err) {
             $scope.handleError(err);
