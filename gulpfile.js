@@ -154,7 +154,7 @@ gulp.task('test', ['compile'], function () {
 
 gulp.task('watch', function () {
   isWatching = true;
-  gulp.watch(paths.scripts, ['browserify']);
+  gulp.watch(paths.scripts, ['browserifyApp']);
   gulp.watch(paths.lessDir, ['less']);
 });
 
@@ -163,9 +163,9 @@ gulp.task('watchLess', function () {
   gulp.watch(paths.lessDir, ['less']);
 });
 
-gulp.task('default', ['test']);
-gulp.task('compile', ['browserifyApp', 'less', 'copyFonts', 'prettify']);
-gulp.task('all', ['test']);
+gulp.task('default', ['all']);
+gulp.task('compile', ['browserifyApp', 'less', 'copyFonts']);
+gulp.task('all', ['test', 'prettify']);
 
 // Hack to stop gulp from hanging after mocha test
 // Follow:
