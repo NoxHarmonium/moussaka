@@ -28,9 +28,9 @@
 
   // Public functions
 
-  module.exports = ['$scope', 'Project', '$routeParams', 
-  'locationPatched', '$cookies',
-    function projectEditController($scope, Project, 
+  module.exports = ['$scope', 'Project', '$routeParams',
+    'locationPatched', '$cookies',
+    function projectEditController($scope, Project,
       $routeParams, locationPatched, $cookies) {
       // 
       // Setup
@@ -77,12 +77,16 @@
       }
 
       // Scroll to messages when shown
-      $('.highlight-on-show').on('show',function() {
-        console.log('show!');
-        $('body, html').animate({
-          scrollTop: this.offset().top
-          }, 300);
-      });
+      // TODO: This isn't working
+      $('.highlight-on-show')
+        .on('show', function () {
+          console.log('show!');
+          $('body, html')
+            .animate({
+              scrollTop: this.offset()
+                .top
+            }, 300);
+        });
 
       //
       // Actions
@@ -167,7 +171,8 @@
 
             // Return focus
             // TODO: This isn't working 
-            $('form input[name=newProjMembEmail]').focus();
+            $('form input[name=newProjMembEmail]')
+              .focus();
           })
           .catch(function (err) {
             $scope.handleError(err);
@@ -178,7 +183,7 @@
 
       };
 
-      $scope.removeProjMemb = function(projectMember) {
+      $scope.removeProjMemb = function (projectMember) {
         $scope.hideSuccess = true;
         $scope.loading = true;
 
@@ -255,9 +260,9 @@
         $scope.errorMessage = detail;
       };
 
-      $scope.updateShowAdmin = function() {
+      $scope.updateShowAdmin = function () {
         console.log('Current user: ', $scope.currentUser);
-        $scope.showAdmin = 
+        $scope.showAdmin =
           $scope.newProject ||
           _.contains($scope.project.admins, $scope.currentUser);
       };

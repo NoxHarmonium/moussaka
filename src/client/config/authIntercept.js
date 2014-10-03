@@ -25,7 +25,7 @@
         },
         responseError: function (rejection) {
           if (rejection.status === 401 &&
-              rejection.config.method === 'GET') {
+            rejection.config.method === 'GET') {
             $location.url('/views/auth#/login');
           }
           return $q.reject(rejection);

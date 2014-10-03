@@ -6,8 +6,7 @@ var jQueryPlugins = require('./libs/jQueryPlugins.js');
 //// ## Dashboard Module ##
 
 var dashboardModule = angular.module(
-  'dashboardModule', 
-  ['ngRoute', 'ngCookies']
+  'dashboardModule', ['ngRoute', 'ngCookies']
 );
 
 // Config
