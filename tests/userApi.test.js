@@ -218,7 +218,7 @@
       });
 
     it('Logout user [0]', function (done) {
-      agent.get('http://localhost:3000/logout/')
+      agent.post('http://localhost:3000/logout/')
         .send()
         .end(function (e, res) {
           expect(e)
@@ -384,7 +384,7 @@
     });
 
     it('Logout user [1]', function (done) {
-      agent.get('http://localhost:3000/logout/')
+      agent.post('http://localhost:3000/logout/')
         .send()
         .end(function (e, res) {
           expect(e)

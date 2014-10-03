@@ -5,7 +5,14 @@ var jQueryPlugins = require('./libs/jQueryPlugins.js');
 
 //// ## Dashboard Module ##
 
-var dashboardModule = angular.module('dashboardModule', ['ngRoute']);
+var dashboardModule = angular.module(
+  'dashboardModule', 
+  ['ngRoute', 'ngCookies']
+);
+
+// Config
+
+dashboardModule.factory('locationPatched', require('./config/locationFix.js'));
 
 // Resources
 

@@ -344,6 +344,8 @@
         req.logout();
       }
 
+      res.clearCookie('userEmail');
+
       return res.send(200);
     },
 
@@ -362,6 +364,9 @@
           if (err) {
             return next(err);
           }
+          // Set a cookie so that client side can 
+          // user logic based on email
+          res.cookie('userEmail', user._id);
           return res.send(200);
         });
       })(req, res, next);

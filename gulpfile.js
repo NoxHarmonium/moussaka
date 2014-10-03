@@ -82,7 +82,10 @@ gulp.task('less', function () {
       base: './public/less/'
     })
     .pipe(cache('less'))
-    .pipe(less())
+    .pipe(less({
+      errorReporting: 'console',
+      logLevel: 2
+    }))
     .pipe(gulp.dest('./public/css'));
 });
 
@@ -103,6 +106,9 @@ gulp.task('browserifyLibs', ['jshint'], function (cb) {
     });
     b.require(bowerResolve('angular-route'), {
       expose: '_angular-route'
+    });
+    b.require(bowerResolve('angular-cookies'), {
+      expose: '_angular-cookies'
     });
     b.require(bowerResolve('kube'), {
       expose: '_kube'
@@ -128,6 +134,7 @@ gulp.task('browserifyApp', ['browserifyLibs'], function (cb) {
   b.add(paths.browserifySrc);
   b.external('_angular');
   b.external('_angular-route');
+  b.external('_angular-cookies');
   b.external('_kube');
 
   b.external('jquery');

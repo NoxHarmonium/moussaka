@@ -15,6 +15,11 @@
         this.base();
         // TODO: Validation?
 
+        this.name = '';
+        this.description = '';
+        this.users = [];
+        this.admin = [];
+
         extend(this, data);
       };
 
@@ -57,6 +62,10 @@
         return $http.put('/projects/', that)
           .then(function (response) {
             that._id = response.data._id;
+            // The only admin should be current user
+            // at this point, there shouldn't be any
+            // users.
+            that.admins = response.data.admins;
             return that;
           }, BaseResource.handleError);
       };
@@ -68,6 +77,46 @@
             return that;
           }, BaseResource.handleError);
 
+      };
+
+      Project.prototype.addAdmin = function (email) {
+        var that = this;
+        return $http.put('/projects/' +
+            this._id + '/admins/' + email + '/')
+          .then(function (response) {
+            that.admins.push(email);
+            return that;
+          }, BaseResource.handleError);
+      };
+
+      Project.prototype.addUser = function (email) {
+        var that = this;
+        return $http.put('/projects/' +
+            this._id + '/users/' + email + '/')
+          .then(function (response) {
+            that.users.push(email);
+            return that;
+          }, BaseResource.handleError);
+      };
+
+      Project.prototype.removeAdmin = function (email) {
+        var that = this;
+        return $http.delete('/projects/' +
+            this._id + '/admins/' + email + '/')
+          .then(function (response) {
+            _.pull(that.admins, email);
+            return that;
+          }, BaseResource.handleError);
+      };
+
+      Project.prototype.removeUser = function (email) {
+        var that = this;
+        return $http.delete('/projects/' +
+            this._id + '/users/' + email + '/')
+          .then(function (response) {
+            _.pull(that.users, email);
+            return that;
+          }, BaseResource.handleError);
       };
 
       return Project;

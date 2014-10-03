@@ -20,6 +20,7 @@
     "angular": "~1.2.25",
     "angular-route": "~1.2.25",
     "kube": "https://github.com/noxharmonium/kube.git#master",
-    "font-awesome": "~4.2.0"
+    "font-awesome": "~4.2.0",
+    "angular-cookies": "~1.2.26"
   }
 }

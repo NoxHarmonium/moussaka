@@ -24,8 +24,9 @@
           return response || $q.when(response);
         },
         responseError: function (rejection) {
-          if (rejection.status === 401) {
-            $location.path('/views/auth#/login');
+          if (rejection.status === 401 &&
+              rejection.config.method === 'GET') {
+            $location.url('/views/auth#/login');
           }
           return $q.reject(rejection);
         }

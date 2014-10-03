@@ -144,7 +144,8 @@
       newProject.saveQ()
         .then(function (data) {
           res.send(201, {
-            '_id': data._id
+            '_id': data._id,
+            admins: data.admins
           });
         })
         .catch(function (err) {

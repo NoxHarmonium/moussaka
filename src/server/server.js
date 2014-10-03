@@ -133,7 +133,7 @@
     app.put('/users/:user/', userApi.putUser);
     app.post('/users/:user/password/', userApi.changePassword);
     app.post('/users/:user/resetpassword/', userApi.resetPassword);
-    app.get('/logout/', userApi.logout);
+    app.post('/logout/', userApi.logout);
     app.post('/login/', userApi.login);
     if (config.enable_test_exts) {
       app.get('/test/user_api/reset/', userApi.resetTests);

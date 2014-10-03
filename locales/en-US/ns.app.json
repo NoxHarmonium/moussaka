@@ -38,7 +38,13 @@
         "projectUsers": "Users",
         "save": "Save",
         "cancel": "Back",
-        "noProjectUsers": "There are no project users"
+        "noProjectUsers": "There are no project users",
+        "projectMembers": "Project Members",
+        "emailOrName": "Email address or name",
+        "admin": "Admin",
+        "user": "User",
+        "saveSuccess": "The project was saved successfully",
+        "readOnly": "This form is in read-only mode as you are not a project admin."
     },
 
     "sorting": {

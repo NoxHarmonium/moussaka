@@ -1,13 +1,13 @@
-(function (module, require) {
+(function (module, require, window) {
   'use strict';
-  module.exports = ['$scope', 'User',
-    function navigationController($scope, User) {
+  module.exports = ['$scope', 'User', '$location',
+    function navigationController($scope, User, $location) {
       $scope.logout = function () {
         User.logout()
           .then(function () {
-            window.location = '/views/auth/#/login';
+            window.location = '/views/auth/';
           });
       };
     }
   ];
-})(module, require);
+})(module, require, window);
