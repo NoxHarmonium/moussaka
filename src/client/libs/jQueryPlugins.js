@@ -4,7 +4,6 @@
 window.$ = window.jQuery = require('jquery');
 
 // Put all the bower loaded jquery plugins here
-require('_magnific-popup');
 
 // jQuery plugins don't really return anything so 
 // just return jQuery

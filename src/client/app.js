@@ -68,9 +68,3 @@ authModule.controller('createAccountController',
 
 // Routes
 authModule.config(require('./routes/authRoute.js'));
-
-// Global setup
-jQueryPlugins('.ajax-popup-link')
-  .magnificPopup({
-    type: 'ajax'
-  });
