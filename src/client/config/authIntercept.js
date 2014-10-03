@@ -1,7 +1,7 @@
 (function (module, require, window) {
   'use strict';
-  module.exports = ['$q',
-    function ($q) {
+  module.exports = ['$q', '$location',
+    function ($q, $location) {
       var jQuery = require('jquery');
       var progressShown = false;
       var showProgress = function () {
@@ -20,25 +20,14 @@
 
 
       return {
-        'request': function (config) {
-          return config;
+        response: function (response) {
+          return response || $q.when(response);
         },
-        'requestError': function (rejection) {
-          return $q.reject(rejection);
-        },
-        'response': function (response) {
-          return response;
-        },
-        'responseError': function (response) {
-          var status = response.status;
-
-          if (status === 401) {
-            // Redirect to login
-            window.location = '/views/auth#/login';
+        responseError: function (rejection) {
+          if (rejection.status === 401) {
+            $location.path('/views/auth#/login');
           }
-
-          // otherwise
-          return;
+          return $q.reject(rejection);
         }
       };
     }
