@@ -9,14 +9,14 @@
 
   var generateTableData = function (project) {
     var members = [];
-    _.every(project.admins, function (admin) {
+    _.each(project.admins, function (admin) {
       members.push({
         email: admin,
         // TODO: i18n
         type: 'Admin'
       });
     });
-    _.every(project.users, function (user) {
+    _.each(project.users, function (user) {
       members.push({
         email: user,
         // TODO: i18n
@@ -115,9 +115,6 @@
             $scope.hideSuccess = false;
             $scope.project = project;
             $scope.projectMembers = generateTableData(project);
-
-            console.log(JSON.stringify(project));
-            console.log(JSON.stringify($scope.projectMembers));
 
             if ($scope.newProject) {
               $scope.newProject = false;
