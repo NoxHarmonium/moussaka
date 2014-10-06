@@ -156,10 +156,17 @@
 
     updateProject: function (req, res, next) {
       var project = req.project;
+      var loggedInUser = req.user;
       if (project) {
         var query = {
           '_id': project._id
         };
+
+        if (!_.contains(project.admins, loggedInUser._id)) {
+          return res.status(401).send({
+            detail: 'Only project admins can edit projects.'
+          });
+        }
 
         // Make sure that the id is not included
         req.body = _.omit(req.body, '_id');

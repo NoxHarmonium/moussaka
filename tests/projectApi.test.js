@@ -887,6 +887,40 @@
         });
     });
 
+    it('Modify project [0] as non-admin', function (done) {
+      var projectCopy = extend({}, projects[0]);
+      projectCopy.name = 'Changed!!!';
+      projectCopy.description = 'Also changed';
+      agent.post('http://localhost:3000/projects/' + projectCopy._id + '/')
+        .send(projectCopy)
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(401);
+
+          done();
+        });
+    });
+
+    it('Get existing project [0] to check if no modifications',
+     function (done) {
+      var project = projects[0];
+
+      agent.get('http://localhost:3000/projects/' + project._id + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+
+          expect(res.ok)
+            .to.be.ok();
+
+          expect(utils.objMatch(res.body, project))
+            .to.be.ok();
+
+          done();
+        });
+    });
 
     it('Add user [1] to project [0] as non-admin', function (done) {
       var project = projects[0];
