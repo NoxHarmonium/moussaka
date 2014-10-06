@@ -7,14 +7,15 @@
   'use strict';
 
   var moment = require('moment');
-  var User = require('./schemas/user.js');
+  var User = require('../schemas/user.js');
   var passport = require('passport');
-  var testData = require('../../tests/testData.js');
-  var config = require('../shared/config.js');
+  var testData = require('../../../tests/testData.js');
+  var config = require('../../shared/config.js');
   var crypto = require('crypto');
-  var emailSend = require('./emailSend.js');
+  var emailSend = require('../email/emailSend.js');
   var Q = require('q');
-  var utils = require('../shared/utils.js');
+  var utils = require('../../shared/utils.js');
+  var emailTemplates = require('../../../emails.json');
 
   var emailConfig = config.email_settings;
 
@@ -246,7 +247,7 @@
     resetPassword: function (req, res, next) {
       var selectedUser = req.selectedUser;
       var loggedInUser = req.user;
-      var emailInfo = require('../../emails.json')
+      var emailInfo = emailTemplates
         .forgottonPassword;
 
       if (!emailInfo) {

@@ -2,9 +2,9 @@
   'use strict';
 
   var colors = require('colors');
-  var config = require('../shared/config.js');
+  var config = require('../../shared/config.js');
   var simplesmtp = require('simplesmtp');
-  var utils = require('../shared/utils.js');
+  var utils = require('../../shared/utils.js');
   var Q = require('q');
 
   var self = module.exports;

@@ -38,15 +38,15 @@
     var lactate = require('lactate');
 
     var config = require('../shared/config.js');
-    var userApi = require('./userApi.js');
-    var projectApi = require('./projectApi.js');
-    var profileApi = require('./profileApi.js');
-    var deviceApi = require('./deviceApi.js');
+    var userApi = require('./api/userApi.js');
+    var projectApi = require('./api/projectApi.js');
+    var profileApi = require('./api/profileApi.js');
+    var deviceApi = require('./api/deviceApi.js');
     var path = require('path');
     var colors = require('colors');
     var passport = require('passport');
-    var auth = require('./auth.js');
-    var dbAccess = require('./dbAccess');
+    var auth = require('./api/auth.js');
+    var dbAccess = require('./include/dbAccess.js');
     var utils = require('../shared/utils');
     var i18n = require('i18next');
 

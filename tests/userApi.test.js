@@ -5,7 +5,7 @@
   var expect = require('expect.js');
   var testData = require('./testData.js');
   var serverModule = require('../src/server/server.js');
-  var fakeSmtp = require('../src/server/fakeSmtp.js');
+  var fakeSmtp = require('../src/server/email/fakeSmtp.js');
   var cheerio = require('cheerio');
   var colors = require('colors');
   var config = require('../src/shared/config.js');
