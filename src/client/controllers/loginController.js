@@ -11,6 +11,7 @@
       $scope.loading = false;
       $scope.hideError = true;
       $scope.errorMessage = '';
+      $scope.submitted = false;
 
       $scope.formLogin = function () {
         $scope.submitted = true;

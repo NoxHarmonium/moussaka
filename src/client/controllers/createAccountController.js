@@ -4,8 +4,8 @@
   var ApiError = require('../exceptions/apiError.js');
 
   // createAccountController
-  module.exports = ['$scope', '$http', 'User',
-    function createAccountController($scope, $http, User) {
+  module.exports = ['$scope', '$http', 'User', '$location',
+    function createAccountController($scope, $http, User, $location) {
       $scope.firstName = '';
       $scope.lastName = '';
       $scope.password = '';
@@ -91,6 +91,10 @@
       $scope.passwordFieldInvalid = function () {
         return ($scope.submitted) &&
           $scope.createAccountForm.password.$error.required;
+      };
+
+      $scope.back = function () {
+        $location.path('/login');
       };
 
     }
