@@ -28,10 +28,11 @@
       }
 
       if (!utils.validateMacAddress(macAddress)) {
-        return res.send(409, {
-          detail: 'Invalid MAC address format. Should be IEEE 802 format. ' +
-            '(01-23-45-67-89-ab)'
-        });
+        return res.status(409)
+          .send({
+            detail: 'Invalid MAC address format. Should be IEEE 802 format. ' +
+              '(01-23-45-67-89-ab)'
+          });
       }
 
       var findDevice = Device.findOne({
@@ -59,9 +60,10 @@
       var existingDevice = req.device;
 
       if (!project) {
-        return res.send(404, {
-          detail: 'Project not found'
-        });
+        return res.status(404)
+          .send({
+            detail: 'Project not found'
+          });
       }
 
       if (existingDevice) {
@@ -76,7 +78,7 @@
 
         existingDevice.saveQ()
           .then(function () {
-            res.send(200);
+            res.status(200).send();
           })
           .catch(function (err) {
             next(err);
@@ -95,9 +97,10 @@
 
         newDevice.saveQ()
           .then(function (data) {
-            res.send(200, {
-              '_id': data._id
-            });
+            res.status(200)
+              .send({
+                '_id': data._id
+              });
           })
           .catch(function (err) {
             next(err);
@@ -111,15 +114,17 @@
       var device = req.device;
 
       if (!project) {
-        return res.send(404, {
-          detail: 'Project not found'
-        });
+        return res.status(404)
+          .send({
+            detail: 'Project not found'
+          });
       }
 
       if (!device) {
-        return res.send(404, {
-          detail: 'Device not found'
-        });
+        return res.status(404)
+          .send({
+            detail: 'Device not found'
+          });
       }
 
       var removeDevice = Device.remove({
@@ -128,7 +133,7 @@
 
       removeDevice.execQ()
         .then(function () {
-          res.send(200);
+          res.status(200).send();
         })
         .catch(function (err) {
           next(err);
@@ -141,36 +146,40 @@
       var device = req.device;
 
       if (!project) {
-        return res.send(404, {
-          detail: 'Project not found'
-        });
+        return res.status(404)
+          .send({
+            detail: 'Project not found'
+          });
       }
 
       if (!device) {
-        return res.send(404, {
-          detail: 'Device not found'
-        });
+        return res.status(404)
+          .send({
+            detail: 'Device not found'
+          });
       }
 
-      res.send(200, {
-        _id: device._id,
-        macAddress: device.macAddress,
-        deviceName: device.deviceName,
-        projectId: device.projectId,
-        projectVersion: device.projectVersion,
-        dataSchema: device.dataSchema,
-        currentState: device.currentState,
-        timestamp: device.timestamp
-      });
+      res.status(200)
+        .send({
+          _id: device._id,
+          macAddress: device.macAddress,
+          deviceName: device.deviceName,
+          projectId: device.projectId,
+          projectVersion: device.projectVersion,
+          dataSchema: device.dataSchema,
+          currentState: device.currentState,
+          timestamp: device.timestamp
+        });
     },
 
     listDevices: function (req, res, next) {
       var project = req.project;
 
       if (!req.project) {
-        return res.send(404, {
-          detail: 'Project not found'
-        });
+        return res.status(404)
+          .send({
+            detail: 'Project not found'
+          });
       }
 
       var query = Device.find({
@@ -187,12 +196,14 @@
           'projectVersion': 'asc'
         });
       } catch (ex) {
-        return res.send(400, ex.message);
+        return res.status(400)
+          .send(ex.message);
       }
 
       query.execQ()
         .then(function (devices) {
-          res.send(200, devices);
+          res.status(200)
+            .send(devices);
         })
         .catch(function (err) {
           next(err);
@@ -206,24 +217,27 @@
       var loggedInUser = req.user;
 
       if (!project) {
-        return res.send(404, {
-          detail: 'Project not found'
-        });
+        return res.status(404)
+          .send({
+            detail: 'Project not found'
+          });
       }
 
       if (!device) {
-        return res.send(404, {
-          detail: 'Device not found'
-        });
+        return res.status(404)
+          .send({
+            detail: 'Device not found'
+          });
       }
 
       if (device.sessionUser) {
         if (device.sessionUser !== loggedInUser._id) {
           // Conflict
-          return res.send(409, {
-            detail: 'Session already started for this' +
-              ' device with other user.'
-          });
+          return res.status(409)
+            .send({
+              detail: 'Session already started for this' +
+                ' device with other user.'
+            });
         }
       } else {
         // Start session
@@ -233,9 +247,10 @@
       device.lastAccess = Date.now();
       device.saveQ()
         .then(function (data) {
-          res.send(200, {
-            '_id': data._id
-          });
+          res.status(200)
+            .send({
+              '_id': data._id
+            });
         })
         .catch(function (err) {
           return next(err);
@@ -249,15 +264,17 @@
       var loggedInUser = req.user;
 
       if (!project) {
-        return res.send(404, {
-          detail: 'Project not found'
-        });
+        return res.status(404)
+          .send({
+            detail: 'Project not found'
+          });
       }
 
       if (!device) {
-        return res.send(404, {
-          detail: 'Device not found'
-        });
+        return res.status(404)
+          .send({
+            detail: 'Device not found'
+          });
       }
 
       if (device.sessionUser) {
@@ -265,15 +282,16 @@
           device.sessionUser = null;
         } else {
           // Conflict
-          return res.send(409, {
-            detail: 'Cannot stop session you didn\'t start'
-          });
+          return res.status(409)
+            .send({
+              detail: 'Cannot stop session you didn\'t start'
+            });
         }
       }
 
       device.saveQ()
         .then(function () {
-          res.send(200);
+          res.status(200).send();
         })
         .catch(function (err) {
           next(err);
@@ -287,18 +305,21 @@
       var loggedInUser = req.user;
 
       if (!project) {
-        return res.send(404, {
-          detail: 'Project not found'
-        });
+        return res.status(404)
+          .send({
+            detail: 'Project not found'
+          });
       }
 
       if (!device) {
-        return res.send(404, {
-          detail: 'Device not found'
-        });
+        return res.status(404)
+          .send({
+            detail: 'Device not found'
+          });
       }
 
-      res.send(200, device.dataSchema);
+      res.status(200)
+        .send(device.dataSchema);
     },
 
     queueUpdate: function (req, res, next) {
@@ -307,22 +328,25 @@
       var loggedInUser = req.user;
 
       if (!project) {
-        return res.send(404, {
-          detail: 'Project not found'
-        });
+        return res.status(404)
+          .send({
+            detail: 'Project not found'
+          });
       }
 
       if (!device) {
-        return res.send(404, {
-          detail: 'Device not found'
-        });
+        return res.status(404)
+          .send({
+            detail: 'Device not found'
+          });
       }
 
       if (device.sessionUser !== loggedInUser._id) {
-        return res.send(401, {
-          detail: 'Logged in user is not in current session ' +
-            'with this device.'
-        });
+        return res.status(401)
+          .send({
+            detail: 'Logged in user is not in current session ' +
+              'with this device.'
+          });
       }
 
       var allSchemas = device.dataSchema;
@@ -351,10 +375,11 @@
       });
 
       if (validationErrors.length > 0) {
-        return res.send(409, {
-          detail: 'There were error/s during data validation: ' +
-            validationErrors.join(', ') + '.'
-        });
+        return res.status(409)
+          .send({
+            detail: 'There were error/s during data validation: ' +
+              validationErrors.join(', ') + '.'
+          });
       }
 
       var newUpdate = new Update({
@@ -367,7 +392,7 @@
           return device.saveQ();
         })
         .then(function () {
-          res.send(200);
+          res.status(200).send();
         })
         .catch(function (err) {
           next(err);
@@ -380,19 +405,22 @@
       var device = req.device;
 
       if (!project) {
-        return res.send(404, {
-          detail: 'Project not found'
-        });
+        return res.status(404)
+          .send({
+            detail: 'Project not found'
+          });
       }
 
       if (!device) {
-        return res.send(404, {
-          detail: 'Device not found'
-        });
+        return res.status(404)
+          .send({
+            detail: 'Device not found'
+          });
       }
 
       var sendMessagesToClient = function (messages) {
-        res.send(messages);
+        res.status(200)
+          .send(messages);
         return messages;
       };
 
@@ -453,7 +481,7 @@
 
       Q.all([clearDevice, clearUpdates])
         .then(function () {
-          res.send(200);
+          res.status(200).send();
         })
         .catch(function (err) {
           next(err);

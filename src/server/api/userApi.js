@@ -54,23 +54,26 @@
       // on user who you share a project with?
 
       if (!selectedUser) {
-        return res.send(404, {
-          detail: 'User doesn\'t exist'
-        });
+        return res.status(404)
+          .send({
+            detail: 'User doesn\'t exist'
+          });
       }
 
       if (loggedInUser._id !== selectedUser._id) {
-        return res.send(401, {
-          detail: 'Can only get information on logged in user.'
-        });
+        return res.status(401)
+          .send({
+            detail: 'Can only get information on logged in user.'
+          });
       }
 
-      return res.send({
-        username: loggedInUser.username,
-        apiKey: loggedInUser.apiKey,
-        firstName: loggedInUser.firstName,
-        lastName: loggedInUser.lastName
-      });
+      return res.status(200)
+        .send({
+          username: loggedInUser.username,
+          apiKey: loggedInUser.apiKey,
+          firstName: loggedInUser.firstName,
+          lastName: loggedInUser.lastName
+        });
     },
 
     deleteUser: function (req, res, next) {
@@ -78,21 +81,23 @@
       var selectedUser = req.selectedUser;
 
       if (!currentUser) {
-        return res.send(401, {
-          detail: 'You are not logged in as a user'
-        });
+        return res.status(401)
+          .send({
+            detail: 'You are not logged in as a user'
+          });
       }
 
       if (currentUser._id !== selectedUser._id) {
-        return res.send(401, {
-          detail: 'A user can only delete their own account'
-        });
+        return res.status(401)
+          .send({
+            detail: 'A user can only delete their own account'
+          });
       }
 
       currentUser.removeQ()
         .then(function () {
           req.logout();
-          res.send(200);
+          res.status(200).send();
         })
         .catch(function (err) {
           next(err);
@@ -104,16 +109,18 @@
       var data = req.body;
 
       if (req.selectedUser) {
-        return res.send(409, {
-          detail: 'User already exists'
-        });
+        return res.status(409)
+          .send({
+            detail: 'User already exists'
+          });
       }
 
       if (!utils.isNonEmptyString(data.username) ||
         !utils.isNonEmptyString(data.password)) {
-        return res.send(409, {
-          detail: 'Both username and password fields are required'
-        });
+        return res.status(409)
+          .send({
+            detail: 'Both username and password fields are required'
+          });
       }
 
       var newUser = new User({
@@ -125,12 +132,13 @@
 
       newUser.saveQ()
         .then(function (savedUser) {
-          res.send(201, {
-            username: savedUser.username,
-            apiKey: savedUser.apiKey,
-            firstName: savedUser.firstName,
-            lastName: savedUser.lastName
-          });
+          res.status(201)
+            .send({
+              username: savedUser.username,
+              apiKey: savedUser.apiKey,
+              firstName: savedUser.firstName,
+              lastName: savedUser.lastName
+            });
         })
         .catch(function (err) {
           next(err);
@@ -144,17 +152,19 @@
       var selectedUser = req.selectedUser;
 
       if (loggedInUser) {
-        return res.send(400, {
-          detail: 'Cannot change password when logged in'
-        });
+        return res.status(400)
+          .send({
+            detail: 'Cannot change password when logged in'
+          });
       }
 
       if (!data.tempPasswordCode &&
         !data.oldPassword) {
-        return res.send(400, {
-          detail: 'You need either \'tempPasswordCode\'' +
-            'or \'oldPassword\' to change your password.'
-        });
+        return res.status(400)
+          .send({
+            detail: 'You need either \'tempPasswordCode\'' +
+              'or \'oldPassword\' to change your password.'
+          });
       }
 
       var verifyTempCode = function (tempCode) {
@@ -230,13 +240,14 @@
       verifyMethod
         .then(saveNewPassword)
         .then(function () {
-          res.send(200);
+          res.status(200).send();
         })
         .catch(function (err) {
           if (err.sendToClient) {
-            res.send(err.sendToClient.code, {
-              detail: err.sendToClient.message
-            });
+            res.status(err.sendToClient.code)
+              .send({
+                detail: err.sendToClient.message
+              });
           } else {
             next(err);
           }
@@ -256,15 +267,17 @@
       }
 
       if (loggedInUser) {
-        return res.send(400, {
-          'detail': 'Cannot reset password while logged in'
-        });
+        return res.status(400)
+          .send({
+            'detail': 'Cannot reset password while logged in'
+          });
       }
 
       if (!selectedUser) {
-        return res.send(404, {
-          'detail': 'User not found'
-        });
+        return res.status(404)
+          .send({
+            'detail': 'User not found'
+          });
       }
 
       var generateTempPasswordCode = function () {
@@ -327,7 +340,7 @@
           return sendEmail(renderedEmail);
         })
         .then(function (message) {
-          res.send(200);
+          res.status(200).send();
         })
         .catch(function (err) {
           if (err.previous) {
@@ -348,7 +361,7 @@
 
       res.clearCookie('userEmail');
 
-      return res.send(200);
+      return res.status(200).send();
     },
 
     login: function (req, res, next) {
@@ -358,9 +371,10 @@
         }
 
         if (!user) {
-          return res.send(401, {
-            'detail': 'Incorrect username/password'
-          });
+          return res.status(401)
+            .send({
+              'detail': 'Incorrect username/password'
+            });
         }
         req.logIn(user, function (err) {
           if (err) {
@@ -369,7 +383,7 @@
           // Set a cookie so that client side can 
           // user logic based on email
           res.cookie('userEmail', user._id);
-          return res.send(200);
+          return res.status(200).send();
         });
       })(req, res, next);
     },
@@ -401,7 +415,7 @@
         for (i = 0; i < users.length; i++) {
           users[i].remove();
         }
-        return res.send(200);
+        return res.status(200).send();
       });
     },
 
@@ -411,7 +425,7 @@
 
       selectedUser.saveQ()
         .then(function () {
-          res.send(200);
+          res.status(200).send();
         })
         .catch(function (err) {
           next(err);

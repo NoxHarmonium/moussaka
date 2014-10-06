@@ -23,9 +23,10 @@
       var loggedInUser = req.user;
 
       if (!loggedInUser) {
-        return res.send(401, {
-          detail: 'Not logged in'
-        });
+        return res.status(401)
+          .send({
+            detail: 'Not logged in'
+          });
       }
 
       if (!utils.exists(projectId)) {
@@ -48,10 +49,11 @@
           if (project && !(_.contains(project.admins, loggedInUser._id) ||
             _.contains(project.users, loggedInUser._id))) {
             // Need to be a user of the project to see it
-            res.send(401, {
-              detail: 'You do not have permission to access ' +
-                'this project.'
-            });
+            res.status(401)
+              .send({
+                detail: 'You do not have permission to access ' +
+                  'this project.'
+              });
           } else {
             next();
           }
@@ -69,9 +71,10 @@
 
     listProjects: function (req, res, next) {
       if (!req.user) {
-        return res.send(401, {
-          detail: 'Not logged in'
-        });
+        return res.status(401)
+          .send({
+            detail: 'Not logged in'
+          });
       }
 
       var query = Project.find({
@@ -91,12 +94,14 @@
           'name': 'asc'
         });
       } catch (ex) {
-        return res.send(400, ex.message);
+        return res.status(400)
+          .send(ex.message);
       }
 
       query.execQ()
         .then(function (projects) {
-          res.send(200, projects);
+          res.status(200)
+            .send(projects);
         })
         .catch(function (err) {
           next(err);
@@ -108,15 +113,17 @@
       var name = req.body.name;
 
       if (!req.user) {
-        return res.send(401, {
-          detail: 'Not logged in'
-        });
+        return res.status(401)
+          .send({
+            detail: 'Not logged in'
+          });
       }
 
       if (!utils.isNonEmptyString(name)) {
-        return res.send(409, {
-          detail: 'A name field is required'
-        });
+        return res.status(409)
+          .send({
+            detail: 'A name field is required'
+          });
       }
 
       var newProject = new Project({
@@ -127,17 +134,19 @@
 
       newProject.saveQ()
         .then(function (data) {
-          res.send(201, {
-            '_id': data._id,
-            admins: data.admins
-          });
+          res.status(201)
+            .send({
+              '_id': data._id,
+              admins: data.admins
+            });
         })
         .catch(function (err) {
           // Duplicate check
           if (err.code === 11000) {
-            res.send(409, {
-              'detail': 'A project with this name already exists.'
-            });
+            res.status(409)
+              .send({
+                'detail': 'A project with this name already exists.'
+              });
           } else {
             next(err);
           }
@@ -162,7 +171,7 @@
 
         Project.findOneAndUpdateQ(query, req.body)
           .then(function (data) {
-            res.send(200);
+            res.status(200).send();
           })
           .catch(function (err) {
             next(err);
@@ -170,9 +179,10 @@
           .done();
 
       } else {
-        return res.send(404, {
-          detail: 'Project doesn\'t exist'
-        });
+        return res.status(404)
+          .send({
+            detail: 'Project doesn\'t exist'
+          });
       }
 
     },
@@ -180,18 +190,20 @@
     getProject: function (req, res, next) {
       var project = req.project;
       if (project) {
-        return res.send({
-          _id: project._id,
-          name: project.name,
-          version: project.version,
-          admins: project.admins,
-          users: project.users,
-          description: project.description
-        });
+        return res.status(200)
+          .send({
+            _id: project._id,
+            name: project.name,
+            version: project.version,
+            admins: project.admins,
+            users: project.users,
+            description: project.description
+          });
       } else {
-        return res.send(404, {
-          detail: 'Project doesn\'t exist'
-        });
+        return res.status(404)
+          .send({
+            detail: 'Project doesn\'t exist'
+          });
       }
     },
 
@@ -201,33 +213,38 @@
       var loggedInUser = req.user;
 
       if (!project) {
-        return res.send(404, {
-          detail: 'Specified project doesn\'t exist'
-        });
+        return res.status(404)
+          .send({
+            detail: 'Specified project doesn\'t exist'
+          });
       }
 
       if (!selectedUser) {
-        return res.send(404, {
-          detail: 'Specified user doesn\'t exist'
-        });
+        return res.status(404)
+          .send({
+            detail: 'Specified user doesn\'t exist'
+          });
       }
 
       if (!_.contains(project.admins, loggedInUser._id)) {
-        return res.send(401, {
-          detail: 'Only admins can change a project user list'
-        });
+        return res.status(401)
+          .send({
+            detail: 'Only admins can change a project user list'
+          });
       }
 
       if (_.contains(project.admins, selectedUser._id)) {
-        return res.send(409, {
-          detail: 'Specified user is already an admin of this project.'
-        });
+        return res.status(409)
+          .send({
+            detail: 'Specified user is already an admin of this project.'
+          });
       }
 
       if (_.contains(project.users, selectedUser._id)) {
-        return res.send(409, {
-          detail: 'Specified user already added to project users'
-        });
+        return res.status(409)
+          .send({
+            detail: 'Specified user already added to project users'
+          });
       }
 
       // Add user to users array
@@ -235,7 +252,7 @@
 
       project.saveQ()
         .then(function () {
-          res.send(200);
+          res.status(200).send();
         })
         .catch(function (err) {
           next(err);
@@ -249,27 +266,31 @@
       var loggedInUser = req.user;
 
       if (!project) {
-        return res.send(404, {
-          detail: 'Specified project doesn\'t exist'
-        });
+        return res.status(404)
+          .send({
+            detail: 'Specified project doesn\'t exist'
+          });
       }
 
       if (!selectedUser) {
-        return res.send(404, {
-          detail: 'Specified user doesn\'t exist'
-        });
+        return res.status(404)
+          .send({
+            detail: 'Specified user doesn\'t exist'
+          });
       }
 
       if (!_.contains(project.admins, loggedInUser._id)) {
-        return res.send(401, {
-          detail: 'Only admins can change a project user list'
-        });
+        return res.status(401)
+          .send({
+            detail: 'Only admins can change a project user list'
+          });
       }
 
       if (!_.contains(req.project.users, selectedUser._id)) {
-        return res.send(404, {
-          detail: 'User is not a member of this project'
-        });
+        return res.status(404)
+          .send({
+            detail: 'User is not a member of this project'
+          });
       }
 
       // Remove user from users array
@@ -278,7 +299,7 @@
 
       project.saveQ()
         .then(function () {
-          res.send(200);
+          res.status(200).send();
         })
         .catch(function (err) {
           next(err);
@@ -292,21 +313,24 @@
       var loggedInUser = req.user;
 
       if (!project) {
-        return res.send(404, {
-          detail: 'Specified project doesn\'t exist'
-        });
+        return res.status(404)
+          .send({
+            detail: 'Specified project doesn\'t exist'
+          });
       }
 
       if (!selectedUser) {
-        return res.send(404, {
-          detail: 'Specified user doesn\'t exist'
-        });
+        return res.status(404)
+          .send({
+            detail: 'Specified user doesn\'t exist'
+          });
       }
 
       if (!_.contains(project.admins, loggedInUser._id)) {
-        return res.send(401, {
-          detail: 'Only admins can change a project admin list'
-        });
+        return res.status(401)
+          .send({
+            detail: 'Only admins can change a project admin list'
+          });
       }
 
       if (_.contains(project.users, selectedUser._id)) {
@@ -316,9 +340,10 @@
       }
 
       if (_.contains(project.admins, selectedUser._id)) {
-        return res.send(409, {
-          detail: 'Specified user already added to project admins'
-        });
+        return res.status(409)
+          .send({
+            detail: 'Specified user already added to project admins'
+          });
       }
 
       // Add user to admins array
@@ -326,7 +351,7 @@
 
       project.saveQ()
         .then(function () {
-          res.send(200);
+          res.status(200).send();
         })
         .catch(function (err) {
           next(err);
@@ -340,33 +365,38 @@
       var loggedInUser = req.user;
 
       if (!project) {
-        return res.send(404, {
-          detail: 'Specified project doesn\'t exist'
-        });
+        return res.status(404)
+          .send({
+            detail: 'Specified project doesn\'t exist'
+          });
       }
 
       if (!selectedUser) {
-        return res.send(404, {
-          detail: 'Specified user doesn\'t exist'
-        });
+        return res.status(404)
+          .send({
+            detail: 'Specified user doesn\'t exist'
+          });
       }
 
       if (!_.contains(project.admins, loggedInUser._id)) {
-        return res.send(401, {
-          detail: 'Only admins can change a project user list'
-        });
+        return res.status(401)
+          .send({
+            detail: 'Only admins can change a project user list'
+          });
       }
 
       if (!_.contains(req.project.admins, selectedUser._id)) {
-        return res.send(404, {
-          detail: 'User is not an admin of this project'
-        });
+        return res.status(404)
+          .send({
+            detail: 'User is not an admin of this project'
+          });
       }
 
       if (project.admins.length === 1) {
-        return res.send(401, {
-          detail: 'A project must have at least one admin'
-        });
+        return res.status(401)
+          .send({
+            detail: 'A project must have at least one admin'
+          });
       }
 
       // Remove user from admins array
@@ -375,7 +405,7 @@
 
       project.saveQ()
         .then(function () {
-          res.send(200);
+          res.status(200).send();
         })
         .catch(function (err) {
           next(err);
@@ -388,20 +418,22 @@
       var loggedInUser = req.user;
 
       if (!project) {
-        return res.send(404, {
-          detail: 'Specified project doesn\'t exist'
-        });
+        return res.status(404)
+          .send({
+            detail: 'Specified project doesn\'t exist'
+          });
       }
 
       if (!_.contains(project.admins, loggedInUser._id)) {
-        return res.send(401, {
-          detail: 'Only admins can delete a project'
-        });
+        return res.status(401)
+          .send({
+            detail: 'Only admins can delete a project'
+          });
       }
 
       project.removeQ()
         .then(function () {
-          res.send(200);
+          res.status(200).send();
         })
         .catch(function (err) {
           next(err);
@@ -438,7 +470,7 @@
         for (i = 0; i < projects.length; i++) {
           projects[i].remove();
         }
-        return res.send(200);
+        return res.status(200).send();
       });
     }
 

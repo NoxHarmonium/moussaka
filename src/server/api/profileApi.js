@@ -56,25 +56,28 @@
       var loggedInUser = req.user;
 
       if (!project) {
-        return res.send(404, {
-          detail: 'Specified project doesn\'t exist'
-        });
+        return res.status(404)
+          .send({
+            detail: 'Specified project doesn\'t exist'
+          });
       }
 
       if (!profile) {
-        return res.send(404, {
-          detail: 'Profile doesn\'t exist'
-        });
+        return res.status(404)
+          .send({
+            detail: 'Profile doesn\'t exist'
+          });
       }
 
-      res.send(200, {
-        projectId: profile.projectId,
-        projectVersion: profile.projectVersion,
-        profileName: profile.profileName,
-        profileData: profile.profileData,
-        owner: profile.owner,
-        timestamp: profile.timestamp
-      });
+      res.status(200)
+        .send({
+          projectId: profile.projectId,
+          projectVersion: profile.projectVersion,
+          profileName: profile.profileName,
+          profileData: profile.profileData,
+          owner: profile.owner,
+          timestamp: profile.timestamp
+        });
     },
 
     getProfiles: function (req, res, next) {
@@ -83,9 +86,10 @@
       var projectVersion = req.query.projectVersion;
 
       if (!project) {
-        return res.send(404, {
-          detail: 'Specified project doesn\'t exist'
-        });
+        return res.status(404)
+          .send({
+            detail: 'Specified project doesn\'t exist'
+          });
       }
 
       var query = Profile.find();
@@ -107,12 +111,14 @@
           'profileName': 'asc'
         });
       } catch (ex) {
-        return res.send(400, ex.message);
+        return res.status(400)
+          .send(ex.message);
       }
 
       query.execQ()
         .then(function (data) {
-          res.send(200, data);
+          res.status(200)
+            .send(data);
         })
         .catch(function (err) {
           next(err);
@@ -128,22 +134,25 @@
       var profileName = data.profileName;
 
       if (!deviceId) {
-        return res.send(409, {
-          detail: 'No device ID specified in query string. ' +
-            '(eg. .../profiles/?deviceId=xxx)'
-        });
+        return res.status(409)
+          .send({
+            detail: 'No device ID specified in query string. ' +
+              '(eg. .../profiles/?deviceId=xxx)'
+          });
       }
 
       if (!project) {
-        return res.send(404, {
-          detail: 'Specified project doesn\'t exist'
-        });
+        return res.status(404)
+          .send({
+            detail: 'Specified project doesn\'t exist'
+          });
       }
 
       if (!utils.isNonEmptyString(profileName)) {
-        return res.send(409, {
-          detail: 'A projectName field is required'
-        });
+        return res.status(409)
+          .send({
+            detail: 'A projectName field is required'
+          });
       }
 
       var getDevice = Device.findOne({
@@ -162,9 +171,10 @@
       };
 
       var returnId = function (savedProfile) {
-        res.send(201, {
-          _id: savedProfile._id
-        });
+        res.status(200)
+          .send({
+            _id: savedProfile._id
+          });
       };
 
       getDevice.execQ()
@@ -182,28 +192,31 @@
       var loggedInUser = req.user;
 
       if (!project) {
-        return res.send(404, {
-          detail: 'Specified project doesn\'t exist'
-        });
+        return res.status(404)
+          .send({
+            detail: 'Specified project doesn\'t exist'
+          });
       }
 
       if (!profile) {
-        return res.send(404, {
-          detail: 'Profile doesn\'t exist'
-        });
+        return res.status(404)
+          .send({
+            detail: 'Profile doesn\'t exist'
+          });
       }
 
       if (!(_.contains(project.admins, loggedInUser._id) ||
         (profile.owner === loggedInUser._id))) {
-        return res.send(401, {
-          detail: 'Only authorised profile owner or a project' +
-            'admin can delete a profile.'
-        });
+        return res.status(401)
+          .send({
+            detail: 'Only authorised profile owner or a project' +
+              'admin can delete a profile.'
+          });
       }
 
       profile.removeQ()
         .then(function () {
-          res.send(200);
+          res.status(200).send();
         })
         .catch(function (err) {
           next(err);
@@ -218,7 +231,7 @@
     resetTests: function (req, res, next) {
       Profile.removeQ({})
         .then(function () {
-          res.send(200);
+          res.status(200).send();
         })
         .catch(function (err) {
           next(err);

@@ -82,7 +82,9 @@
     app.set('views', path.join(rootDir, './views/'));
     app.set('view engine', 'jade');
     app.use(favicon(path.join(rootDir, './public/img/favicon/favicon.ico')));
-    app.use(logger('dev', {stream: serverModule.logFile}));
+    app.use(logger('dev', {
+      stream: serverModule.logFile
+    }));
     app.use(methodOverride());
     app.use(session({
       resave: true,
