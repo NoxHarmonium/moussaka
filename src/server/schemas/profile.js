@@ -9,15 +9,17 @@
     projectId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Project',
-      required: true
+      required: true,
     },
     projectVersion: {
       type: String,
-      required: true
+      required: true,
+      trim: true
     },
     profileName: {
       type: String,
-      required: true
+      required: true,
+      trim: true
     },
     profileData: {
       type: Schema.Types.Mixed,
@@ -29,7 +31,8 @@
     },
     owner: {
       type: String,
-      required: true
+      required: true,
+      trim: true
     }
   });
 

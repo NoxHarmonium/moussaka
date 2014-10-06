@@ -13,17 +13,20 @@
     },
     projectVersion: {
       type: String,
-      required: true
+      required: true,
+      trim: true
     },
     macAddress: {
       type: String,
       required: true,
+      trim: true,
       unique: true,
       index: true
     },
     deviceName: {
       type: String,
-      required: true
+      required: true,
+      trim: true
     },
     dataSchema: {
       type: Schema.Types.Mixed,
@@ -35,7 +38,8 @@
     },
     sessionUser: {
       type: String,
-      required: false
+      required: false,
+      trim: true
     },
     timestamp: {
       type: Date,

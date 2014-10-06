@@ -282,7 +282,7 @@
 
     it('Create project [0]', function (done) {
       var project = projects[0];
-
+      
       agent.put('http://localhost:3000/projects/')
         .send(project)
         .end(function (e, res) {
@@ -293,6 +293,25 @@
 
           // Set test data id to the returned id
           project._id = res.body._id;
+
+          done();
+        });
+
+    });
+
+    it('Create project [0] with whitespace in name', function (done) {
+      // Check if whitespace is trimmed in queries
+      var projectCopy = extend({}, projects[0]);
+
+      projectCopy.name = '    ' + projectCopy.name + '    ';
+
+      agent.put('http://localhost:3000/projects/')
+        .send(projectCopy)
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(409);
 
           done();
         });

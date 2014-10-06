@@ -12,22 +12,27 @@
   var UserSchema = new Schema({
     _id: {
       type: String,
-      required: true
+      required: true,
+      trim: true
     },
     password: {
       type: String,
-      required: true
+      required: true,
+      trim: true
     },
     firstName: {
       type: String,
-      required: true
+      required: true,
+      trim: true
     },
     lastName: {
       type: String,
-      required: true
+      required: true,
+      trim: true
     },
     tempPasswordCode: {
-      type: String
+      type: String,
+      trim: true
     },
     passwordExpiry: {
       type: Date
@@ -35,7 +40,8 @@
     apiKey: {
       type: String,
       default: uuid.v4,
-      unique: true
+      unique: true,
+      trim: true
     }
 
   });
