@@ -52,7 +52,7 @@ var paths = {
 };
 
 var browserifyOptions = {
-  insertGlobals: false,
+  insertGlobals: true,
   debug: config.code_generation.browserify.debug
 };
 
