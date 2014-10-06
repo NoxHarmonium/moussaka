@@ -16,6 +16,7 @@
   var Q = require('q');
   var utils = require('../../shared/utils.js');
   var emailTemplates = require('../../../emails.json');
+  var queryFilters = require('../include/queryFilters.js');
 
   var emailConfig = config.email_settings;
 

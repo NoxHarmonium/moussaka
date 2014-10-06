@@ -18,6 +18,7 @@
   var Q = require('q');
   var utils = require('../../shared/utils.js');
   var _ = require('lodash');
+  var queryFilters = require('../include/queryFilters.js');
 
   module.exports = {
 
@@ -80,8 +81,6 @@
       var project = req.project;
       var loggedInUser = req.user;
       var projectVersion = req.query.projectVersion;
-      var minRecord = req.query.minRecord;
-      var maxRecord = req.query.maxRecord;
 
       if (!project) {
         return res.send(404, {
@@ -97,34 +96,19 @@
       query.where('projectId')
         .equals(project._id);
 
-      query.sort({
-        'profileName': 'asc'
-      });
-
       if (utils.exists(projectVersion)) {
         query.where('projectVersion')
           .equals(projectVersion);
       }
 
-      var maxRecordCount = config.max_records_per_query;
-
-      // Pagination
-      if (minRecord) {
-        query.skip(minRecord);
+      try {
+        queryFilters.paginate(req.query, query);
+        queryFilters.sort(req.query, query, {
+          'profileName': 'asc'
+        });
+      } catch (ex) {
+        return res.send(400, ex.message);
       }
-      if (minRecord && maxRecord) {
-        if (maxRecord < minRecord) {
-          return res.send(400, {
-            detail: 'Invalid pagination range'
-          });
-        }
-
-        maxRecordCount = Math.min(
-          maxRecordCount, (maxRecord - minRecord) + 1
-        );
-      }
-
-      query.limit(maxRecordCount);
 
       query.execQ()
         .then(function (data) {

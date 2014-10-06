@@ -1547,6 +1547,102 @@
         });
     });
 
+    it('Test sorting (invalid field)', function (done) {
+      var device = devices[0];
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/devices/')
+        .query({
+          sortField: 'invalid'
+        })
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(400);
+
+
+          done();
+        });
+    });
+
+    it('Test sorting (invalid dir)', function (done) {
+      var device = devices[0];
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/devices/')
+        .query({
+          sortField: 'name',
+          sortDir: 'invalid'
+        })
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(400);
+
+          done();
+        });
+    });
+
+    it('Test sorting (timestamp/asc)', function (done) {
+      var device = devices[0];
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/devices/')
+        .query({
+          sortField: 'timestamp',
+          sortDir: 'asc',
+          maxRecord: 5
+        })
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          var prevDev = null;
+          _.each(res.body, function (dev) {
+            if (prevDev) {
+              // Check sort order
+              expect(prevDev.timestamp < dev.timestamp)
+                .to.be.ok();
+            }
+            prevDev = dev;
+          });
+
+
+          done();
+        });
+    });
+
+    it('Test sorting (timestamp/desc)', function (done) {
+      var device = devices[0];
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/devices/')
+        .query({
+          sortField: 'timestamp',
+          sortDir: 'desc',
+          maxRecord: 5
+        })
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          var prevDev = null;
+          _.each(res.body, function (dev) {
+            if (prevDev) {
+              // Check sort order
+              expect(prevDev.timestamp > dev.timestamp)
+                .to.be.ok();
+            }
+            prevDev = dev;
+          });
+
+
+          done();
+        });
+    });
+
     // TODO: Somehow simulate device connect timeout for testing
   });
 })(require, describe, it);

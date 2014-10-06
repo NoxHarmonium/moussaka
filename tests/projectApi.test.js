@@ -19,6 +19,17 @@
       .padLeft(3, '0');
   };
 
+  var _generateProjDesc = function (index) {
+    var padded = _formatTestIndex(index);
+    var chars = '';
+    for (var i = 0; i < padded.length; i++) {
+      var n = parseInt(padded.charAt(i));
+      var c = String.fromCharCode(97 + n);
+      chars += c;
+    }
+    return chars;
+  };
+
   describe('Project API tests', function () {
     var id;
     var users = testData.getTestUsers();
@@ -1397,6 +1408,8 @@
         project.name = 'TEST_DATA_DELETE_' +
           _formatTestIndex(currentProjectIndex);
 
+        project.description = _generateProjDesc(currentProjectIndex);
+
         agent.put('http://localhost:3000/projects/')
           .send(project)
           .end(function (e, res) {
@@ -1580,6 +1593,94 @@
             )
               .to.be.ok();
           }
+
+          done();
+        });
+    });
+
+    it('Test sorting (invalid field)', function (done) {
+      agent.get('http://localhost:3000/projects/')
+        .query({
+          sortField: 'invalid'
+        })
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(400);
+
+
+          done();
+        });
+    });
+
+    it('Test sorting (invalid dir)', function (done) {
+      agent.get('http://localhost:3000/projects/')
+        .query({
+          sortField: 'name',
+          sortDir: 'invalid'
+        })
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(400);
+
+          done();
+        });
+    });
+
+    it('Test sorting (description/asc)', function (done) {
+      agent.get('http://localhost:3000/projects/')
+        .query({
+          sortField: 'description',
+          sortDir: 'asc',
+          maxRecord: 5
+        })
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          var prevProj = null;
+          _.each(res.body, function (proj) {
+            if (prevProj) {
+              // Check sort order
+              expect(prevProj.description < proj.description)
+                .to.be.ok();
+            }
+            prevProj = proj;
+          });
+
+
+          done();
+        });
+    });
+
+    it('Test sorting (description/desc)', function (done) {
+      agent.get('http://localhost:3000/projects/')
+        .query({
+          sortField: 'description',
+          sortDir: 'desc',
+          maxRecord: 5
+        })
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          var prevProj = null;
+          _.each(res.body, function (proj) {
+            if (prevProj) {
+              // Check sort order
+              expect(prevProj.description > proj.description)
+                .to.be.ok();
+            }
+            prevProj = proj;
+          });
+
 
           done();
         });

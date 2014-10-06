@@ -11,6 +11,7 @@
   var Q = require('q');
   var utils = require('../../shared/utils.js');
   var controls = require('../../shared/controls.js');
+  var queryFilters = require('../include/queryFilters.js');
 
   // Public functions
   module.exports = {
@@ -165,8 +166,6 @@
 
     listDevices: function (req, res, next) {
       var project = req.project;
-      var minRecord = req.query.minRecord;
-      var maxRecord = req.query.maxRecord;
 
       if (!req.project) {
         return res.send(404, {
@@ -174,39 +173,24 @@
         });
       }
 
-      var getDevices = Device.find({
+      var query = Device.find({
         projectId: project._id
       });
 
-      getDevices.select('macAddress projectId projectVersion ' +
+      query.select('macAddress projectId projectVersion ' +
         'dataSchema currentState timestamp deviceName');
 
-      getDevices.sort({
-        'timestamp': 'desc',
-        'projectVersion': 'asc'
-      });
-
-      var maxRecordCount = config.max_records_per_query;
-
-      // Pagination
-      if (minRecord) {
-        getDevices.skip(minRecord);
-      }
-      if (minRecord && maxRecord) {
-        if (maxRecord < minRecord) {
-          return res.send(400, {
-            detail: 'Invalid pagination range'
-          });
-        }
-
-        maxRecordCount = Math.min(
-          maxRecordCount, (maxRecord - minRecord) + 1
-        );
+      try {
+        queryFilters.paginate(req.query, query);
+        queryFilters.sort(req.query, query, {
+          'timestamp': 'desc',
+          'projectVersion': 'asc'
+        });
+      } catch (ex) {
+        return res.send(400, ex.message);
       }
 
-      getDevices.limit(maxRecordCount);
-
-      getDevices.execQ()
+      query.execQ()
         .then(function (devices) {
           res.send(200, devices);
         })

@@ -10,6 +10,8 @@
   var _ = require('lodash');
   var utils = require('../../shared/utils.js');
   var extend = require('extend');
+  var queryFilters = require('../include/queryFilters.js');
+
   // Public functions
   module.exports = {
 
@@ -66,16 +68,13 @@
     //
 
     listProjects: function (req, res, next) {
-      var minRecord = req.query.minRecord;
-      var maxRecord = req.query.maxRecord;
-
       if (!req.user) {
         return res.send(401, {
           detail: 'Not logged in'
         });
       }
 
-      var getProjects = Project.find({
+      var query = Project.find({
         $or: [{
           'admins': req.user._id
         }, {
@@ -84,33 +83,18 @@
       });
 
       // Project correct fields
-      getProjects.select('_id name version admins users description');
+      query.select('_id name version admins users description');
 
-      getProjects.sort({
-        'name': 'asc'
-      });
-
-      var maxRecordCount = config.max_records_per_query;
-
-      // Pagination
-      if (minRecord) {
-        getProjects.skip(minRecord);
-      }
-      if (minRecord && maxRecord) {
-        if (maxRecord < minRecord) {
-          return res.send(400, {
-            detail: 'Invalid pagination range'
-          });
-        }
-
-        maxRecordCount = Math.min(
-          maxRecordCount, (maxRecord - minRecord) + 1
-        );
+      try {
+        queryFilters.paginate(req.query, query);
+        queryFilters.sort(req.query, query, {
+          'name': 'asc'
+        });
+      } catch (ex) {
+        return res.send(400, ex.message);
       }
 
-      getProjects.limit(maxRecordCount);
-
-      getProjects.execQ()
+      query.execQ()
         .then(function (projects) {
           res.send(200, projects);
         })

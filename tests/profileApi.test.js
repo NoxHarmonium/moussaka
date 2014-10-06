@@ -721,6 +721,98 @@
         });
     });
 
+    it('Test sorting (invalid field)', function (done) {
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/profiles/')
+        .query({
+          sortField: 'invalid'
+        })
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(400);
+
+
+          done();
+        });
+    });
+
+    it('Test sorting (invalid dir)', function (done) {
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/profiles/')
+        .query({
+          sortField: 'name',
+          sortDir: 'invalid'
+        })
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(400);
+
+          done();
+        });
+    });
+
+    it('Test sorting (timestamp/asc)', function (done) {
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/profiles/')
+        .query({
+          sortField: 'timestamp',
+          sortDir: 'asc',
+          maxRecord: 5
+        })
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          var prevProf = null;
+          _.each(res.body, function (prof) {
+            if (prevProf) {
+              // Check sort order
+              expect(prevProf.timestamp < prof.timestamp)
+                .to.be.ok();
+            }
+            prevProf = prof;
+          });
+
+
+          done();
+        });
+    });
+
+    it('Test sorting (timestamp/desc)', function (done) {
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/profiles/')
+        .query({
+          sortField: 'timestamp',
+          sortDir: 'desc',
+          maxRecord: 5
+        })
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          var prevProf = null;
+          _.each(res.body, function (prof) {
+            if (prevProf) {
+              // Check sort order
+              expect(prevProf.timestamp > prof.timestamp)
+                .to.be.ok();
+            }
+            prevProf = prof;
+          });
+
+
+          done();
+        });
+    });
+
   });
 
 })(require, describe, it);
