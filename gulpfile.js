@@ -12,7 +12,8 @@ var gulp = require('gulp'),
   less = require('gulp-less'),
   config = require('./src/shared/config.js'),
   concat = require('gulp-concat'),
-  bowerResolve = require('bower-resolve');
+  bowerResolve = require('bower-resolve'),
+  runSequence = require('run-sequence');
 
 
 var isWatching = false;
@@ -128,7 +129,7 @@ gulp.task('browserifyLibs', ['jshint'], function (cb) {
   });
 });
 
-gulp.task('browserifyApp', ['browserifyLibs'], function (cb) {
+gulp.task('browserifyApp', ['jshint'], function (cb) {
   // Compile the main app bundle using the libs bundle
   var b = browserify(browserifyOptions);
   b.add(paths.browserifySrc);
@@ -144,6 +145,14 @@ gulp.task('browserifyApp', ['browserifyLibs'], function (cb) {
     .pipe(source('app.js'))
     .pipe(gulp.dest(paths.browserifyDest))
     .on('end', cb);
+});
+
+gulp.task('browserifyAll', function(callback) {
+  runSequence(
+    'browserifyLibs', 
+    'browserifyApp',
+    callback
+    );
 });
 
 gulp.task('test', ['compile'], function () {
@@ -171,7 +180,7 @@ gulp.task('watchLess', function () {
 });
 
 gulp.task('default', ['all']);
-gulp.task('compile', ['browserifyApp', 'less', 'copyFonts']);
+gulp.task('compile', ['browserifyAll', 'less', 'copyFonts']);
 gulp.task('all', ['test', 'prettify']);
 
 // Hack to stop gulp from hanging after mocha test

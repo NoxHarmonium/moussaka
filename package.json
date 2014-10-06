@@ -41,6 +41,7 @@
     "passport-local": "*",
     "passport-localapikey-update": "*",
     "q": "*",
+    "run-sequence": "^1.0.1",
     "serve-favicon": "^2.1.5",
     "string": "*",
     "stylus": "*",
