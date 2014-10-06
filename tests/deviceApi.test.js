@@ -1368,7 +1368,7 @@
       });
     });
 
-    it('List profiles to test record limit', function (done) {
+    it('List devices to test record limit', function (done) {
       var device = devices[0];
       agent.get('http://localhost:3000/projects/' +
         device.projectId + '/devices/')
@@ -1405,8 +1405,6 @@
 
           expect(res.body.length)
             .to.be((max - min) + 1);
-
-          console.log(JSON.stringify(res.body));
 
           for (var i = min; i <= max; i++) {
             expect(
