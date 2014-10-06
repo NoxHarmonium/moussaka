@@ -4,6 +4,7 @@
   var mongoose = require('mongoose-q')();
   var config = require('../../shared/config.js');
   var Schema = mongoose.Schema;
+  var timestamps = require('mongoose-timestamp');
 
   var ProjectSchema = new Schema({
     name: {
@@ -23,10 +24,8 @@
   ProjectSchema.index({
     name: 1
   });
-  //, {
-  // Mongo cannot use 2 keys to determine uniqueness
-  //unique: true, dropDups: true 
-  //});
+
+  ProjectSchema.plugin(timestamps);
 
   module.exports = mongoose.model('Project', ProjectSchema);
 

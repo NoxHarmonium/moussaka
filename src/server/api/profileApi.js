@@ -76,7 +76,7 @@
           profileName: profile.profileName,
           profileData: profile.profileData,
           owner: profile.owner,
-          timestamp: profile.timestamp
+          updatedAt: profile.updatedAt
         });
     },
 
@@ -95,7 +95,7 @@
       var query = Profile.find();
 
       query.select('_id projectId projectVersion profileName ' +
-        'profileData timestamp owner');
+        'profileData updatedAt owner');
 
       query.where('projectId')
         .equals(project._id);

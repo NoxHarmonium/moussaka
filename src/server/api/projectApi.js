@@ -168,16 +168,15 @@
           });
         }
 
-        // Make sure that the id is not included
-        req.body = _.omit(req.body, '_id');
+        if (req.body.name) {
+          project.name = req.body.name;
+        }
+        if (req.body.description) {
+          project.description = req.body.description;
+        }
 
-        // Changes to user and admin lists need to be done
-        // through the respective commands.
-        req.body = _.omit(req.body, 'users');
-        req.body = _.omit(req.body, 'admins');
-
-        Project.findOneAndUpdateQ(query, req.body)
-          .then(function (data) {
+        project.saveQ()
+          .then(function () {
             res.status(200).send();
           })
           .catch(function (err) {

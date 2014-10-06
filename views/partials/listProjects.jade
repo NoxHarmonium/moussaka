@@ -1,24 +1,49 @@
-#projects
-    #projectRow.row
-        .noResults(ng-show='!projects.length' ng-cloak)
-            i.fa.fa-info-circle.fa-3x 
-            p
-                span= t("app.projectList.noProjectsMessage1")
-                a(href="#editProject/")= t("app.projectList.noProjectsMessage2")
-                span= t("app.projectList.noProjectsMessage3")
-        .project(ng-repeat="project in projects" ng-cloak)
-            hr
-            div.project-title
-                a(ng-href="#/editProject/{{project._id}}/")
-                    h3.project-name          {{project.name}}  {{project.version}}
-                a.remove-icon(href="#") 
-                        i.fa.fa-remove 
-            p.project-description(ng-hide="!project.description")     {{project.description}}
-            p.project-info-summary
-                span {{project.users.length + project.admins.length}} Contributors 
-                i.fa.fa-circle 
-                span 2 Connected Devices
-
+div#tools-progress.dashboard-progress
+    span
+div.dashboard-sidebar-container
+    // TODO: This should probably be specific to project list view
+    div.dashboard-sidebar
         hr
-                
+        ul
+            li(ng-class="{active: activeIndex == 0}")
+                a(href="javascript:void(0)" ng-click="changeSorting(0, 'name', 'asc')")= t("app.sorting.sortNameAsc")
+            li(ng-class="{active: activeIndex == 1}")     
+                a(href="javascript:void(0)" ng-click="changeSorting(1, 'name', 'desc')")= t("app.sorting.sortNameDesc")
+            li(ng-class="{active: activeIndex == 2}")
+                a(href="javascript:void(0)" ng-click="changeSorting(2, 'updatedAt', 'desc')")= t("app.sorting.lastAccessed")
+        hr
+        ul
+            li
+                a(href="#/editProject")= t("app.actions.createProject")
+        hr
+        ul    
+            li
+                a(href="#/help")= t("app.actions.help")
+        hr
+
+
+div.dashboard-view
+    #projects
+        #projectRow.row
+            .noResults(ng-show='!projects.length' ng-cloak)
+                i.fa.fa-info-circle.fa-3x 
+                p
+                    span= t("app.projectList.noProjectsMessage1")
+                    a(href="#editProject/")= t("app.projectList.noProjectsMessage2")
+                    span= t("app.projectList.noProjectsMessage3")
+            .project(ng-repeat="project in projects" ng-cloak)
+                hr
+                div.project-title
+                    a(href="javascript:void(0)" ng-href="#/editProject/{{project._id}}/")
+                        h3.project-name          {{project.name}}  {{project.version}}
+                    a.remove-icon(href="#") 
+                            i.fa.fa-remove 
+                p.project-description(ng-hide="!project.description")     {{project.description}}
+                p.project-info-summary
+                    span {{project.users.length + project.admins.length}} Contributors 
+                    i.fa.fa-circle 
+                    span 2 Connected Devices
+
+            hr
+                    
 

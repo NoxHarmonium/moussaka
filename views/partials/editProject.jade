@@ -1,74 +1,80 @@
-#editProjects
-    form(method="post" ng-submit="saveProject()" class="forms" name="projectEditForm" novalidate)
+div#tools-progress.dashboard-progress
+    span
         
-        div.tools-alert.tools-alert-yellow(ng-hide="showAdmin")
-            i.fa.fa-exclamation-triangle
-            span &nbsp; 
-            span= t("app.projectEditForm.readOnly")
+div.dashboard-sidebar-container
 
-        label= t("app.projectEditForm.projectName")
-            div.input-groups.width-100
-                input(type="text" name="projectName" ng-model="project.name" 
-                    ng-Disabled="loading || !showAdmin" ng-change="fieldHasChanged()" required)
-            div.forms-desc.error(ng-show="projectNameFieldRequired()")= t("app.validationMessages.projectNameRequired")
-
-        label= t("app.projectEditForm.projectDesc")
-            div.input-groups.width-100
-                textarea(rows="5" name="projectDesc" ng-model="project.description" 
-                    ng-Disabled="loading || !showAdmin" ng-change="fieldHasChanged()")
-        
-        label(ng-hide="newProject")= t("app.projectEditForm.projectMembers")
-            table.project-members
-                thead
-                    tr
-                        td 
-                        td 
-                        td(ng-show="showAdmin")
-                
-
-                tbody(ng-repeat="projectMember in projectMembers")
-                        tr 
-                            td {{ projectMember.email }}
-                            td {{ projectMember.type }}
-                            td(ng-show="showAdmin") 
-                                a(ng-click="removeProjMemb(projectMember)")
-                                    i.fa.fa-remove
-
-                tfoot(ng-show="showAdmin")
-                    tr
-                        td 
-                            input.width-100(type="email" placeholder=t("app.projectEditForm.emailOrName") 
-                                name="newProjMembEmail" ng-model="newProjMemb.email" ng-Disabled="loading" 
-                                ng-change="projMembFieldHasChanged()" ng-enter="addNewProjectMember()" required)
-                        td
-                            select(name="newProjMembType" ng-model="newProjMemb.type" ng-Disabled="loading" 
-                                ng-change="projMembFieldHasChanged()")
-                                option(value="admin")= t("app.projectEditForm.admin")
-                                option(value="user" )= t("app.projectEditForm.user")
-                        td 
-                            button.btn.btn-smaller.btn-outline(type="button" ng-click="addNewProjectMember()" ng-Disabled="loading") Add
-
-            div.forms-desc.error(ng-show="newProjEmailRequired()")= t("app.validationMessages.emailRequired")
-            div.forms-desc.error(ng-show="newProjEmailWrongFormat()")= t("app.validationMessages.emailWrongFormat")
-
-
-
-        div.highlight-on-show.ng-hide(ng-hide="hideError")
-                p.error 
-                    i.fa.fa-exclamation-triangle
-                    span &nbsp; {{ errorMessage }}   
-
-        div.highlight-on-show.ng-hide(ng-hide="hideSuccess")
-                p.success 
-                    i.fa.fa-check-square
-                    span &nbsp; 
-                    span= t("app.projectEditForm.saveSuccess")
-
-        p 
-            a.btn.btn-blue(href="#/listProjects")= t("app.projectEditForm.cancel") 
-
-            button.btn.btn-blue(type="submit" ng-disabled="loading")= t("app.projectEditForm.save") 
+div.dashboard-view
+    #editProjects
+        form(method="post" ng-submit="saveProject()" class="forms" name="projectEditForm" novalidate)
+            
+            div.tools-alert.tools-alert-yellow(ng-hide="showAdmin")
+                i.fa.fa-exclamation-triangle
                 span &nbsp; 
-                i.fa.fa-refresh.fa-spin.ng-hide(ng-hide="!loading")
+                span= t("app.projectEditForm.readOnly")
+
+            label= t("app.projectEditForm.projectName")
+                div.input-groups.width-100
+                    input(type="text" name="projectName" ng-model="project.name" 
+                        ng-Disabled="loading || !showAdmin" ng-change="fieldHasChanged()" required)
+                div.forms-desc.error(ng-show="projectNameFieldRequired()")= t("app.validationMessages.projectNameRequired")
+
+            label= t("app.projectEditForm.projectDesc")
+                div.input-groups.width-100
+                    textarea(rows="5" name="projectDesc" ng-model="project.description" 
+                        ng-Disabled="loading || !showAdmin" ng-change="fieldHasChanged()")
+            
+            label(ng-hide="newProject")= t("app.projectEditForm.projectMembers")
+                table.project-members
+                    thead
+                        tr
+                            td 
+                            td 
+                            td(ng-show="showAdmin")
                     
+
+                    tbody(ng-repeat="projectMember in projectMembers")
+                            tr 
+                                td {{ projectMember.email }}
+                                td {{ projectMember.type }}
+                                td(ng-show="showAdmin") 
+                                    a(ng-click="removeProjMemb(projectMember)")
+                                        i.fa.fa-remove
+
+                    tfoot(ng-show="showAdmin")
+                        tr
+                            td 
+                                input.width-100(type="email" placeholder=t("app.projectEditForm.emailOrName") 
+                                    name="newProjMembEmail" ng-model="newProjMemb.email" ng-Disabled="loading" 
+                                    ng-change="projMembFieldHasChanged()" ng-enter="addNewProjectMember()" required)
+                            td
+                                select(name="newProjMembType" ng-model="newProjMemb.type" ng-Disabled="loading" 
+                                    ng-change="projMembFieldHasChanged()")
+                                    option(value="admin")= t("app.projectEditForm.admin")
+                                    option(value="user" )= t("app.projectEditForm.user")
+                            td 
+                                button.btn.btn-smaller.btn-outline(type="button" ng-click="addNewProjectMember()" ng-Disabled="loading") Add
+
+                div.forms-desc.error(ng-show="newProjEmailRequired()")= t("app.validationMessages.emailRequired")
+                div.forms-desc.error(ng-show="newProjEmailWrongFormat()")= t("app.validationMessages.emailWrongFormat")
+
+
+
+            div.highlight-on-show.ng-hide(ng-hide="hideError")
+                    p.error 
+                        i.fa.fa-exclamation-triangle
+                        span &nbsp; {{ errorMessage }}   
+
+            div.highlight-on-show.ng-hide(ng-hide="hideSuccess")
+                    p.success 
+                        i.fa.fa-check-square
+                        span &nbsp; 
+                        span= t("app.projectEditForm.saveSuccess")
+
+            p 
+                a.btn.btn-blue(href="#/listProjects")= t("app.projectEditForm.cancel") 
+
+                button.btn.btn-blue(type="submit" ng-disabled="loading")= t("app.projectEditForm.save") 
+                    span &nbsp; 
+                    i.fa.fa-refresh.fa-spin.ng-hide(ng-hide="!loading")
+                        
 

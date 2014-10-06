@@ -35,34 +35,7 @@ html(ng-app="dashboardModule")
 
            
 
-        div.dashboard-outer
-            div#tools-progress.dashboard-progress
-                span
-            div.dashboard-sidebar-container
-                // TODO: This should probably be specific to project list view
-                div.dashboard-sidebar
-                    hr
-                    ul
-                        li.active
-                            a(href="?sortType=name")= t("app.sorting.sortNameAsc")
-                        li      
-                            a(href="?sortType=name&sortType=desc")= t("app.sorting.sortNameDesc")
-                        li
-                            a(href="?sortType=accessed&sortType=desc")= t("app.sorting.lastAccessed")
-                    hr
-                    ul
-                        li
-                            a(href="#/editProject")= t("app.actions.createProject")
-                    hr
-                    ul    
-                        li
-                            a(href="#/help")= t("app.actions.help")
-                    hr
+        div.dashboard-outer(ng-view)
 
-
-            div.dashboard-view(ng-view)
-                div id="tools-progress"><span></span></div>
-
-
-        script(src="/js/libs.js")
-        script(src="/js/app.js")
+    script(src="/js/libs.js")
+    script(src="/js/app.js")

@@ -755,11 +755,11 @@
         });
     });
 
-    it('Test sorting (timestamp/asc)', function (done) {
+    it('Test sorting (updatedAt/asc)', function (done) {
       agent.get('http://localhost:3000/projects/' +
         device.projectId + '/profiles/')
         .query({
-          sortField: 'timestamp',
+          sortField: 'updatedAt',
           sortDir: 'asc',
           maxRecord: 5
         })
@@ -773,7 +773,7 @@
           _.each(res.body, function (prof) {
             if (prevProf) {
               // Check sort order
-              expect(prevProf.timestamp < prof.timestamp)
+              expect(prevProf.updatedAt < prof.updatedAt)
                 .to.be.ok();
             }
             prevProf = prof;
@@ -784,11 +784,11 @@
         });
     });
 
-    it('Test sorting (timestamp/desc)', function (done) {
+    it('Test sorting (updatedAt/desc)', function (done) {
       agent.get('http://localhost:3000/projects/' +
         device.projectId + '/profiles/')
         .query({
-          sortField: 'timestamp',
+          sortField: 'updatedAt',
           sortDir: 'desc',
           maxRecord: 5
         })
@@ -802,7 +802,7 @@
           _.each(res.body, function (prof) {
             if (prevProf) {
               // Check sort order
-              expect(prevProf.timestamp > prof.timestamp)
+              expect(prevProf.updatedAt > prof.updatedAt)
                 .to.be.ok();
             }
             prevProf = prof;

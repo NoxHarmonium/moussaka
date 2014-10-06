@@ -73,7 +73,6 @@
         existingDevice.projectVersion = device.projectVersion;
         existingDevice.dataSchema = device.dataSchema;
         existingDevice.currentState = device.currentState;
-        existingDevice.timestamp = Date.now();
         existingDevice.lastAccess = Date.now();
 
         existingDevice.saveQ()
@@ -168,7 +167,7 @@
           projectVersion: device.projectVersion,
           dataSchema: device.dataSchema,
           currentState: device.currentState,
-          timestamp: device.timestamp
+          updatedAt: device.updatedAt
         });
     },
 
@@ -187,12 +186,12 @@
       });
 
       query.select('macAddress projectId projectVersion ' +
-        'dataSchema currentState timestamp deviceName');
+        'dataSchema currentState updatedAt deviceName');
 
       try {
         queryFilters.paginate(req.query, query);
         queryFilters.sort(req.query, query, {
-          'timestamp': 'desc',
+          'updatedAt': 'desc',
           'projectVersion': 'asc'
         });
       } catch (ex) {

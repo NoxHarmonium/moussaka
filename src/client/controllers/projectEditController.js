@@ -44,7 +44,7 @@
       $scope.hideError = true;
       $scope.project = new Project();
       $scope.currentUser = $cookies.userEmail;
-      $scope.showAdmin = false;
+      $scope.showAdmin = true;
       $scope.newProjMemb = {
         email: '',
         type: 'user'

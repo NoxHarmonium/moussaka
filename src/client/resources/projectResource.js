@@ -35,8 +35,12 @@
           }, BaseResource.handleError);
       };
 
-      Project.getAll = function (id) {
-        return $http.get('/projects/')
+      Project.getAll = function (queryVars) {
+        return $http({
+          url: '/projects/',
+          method: 'GET',
+          params: queryVars
+        })
           .then(function (response) {
             var projects = [];
             _.each(response.data, function (projectData) {

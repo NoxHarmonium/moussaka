@@ -339,7 +339,7 @@
           expect(res.ok)
             .to.be.ok();
 
-          device.timestamp = res.body.timestamp;
+          device.updatedAt = res.body.updatedAt;
           device._id = res.body._id;
 
           expect(utils.objMatch(res.body, device))
@@ -1581,12 +1581,12 @@
         });
     });
 
-    it('Test sorting (timestamp/asc)', function (done) {
+    it('Test sorting (updatedAt/asc)', function (done) {
       var device = devices[0];
       agent.get('http://localhost:3000/projects/' +
         device.projectId + '/devices/')
         .query({
-          sortField: 'timestamp',
+          sortField: 'updatedAt',
           sortDir: 'asc',
           maxRecord: 5
         })
@@ -1600,7 +1600,7 @@
           _.each(res.body, function (dev) {
             if (prevDev) {
               // Check sort order
-              expect(prevDev.timestamp < dev.timestamp)
+              expect(prevDev.updatedAt < dev.updatedAt)
                 .to.be.ok();
             }
             prevDev = dev;
@@ -1611,12 +1611,12 @@
         });
     });
 
-    it('Test sorting (timestamp/desc)', function (done) {
+    it('Test sorting (updatedAt/desc)', function (done) {
       var device = devices[0];
       agent.get('http://localhost:3000/projects/' +
         device.projectId + '/devices/')
         .query({
-          sortField: 'timestamp',
+          sortField: 'updatedAt',
           sortDir: 'desc',
           maxRecord: 5
         })
@@ -1630,7 +1630,7 @@
           _.each(res.body, function (dev) {
             if (prevDev) {
               // Check sort order
-              expect(prevDev.timestamp > dev.timestamp)
+              expect(prevDev.updatedAt > dev.updatedAt)
                 .to.be.ok();
             }
             prevDev = dev;

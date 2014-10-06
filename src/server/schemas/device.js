@@ -4,6 +4,7 @@
   var mongoose = require('mongoose-q')();
   var config = require('../../shared/config.js');
   var Schema = mongoose.Schema;
+  var timestamps = require('mongoose-timestamp');
 
   var DeviceSchema = new Schema({
     projectId: {
@@ -41,16 +42,14 @@
       required: false,
       trim: true
     },
-    timestamp: {
-      type: Date,
-      default: Date.now
-    },
     lastAccess: {
       type: Date,
       default: Date.now,
       expires: config.device_Timeout_Seconds
     }
   });
+
+  DeviceSchema.plugin(timestamps);
 
   module.exports = mongoose.model('Device', DeviceSchema);
 
