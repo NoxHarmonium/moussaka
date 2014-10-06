@@ -128,6 +128,7 @@
 
       var newProject = new Project({
         name: req.body.name,
+        sortingName: req.body.name.toUpperCase(),
         description: req.body.description,
         admins: [req.user._id]
       });
@@ -170,6 +171,7 @@
 
         if (req.body.name) {
           project.name = req.body.name;
+          project.sortingName = req.body.name.toUpperCase();
         }
         if (req.body.description) {
           project.description = req.body.description;
@@ -179,8 +181,16 @@
           .then(function () {
             res.status(200).send();
           })
-          .catch(function (err) {
-            next(err);
+         .catch(function (err) {
+            // Duplicate check
+            if (err.code === 11000) {
+              res.status(409)
+                .send({
+                  'detail': 'A project with this name already exists.'
+                });
+            } else {
+              next(err);
+            }
           })
           .done();
 

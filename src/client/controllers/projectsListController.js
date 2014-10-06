@@ -10,8 +10,8 @@
 
       // Scope vars/defaults
       $scope.sortVars = {
-        sortField: 'name',
-        sortDir: 'desc'
+        sortField: 'sortingName',
+        sortDir: 'asc'
       };
       $scope.activeIndex = 0;
 
@@ -40,8 +40,8 @@
 
       // TODO: Pagination
       $scope.getProjects = function() {
-        var queryVars = locationPatched.search();
         $scope.reloadCookies();
+        var queryVars = locationPatched.search();
         $scope.sortVars = extend($scope.sortVars, queryVars);
 
         Project.getAll($scope.sortVars)
@@ -53,11 +53,13 @@
           });
       };
 
-      $scope.changeSorting = function(activeIndex, field, direction) {
+      $scope.changeSorting = function(activeIndex, sortField, sortDir) {
         $scope.activeIndex = activeIndex;
+        $scope.sortVars.sortField = sortField;
+         $scope.sortVars.sortDir = sortDir;
         locationPatched.skipReload().search({
-          'sortField': field,
-          'sortDir': direction
+          'sortField': sortField,
+          'sortDir': sortDir
         });
         $scope.saveCookies();
         $scope.getProjects();

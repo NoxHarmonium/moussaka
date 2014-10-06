@@ -13,6 +13,15 @@
       trim: true,
       unique: true
     },
+    // sortingName is all uppercase for sorting purposes
+    // MongoDB cant sort mixed case strings alphabetically
+    // http://stackoverflow.com/questions/7644087/php-mongodb-sort-results-by-alphabetical
+    sortingName: { 
+      type: String,
+      required: true,
+      trim: true,
+      unique: true
+    },
     description: {
       type: String,
     },
@@ -22,7 +31,7 @@
 
   // Apply index over name
   ProjectSchema.index({
-    name: 1
+    sortingName: 1
   });
 
   ProjectSchema.plugin(timestamps);

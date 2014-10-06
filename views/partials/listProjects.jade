@@ -6,9 +6,9 @@ div.dashboard-sidebar-container
         hr
         ul
             li(ng-class="{active: activeIndex == 0}")
-                a(href="javascript:void(0)" ng-click="changeSorting(0, 'name', 'desc')")= t("app.sorting.sortNameAsc")
+                a(href="javascript:void(0)" ng-click="changeSorting(0, 'sortingName', 'asc')")= t("app.sorting.sortNameAsc")
             li(ng-class="{active: activeIndex == 1}")     
-                a(href="javascript:void(0)" ng-click="changeSorting(1, 'name', 'asc')")= t("app.sorting.sortNameDesc")
+                a(href="javascript:void(0)" ng-click="changeSorting(1, 'sortingName', 'desc')")= t("app.sorting.sortNameDesc")
             li(ng-class="{active: activeIndex == 2}")
                 a(href="javascript:void(0)" ng-click="changeSorting(2, 'updatedAt', 'desc')")= t("app.sorting.lastAccessed")
         hr
