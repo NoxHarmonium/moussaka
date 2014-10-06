@@ -11,7 +11,7 @@
       // Scope vars/defaults
       $scope.sortVars = {
         sortField: 'name',
-        sortDir: 'asc'
+        sortDir: 'desc'
       };
       $scope.activeIndex = 0;
 
@@ -22,10 +22,10 @@
         var sortDir = $cookieStore.get('sortDir');
         var activeIndex = $cookieStore.get('activeIndex');
         if (sortField) {
-          $scope.sortField = sortField;
+          $scope.sortVars.sortField = sortField;
         }
         if (sortDir) {
-          $scope.sortDir = sortDir;
+          $scope.sortVars.sortDir = sortDir;
         }
         if (activeIndex) {
           $scope.activeIndex = parseInt(activeIndex);
@@ -33,8 +33,8 @@
       };
 
       $scope.saveCookies = function() {
-        $cookieStore.put('sortField', $scope.sortField);
-        $cookieStore.put('sortDir', $scope.sortDir);
+        $cookieStore.put('sortField', $scope.sortVars.sortField);
+        $cookieStore.put('sortDir', $scope.sortVars.sortDir);
         $cookieStore.put('activeIndex', $scope.activeIndex);
       };
 
@@ -44,7 +44,7 @@
         $scope.reloadCookies();
         $scope.sortVars = extend($scope.sortVars, queryVars);
 
-        Project.getAll(queryVars)
+        Project.getAll($scope.sortVars)
           .then(function (projects) {
             $scope.projects = projects;
           })
