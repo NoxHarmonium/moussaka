@@ -147,7 +147,7 @@ gulp.task('browserifyApp', ['jshint'], function (cb) {
     .on('end', cb);
 });
 
-gulp.task('browserifyAll', function(callback) {
+gulp.task('browserifyAll', ['jshint'], function(callback) {
   runSequence(
     'browserifyLibs', 
     'browserifyApp',
