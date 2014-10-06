@@ -73,7 +73,11 @@ div.dashboard-view
             p 
                 a.btn.btn-blue(href="#/listProjects")= t("app.projectEditForm.cancel") 
 
-                button.btn.btn-blue(type="submit" ng-disabled="loading")= t("app.projectEditForm.save") 
+                button.btn.btn-blue(type="submit" ng-hide="newProject" ng-disabled="loading")= t("app.projectEditForm.save") 
+                    span &nbsp; 
+                    i.fa.fa-refresh.fa-spin.ng-hide(ng-hide="!loading")
+
+                button.btn.btn-blue(type="submit" ng-show="newProject" ng-disabled="loading")= t("app.projectEditForm.create") 
                     span &nbsp; 
                     i.fa.fa-refresh.fa-spin.ng-hide(ng-hide="!loading")
                         

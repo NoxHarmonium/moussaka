@@ -123,6 +123,8 @@
               locationPatched.skipReload()
                 .path(url)
                 .replace();
+            } else {
+              locationPatched.path('/listProjects/');
             }
           })
           .catch(function (err) {

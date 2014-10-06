@@ -44,7 +44,8 @@
         "admin": "Admin",
         "user": "User",
         "saveSuccess": "The project was saved successfully",
-        "readOnly": "This form is in read-only mode as you are not a project admin."
+        "readOnly": "This form is in read-only mode as you are not a project admin.",
+        "create": "Create"
     },
 
     "sorting": {
