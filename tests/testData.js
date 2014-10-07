@@ -39,7 +39,8 @@
         'role-playing video game developed ' +
         'by BioWare and published by LucasArts. ' +
         'Written by Drew Karpyshyn, the ' +
-        'soundtrack for the game was composed by Jeremy Soule. '
+        'soundtrack for the game was composed by Jeremy Soule. ',
+      deviceCount: 0
     }, {
       //_id: 'to be defined',
       name: 'FTL: Faster Than Light',
@@ -52,7 +53,8 @@
         'single spacecraft, holding critical information to be ' +
         'delivered to an allied ' +
         'fleet several sectors away, while being pursued by a ' +
-        'large rebel fleet. '
+        'large rebel fleet. ',
+      deviceCount: 0
     }, {
       //_id: 'to be defined',
       name: 'The Stanley Parable',
@@ -66,12 +68,14 @@
         'new story elements, ' +
         'was developed by Wreden and Source modeler William Pugh ' +
         'under the Galactic ' +
-        'Cafe development team name. '
+        'Cafe development team name. ',
+      deviceCount: 0
     }, {
       //_id: 'to be defined',
       name: 'A Project Without A Description',
       users: [],
       admins: ['test.account1@test.com'],
+      deviceCount: 0
     }];
   };
 

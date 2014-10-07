@@ -29,6 +29,10 @@
       .then(function (project) {
         if (project) {
           project.deviceCount--;
+          if (project.deviceCount < 0) {
+            console.log('WARNING: Device count out of sync.');
+            project.deviceCount = 0;
+          }
           return project.saveQ();
         }
       })
