@@ -174,8 +174,27 @@
           project.name = req.body.name;
           project.sortingName = req.body.name.toUpperCase();
         }
+        
         if (req.body.description) {
           project.description = req.body.description;
+        }
+
+        project.admins = req.body.admins;
+        project.users = req.body.users;
+
+        if (_.intersection(project.admins, project.users).length) {
+          return res.status(409)
+            .send({
+              'detail': 'A user cannot be a project user and admin ' + '
+                at the same time.'
+            });
+        }
+
+        if (project.admins.length < 1) {
+          return res.status(409)
+            .send({
+              'detail': 'A project must have at least one admin.'
+            });
         }
 
         project.saveQ()

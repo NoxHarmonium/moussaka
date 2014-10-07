@@ -34,8 +34,14 @@ div.dashboard-view
 
                     tbody(ng-repeat="projectMember in projectMembers")
                             tr 
-                                td {{ projectMember.email }}
-                                td {{ projectMember.type }}
+                                td{{ projectMember.email }}
+                                td(ng-hide="showAdmin") 
+                                    span {{ projectMember.type }}
+                                td(ng-show="showAdmin")
+                                    select(name="projMembType" ng-model="projectMember.type" 
+                                        ng-Disabled="loading" ng-change="projMembTypeModified(projectMember)")
+                                        option(value="Admin")= t("app.projectEditForm.admin")
+                                        option(value="User" )= t("app.projectEditForm.user")
                                 td(ng-show="showAdmin") 
                                     a(ng-click="removeProjMemb(projectMember)")
                                         i.fa.fa-remove
@@ -54,8 +60,15 @@ div.dashboard-view
                             td 
                                 button.btn.btn-smaller.btn-outline(type="button" ng-click="addNewProjectMember()" ng-Disabled="loading") Add
 
-                div.forms-desc.error(ng-show="newProjEmailRequired()")= t("app.validationMessages.emailRequired")
-                div.forms-desc.error(ng-show="newProjEmailWrongFormat()")= t("app.validationMessages.emailWrongFormat")
+                div.forms-desc.error(ng-show="newProjEmailRequired()")
+                    i.fa.fa-exclamation-triangle &nbsp; 
+                    span= t("app.validationMessages.emailRequired")
+                div.forms-desc.error(ng-show="newProjEmailWrongFormat()")
+                    i.fa.fa-exclamation-triangle &nbsp; 
+                    span= t("app.validationMessages.emailWrongFormat")
+                div.forms-desc.error(ng-show="newProjEmailExists()")
+                    i.fa.fa-exclamation-triangle &nbsp; 
+                    span= t("app.validationMessages.userAlreadyExistsProj")
 
 
 

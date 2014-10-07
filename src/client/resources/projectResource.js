@@ -76,6 +76,7 @@
 
       Project.prototype.update = function () {
         var that = this;
+        console.log('Sending update: ', JSON.stringify(that));
         return $http.post('/projects/' + this._id + '/', that)
           .then(function (response) {
             return that;

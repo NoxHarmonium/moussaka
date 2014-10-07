@@ -72,7 +72,8 @@
         "lastNameRequired": "Last Name is required.",
         "projectNameRequired": "Project Name is required.",
         "passwordWrongSize": "Password should be between 8 and 40 characters long.",
-        "nameWrongSize": "Names should be between 3 and 40 characters long."
+        "nameWrongSize": "Names should be between 3 and 40 characters long.",
+        "userAlreadyExistsProj": "The specified user is already part of the project."
     },
 
     "projectList" : {
