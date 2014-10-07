@@ -8,5 +8,6 @@ window.$ = window.jQuery = require('jquery');
 require('_angular');
 require('_angular-ui-router');
 require('_angular-cookies');
+require('_angular-breadcrumb');
 
 module.exports = window.angular;

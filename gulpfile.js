@@ -111,6 +111,9 @@ gulp.task('browserifyLibs', ['jshint'], function (cb) {
     b.require(bowerResolve('angular-cookies'), {
       expose: '_angular-cookies'
     });
+    b.require(bowerResolve('angular-breadcrumb'), {
+      expose: '_angular-breadcrumb'
+    });
     b.require(bowerResolve('kube'), {
       expose: '_kube'
     });
@@ -136,6 +139,7 @@ gulp.task('browserifyApp', ['jshint'], function (cb) {
   b.external('_angular');
   b.external('_angular-ui-router');
   b.external('_angular-cookies');
+  b.external('_angular-breadcrumb');
   b.external('_kube');
 
   b.external('jquery');

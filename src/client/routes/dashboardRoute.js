@@ -8,22 +8,37 @@
       state('listProjects', {
         url: '/listProjects',
         templateUrl: '/views/partials/listProjects',
-        controller: 'projectsListController'
+        controller: 'projectsListController',
+        data: {
+          ncyBreadcrumbLabel: 'Projects'
+        }
       })
       .state('createProject', {
         url: '/editProject/',
         templateUrl: '/views/partials/editProject',
-        controller: 'projectEditController'
+        controller: 'projectEditController',
+        data: {
+          ncyBreadcrumbLabel: 'New Project',
+          ncyBreadcrumbParent: 'listProjects'
+        }
       })
       .state('editProject', {
         url: '/editProject/:projectId',
         templateUrl: '/views/partials/editProject',
-        controller: 'projectEditController'
+        controller: 'projectEditController',
+        data: {
+          ncyBreadcrumbLabel: '{{project.name}}',
+          ncyBreadcrumbParent: 'listProjects'
+        }
       })
       .state('viewProject', {
         url: '/viewProject/:projectId',
         templateUrl: '/views/partials/viewProject',
-        controller: 'projectViewController'
+        controller: 'projectViewController',
+        data: {
+          ncyBreadcrumbLabel: '{{project.name}}',
+          ncyBreadcrumbParent: 'listProjects'
+        }
       });
     }
   ];

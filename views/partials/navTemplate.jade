@@ -1,0 +1,6 @@
+ul
+    li(ng-repeat="step in steps | limitTo:(steps.length-1)")
+        a(href="{{step.ncyBreadcrumbLink}}")
+            h5 {{step.ncyBreadcrumbLabel}}
+    li(ng-repeat="step in steps | limitTo:-1" class="active")
+        h5 {{step.ncyBreadcrumbLabel}}

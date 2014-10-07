@@ -6,10 +6,12 @@ var jQueryPlugins = require('./libs/jQueryPlugins.js');
 //// ## Dashboard Module ##
 
 var dashboardModule = angular.module(
-  'dashboardModule', ['ngCookies', 'ui.router']
+  'dashboardModule', ['ngCookies', 'ui.router', 'ncy-angular-breadcrumb']
 );
 
 // Config
+
+dashboardModule.config(require('./config/breadcrumbConfig.js'));
 
 // Directives
 

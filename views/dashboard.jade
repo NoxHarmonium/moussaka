@@ -15,6 +15,7 @@ html(ng-app="dashboardModule")
             div.userInfo
                 a(href="#")
                     h5(data-tools="dropdown" data-target="#user-dropdown") Welcome, #{userFirstName}
+                
                 ul(id="user-dropdown" class="dropdown")
                     li
                         a(href="#")
@@ -28,14 +29,18 @@ html(ng-app="dashboardModule")
             // TODO: This will be dynamic depending on current view
             div.nav-wrapper
                 nav.navbar
-                    ul
-                        li.active
-                            a(ui-sref="listProjects") 
-                                h4= t("app.nav.projects")
+                    div(ncy-breadcrumb)
+                    //
+                        ul
+                            li.active
+                                a(ui-sref="listProjects") 
+                                    h4= t("app.nav.projects")
 
            
 
         div.dashboard-outer(ui-view)
+
+
 
     script(src="/js/libs.js")
     script(src="/js/app.js")
