@@ -55,7 +55,7 @@ var paths = {
   fontDest: 'public/fonts/'
 };
 
-var onError = function (err) {  
+var onError = function (err) {
   gutil.beep();
   console.log(gutil.colors.red(err));
 };

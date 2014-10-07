@@ -118,8 +118,9 @@
 
             if ($scope.newProject) {
               $scope.newProject = false;
-              $state.go('editProject', 
-                {projectId: project._id});
+              $state.go('editProject', {
+                projectId: project._id
+              });
             } else {
               $state.go('listProjects');
             }

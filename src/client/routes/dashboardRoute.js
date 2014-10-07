@@ -13,33 +13,33 @@
           ncyBreadcrumbLabel: 'Projects'
         }
       })
-      .state('createProject', {
-        url: '/editProject/',
-        templateUrl: '/views/partials/editProject',
-        controller: 'projectEditController',
-        data: {
-          ncyBreadcrumbLabel: 'New Project',
-          ncyBreadcrumbParent: 'listProjects'
-        }
-      })
-      .state('editProject', {
-        url: '/editProject/:projectId',
-        templateUrl: '/views/partials/editProject',
-        controller: 'projectEditController',
-        data: {
-          ncyBreadcrumbLabel: '{{project.name}}',
-          ncyBreadcrumbParent: 'listProjects'
-        }
-      })
-      .state('viewProject', {
-        url: '/viewProject/:projectId',
-        templateUrl: '/views/partials/viewProject',
-        controller: 'projectViewController',
-        data: {
-          ncyBreadcrumbLabel: '{{project.name}}',
-          ncyBreadcrumbParent: 'listProjects'
-        }
-      });
+        .state('createProject', {
+          url: '/editProject/',
+          templateUrl: '/views/partials/editProject',
+          controller: 'projectEditController',
+          data: {
+            ncyBreadcrumbLabel: 'New Project',
+            ncyBreadcrumbParent: 'listProjects'
+          }
+        })
+        .state('editProject', {
+          url: '/editProject/:projectId',
+          templateUrl: '/views/partials/editProject',
+          controller: 'projectEditController',
+          data: {
+            ncyBreadcrumbLabel: '{{project.name}}',
+            ncyBreadcrumbParent: 'listProjects'
+          }
+        })
+        .state('viewProject', {
+          url: '/viewProject/:projectId',
+          templateUrl: '/views/partials/viewProject',
+          controller: 'projectViewController',
+          data: {
+            ncyBreadcrumbLabel: '{{project.name}}',
+            ncyBreadcrumbParent: 'listProjects'
+          }
+        });
     }
   ];
 })(module, require);
