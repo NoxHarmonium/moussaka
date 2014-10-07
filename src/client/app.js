@@ -39,6 +39,10 @@ dashboardModule.controller('projectEditController',
   require('./controllers/projectEditController.js')
 );
 
+dashboardModule.controller('projectViewController',
+  require('./controllers/projectViewController.js')
+);
+
 // Routes
 
 dashboardModule.config(require('./routes/dashboardRoute.js'));

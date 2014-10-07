@@ -82,6 +82,13 @@
         "noProjectsMessage3": " or get invited to someone else's project.",
         "contributors" : "contributors",
         "connectedDevices": "connected devices"
+    },
+
+    "viewProject" : {
+        "connectedDevices": "Connected Devices",
+        "projectContributors": "Project Contributors",
+        "deviceList": "Device List",
+        "noDevices": "There are no connected devices for this project at this time."
     }
   }
 }

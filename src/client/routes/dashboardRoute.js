@@ -17,6 +17,11 @@
         templateUrl: '/views/partials/editProject',
         controller: 'projectEditController'
       })
+        .
+      when('/viewProject/:projectId', {
+        templateUrl: '/views/partials/viewProject',
+        controller: 'projectViewController'
+      })
 
       .otherwise({
         redirectTo: '/listProjects'
