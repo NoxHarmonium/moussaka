@@ -97,7 +97,8 @@
       currentUser.removeQ()
         .then(function () {
           req.logout();
-          res.status(200).send();
+          res.status(200)
+            .send();
         })
         .catch(function (err) {
           next(err);
@@ -240,7 +241,8 @@
       verifyMethod
         .then(saveNewPassword)
         .then(function () {
-          res.status(200).send();
+          res.status(200)
+            .send();
         })
         .catch(function (err) {
           if (err.sendToClient) {
@@ -340,7 +342,8 @@
           return sendEmail(renderedEmail);
         })
         .then(function (message) {
-          res.status(200).send();
+          res.status(200)
+            .send();
         })
         .catch(function (err) {
           if (err.previous) {
@@ -361,7 +364,8 @@
 
       res.clearCookie('userEmail');
 
-      return res.status(200).send();
+      return res.status(200)
+        .send();
     },
 
     login: function (req, res, next) {
@@ -383,7 +387,8 @@
           // Set a cookie so that client side can 
           // user logic based on email
           res.cookie('userEmail', user._id);
-          return res.status(200).send();
+          return res.status(200)
+            .send();
         });
       })(req, res, next);
     },
@@ -415,7 +420,8 @@
         for (i = 0; i < users.length; i++) {
           users[i].remove();
         }
-        return res.status(200).send();
+        return res.status(200)
+          .send();
       });
     },
 
@@ -425,7 +431,8 @@
 
       selectedUser.saveQ()
         .then(function () {
-          res.status(200).send();
+          res.status(200)
+            .send();
         })
         .catch(function (err) {
           next(err);

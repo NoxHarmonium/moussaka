@@ -3,9 +3,9 @@
 
   var extend = require('extend');
 
-  module.exports = ['$scope', 'Project', 'locationPatched', 
-  '$cookieStore',
-    function projectsListController($scope, Project, locationPatched, 
+  module.exports = ['$scope', 'Project', 'locationPatched',
+    '$cookieStore',
+    function projectsListController($scope, Project, locationPatched,
       $cookieStore) {
 
       // Scope vars/defaults
@@ -17,7 +17,7 @@
 
       // Functions
 
-      $scope.reloadCookies = function() {
+      $scope.reloadCookies = function () {
         var sortField = $cookieStore.get('sortField');
         var sortDir = $cookieStore.get('sortDir');
         var activeIndex = $cookieStore.get('activeIndex');
@@ -32,14 +32,14 @@
         }
       };
 
-      $scope.saveCookies = function() {
+      $scope.saveCookies = function () {
         $cookieStore.put('sortField', $scope.sortVars.sortField);
         $cookieStore.put('sortDir', $scope.sortVars.sortDir);
         $cookieStore.put('activeIndex', $scope.activeIndex);
       };
 
       // TODO: Pagination
-      $scope.getProjects = function() {
+      $scope.getProjects = function () {
         $scope.reloadCookies();
         var queryVars = locationPatched.search();
         $scope.sortVars = extend($scope.sortVars, queryVars);
@@ -53,14 +53,15 @@
           });
       };
 
-      $scope.changeSorting = function(activeIndex, sortField, sortDir) {
+      $scope.changeSorting = function (activeIndex, sortField, sortDir) {
         $scope.activeIndex = activeIndex;
         $scope.sortVars.sortField = sortField;
-         $scope.sortVars.sortDir = sortDir;
-        locationPatched.skipReload().search({
-          'sortField': sortField,
-          'sortDir': sortDir
-        });
+        $scope.sortVars.sortDir = sortDir;
+        locationPatched.skipReload()
+          .search({
+            'sortField': sortField,
+            'sortDir': sortDir
+          });
         $scope.saveCookies();
         $scope.getProjects();
       };

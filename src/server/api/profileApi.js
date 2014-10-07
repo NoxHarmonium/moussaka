@@ -216,7 +216,8 @@
 
       profile.removeQ()
         .then(function () {
-          res.status(200).send();
+          res.status(200)
+            .send();
         })
         .catch(function (err) {
           next(err);
@@ -231,7 +232,8 @@
     resetTests: function (req, res, next) {
       Profile.removeQ({})
         .then(function () {
-          res.status(200).send();
+          res.status(200)
+            .send();
         })
         .catch(function (err) {
           next(err);

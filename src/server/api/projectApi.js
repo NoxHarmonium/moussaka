@@ -164,9 +164,10 @@
         };
 
         if (!_.contains(project.admins, loggedInUser._id)) {
-          return res.status(401).send({
-            detail: 'Only project admins can edit projects.'
-          });
+          return res.status(401)
+            .send({
+              detail: 'Only project admins can edit projects.'
+            });
         }
 
         if (req.body.name) {
@@ -179,9 +180,10 @@
 
         project.saveQ()
           .then(function () {
-            res.status(200).send();
+            res.status(200)
+              .send();
           })
-         .catch(function (err) {
+          .catch(function (err) {
             // Duplicate check
             if (err.code === 11000) {
               res.status(409)
@@ -268,7 +270,8 @@
 
       project.saveQ()
         .then(function () {
-          res.status(200).send();
+          res.status(200)
+            .send();
         })
         .catch(function (err) {
           next(err);
@@ -315,7 +318,8 @@
 
       project.saveQ()
         .then(function () {
-          res.status(200).send();
+          res.status(200)
+            .send();
         })
         .catch(function (err) {
           next(err);
@@ -367,7 +371,8 @@
 
       project.saveQ()
         .then(function () {
-          res.status(200).send();
+          res.status(200)
+            .send();
         })
         .catch(function (err) {
           next(err);
@@ -421,7 +426,8 @@
 
       project.saveQ()
         .then(function () {
-          res.status(200).send();
+          res.status(200)
+            .send();
         })
         .catch(function (err) {
           next(err);
@@ -449,7 +455,8 @@
 
       project.removeQ()
         .then(function () {
-          res.status(200).send();
+          res.status(200)
+            .send();
         })
         .catch(function (err) {
           next(err);
@@ -486,7 +493,8 @@
         for (i = 0; i < projects.length; i++) {
           projects[i].remove();
         }
-        return res.status(200).send();
+        return res.status(200)
+          .send();
       });
     }
 

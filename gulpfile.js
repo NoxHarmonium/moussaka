@@ -147,12 +147,12 @@ gulp.task('browserifyApp', ['jshint'], function (cb) {
     .on('end', cb);
 });
 
-gulp.task('browserifyAll', ['jshint'], function(callback) {
+gulp.task('browserifyAll', ['jshint'], function (callback) {
   runSequence(
-    'browserifyLibs', 
+    'browserifyLibs',
     'browserifyApp',
     callback
-    );
+  );
 });
 
 gulp.task('test', ['compile'], function () {

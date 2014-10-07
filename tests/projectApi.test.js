@@ -282,7 +282,7 @@
 
     it('Create project [0]', function (done) {
       var project = projects[0];
-      
+
       agent.put('http://localhost:3000/projects/')
         .send(project)
         .end(function (e, res) {
@@ -910,7 +910,8 @@
       var projectCopy = extend({}, projects[0]);
       projectCopy.name = 'Changed!!!';
       projectCopy.description = 'Also changed';
-      agent.post('http://localhost:3000/projects/' + projectCopy._id + '/')
+      agent.post('http://localhost:3000/projects/' + projectCopy._id +
+        '/')
         .send(projectCopy)
         .end(function (e, res) {
           expect(e)
@@ -923,23 +924,23 @@
     });
 
     it('Get existing project [0] to check if no modifications',
-     function (done) {
-      var project = projects[0];
+      function (done) {
+        var project = projects[0];
 
-      agent.get('http://localhost:3000/projects/' + project._id + '/')
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
+        agent.get('http://localhost:3000/projects/' + project._id + '/')
+          .end(function (e, res) {
+            expect(e)
+              .to.eql(null);
 
-          expect(res.ok)
-            .to.be.ok();
+            expect(res.ok)
+              .to.be.ok();
 
-          expect(utils.objMatch(res.body, project))
-            .to.be.ok();
+            expect(utils.objMatch(res.body, project))
+              .to.be.ok();
 
-          done();
-        });
-    });
+            done();
+          });
+      });
 
     it('Add user [1] to project [0] as non-admin', function (done) {
       var project = projects[0];

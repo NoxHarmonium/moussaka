@@ -77,7 +77,8 @@
 
         existingDevice.saveQ()
           .then(function () {
-            res.status(200).send();
+            res.status(200)
+              .send();
           })
           .catch(function (err) {
             next(err);
@@ -132,7 +133,8 @@
 
       removeDevice.execQ()
         .then(function () {
-          res.status(200).send();
+          res.status(200)
+            .send();
         })
         .catch(function (err) {
           next(err);
@@ -290,7 +292,8 @@
 
       device.saveQ()
         .then(function () {
-          res.status(200).send();
+          res.status(200)
+            .send();
         })
         .catch(function (err) {
           next(err);
@@ -391,7 +394,8 @@
           return device.saveQ();
         })
         .then(function () {
-          res.status(200).send();
+          res.status(200)
+            .send();
         })
         .catch(function (err) {
           next(err);
@@ -480,7 +484,8 @@
 
       Q.all([clearDevice, clearUpdates])
         .then(function () {
-          res.status(200).send();
+          res.status(200)
+            .send();
         })
         .catch(function (err) {
           next(err);
