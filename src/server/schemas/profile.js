@@ -6,10 +6,11 @@
   var Schema = mongoose.Schema;
   var timestamps = require('mongoose-timestamp');
 
-  var emailValidator = require('validators/emailValidator.js');
-  var nameValidator = require('validators/nameValidator.js');
+  var emailValidator = require('./validators/emailValidator.js');
+  var profileNameValidator =
+    require('./validators/profileNameValidator.js');
   var projVersionValidator =
-    require('validators/projectVersionValidator.js');
+    require('./validators/projectVersionValidator.js');
 
   var ProfileSchema = new Schema({
     projectId: {
@@ -27,7 +28,7 @@
       type: String,
       required: true,
       trim: true,
-      validate: nameValidator
+      validate: profileNameValidator
     },
     profileData: {
       type: Schema.Types.Mixed,

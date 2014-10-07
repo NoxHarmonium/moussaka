@@ -47,6 +47,7 @@
     "serve-favicon": "^2.1.5",
     "string": "*",
     "stylus": "*",
+    "validator": "*",
     "vinyl-source-stream": "^1.0.0",
     "yaml-config": "*"
   },

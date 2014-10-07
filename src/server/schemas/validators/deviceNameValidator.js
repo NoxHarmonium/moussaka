@@ -8,14 +8,8 @@
   module.exports = [
     validate({
       validator: 'isLength',
-      arguments: [3, 40],
-      message: 'Name should be between 3 and 50 characters'
-    }),
-    validate({
-      validator: 'matches',
-      arguments: [pattern, 'i'],
-      message: 'Names should only use valid characters ' +
-        '(a-z, apostrophe, hyphen)'
+      arguments: [3, 100],
+      message: 'Device name should be between 3 and 100 characters'
     })
   ];
 

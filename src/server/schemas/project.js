@@ -6,10 +6,10 @@
   var Schema = mongoose.Schema;
   var timestamps = require('mongoose-timestamp');
 
-  var nameValidator = require('validators/nameValidator.js');
-  var sortNameValidator = require('validators/sortNameValidator.js');
-  var descriptionValidator = require('validators/descriptionValidator.js');
-  var emailValidator = require('validators/emailValidator.js');
+  var projectNameValidator = require('./validators/projectNameValidator.js');
+  var sortNameValidator = require('./validators/sortNameValidator.js');
+  var descriptionValidator = require('./validators/descriptionValidator.js');
+  var emailValidator = require('./validators/emailValidator.js');
 
   var ProjectSchema = new Schema({
     name: {
@@ -17,7 +17,7 @@
       required: true,
       trim: true,
       unique: true,
-      validate: nameValidator
+      validate: projectNameValidator
     },
     // sortingName is all uppercase for sorting purposes
     // MongoDB cant sort mixed case strings alphabetically
@@ -33,11 +33,16 @@
       type: String,
       validate: descriptionValidator
     },
-    admins: { // Referencing user email address
-      type: [String],
-      validate: [emailValidator]
-    },
-    users: [String] // Referencing user email address
+    admins: [{ // Referencing user email address
+      type: String,
+      trim: true,
+      validate: emailValidator
+    }],
+    users: [{ // Referencing user email address
+      type: String,
+      trim: true,
+      validate: emailValidator
+    }]
   });
 
   // Apply index over name

@@ -5,12 +5,15 @@
   var config = require('../../shared/config.js');
   var Schema = mongoose.Schema;
 
+  var macAddressValidator = require('./validators/macAddressValidator.js');
+
   var UpdateSchema = new Schema({
     targetMacAddress: {
       type: String,
       required: true,
       trim: true,
-      index: true
+      index: true,
+      validate: macAddressValidator
     },
     data: {
       type: Schema.Types.Mixed,

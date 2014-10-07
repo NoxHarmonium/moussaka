@@ -14,18 +14,18 @@
     }, {
       username: 'test.account2@test.com',
       password: 'test_password3',
-      firstName: 'firstName2',
-      lastName: 'lastName2',
+      firstName: 'firstNameTwo',
+      lastName: 'lastNameTwo',
     }, {
       username: 'test.account3@test.com',
       password: 'test_password4',
-      firstName: 'firstName2',
-      lastName: 'lastName2',
+      firstName: 'firstName-Three',
+      lastName: 'lastName-THree',
     }, {
       username: 'test.account4@test.com',
       password: 'test_password5',
-      firstName: 'firstName2',
-      lastName: 'lastName2',
+      firstName: 'firstNameo\'Four',
+      lastName: 'lastNameO\'Four',
     }, ];
   };
 
