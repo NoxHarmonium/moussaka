@@ -13,7 +13,10 @@ var gulp = require('gulp'),
   config = require('./src/shared/config.js'),
   concat = require('gulp-concat'),
   bowerResolve = require('bower-resolve'),
-  runSequence = require('run-sequence');
+  runSequence = require('run-sequence'),
+  plumber = require('gulp-plumber'),
+  gutil = require('gulp-util');
+
 
 
 var isWatching = false;
@@ -52,6 +55,11 @@ var paths = {
   fontDest: 'public/fonts/'
 };
 
+var onError = function (err) {  
+  gutil.beep();
+  console.log(gutil.colors.red(err));
+};
+
 var browserifyOptions = {
   insertGlobals: true,
   debug: config.code_generation.browserify.debug
@@ -83,6 +91,9 @@ gulp.task('less', function () {
       base: './public/less/'
     })
     .pipe(cache('less'))
+    .pipe(plumber({
+      errorHandler: onError
+    }))
     .pipe(less({
       errorReporting: 'console',
       logLevel: 2
