@@ -3,9 +3,9 @@
 
   var extend = require('extend');
 
-  module.exports = ['$scope', 'Project', 'locationPatched',
+  module.exports = ['$scope', 'Project', '$location',
     '$cookieStore',
-    function projectsListController($scope, Project, locationPatched,
+    function projectsListController($scope, Project, $location,
       $cookieStore) {
 
       // Scope vars/defaults
@@ -41,7 +41,7 @@
       // TODO: Pagination
       $scope.getProjects = function () {
         $scope.reloadCookies();
-        var queryVars = locationPatched.search();
+        var queryVars = $location.search();
         $scope.sortVars = extend($scope.sortVars, queryVars);
 
         Project.getAll($scope.sortVars)
@@ -57,7 +57,7 @@
         $scope.activeIndex = activeIndex;
         $scope.sortVars.sortField = sortField;
         $scope.sortVars.sortDir = sortDir;
-        locationPatched.skipReload()
+        $location
           .search({
             'sortField': sortField,
             'sortDir': sortDir

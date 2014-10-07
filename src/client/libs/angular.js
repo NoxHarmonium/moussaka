@@ -6,7 +6,7 @@ window.$ = window.jQuery = require('jquery');
 
 // Load angular and packages into global scope
 require('_angular');
-require('_angular-route');
+require('_angular-ui-router');
 require('_angular-cookies');
 
 module.exports = window.angular;

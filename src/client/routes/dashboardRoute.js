@@ -1,30 +1,29 @@
 (function (module, require) {
   'use strict';
-  module.exports = ['$routeProvider',
-    function ($routeProvider) {
-      $routeProvider.
-      when('/listProjects', {
+  module.exports = ['$stateProvider', '$urlRouterProvider',
+    function ($stateProvider, $urlRouterProvider) {
+      $urlRouterProvider.otherwise('/listProjects');
+
+      $stateProvider.
+      state('listProjects', {
+        url: '/listProjects',
         templateUrl: '/views/partials/listProjects',
         controller: 'projectsListController'
       })
-        .
-      when('/editProject/', {
+      .state('createProject', {
+        url: '/editProject/',
         templateUrl: '/views/partials/editProject',
         controller: 'projectEditController'
       })
-        .
-      when('/editProject/:projectId', {
+      .state('editProject', {
+        url: '/editProject/:projectId',
         templateUrl: '/views/partials/editProject',
         controller: 'projectEditController'
       })
-        .
-      when('/viewProject/:projectId', {
+      .state('viewProject', {
+        url: '/viewProject/:projectId',
         templateUrl: '/views/partials/viewProject',
         controller: 'projectViewController'
-      })
-
-      .otherwise({
-        redirectTo: '/listProjects'
       });
     }
   ];

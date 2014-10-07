@@ -28,15 +28,15 @@
 
   // Public functions
 
-  module.exports = ['$scope', 'Project', '$routeParams',
-    'locationPatched', '$cookies',
+  module.exports = ['$scope', 'Project', '$stateParams',
+    '$state', '$cookies',
     function projectEditController($scope, Project,
-      $routeParams, locationPatched, $cookies) {
+      $stateParams, $state, $cookies) {
       // 
       // Setup
       //
 
-      var projectId = $routeParams.projectId;
+      var projectId = $stateParams.projectId;
       $scope.submitted = false;
       $scope.hideSuccess = true;
       $scope.newProjMembSubmitted = false;
@@ -118,13 +118,10 @@
 
             if ($scope.newProject) {
               $scope.newProject = false;
-              var url = '/editProject/' +
-                project._id;
-              locationPatched.skipReload()
-                .path(url)
-                .replace();
+              $state.go('editProject', 
+                {projectId: project._id});
             } else {
-              locationPatched.path('/listProjects/');
+              $state.go('listProjects');
             }
           })
           .catch(function (err) {

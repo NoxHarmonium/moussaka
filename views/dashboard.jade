@@ -30,12 +30,12 @@ html(ng-app="dashboardModule")
                 nav.navbar
                     ul
                         li.active
-                            a(href="#/listProjects") 
+                            a(ui-sref="listProjects") 
                                 h4= t("app.nav.projects")
 
            
 
-        div.dashboard-outer(ng-view)
+        div.dashboard-outer(ui-view)
 
     script(src="/js/libs.js")
     script(src="/js/app.js")

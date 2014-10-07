@@ -6,12 +6,10 @@ var jQueryPlugins = require('./libs/jQueryPlugins.js');
 //// ## Dashboard Module ##
 
 var dashboardModule = angular.module(
-  'dashboardModule', ['ngRoute', 'ngCookies']
+  'dashboardModule', ['ngCookies', 'ui.router']
 );
 
 // Config
-
-dashboardModule.factory('locationPatched', require('./config/locationFix.js'));
 
 // Directives
 
@@ -59,7 +57,7 @@ dashboardModule.config(['$httpProvider',
 
 //// ## Auth Module ##
 
-var authModule = angular.module('authModule', ['ngRoute']);
+var authModule = angular.module('authModule', ['ui.router']);
 
 // Directives
 

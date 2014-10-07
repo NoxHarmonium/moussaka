@@ -1,0 +1,21 @@
+div#tools-progress.dashboard-progress
+    span
+        
+div.dashboard-sidebar-container
+
+div.dashboard-view
+    #viewProject
+        h2 {{project.name}}
+        dl
+            dt= t("app.viewProject.projectContributors") 
+            dd {{getTotalContributors()}}
+            dt= t("app.viewProject.connectedDevices")
+            dd {{project.deviceCount}}
+
+        h4= t("app.viewProject.deviceList")
+
+        p(ng-show="project.deviceCount < 1")= t("app.viewProject.noDevices")
+
+       
+                        
+

@@ -105,8 +105,8 @@ gulp.task('browserifyLibs', ['jshint'], function (cb) {
     b.require(bowerResolve('angular'), {
       expose: '_angular'
     });
-    b.require(bowerResolve('angular-route'), {
-      expose: '_angular-route'
+    b.require(bowerResolve('angular-ui-router'), {
+      expose: '_angular-ui-router'
     });
     b.require(bowerResolve('angular-cookies'), {
       expose: '_angular-cookies'
@@ -134,7 +134,7 @@ gulp.task('browserifyApp', ['jshint'], function (cb) {
   var b = browserify(browserifyOptions);
   b.add(paths.browserifySrc);
   b.external('_angular');
-  b.external('_angular-route');
+  b.external('_angular-ui-router');
   b.external('_angular-cookies');
   b.external('_kube');
 

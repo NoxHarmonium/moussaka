@@ -14,7 +14,7 @@ div.dashboard-sidebar-container
         hr
         ul
             li
-                a(href="#/editProject")= t("app.actions.createProject")
+                a(ui-sref="createProject")= t("app.actions.createProject")
         hr
         ul    
             li
@@ -29,14 +29,14 @@ div.dashboard-view
                 i.fa.fa-info-circle.fa-3x 
                 p
                     span= t("app.projectList.noProjectsMessage1")
-                    a(href="#editProject/")= t("app.projectList.noProjectsMessage2")
+                    a(ui-sref="dashboard.createProject")= t("app.projectList.noProjectsMessage2")
                     span= t("app.projectList.noProjectsMessage3")
             .project(ng-repeat="project in projects" ng-cloak)
                 hr
                 div.project-title
-                    a(href="javascript:void(0)" ng-href="#/viewProject/{{project._id}}/")
+                    a(href="javascript:void(0)" ui-sref="viewProject({projectId: project._id})")
                         h3.project-name          {{project.name}}  {{project.version}}
-                    a.remove-icon(href="#" ng-href="#/editProject/{{project._id}}/") 
+                    a.remove-icon(href="#" ui-sref="editProject({projectId: project._id})") 
                             i.fa.fa-gear 
                 p.project-description(ng-hide="!project.description")     {{project.description}}
                 p.project-info-summary
