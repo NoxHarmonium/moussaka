@@ -64,7 +64,7 @@
             .to.eql(null);
           expect(res.status)
             .to.be.ok();
-          var data = res.body;
+          var data = res.body.data;
 
           expect(data.apiKey)
             .to.be.ok();
@@ -108,7 +108,7 @@
             .to.eql(null);
           expect(res.status)
             .to.be.ok();
-          var data = res.body;
+          var data = res.body.data;
 
           expect(data.apiKey)
             .to.be.ok();
@@ -132,7 +132,7 @@
             .to.be.ok();
 
           // Set test data id to the returned id
-          project._id = res.body._id;
+          project._id = res.body.data._id;
 
           done();
         });
@@ -339,10 +339,10 @@
           expect(res.ok)
             .to.be.ok();
 
-          device.updatedAt = res.body.updatedAt;
-          device._id = res.body._id;
+          device.updatedAt = res.body.data.updatedAt;
+          device._id = res.body.data._id;
 
-          expect(utils.objMatch(res.body, device))
+          expect(utils.objMatch(res.body.data, device))
             .to.be.ok();
 
           done();
@@ -379,7 +379,7 @@
 
           // Scan list for specific device
           var matchFound = false;
-          _.every(res.body, function (entry) {
+          _.every(res.body.data, function (entry) {
 
             if (utils.objMatch(entry, device)) {
               matchFound = true;
@@ -485,7 +485,7 @@
 
           // Scan list for specific device
           var matchFound = false;
-          _.every(res.body, function (entry) {
+          _.every(res.body.data, function (entry) {
             if (utils.objMatch(entry, device)) {
               matchFound = true;
               return false;
@@ -558,7 +558,7 @@
 
           // Scan list for specific device
           var matchFound = false;
-          _.every(res.body, function (entry) {
+          _.every(res.body.data, function (entry) {
             if (utils.objMatch(entry, device)) {
               matchFound = true;
               return false;
@@ -783,7 +783,7 @@
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
-          schema = res.body;
+          schema = res.body.data;
 
           done();
         });
@@ -956,10 +956,10 @@
           expect(res.ok)
             .to.be.ok();
 
-          expect(res.body.length)
+          expect(res.body.data.length)
             .to.be(1);
 
-          var recvUpdate = res.body[0].data;
+          var recvUpdate = res.body.data[0].data;
           expect(recvUpdate.rotateSpeed.values.n)
             .to.be(sentUpdates[0].rotateSpeed.values.n);
 
@@ -983,7 +983,7 @@
               .to.eql(null);
             expect(res.ok)
               .to.be.ok();
-            expect(res.body.length)
+            expect(res.body.data.length)
               .to.be(0);
 
             done();
@@ -1039,7 +1039,7 @@
           expect(res.ok)
             .to.be.ok();
           // No valid updates
-          expect(res.body.length)
+          expect(res.body.data.length)
             .to.be(0);
 
           done();
@@ -1132,14 +1132,14 @@
           expect(res.ok)
             .to.be.ok();
           // No valid updates
-          expect(res.body.length)
+          expect(res.body.data.length)
             .to.be(3);
 
           // Check for correct ordering of updates
           var matchFound = true;
 
           _.every(
-            _.zip(res.body, sentUpdates), function (entry) {
+            _.zip(res.body.data, sentUpdates), function (entry) {
               if (!utils.objMatch(entry[0].data, entry[1])) {
                 matchFound = false;
                 return false;
@@ -1378,7 +1378,7 @@
           expect(res.ok)
             .to.be.ok();
 
-          expect(res.body.length)
+          expect(res.body.data.length)
             .to.be(config.max_records_per_query);
           done();
         });
@@ -1403,12 +1403,12 @@
           expect(res.ok)
             .to.be.ok();
 
-          expect(res.body.length)
+          expect(res.body.data.length)
             .to.be((max - min) + 1);
 
           for (var i = min; i <= max; i++) {
             expect(
-              S(res.body[i - min].deviceName)
+              S(res.body.data[i - min].deviceName)
               .endsWith(_formatTestIndex(i))
             )
               .to.be.ok();
@@ -1437,12 +1437,12 @@
           expect(res.ok)
             .to.be.ok();
 
-          expect(res.body.length)
+          expect(res.body.data.length)
             .to.be((max - min) + 1);
 
           for (var i = min; i <= max; i++) {
             expect(
-              S(res.body[i - min].deviceName)
+              S(res.body.data[i - min].deviceName)
               .endsWith(_formatTestIndex(i))
             )
               .to.be.ok();
@@ -1494,12 +1494,12 @@
           expect(res.ok)
             .to.be.ok();
 
-          expect(res.body.length)
+          expect(res.body.data.length)
             .to.be((max - min) + 1);
 
           for (var i = min; i <= max; i++) {
             expect(
-              S(res.body[i - min].deviceName)
+              S(res.body.data[i - min].deviceName)
               .endsWith(_formatTestIndex(i))
             )
               .to.be.ok();
@@ -1530,12 +1530,12 @@
 
           max = min + config.max_records_per_query - 1;
 
-          expect(res.body.length)
+          expect(res.body.data.length)
             .to.be((max - min) + 1);
 
           for (var i = min; i <= max; i++) {
             expect(
-              S(res.body[i - min].deviceName)
+              S(res.body.data[i - min].deviceName)
               .endsWith(_formatTestIndex(i))
             )
               .to.be.ok();
@@ -1597,7 +1597,7 @@
             .to.be.ok();
 
           var prevDev = null;
-          _.each(res.body, function (dev) {
+          _.each(res.body.data, function (dev) {
             if (prevDev) {
               // Check sort order
               expect(prevDev.updatedAt < dev.updatedAt)
@@ -1627,7 +1627,7 @@
             .to.be.ok();
 
           var prevDev = null;
-          _.each(res.body, function (dev) {
+          _.each(res.body.data, function (dev) {
             if (prevDev) {
               // Check sort order
               expect(prevDev.updatedAt > dev.updatedAt)

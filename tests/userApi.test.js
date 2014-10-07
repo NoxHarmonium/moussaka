@@ -190,7 +190,7 @@
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
-          expect(res.body.password)
+          expect(res.body.data.password)
             .to.be(undefined);
           done();
         });

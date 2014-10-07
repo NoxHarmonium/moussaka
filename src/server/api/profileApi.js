@@ -128,7 +128,7 @@
 
       };
 
-      Q.spread([countTotalRecords, getPaginatedRecords],
+      Q.spread([countTotalRecords(), getPaginatedRecords()],
         function (totalRecordCount, profiles) {
           res.status(200)
             .send({

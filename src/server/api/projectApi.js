@@ -115,8 +115,11 @@
         return query.execQ();
 
       };
-      Q.spread([countTotalRecords, getPaginatedRecords],
+      Q.spread([countTotalRecords(), getPaginatedRecords()],
         function (totalRecordCount, projects) {
+          //console.log('totalRecordCount: ', totalRecordCount);
+          //console.log('projects: ', JSON.stringify(projects));
+
           res.status(200)
             .send({
               data: projects,

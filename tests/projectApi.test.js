@@ -242,7 +242,7 @@
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
-          expect(res.body.length)
+          expect(res.body.data.length)
             .to.be(0);
 
           done();
@@ -292,7 +292,7 @@
             .to.be.ok();
 
           // Set test data id to the returned id
-          project._id = res.body._id;
+          project._id = res.body.data._id;
 
           done();
         });
@@ -330,7 +330,7 @@
             .to.be.ok();
 
           // Set test data id to the returned id
-          project._id = res.body._id;
+          project._id = res.body.data._id;
 
           done();
         });
@@ -349,7 +349,7 @@
             .to.be.ok();
 
           // Set test data id to the returned id
-          project._id = res.body._id;
+          project._id = res.body.data._id;
 
           done();
         });
@@ -380,10 +380,10 @@
           expect(res.ok)
             .to.be.ok();
 
-          expect(res.body.length)
+          expect(res.body.data.length)
             .to.be(3);
           var match =
-            utils.arrayMatch(res.body, projects);
+            utils.arrayMatch(res.body.data, projects);
           expect(match)
             .to.be(true);
 
@@ -427,8 +427,6 @@
 
     it('Update project [0] with different user/admin list', function (done) {
       var project = projects[0];
-      console.log('users: ' + JSON.stringify(users));
-
       project.users = [users[0].username];
       project.admins = [users[2].username, users[1].username];
 
@@ -438,7 +436,6 @@
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
-          console.log(res.body.detail);
           expect(res.ok)
             .to.be.ok();
 
@@ -456,7 +453,7 @@
           expect(res.ok)
             .to.be.ok();
 
-          expect(utils.objMatch(res.body, project))
+          expect(utils.objMatch(res.body.data, project))
             .to.be.ok();
 
           done();
@@ -474,7 +471,6 @@
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
-          console.log(res.body.detail);
           expect(res.ok)
             .to.be.ok();
 
@@ -509,7 +505,7 @@
           expect(res.ok)
             .to.be.ok();
 
-          expect(utils.objMatch(res.body, project))
+          expect(utils.objMatch(res.body.data, project))
             .to.be.ok();
 
           done();
@@ -546,7 +542,7 @@
           expect(res.ok)
             .to.be.ok();
 
-          expect(utils.objMatch(res.body, project))
+          expect(utils.objMatch(res.body.data, project))
             .to.be.ok();
 
           done();
@@ -563,7 +559,7 @@
           expect(res.ok)
             .to.be.ok();
 
-          expect(utils.objMatch(res.body, project))
+          expect(utils.objMatch(res.body.data, project))
             .to.be.ok();
 
           done();
@@ -581,7 +577,7 @@
           expect(res.ok)
             .to.be.ok();
 
-          expect(utils.objMatch(res.body, project))
+          expect(utils.objMatch(res.body.data, project))
             .to.be.ok();
 
           done();
@@ -675,7 +671,7 @@
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
-          expect(res.body.length)
+          expect(res.body.data.length)
             .to.be(0);
 
           done();
@@ -781,11 +777,11 @@
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
-          expect(res.body.length)
+          expect(res.body.data.length)
             .to.be(3);
 
           var match =
-            utils.arrayMatch(res.body, projects);
+            utils.arrayMatch(res.body.data, projects);
           expect(match)
             .to.be(true);
 
@@ -804,10 +800,10 @@
           expect(res.ok)
             .to.be.ok();
 
-          expect(res.body.users.length)
+          expect(res.body.data.users.length)
             .to.be(2);
 
-          expect(utils.objMatch(res.body, project))
+          expect(utils.objMatch(res.body.data, project))
             .to.be.ok();
 
           done();
@@ -890,11 +886,11 @@
           expect(res.ok)
             .to.be.ok();
 
-          expect(res.body.length)
+          expect(res.body.data.length)
             .to.be(3);
 
           var match =
-            utils.arrayMatch(res.body, projects);
+            utils.arrayMatch(res.body.data, projects);
           expect(match)
             .to.be(true);
 
@@ -911,10 +907,10 @@
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
-          expect(res.body.users.length)
+          expect(res.body.data.users.length)
             .to.be(project.users.length);
 
-          expect(utils.objMatch(res.body, project))
+          expect(utils.objMatch(res.body.data, project))
             .to.be.ok();
 
           done();
@@ -974,7 +970,7 @@
             expect(res.ok)
               .to.be.ok();
 
-            expect(utils.objMatch(res.body, project))
+            expect(utils.objMatch(res.body.data, project))
               .to.be.ok();
 
             done();
@@ -1191,7 +1187,7 @@
           expect(res.ok)
             .to.be.ok();
 
-          expect(utils.objMatch(res.body, project))
+          expect(utils.objMatch(res.body.data, project))
             .to.be.ok();
 
           done();
@@ -1267,11 +1263,11 @@
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
-          expect(res.body.length)
+          expect(res.body.data.length)
             .to.be(3);
 
           var match =
-            utils.arrayMatch(res.body, projects);
+            utils.arrayMatch(res.body.data, projects);
           expect(match)
             .to.be(true);
 
@@ -1290,10 +1286,10 @@
           expect(res.ok)
             .to.be.ok();
 
-          expect(res.body.admins.length)
+          expect(res.body.data.admins.length)
             .to.be(2);
 
-          expect(utils.objMatch(res.body, project))
+          expect(utils.objMatch(res.body.data, project))
             .to.be.ok();
 
           done();
@@ -1378,11 +1374,11 @@
           expect(res.ok)
             .to.be.ok();
 
-          expect(res.body.length)
+          expect(res.body.data.length)
             .to.be(3);
 
           var match =
-            utils.arrayMatch(res.body, projects);
+            utils.arrayMatch(res.body.data, projects);
           expect(match)
             .to.be(true);
 
@@ -1399,10 +1395,10 @@
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
-          expect(res.body.admins.length)
+          expect(res.body.data.admins.length)
             .to.be(1);
 
-          expect(utils.objMatch(res.body, project))
+          expect(utils.objMatch(res.body.data, project))
             .to.be.ok();
 
           done();
@@ -1534,7 +1530,7 @@
           expect(res.ok)
             .to.be.ok();
 
-          expect(res.body.length)
+          expect(res.body.data.length)
             .to.be(config.max_records_per_query);
           done();
         });
@@ -1557,12 +1553,12 @@
           expect(res.ok)
             .to.be.ok();
 
-          expect(res.body.length)
+          expect(res.body.data.length)
             .to.be((max - min) + 1);
 
           for (var i = min; i <= max; i++) {
             expect(
-              S(res.body[i - min].name)
+              S(res.body.data[i - min].name)
               .endsWith(_formatTestIndex(i))
             )
               .to.be.ok();
@@ -1589,12 +1585,12 @@
           expect(res.ok)
             .to.be.ok();
 
-          expect(res.body.length)
+          expect(res.body.data.length)
             .to.be((max - min) + 1);
 
           for (var i = min; i <= max; i++) {
             expect(
-              S(res.body[i - min].name)
+              S(res.body.data[i - min].name)
               .endsWith(_formatTestIndex(i))
             )
               .to.be.ok();
@@ -1642,12 +1638,12 @@
           expect(res.ok)
             .to.be.ok();
 
-          expect(res.body.length)
+          expect(res.body.data.length)
             .to.be((max - min) + 1);
 
           for (var i = min; i <= max; i++) {
             expect(
-              S(res.body[i - min].name)
+              S(res.body.data[i - min].name)
               .endsWith(_formatTestIndex(i))
             )
               .to.be.ok();
@@ -1676,12 +1672,12 @@
 
           max = min + config.max_records_per_query - 1;
 
-          expect(res.body.length)
+          expect(res.body.data.length)
             .to.be((max - min) + 1);
 
           for (var i = min; i <= max; i++) {
             expect(
-              S(res.body[i - min].name)
+              S(res.body.data[i - min].name)
               .endsWith(_formatTestIndex(i))
             )
               .to.be.ok();
@@ -1737,7 +1733,7 @@
             .to.be.ok();
 
           var prevProj = null;
-          _.each(res.body, function (proj) {
+          _.each(res.body.data, function (proj) {
             if (prevProj) {
               // Check sort order
               expect(prevProj.description < proj.description)
@@ -1765,7 +1761,7 @@
             .to.be.ok();
 
           var prevProj = null;
-          _.each(res.body, function (proj) {
+          _.each(res.body.data, function (proj) {
             if (prevProj) {
               // Check sort order
               expect(prevProj.description > proj.description)

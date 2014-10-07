@@ -242,8 +242,6 @@
           });
       }
 
-
-
       var countTotalRecords = function () {
         return Device.countQ({
           projectId: project._id
@@ -272,7 +270,7 @@
         return query.execQ();
       };
 
-      Q.spread([countTotalRecords, getPaginatedRecords],
+      Q.spread([countTotalRecords(), getPaginatedRecords()],
         function (totalRecordCount, devices) {
           res.status(200)
             .send({
@@ -505,7 +503,7 @@
 
       var sendMessagesToClient = function (messages) {
         res.status(200)
-          .send(messages);
+          .send({data: messages});
         return messages;
       };
 

@@ -58,10 +58,10 @@
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
-          expect(res.body.length)
+          expect(res.body.data.length)
             .to.be(1);
 
-          project = res.body[0];
+          project = res.body.data[0];
 
           done();
         });
@@ -76,7 +76,7 @@
           expect(res.ok)
             .to.be.ok();
 
-          device = res.body;
+          device = res.body.data;
 
           done();
         });
@@ -161,10 +161,10 @@
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
-          expect(res.body._id)
+          expect(res.body.data._id)
             .to.be.ok();
 
-          profileId = res.body._id;
+          profileId = res.body.data._id;
 
           done();
         });
@@ -194,7 +194,7 @@
           expect(res.ok)
             .to.be.ok();
 
-          var profile = res.body;
+          var profile = res.body.data;
 
           expect(utils.objMatch(
             device.currentState,
@@ -215,7 +215,7 @@
           expect(res.ok)
             .to.be.ok();
 
-          var profile = res.body[0];
+          var profile = res.body.data[0];
 
           expect(utils.objMatch(
             device.currentState,
@@ -240,7 +240,7 @@
             expect(res.ok)
               .to.be.ok();
 
-            var profile = res.body[0];
+            var profile = res.body.data[0];
 
             expect(utils.objMatch(
               device.currentState,
@@ -265,7 +265,7 @@
             expect(res.ok)
               .to.be.ok();
 
-            expect(res.body.length)
+            expect(res.body.data.length)
               .to.be(0);
 
             done();
@@ -365,7 +365,7 @@
           expect(res.ok)
             .to.be.ok();
 
-          var profile = res.body;
+          var profile = res.body.data;
 
           expect(utils.objMatch(
             device.currentState,
@@ -559,7 +559,7 @@
           expect(res.ok)
             .to.be.ok();
 
-          expect(res.body.length)
+          expect(res.body.data.length)
             .to.be(config.max_records_per_query);
           done();
         });
@@ -583,12 +583,12 @@
           expect(res.ok)
             .to.be.ok();
 
-          expect(res.body.length)
+          expect(res.body.data.length)
             .to.be((max - min) + 1);
 
           for (var i = min; i <= max; i++) {
             expect(
-              S(res.body[i - min].profileName)
+              S(res.body.data[i - min].profileName)
               .endsWith(_formatTestIndex(i))
             )
               .to.be.ok();
@@ -616,12 +616,12 @@
           expect(res.ok)
             .to.be.ok();
 
-          expect(res.body.length)
+          expect(res.body.data.length)
             .to.be((max - min) + 1);
 
           for (var i = min; i <= max; i++) {
             expect(
-              S(res.body[i - min].profileName)
+              S(res.body.data[i - min].profileName)
               .endsWith(_formatTestIndex(i))
             )
               .to.be.ok();
@@ -671,12 +671,12 @@
           expect(res.ok)
             .to.be.ok();
 
-          expect(res.body.length)
+          expect(res.body.data.length)
             .to.be((max - min) + 1);
 
           for (var i = min; i <= max; i++) {
             expect(
-              S(res.body[i - min].profileName)
+              S(res.body.data[i - min].profileName)
               .endsWith(_formatTestIndex(i))
             )
               .to.be.ok();
@@ -706,12 +706,12 @@
 
           max = min + config.max_records_per_query - 1;
 
-          expect(res.body.length)
+          expect(res.body.data.length)
             .to.be((max - min) + 1);
 
           for (var i = min; i <= max; i++) {
             expect(
-              S(res.body[i - min].profileName)
+              S(res.body.data[i - min].profileName)
               .endsWith(_formatTestIndex(i))
             )
               .to.be.ok();
@@ -770,7 +770,7 @@
             .to.be.ok();
 
           var prevProf = null;
-          _.each(res.body, function (prof) {
+          _.each(res.body.data, function (prof) {
             if (prevProf) {
               // Check sort order
               expect(prevProf.updatedAt < prof.updatedAt)
@@ -799,7 +799,7 @@
             .to.be.ok();
 
           var prevProf = null;
-          _.each(res.body, function (prof) {
+          _.each(res.body.data, function (prof) {
             if (prevProf) {
               // Check sort order
               expect(prevProf.updatedAt > prof.updatedAt)
