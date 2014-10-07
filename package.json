@@ -35,6 +35,7 @@
     "mongoose": "*",
     "mongoose-q": "*",
     "mongoose-timestamp": "^0.3.0",
+    "mongoose-validator": "^1.0.2",
     "morgan": "^1.3.2",
     "multer": "^0.1.4",
     "node-uuid": "*",

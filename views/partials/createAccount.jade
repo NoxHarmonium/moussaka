@@ -10,41 +10,48 @@ div.viewContainer
             label= t("app.sharedForm.firstName")
                 div.input-groups.width-100
                     input(type="text" name="firstName" ng-model="firstName" 
-                        watch-change="fieldHasChanged()" ng-Disabled="loading" required)
+                        watch-change="fieldHasChanged()" ng-Disabled="loading" 
+                        ng-minlength="3" ng-maxlength="40" maxlength="40" required)
                     span.input-append
                         i(class="fa fa-user")
                 div.forms-desc.error(ng-show="firstNameFieldRequired()")= t("app.validationMessages.firstNameRequired")
+                div.forms-desc.error(ng-show="firstNameFieldWrongSize()")= t("app.validationMessages.nameWrongSize")
 
             label= t("app.sharedForm.lastName")
                 div.input-groups.width-100
                     input(type="text" name="lastName" ng-model="lastName" 
-                        watch-change="fieldHasChanged()" ng-Disabled="loading" required)
+                        watch-change="fieldHasChanged()" ng-Disabled="loading" 
+                        ng-minlength="3" ng-maxlength="40" maxlength="40" required)
                     span.input-append
                         i(class="fa fa-user")
                 div.forms-desc.error(ng-show="lastNameFieldRequired()")= t("app.validationMessages.lastNameRequired")
+                div.forms-desc.error(ng-show="lastNameFieldWrongSize()")= t("app.validationMessages.nameWrongSize")
 
             label= t("app.sharedForm.email")
                 div.input-groups.width-100
                     input(type="email" name="email" ng-model="email" 
-                        watch-change="fieldHasChanged()" ng-Disabled="loading" required)
+                        watch-change="fieldHasChanged()" ng-Disabled="loading" 
+                        ng-minlength="3" ng-maxlength="254" maxlength="254" required)
                     span.input-append
                         i(class="fa fa-at")
                 div.forms-desc.error(ng-show="emailFieldRequired()")= t("app.validationMessages.emailRequired")
                 div.forms-desc.error(ng-show="emailFieldFormat()")= t("app.validationMessages.emailWrongFormat")
+                div.forms-desc.error(ng-show="emailFieldWrongSize()")= t("app.validationMessages.emailWrongSize")
 
             label= t("app.sharedForm.password")
                 div.input-groups.width-100
                     input(type="password" name="password" ng-model="password" 
-                        watch-change="fieldHasChanged()" ng-Disabled="loading" required)
+                        watch-change="fieldHasChanged()" ng-Disabled="loading" 
+                        ng-minlength="8" ng-maxlength="40" maxlength="40" required)
                     span.input-append   
                         i(class="fa fa-lock")
                 div.forms-desc.error(ng-show="passwordFieldInvalid()")= t("app.validationMessages.passwordRequired")
+                div.forms-desc.error(ng-show="passwordFieldWrongSize()")= t("app.validationMessages.passwordWrongSize")
            
             div.loginError.ng-hide(ng-hide="hideError")
                 p.error 
                     i.fa.fa-info-circle
                     span &nbsp; {{ errorMessage }}   
-
 
             div.units-row.text-centered 
                 div.unit-50

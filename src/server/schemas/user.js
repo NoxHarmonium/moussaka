@@ -8,27 +8,71 @@
   var config = require('../../shared/config.js');
   var Schema = mongoose.Schema;
   var uuid = require('node-uuid');
+  var validate = require('mongoose-validator');
+
+  var emailValidator = [
+    validate({
+      validator: 'isEmail',
+      message: 'Email should be in a valid email format'
+    }),
+    validate({
+      validator: 'isLength',
+      arguments: [3, 254],
+      message: 'Email should be between 3 and 254 characters'
+    })
+  ];
+
+  var nameValidator = [
+    validate({
+      validator: 'isLength',
+      arguments: [3, 40],
+      message: 'Name should be between 3 and 50 characters'
+    }),
+    validate({
+      validator: 'isAlphanumeric',
+      passIfEmpty: true,
+      message: 'Name should contain alpha-numeric characters only'
+    })
+  ];
+
+  var passwordValidator = [
+    validate({
+      validator: 'isLength',
+      arguments: [8, 40]
+    })
+  ];
+
+  var apiKeyValidator = [
+    validate({
+      validator: 'isUUID',
+      arguments: [4] //v4
+    })
+  ];
 
   var UserSchema = new Schema({
     _id: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
+      validate: emailValidator
     },
     password: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
+      validate: passwordValidator
     },
     firstName: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
+      validate: nameValidator
     },
     lastName: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
+      validate: nameValidator
     },
     tempPasswordCode: {
       type: String,
@@ -41,7 +85,8 @@
       type: String,
       default: uuid.v4,
       unique: true,
-      trim: true
+      trim: true,
+      validate: apiKeyValidator
     }
 
   });

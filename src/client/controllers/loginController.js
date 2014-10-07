@@ -70,6 +70,22 @@
           $scope.loginForm.password.$error.required;
       };
 
+      $scope.emailFieldWrongSize = function () {
+        return ($scope.submitted) &&
+          (
+            $scope.loginForm.email.$error.minlength ||
+            $scope.loginForm.email.$error.maxlength
+          );
+      };
+
+      $scope.passwordFieldWrongSize = function () {
+        return ($scope.submitted) &&
+          (
+            $scope.loginForm.password.$error.minlength ||
+            $scope.loginForm.password.$error.maxlength
+          );
+      };
+
     }
   ];
 

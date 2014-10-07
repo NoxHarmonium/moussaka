@@ -93,6 +93,38 @@
           $scope.createAccountForm.password.$error.required;
       };
 
+      $scope.firstNameFieldWrongSize = function () {
+        return ($scope.submitted) &&
+          (
+            $scope.createAccountForm.firstName.$error.minlength ||
+            $scope.createAccountForm.firstName.$error.maxlength
+          );
+      };
+
+      $scope.lastNameFieldWrongSize = function () {
+        return ($scope.submitted) &&
+          (
+            $scope.createAccountForm.lastName.$error.minlength ||
+            $scope.createAccountForm.lastName.$error.maxlength
+          );
+      };
+
+      $scope.emailFieldWrongSize = function () {
+        return ($scope.submitted) &&
+          (
+            $scope.createAccountForm.email.$error.minlength ||
+            $scope.createAccountForm.email.$error.maxlength
+          );
+      };
+
+      $scope.passwordFieldWrongSize = function () {
+        return ($scope.submitted) &&
+          (
+            $scope.createAccountForm.password.$error.minlength ||
+            $scope.createAccountForm.password.$error.maxlength
+          );
+      };
+
       $scope.back = function () {
         $location.path('/login');
       };

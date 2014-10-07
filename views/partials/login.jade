@@ -13,21 +13,25 @@ div.viewContainer
                         type="email" name="email" class="width-100" 
                         ng-model="email" ng-Disabled="loading" 
                         watch-change="fieldHasChanged()" required
+                        ng-minlength="3" ng-maxlength="254"
                         )
                     span.input-append
                         i(class="fa fa-at")
                 div.forms-desc.error(ng-show="emailFieldRequired()")= t("app.validationMessages.emailRequired")
                 div.forms-desc.error(ng-show="emailFieldFormat()")= t("app.validationMessages.emailWrongFormat")
+                div.forms-desc.error(ng-show="emailFieldWrongSize()")= t("app.validationMessages.emailWrongSize")
             label= t("app.sharedForm.password")
                 div.input-groups
                     input(
                         type="password" name="password" class="width-100" 
                         ng-model="password" ng-disabled="loading" 
                         watch-change="fieldHasChanged()" required
+                        ng-minlength="8" ng-maxlength="40"
                         )
                     span.input-append   
                         i(class="fa fa-lock")
                 div.forms-desc.error(ng-show="passwordFieldInvalid()")= t("app.validationMessages.passwordRequired")
+                div.forms-desc.error(ng-show="passwordFieldWrongSize()")= t("app.validationMessages.passwordWrongSize")
 
 
             div.loginError.ng-hide(ng-hide="hideError")
