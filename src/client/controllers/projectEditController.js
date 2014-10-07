@@ -142,7 +142,7 @@
         $scope.newProjMembSubmitted = true;
 
         if ($scope.newProjEmailRequired() ||
-          $scope.newProjEmailWrongFormat() || 
+          $scope.newProjEmailWrongFormat() ||
           $scope.newProjEmailExists()) {
           return;
         }
@@ -210,7 +210,7 @@
           });
       };
 
-      $scope.projMembTypeModified = function(projectMember) {
+      $scope.projMembTypeModified = function (projectMember) {
         _.pull($scope.project.admins, projectMember.email);
         _.pull($scope.project.users, projectMember.email);
         if (projectMember.type.toLowerCase() === 'admin') {
@@ -242,8 +242,9 @@
 
       $scope.newProjEmailExists = function () {
         return ($scope.newProjMembSubmitted) &&
-          _.detect($scope.projectMembers, 
-            {'email': $scope.newProjMemb.email});
+          _.detect($scope.projectMembers, {
+            'email': $scope.newProjMemb.email
+          });
       };
 
       $scope.fieldHasChanged = function () {

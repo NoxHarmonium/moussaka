@@ -426,16 +426,55 @@
     });
 
     it('Update project [0] with different user/admin list', function (done) {
-      var projectCopy = extend({}, projects[0]);
-      projectCopy.users = [users[1]._id, users[2]._id];
-      projectCopy.admins = [users[0]._id];
+      var project = projects[0];
+      console.log('users: ' + JSON.stringify(users));
+
+      project.users = [users[0].username];
+      project.admins = [users[2].username, users[1].username];
 
       agent.post('http://localhost:3000/projects/' +
-        projectCopy._id + '/')
-        .send(projectCopy)
+        project._id + '/')
+        .send(project)
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
+          console.log(res.body.detail);
+          expect(res.ok)
+            .to.be.ok();
+
+          done();
+        });
+    });
+
+    it('Get existing project [0]', function (done) {
+      var project = projects[0];
+
+      agent.get('http://localhost:3000/projects/' + project._id + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          expect(utils.objMatch(res.body, project))
+            .to.be.ok();
+
+          done();
+        });
+    });
+
+   it('Update project [0] with original user/admin list', function (done) {
+      var project = projects[0];
+      project.users = [];
+      project.admins = [users[2].username];
+
+      agent.post('http://localhost:3000/projects/' +
+        project._id + '/')
+        .send(project)
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          console.log(res.body.detail);
           expect(res.ok)
             .to.be.ok();
 
