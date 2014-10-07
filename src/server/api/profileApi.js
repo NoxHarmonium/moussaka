@@ -71,12 +71,14 @@
 
       res.status(200)
         .send({
-          projectId: profile.projectId,
-          projectVersion: profile.projectVersion,
-          profileName: profile.profileName,
-          profileData: profile.profileData,
-          owner: profile.owner,
-          updatedAt: profile.updatedAt
+          data: {
+            projectId: profile.projectId,
+            projectVersion: profile.projectVersion,
+            profileName: profile.profileName,
+            profileData: profile.profileData,
+            owner: profile.owner,
+            updatedAt: profile.updatedAt
+          }
         });
     },
 
@@ -92,33 +94,51 @@
           });
       }
 
-      var query = Profile.find();
-
-      query.select('_id projectId projectVersion profileName ' +
-        'profileData updatedAt owner');
-
-      query.where('projectId')
-        .equals(project._id);
-
-      if (utils.exists(projectVersion)) {
-        query.where('projectVersion')
-          .equals(projectVersion);
-      }
-
-      try {
-        queryFilters.paginate(req.query, query);
-        queryFilters.sort(req.query, query, {
-          'profileName': 'asc'
+      var countTotalRecords = function () {
+        return Profile.countQ({
+          projectId: project._id
         });
-      } catch (ex) {
-        return res.status(400)
-          .send(ex.message);
-      }
+      };
 
-      query.execQ()
-        .then(function (data) {
+      var getPaginatedRecords = function () {
+
+        var query = Profile.find({
+          projectId: project._id
+        });
+
+        query.select('_id projectId projectVersion profileName ' +
+          'profileData updatedAt owner');
+
+        if (utils.exists(projectVersion)) {
+          query.where('projectVersion')
+            .equals(projectVersion);
+        }
+
+        try {
+          queryFilters.paginate(req.query, query);
+          queryFilters.sort(req.query, query, {
+            'profileName': 'asc'
+          });
+        } catch (ex) {
+          return res.status(400)
+            .send(ex.message);
+        }
+
+        return query.execQ();
+
+      };
+
+      Q.spread([countTotalRecords, getPaginatedRecords],
+        function (totalRecordCount, profiles) {
           res.status(200)
-            .send(data);
+            .send({
+              data: profiles,
+              control: {
+                recordsSent: profiles.length,
+                totalRecords: totalRecordCount
+              }
+            });
+
         })
         .catch(function (err) {
           next(err);
@@ -173,7 +193,9 @@
       var returnId = function (savedProfile) {
         res.status(200)
           .send({
-            _id: savedProfile._id
+            data: {
+              _id: savedProfile._id
+            }
           });
       };
 

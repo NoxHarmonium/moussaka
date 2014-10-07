@@ -69,10 +69,12 @@
 
       return res.status(200)
         .send({
-          username: loggedInUser.username,
-          apiKey: loggedInUser.apiKey,
-          firstName: loggedInUser.firstName,
-          lastName: loggedInUser.lastName
+          data: {
+            username: loggedInUser.username,
+            apiKey: loggedInUser.apiKey,
+            firstName: loggedInUser.firstName,
+            lastName: loggedInUser.lastName
+          }
         });
     },
 
@@ -135,10 +137,12 @@
         .then(function (savedUser) {
           res.status(201)
             .send({
-              username: savedUser.username,
-              apiKey: savedUser.apiKey,
-              firstName: savedUser.firstName,
-              lastName: savedUser.lastName
+              data: {
+                username: savedUser.username,
+                apiKey: savedUser.apiKey,
+                firstName: savedUser.firstName,
+                lastName: savedUser.lastName
+              }
             });
         })
         .catch(function (err) {

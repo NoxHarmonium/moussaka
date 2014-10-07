@@ -46,6 +46,10 @@ default: # The default config profile. (With documentation)
     # The secret key of the session, should be changed for each server instance
     session_secret:         6zRckBzE
 
+    # Enables more informative stack traces in Q
+    # Uses more memory and CPU s so turn off in production
+    q_long_stacktrace:      true
+
     # The settings so that emails can be sent for things such as lost password.
     # Set enabled to false to avoid errors due to incorrect settings.
     # When fake_smtp is set to true, an SMTP server is started by the server
@@ -78,6 +82,7 @@ development: # The development config profile.
     tempPasswordCodeLength: 8
     device_Timeout_Seconds: 300
     session_secret:         6zRckBzE
+    q_long_stacktrace:      true
     email_settings: 
         enabled:    true    
         user:       "testUser"
@@ -102,6 +107,7 @@ travis-ci: # The development config profile.
     tempPasswordCodeLength: 8
     device_Timeout_Seconds: 300
     session_secret:         6zRckBzE
+    q_long_stacktrace:      true
     email_settings:
         enabled:    true    
         user:       "testUser"
@@ -125,6 +131,7 @@ heroku:
     max_records_per_query:  20
     tempPasswordCodeLength: 8
     device_Timeout_Seconds: 300
+    q_long_stacktrace:      true
     email_settings:
         enabled:    true    
         user:       "testUser"

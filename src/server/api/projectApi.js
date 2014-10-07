@@ -11,6 +11,7 @@
   var utils = require('../../shared/utils.js');
   var extend = require('extend');
   var queryFilters = require('../include/queryFilters.js');
+  var Q = require('q');
 
   // Public functions
   module.exports = {
@@ -77,31 +78,54 @@
           });
       }
 
-      var query = Project.find({
-        $or: [{
-          'admins': req.user._id
-        }, {
-          'users': req.user._id
-        }]
-      });
-
-      // Project correct fields
-      query.select('_id name version admins users description deviceCount');
-
-      try {
-        queryFilters.paginate(req.query, query);
-        queryFilters.sort(req.query, query, {
-          'name': 'asc'
+      var countTotalRecords = function () {
+        return Project.countQ({
+          $or: [{
+            'admins': req.user._id
+          }, {
+            'users': req.user._id
+          }]
         });
-      } catch (ex) {
-        return res.status(400)
-          .send(ex.message);
-      }
+      };
 
-      query.execQ()
-        .then(function (projects) {
+      var getPaginatedRecords = function () {
+
+        var query = Project.find({
+          $or: [{
+            'admins': req.user._id
+          }, {
+            'users': req.user._id
+          }]
+        });
+
+        // Project correct fields
+        query.select(
+          '_id name version admins users description deviceCount');
+
+        try {
+          queryFilters.paginate(req.query, query);
+          queryFilters.sort(req.query, query, {
+            'name': 'asc'
+          });
+        } catch (ex) {
+          return res.status(400)
+            .send(ex.message);
+        }
+
+        return query.execQ();
+
+      };
+      Q.spread([countTotalRecords, getPaginatedRecords],
+        function (totalRecordCount, projects) {
           res.status(200)
-            .send(projects);
+            .send({
+              data: projects,
+              control: {
+                recordsSent: projects.length,
+                totalRecords: totalRecordCount
+              }
+            });
+
         })
         .catch(function (err) {
           next(err);
@@ -137,8 +161,10 @@
         .then(function (data) {
           res.status(201)
             .send({
-              '_id': data._id,
-              admins: data.admins
+              data: {
+                '_id': data._id,
+                admins: data.admins
+              }
             });
         })
         .catch(function (err) {
@@ -230,13 +256,15 @@
       if (project) {
         return res.status(200)
           .send({
-            _id: project._id,
-            name: project.name,
-            version: project.version,
-            admins: project.admins,
-            users: project.users,
-            description: project.description,
-            deviceCount: project.deviceCount
+            data: {
+              _id: project._id,
+              name: project.name,
+              version: project.version,
+              admins: project.admins,
+              users: project.users,
+              description: project.description,
+              deviceCount: project.deviceCount
+            }
           });
       } else {
         return res.status(404)

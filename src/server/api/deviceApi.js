@@ -146,7 +146,9 @@
           resetTimeout(savedDevice);
           res.status(200)
             .send({
-              '_id': savedDevice._id
+              data: {
+                '_id': savedDevice._id
+              }
             });
         })
         .catch(function (err) {
@@ -217,14 +219,16 @@
 
       res.status(200)
         .send({
-          _id: device._id,
-          macAddress: device.macAddress,
-          deviceName: device.deviceName,
-          projectId: device.projectId,
-          projectVersion: device.projectVersion,
-          dataSchema: device.dataSchema,
-          currentState: device.currentState,
-          updatedAt: device.updatedAt
+          data: {
+            _id: device._id,
+            macAddress: device.macAddress,
+            deviceName: device.deviceName,
+            projectId: device.projectId,
+            projectVersion: device.projectVersion,
+            dataSchema: device.dataSchema,
+            currentState: device.currentState,
+            updatedAt: device.updatedAt
+          }
         });
     },
 
@@ -238,28 +242,47 @@
           });
       }
 
-      var query = Device.find({
-        projectId: project._id
-      });
 
-      query.select('macAddress projectId projectVersion ' +
-        'dataSchema currentState updatedAt deviceName');
 
-      try {
-        queryFilters.paginate(req.query, query);
-        queryFilters.sort(req.query, query, {
-          'updatedAt': 'desc',
-          'projectVersion': 'asc'
+      var countTotalRecords = function () {
+        return Device.countQ({
+          projectId: project._id
         });
-      } catch (ex) {
-        return res.status(400)
-          .send(ex.message);
-      }
+      };
 
-      query.execQ()
-        .then(function (devices) {
+      var getPaginatedRecords = function () {
+        var query = Device.find({
+          projectId: project._id
+        });
+
+        query.select('macAddress projectId projectVersion ' +
+          'dataSchema currentState updatedAt deviceName');
+
+        try {
+          queryFilters.paginate(req.query, query);
+          queryFilters.sort(req.query, query, {
+            'updatedAt': 'desc',
+            'projectVersion': 'asc'
+          });
+        } catch (ex) {
+          return res.status(400)
+            .send(ex.message);
+        }
+
+        return query.execQ();
+      };
+
+      Q.spread([countTotalRecords, getPaginatedRecords],
+        function (totalRecordCount, devices) {
           res.status(200)
-            .send(devices);
+            .send({
+              data: devices,
+              control: {
+                recordsSent: devices.length,
+                totalRecords: totalRecordCount
+              }
+            });
+
         })
         .catch(function (err) {
           next(err);
@@ -305,7 +328,9 @@
         .then(function (data) {
           res.status(200)
             .send({
-              '_id': data._id
+              data: {
+                '_id': data._id
+              }
             });
         })
         .catch(function (err) {
@@ -376,7 +401,9 @@
       }
 
       res.status(200)
-        .send(device.dataSchema);
+        .send({
+          data: device.dataSchema
+        });
     },
 
     queueUpdate: function (req, res, next) {

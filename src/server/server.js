@@ -50,6 +50,7 @@
     var dbAccess = require('./include/dbAccess.js');
     var utils = require('../shared/utils');
     var i18n = require('i18next');
+    var Q = require('q');
 
     /**
      * Main application
@@ -67,6 +68,8 @@
       supportedLngs: 'en-US',
       lng: config.locale
     });
+
+    Q.longStackSupport = config.q_long_stacktrace;
 
     var app = express();
     var rootDir = process.cwd();
