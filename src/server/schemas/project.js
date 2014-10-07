@@ -10,6 +10,7 @@
   var sortNameValidator = require('./validators/sortNameValidator.js');
   var descriptionValidator = require('./validators/descriptionValidator.js');
   var emailValidator = require('./validators/emailValidator.js');
+  var deviceCountValidator = require('./validators/deviceCountValidator.js');
 
   var ProjectSchema = new Schema({
     name: {
@@ -42,7 +43,12 @@
       type: String,
       trim: true,
       validate: emailValidator
-    }]
+    }],
+    deviceCount: { // Not user editable. Updated when devices connect/disconnect
+      type: Number,
+      default: 0,
+      validate: deviceCountValidator
+    }
   });
 
   // Apply index over name

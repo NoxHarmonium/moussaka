@@ -40,9 +40,11 @@ div.dashboard-view
                             i.fa.fa-remove 
                 p.project-description(ng-hide="!project.description")     {{project.description}}
                 p.project-info-summary
-                    span {{project.users.length + project.admins.length}} Contributors 
+                    span {{getTotalContributors(project)}}&nbsp;
+                    span= t("app.projectList.contributors") 
                     i.fa.fa-circle 
-                    span 2 Connected Devices
+                    span {{project.deviceCount}}&nbsp;
+                    span= t("app.projectList.connectedDevices")
 
             hr
                     

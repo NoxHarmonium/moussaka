@@ -86,7 +86,7 @@
       });
 
       // Project correct fields
-      query.select('_id name version admins users description');
+      query.select('_id name version admins users description deviceCount');
 
       try {
         queryFilters.paginate(req.query, query);
@@ -235,7 +235,8 @@
             version: project.version,
             admins: project.admins,
             users: project.users,
-            description: project.description
+            description: project.description,
+            deviceCount: project.deviceCount
           });
       } else {
         return res.status(404)

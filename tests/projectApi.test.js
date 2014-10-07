@@ -463,7 +463,7 @@
         });
     });
 
-   it('Update project [0] with original user/admin list', function (done) {
+    it('Update project [0] with original user/admin list', function (done) {
       var project = projects[0];
       project.users = [];
       project.admins = [users[2].username];

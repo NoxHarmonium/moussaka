@@ -57,8 +57,7 @@
     },
     lastAccess: {
       type: Date,
-      default: Date.now,
-      expires: config.device_Timeout_Seconds
+      default: Date.now
     }
   });
 

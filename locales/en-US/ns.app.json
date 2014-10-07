@@ -79,7 +79,9 @@
     "projectList" : {
         "noProjectsMessage1": "You currently have no projects you can view. You could ",
         "noProjectsMessage2": "create a new one",
-        "noProjectsMessage3": " or get invited to someone else's project."
+        "noProjectsMessage3": " or get invited to someone else's project.",
+        "contributors" : "contributors",
+        "connectedDevices": "connected devices"
     }
   }
 }

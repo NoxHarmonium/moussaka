@@ -13,6 +13,43 @@
   var controls = require('../../shared/controls.js');
   var queryFilters = require('../include/queryFilters.js');
 
+  // Device expiry functionality
+
+  var deviceTimeouts = {};
+
+  var expireDevice = function (device) {
+    console.log('Expiring device \'', device.macAddress,
+      '\' due to timeout (',
+      config.device_Timeout_Seconds, ' seconds)');
+
+    device.removeQ()
+      .then(Project.findOneQ({
+        '_id': device.projectId
+      }))
+      .then(function (project) {
+        if (project) {
+          project.deviceCount--;
+          return project.saveQ();
+        }
+      })
+      .done();
+  };
+
+  var resetTimeout = function (device) {
+    clearTimeout(device);
+    var timeoutId = setTimeout(expireDevice,
+      config.device_Timeout_Seconds * 1000,
+      device);
+    deviceTimeouts[device._id] = timeoutId;
+  };
+
+  var clearTimeout = function (device) {
+    var timeoutId = deviceTimeouts[device._id];
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+  };
+
   // Public functions
   module.exports = {
 
@@ -66,6 +103,8 @@
           });
       }
 
+      var saveDevice;
+
       if (existingDevice) {
         // Just update device if exists
         existingDevice.projectId = device.projectId;
@@ -75,15 +114,9 @@
         existingDevice.currentState = device.currentState;
         existingDevice.lastAccess = Date.now();
 
-        existingDevice.saveQ()
-          .then(function () {
-            res.status(200)
-              .send();
-          })
-          .catch(function (err) {
-            next(err);
-          })
-          .done();
+
+        saveDevice = existingDevice;
+
       } else {
         // Else create new
         var newDevice = new Device({
@@ -95,18 +128,27 @@
           currentState: device.currentState
         });
 
-        newDevice.saveQ()
-          .then(function (data) {
-            res.status(200)
-              .send({
-                '_id': data._id
-              });
-          })
-          .catch(function (err) {
-            next(err);
-          })
-          .done();
+        project.deviceCount++;
+        saveDevice = newDevice;
       }
+
+      var savedDevice = null;
+      saveDevice.saveQ()
+        .then(function (data) {
+          savedDevice = data;
+          return project.saveQ();
+        })
+        .then(function (data) {
+          resetTimeout(savedDevice);
+          res.status(200)
+            .send({
+              '_id': savedDevice._id
+            });
+        })
+        .catch(function (err) {
+          next(err);
+        })
+        .done();
     },
 
     deregisterDevice: function (req, res, next) {
@@ -127,12 +169,21 @@
           });
       }
 
-      var removeDevice = Device.remove({
-        'macAddress': device.macAddress
-      });
+      project.deviceCount--;
 
-      removeDevice.execQ()
+      var removedDevice;
+      Device.findOneAndRemoveQ({
+        'macAddress': device.macAddress
+      })
+        .then(function (data) {
+          removedDevice = data;
+          return true;
+        })
         .then(function () {
+          return project.saveQ();
+        })
+        .then(function (data) {
+          clearTimeout(removedDevice);
           res.status(200)
             .send();
         })

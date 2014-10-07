@@ -66,6 +66,10 @@
         $scope.getProjects();
       };
 
+      $scope.getTotalContributors = function (project) {
+        return project.users.length + project.admins.length;
+      };
+
       // Initialization
       $scope.getProjects();
     }
