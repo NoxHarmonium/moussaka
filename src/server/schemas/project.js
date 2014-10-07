@@ -5,37 +5,11 @@
   var config = require('../../shared/config.js');
   var Schema = mongoose.Schema;
   var timestamps = require('mongoose-timestamp');
-  var validate = require('mongoose-validator');
 
-
-  var nameValidator = [
-    validate({
-      validator: 'isLength',
-      arguments: [3, 100],
-      message: 'Project name should be between 3 and 100 characters'
-    })
-  ];
-
-  var sortValidator = [
-    validate({
-      validator: 'isUppercase',
-      message: 'The sorting name should be only in uppercase'
-    }),
-    validate({
-      validator: 'isLength',
-      arguments: [3, 100],
-      message: 'The sorting name should be between 3 and 100 characters'
-    })
-  ];
-
-  var descriptionValidator = [
-    validate({
-      validator: 'isLength',
-      arguments: [0, 500],
-      message: 'Project description should be less than 500 characters',
-      passIfEmpty: true
-    })
-  ];
+  var nameValidator = require('validators/nameValidator.js');
+  var sortNameValidator = require('validators/sortNameValidator.js');
+  var descriptionValidator = require('validators/descriptionValidator.js');
+  var emailValidator = require('validators/emailValidator.js');
 
   var ProjectSchema = new Schema({
     name: {
@@ -53,13 +27,16 @@
       required: true,
       trim: true,
       unique: true,
-      validate: sortValidator
+      validate: sortNameValidator
     },
     description: {
       type: String,
       validate: descriptionValidator
     },
-    admins: [String], // Referencing user email address
+    admins: { // Referencing user email address
+      type: [String],
+      validate: [emailValidator]
+    },
     users: [String] // Referencing user email address
   });
 

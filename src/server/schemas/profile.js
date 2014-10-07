@@ -5,22 +5,11 @@
   var config = require('../../shared/config.js');
   var Schema = mongoose.Schema;
   var timestamps = require('mongoose-timestamp');
-  var validate = require('mongoose-validator');
 
-  var nameValidator = [
-    validate({
-      validator: 'isLength',
-      arguments: [3, 100],
-      message: 'Profile name should be between 3 and 100 characters'
-    })
-  ];
-
-  var emailValidator = [
-    validate({
-      validator: 'isEmail',
-      message: 'Owner should be in a valid email format'
-    })
-  ];
+  var emailValidator = require('validators/emailValidator.js');
+  var nameValidator = require('validators/nameValidator.js');
+  var projVersionValidator =
+    require('validators/projectVersionValidator.js');
 
   var ProfileSchema = new Schema({
     projectId: {
@@ -31,7 +20,8 @@
     projectVersion: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
+      validator: projVersionValidator
     },
     profileName: {
       type: String,
