@@ -18,7 +18,7 @@
           templateUrl: '/views/partials/editProject',
           controller: 'projectEditController',
           data: {
-            ncyBreadcrumbLabel: 'New Project',
+            ncyBreadcrumbLabel: '{{project.name || \'New Project\'}}',
             ncyBreadcrumbParent: 'listProjects'
           }
         })
