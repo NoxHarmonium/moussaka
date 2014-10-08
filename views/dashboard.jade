@@ -13,16 +13,16 @@ html(ng-app="dashboardModule")
                 span= t("app.name")
 
             div.userInfo
-                a(href="#")
+                a(href="javascript:void(0)")
                     h5(data-tools="dropdown" data-target="#user-dropdown") Welcome, #{userFirstName}
                 
                 ul(id="user-dropdown" class="dropdown")
                     li
-                        a(href="#")
+                        a(href="javascript:void(0)")
                             i.fa.fa-gear &nbsp; &nbsp;
                             span= t("app.nav.userPreferences")
                     li
-                        a(href="#" ng-click="logout()")
+                        a(href="javascript:void(0)" ng-click="logout()")
                             i.fa.fa-ban &nbsp; &nbsp;
                             span= t("app.nav.logout")
 

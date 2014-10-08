@@ -8,8 +8,7 @@
 
   module.exports = ['$http',
     function ($http) {
-      // TODO: Implement!
-
+      
       var Project = function (data) {
         this.base = BaseResource;
         this.base();
@@ -42,11 +41,15 @@
             params: queryVars
           })
           .then(function (response) {
+            var data = response.data;
             var projects = [];
-            _.each(response.data.data, function (projectData) {
+            _.each(data.data, function (projectData) {
               projects.push(new Project(projectData));
             });
-            return projects;
+            return {
+              projects: projects,
+              totalRecords: data.control.totalRecords
+            }
           }, BaseResource.handleError);
       };
 

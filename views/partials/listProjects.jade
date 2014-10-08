@@ -49,12 +49,12 @@ div.dashboard-view
             hr
 
 
-        //ul.pagination
-        //    li
-        //        a(href="#")&larr;
-        //    li
-        //        span 2 of 10
-        //    li
-        //        a(href="#")&rarr;
+        ul.pagination
+            li
+                a(href="javascript:void(0)" ng-click="prevPage()")&larr;
+            li
+                span {{currentPage}} of {{totalPages}}
+            li
+                a(href="javascript:void(0)" ng-click="nextPage()")&rarr;
 </ul>                
 
