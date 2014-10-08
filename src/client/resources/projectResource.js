@@ -31,7 +31,7 @@
       Project.get = function (id) {
         return $http.get('/projects/' + id + '/')
           .then(function (response) {
-            return new Project(response.data);
+            return new Project(response.data.data);
           }, BaseResource.handleError);
       };
 
@@ -43,7 +43,7 @@
           })
           .then(function (response) {
             var projects = [];
-            _.each(response.data, function (projectData) {
+            _.each(response.data.data, function (projectData) {
               projects.push(new Project(projectData));
             });
             return projects;
@@ -65,11 +65,11 @@
         var that = this;
         return $http.put('/projects/', that)
           .then(function (response) {
-            that._id = response.data._id;
+            that._id = response.data.data._id;
             // The only admin should be current user
             // at this point, there shouldn't be any
             // users.
-            that.admins = response.data.admins;
+            that.admins = response.data.data.admins;
             return that;
           }, BaseResource.handleError);
       };

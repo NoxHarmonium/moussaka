@@ -29,7 +29,7 @@ div.dashboard-view
                 i.fa.fa-info-circle.fa-3x 
                 p
                     span= t("app.projectList.noProjectsMessage1")
-                    a(ui-sref="dashboard.createProject")= t("app.projectList.noProjectsMessage2")
+                    a(ui-sref="createProject")= t("app.projectList.noProjectsMessage2")
                     span= t("app.projectList.noProjectsMessage3")
             .project(ng-repeat="project in projects" ng-cloak)
                 hr

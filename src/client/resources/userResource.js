@@ -29,7 +29,7 @@
       User.get = function (email) {
         return $http.get('/users/' + email + '/')
           .then(function (response) {
-            return new User(response.data);
+            return new User(response.data.data);
           }, BaseResource.handleError);
       };
 
