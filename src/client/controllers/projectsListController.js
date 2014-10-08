@@ -75,7 +75,7 @@
 
       $scope.changePaging = function () {
         var minRecord = ($scope.currentPage - 1) * $scope.pageSize;
-        var maxRecord = minRecord + $scope.pageSize;
+        var maxRecord = minRecord + $scope.pageSize - 1;
         $location.search('minRecord', minRecord);
         $location.search('maxRecord', maxRecord);
         $scope.getProjects();
