@@ -4,7 +4,7 @@
   var MongooseValidationError =
     require('mongoose/lib/error/validation');
   var InvalidQueryParams =
-    require('../include/InvalidQueryParams.js');
+    require('../include/invalidQueryParams.js');
 
   module.exports = function (err, req, res, next) {
     // Client Errors (400)
