@@ -29,10 +29,12 @@
       $scope.activeIndex = 0;
       $scope.currentPage = 1;
       $scope.totalPages = 1;
+      $scope.loading = true;
 
       // Functions
 
       $scope.getProjects = function () {
+        $scope.loading = true;
         var queryVars = $location.search();
         $scope.queryVars = extend($scope.queryVars, queryVars);
 
@@ -41,6 +43,7 @@
             $scope.projects = response.projects;
             $scope.totalPages =
               Math.ceil(response.totalRecords / $scope.pageSize);
+            $scope.loading = false;
           })
           .catch(function (err) {
             // TODO: Error message
@@ -53,6 +56,9 @@
       };
 
       $scope.changeSorting = function (sortingOption) {
+        if ($scope.loading) {
+          return;
+        }
         $scope.queryVars.sortField = sortingOption.sortField;
         $scope.queryVars.sortDir = sortingOption.sortDir;
         $location.search('sortField', sortingOption.sortField);
@@ -73,6 +79,9 @@
       };
 
       $scope.nextPage = function () {
+        if ($scope.loading) {
+          return;
+        }
         if ($scope.currentPage < $scope.totalPages) {
           $scope.currentPage++;
           $scope.changePaging();
@@ -80,6 +89,9 @@
       };
 
       $scope.prevPage = function () {
+        if ($scope.loading) {
+          return;
+        }
         if ($scope.currentPage > 1) {
           $scope.currentPage--;
           $scope.changePaging();

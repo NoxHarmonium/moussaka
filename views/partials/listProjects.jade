@@ -27,7 +27,7 @@ div.dashboard-sidebar-container
 
 div.dashboard-view
     #projects
-        #projectRow.row
+        #projectRow.row(ng-hide="loading")
             .noResults(ng-show='!projects.length' ng-cloak)
                 i.fa.fa-info-circle.fa-3x 
                 p
@@ -50,14 +50,18 @@ div.dashboard-view
                     span= t("app.projectList.connectedDevices")
 
             hr
+        #dashboardLoading(ng-show="loading")
+            // TODO: Make a nicer one
+            i.fa.fa-circle-o-notch.fa-spin.fa-5x
 
 
-        ul.pagination
-            li
-                a(href="javascript:void(0)" ng-click="prevPage()")&larr;
-            li
-                span {{currentPage}} of {{totalPages}}
-            li
-                a(href="javascript:void(0)" ng-click="nextPage()")&rarr;
+        div.text-centered
+            ul.pagination(ng-class="{disabled: loading}")
+                li
+                    a(href="javascript:void(0)" ng-click="prevPage()")&larr;
+                li
+                    span {{currentPage}} of {{totalPages}}
+                li
+                    a(href="javascript:void(0)" ng-click="nextPage()")&rarr;
 </ul>                
 
