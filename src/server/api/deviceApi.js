@@ -242,13 +242,13 @@
           });
       }
 
-      var countTotalRecords = function () {
+      var countTotalRecords = Q.try(function () {
         return Device.countQ({
           projectId: project._id
         });
-      };
+      });
 
-      var getPaginatedRecords = function () {
+      var getPaginatedRecords = Q.try(function () {
         var query = Device.find({
           projectId: project._id
         });
@@ -256,22 +256,17 @@
         query.select('macAddress projectId projectVersion ' +
           'dataSchema currentState updatedAt deviceName');
 
-        try {
-          queryFilters.paginate(req.query, query);
-          queryFilters.sort(req.query, query, {
-            'updatedAt': 'desc',
-            'projectVersion': 'asc'
-          });
-        } catch (ex) {
-          return res.status(400)
-            .send(ex.message);
-        }
+        queryFilters.paginate(req.query, query);
+        queryFilters.sort(req.query, query, {
+          'updatedAt': 'desc',
+          'projectVersion': 'asc'
+        });
 
         return query.execQ();
-      };
+      });
 
-      Q.spread([countTotalRecords(), getPaginatedRecords()],
-        function (totalRecordCount, devices) {
+      Q.all([countTotalRecords, getPaginatedRecords])
+        .spread(function (totalRecordCount, devices) {
           res.status(200)
             .send({
               data: devices,
@@ -503,7 +498,9 @@
 
       var sendMessagesToClient = function (messages) {
         res.status(200)
-          .send({data: messages});
+          .send({
+            data: messages
+          });
         return messages;
       };
 

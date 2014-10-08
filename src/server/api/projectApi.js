@@ -78,7 +78,7 @@
           });
       }
 
-      var countTotalRecords = function () {
+      var countTotalRecords = Q.try(function () {
         return Project.countQ({
           $or: [{
             'admins': req.user._id
@@ -86,9 +86,9 @@
             'users': req.user._id
           }]
         });
-      };
+      });
 
-      var getPaginatedRecords = function () {
+      var getPaginatedRecords = Q.try(function () {
 
         var query = Project.find({
           $or: [{
@@ -102,24 +102,17 @@
         query.select(
           '_id name version admins users description deviceCount');
 
-        try {
-          queryFilters.paginate(req.query, query);
-          queryFilters.sort(req.query, query, {
-            'name': 'asc'
-          });
-        } catch (ex) {
-          return res.status(400)
-            .send(ex.message);
-        }
+        queryFilters.paginate(req.query, query);
+        queryFilters.sort(req.query, query, {
+          'name': 'asc'
+        });
 
         return query.execQ();
 
-      };
-      Q.spread([countTotalRecords(), getPaginatedRecords()],
-        function (totalRecordCount, projects) {
-          //console.log('totalRecordCount: ', totalRecordCount);
-          //console.log('projects: ', JSON.stringify(projects));
+      });
 
+      Q.spread([countTotalRecords, getPaginatedRecords],
+        function (totalRecordCount, projects) {
           res.status(200)
             .send({
               data: projects,

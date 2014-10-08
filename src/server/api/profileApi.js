@@ -94,13 +94,13 @@
           });
       }
 
-      var countTotalRecords = function () {
+      var countTotalRecords = Q.try(function () {
         return Profile.countQ({
           projectId: project._id
         });
-      };
+      });
 
-      var getPaginatedRecords = function () {
+      var getPaginatedRecords = Q.try(function () {
 
         var query = Profile.find({
           projectId: project._id
@@ -114,22 +114,17 @@
             .equals(projectVersion);
         }
 
-        try {
-          queryFilters.paginate(req.query, query);
-          queryFilters.sort(req.query, query, {
-            'profileName': 'asc'
-          });
-        } catch (ex) {
-          return res.status(400)
-            .send(ex.message);
-        }
+        queryFilters.paginate(req.query, query);
+        queryFilters.sort(req.query, query, {
+          'profileName': 'asc'
+        });
 
         return query.execQ();
 
-      };
+      });
 
-      Q.spread([countTotalRecords(), getPaginatedRecords()],
-        function (totalRecordCount, profiles) {
+      Q.all([countTotalRecords, getPaginatedRecords])
+        .spread(function (totalRecordCount, profiles) {
           res.status(200)
             .send({
               data: profiles,

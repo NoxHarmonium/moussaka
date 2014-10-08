@@ -52,6 +52,13 @@
     var i18n = require('i18next');
     var Q = require('q');
 
+    // Errors
+    var customErrorHandler = require('./api/customErrorHandler.js');
+    var MongooseValidationError =
+      require('mongoose/lib/error/validation');
+    var InvalidQueryParams =
+      require('./include/InvalidQueryParams.js');
+
     /**
      * Main application
      */
@@ -69,7 +76,9 @@
       lng: config.locale
     });
 
-    Q.longStackSupport = config.q_long_stacktrace;
+    // TODO: Resolve why this breaks promise flow in API
+    // https://github.com/kriskowal/q/issues/579
+    //Q.longStackSupport = config.q_long_stacktrace;
 
     var app = express();
     var rootDir = process.cwd();
@@ -210,6 +219,11 @@
     if (config.enable_test_exts) {
       app.get('/test/device_api/reset/', deviceApi.resetTests);
     }
+
+    // Error Catchers
+
+    // Handle certain exceptions
+    app.use(customErrorHandler);
 
     // Rendered HTML pages
     app.get('/views/auth', function (req, res) {

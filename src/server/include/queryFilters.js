@@ -4,6 +4,7 @@
   var config = require('../../shared/config.js');
   var _ = require('lodash');
   var extend = require('extend');
+  var InvalidQueryParams = require('./InvalidQueryParams.js');
 
   // Pass in a mongoose query and apply pagination and sorting
   // depending on request query params
@@ -14,7 +15,9 @@
       var maxRecord = params.maxRecord || globalMaxRecords;
 
       if (maxRecord < minRecord) {
-        throw new Error('Invalid pagination range');
+        throw new InvalidQueryParams('Invalid pagination range', ['minRecord',
+          'maxRecord'
+        ]);
       }
 
       query.skip(minRecord);
@@ -36,13 +39,13 @@
 
       if (sortField) {
         if (!query.model.schema.paths[sortField]) {
-          throw new Error('Invalid sort field');
+          throw new InvalidQueryParams('Invalid sort field', 'sortField');
         }
 
         sortDir = sortDir || 'asc';
 
         if (!_.contains(['asc', 'desc'], sortDir)) {
-          throw new Error('Invalid sort direction');
+          throw new InvalidQueryParams('Invalid sort direction', 'sortDir');
         }
 
         sortObj = {};
