@@ -4,7 +4,7 @@
   var config = require('../../shared/config.js');
   var _ = require('lodash');
   var extend = require('extend');
-  var InvalidQueryParams = require('./InvalidQueryParams.js');
+  var InvalidQueryParams = require('./invalidQueryParams.js');
 
   // Pass in a mongoose query and apply pagination and sorting
   // depending on request query params
