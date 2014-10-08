@@ -8,7 +8,7 @@
 
   module.exports = ['$http',
     function ($http) {
-      
+
       var Project = function (data) {
         this.base = BaseResource;
         this.base();
@@ -49,7 +49,7 @@
             return {
               projects: projects,
               totalRecords: data.control.totalRecords
-            }
+            };
           }, BaseResource.handleError);
       };
 

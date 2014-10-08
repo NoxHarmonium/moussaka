@@ -84,7 +84,7 @@ div.dashboard-view
                         span= t("app.projectEditForm.saveSuccess")
 
             p 
-                a.btn.btn-blue(href="#/listProjects")= t("app.projectEditForm.cancel") 
+                a.btn.btn-blue(href="javascript:void(0)" ng-click="back()")= t("app.projectEditForm.cancel") 
 
                 button.btn.btn-blue(type="submit" ng-hide="newProject" ng-disabled="loading")= t("app.projectEditForm.save") 
                     span &nbsp; 

@@ -9,6 +9,16 @@
       $cookieStore) {
 
       // Scope vars/defaults
+      $scope.sortingOptions = [{
+        sortField: 'sortingName',
+        sortDir: 'asc'
+      }, {
+        sortField: 'sortingName',
+        sortDir: 'desc'
+      }, {
+        sortField: 'updatedAt',
+        sortDir: 'desc'
+      }];
       $scope.pageSize = 10;
       $scope.queryVars = {
         sortField: 'sortingName',
@@ -22,36 +32,14 @@
 
       // Functions
 
-      $scope.reloadCookies = function () {
-        var sortField = $cookieStore.get('sortField');
-        var sortDir = $cookieStore.get('sortDir');
-        var activeIndex = $cookieStore.get('activeIndex');
-        if (sortField) {
-          $scope.queryVars.sortField = sortField;
-        }
-        if (sortDir) {
-          $scope.queryVars.sortDir = sortDir;
-        }
-        if (activeIndex) {
-          $scope.activeIndex = parseInt(activeIndex);
-        }
-      };
-
-      $scope.saveCookies = function () {
-        $cookieStore.put('sortField', $scope.queryVars.sortField);
-        $cookieStore.put('sortDir', $scope.queryVars.sortDir);
-        $cookieStore.put('activeIndex', $scope.activeIndex);
-      };
-
       $scope.getProjects = function () {
-        $scope.reloadCookies();
         var queryVars = $location.search();
         $scope.queryVars = extend($scope.queryVars, queryVars);
 
         Project.getAll($scope.queryVars)
           .then(function (response) {
             $scope.projects = response.projects;
-            $scope.totalPages = 
+            $scope.totalPages =
               Math.ceil(response.totalRecords / $scope.pageSize);
           })
           .catch(function (err) {
@@ -59,19 +47,24 @@
           });
       };
 
-      $scope.changeSorting = function (activeIndex, sortField, sortDir) {
-        $scope.activeIndex = activeIndex;
-        $scope.queryVars.sortField = sortField;
-        $scope.queryVars.sortDir = sortDir;
-        $location.search('sortField', sortField);
-        $location.search('sortDir', sortDir);
-        $scope.saveCookies();
+      $scope.isHighlighted = function (sortingOption) {
+        return $scope.queryVars.sortField === sortingOption.sortField &&
+          $scope.queryVars.sortDir === sortingOption.sortDir;
+      };
+
+      $scope.changeSorting = function (sortingOption) {
+        $scope.queryVars.sortField = sortingOption.sortField;
+        $scope.queryVars.sortDir = sortingOption.sortDir;
+        $location.search('sortField', sortingOption.sortField);
+        $location.search('sortDir', sortingOption.sortDir);
         $scope.getProjects();
       };
 
-      $scope.changePaging = function() {
+      $scope.changePaging = function () {
         var minRecord = ($scope.currentPage - 1) * $scope.pageSize;
         var maxRecord = minRecord + $scope.pageSize;
+        $location.search('minRecord', minRecord);
+        $location.search('maxRecord', maxRecord);
         $scope.getProjects();
       };
 
@@ -80,17 +73,17 @@
       };
 
       $scope.nextPage = function () {
-        if($scope.currentPage < $scope.totalPages) {
+        if ($scope.currentPage < $scope.totalPages) {
           $scope.currentPage++;
           $scope.changePaging();
-        } 
+        }
       };
 
       $scope.prevPage = function () {
-        if($scope.currentPage > 1) {
+        if ($scope.currentPage > 1) {
           $scope.currentPage--;
           $scope.changePaging();
-        } 
+        }
 
       };
 

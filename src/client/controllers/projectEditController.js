@@ -281,6 +281,10 @@
           $scope.newProject ||
           _.contains($scope.project.admins, $scope.currentUser);
       };
+
+      $scope.back = function () {
+        window.history.back();
+      };
     }
   ];
 
