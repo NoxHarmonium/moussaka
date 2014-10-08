@@ -33,6 +33,13 @@
 
       // Functions
 
+      $scope.restorePageNumber = function () {
+        var minRecord = $location.search().minRecord;
+        if (minRecord) {
+          $scope.currentPage = Math.floor(minRecord / $scope.pageSize) + 1;
+        }
+      };
+
       $scope.getProjects = function () {
         $scope.loading = true;
         var queryVars = $location.search();
@@ -100,6 +107,7 @@
       };
 
       // Initialization
+      $scope.restorePageNumber();
       $scope.getProjects();
     }
   ];
