@@ -49,6 +49,10 @@
       type: Schema.Types.Mixed,
       required: true
     },
+    sessionDirtyFields: [{
+      type: String,
+      trim: true
+    }],
     sessionUser: {
       type: String,
       required: false,

@@ -34,7 +34,8 @@
       // Functions
 
       $scope.restorePageNumber = function () {
-        var minRecord = $location.search().minRecord;
+        var minRecord = $location.search()
+          .minRecord;
         if (minRecord) {
           $scope.currentPage = Math.floor(minRecord / $scope.pageSize) + 1;
         }

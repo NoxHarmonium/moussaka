@@ -4,7 +4,6 @@
   var Project = require('../schemas/project.js');
   var User = require('../schemas/user.js');
   var Device = require('../schemas/device.js');
-  var Update = require('../schemas/update.js');
   var moment = require('moment');
   var config = require('../../shared/config.js');
   var _ = require('lodash');
@@ -434,18 +433,27 @@
         var type = schema.type;
         var control = controls[type];
 
-        //console.log('Validating field: ' + key);
-        //console.log('Type: ' + type);
-        //console.log('Value: ' + JSON.stringify(val));
+        // console.log('Validating field: ' + key);
+        // console.log('Type: ' + type);
+        // console.log('Value: ' + JSON.stringify(val));
 
         var result = control.validate(schema, val);
 
-        //console.log('Schema: ' + JSON.stringify(schema));
-        //console.log('Validation result: ' + JSON.stringify(result));
+        // console.log('Schema: ' + JSON.stringify(schema));
+        // console.log('Validation result: ' + JSON.stringify(result));
 
         if (result.success) {
+          // Apply change to currentState
           var currentData = device.currentState[key];
           control.apply(schema, currentData, val);
+          // Mark as modified, otherwise mongoose doesn't know nested
+          // values have changed
+          device.markModified('currentState');
+          // Set dirty fields for getUpdates
+          var dirtyFields = device.sessionDirtyFields;
+          if (!_.contains(dirtyFields, key)) {
+            dirtyFields.push(key);
+          }
         } else {
           validationErrors.push(result.reason);
         }
@@ -459,15 +467,7 @@
           });
       }
 
-      var newUpdate = new Update({
-        'targetMacAddress': device.macAddress,
-        'data': req.body
-      });
-
-      newUpdate.saveQ()
-        .then(function () {
-          return device.saveQ();
-        })
+      device.saveQ()
         .then(function () {
           res.status(200)
             .send();
@@ -496,51 +496,23 @@
           });
       }
 
-      var sendMessagesToClient = function (messages) {
-        res.status(200)
-          .send({
-            data: messages
-          });
-        return messages;
-      };
+      var dirtyFields = device.sessionDirtyFields;
 
-      var markMessagesAsReceived = function (messages) {
-        if (messages.length > 0) {
-          var latestTime =
-            _.last(messages)
-            .timestamp;
+      var update = {};
 
-          return Update.updateQ({
-            timestamp: {
-              $lte: latestTime
-            },
-            received: false
-          }, {
-            $set: {
-              received: true
-            }
-          }, {
-            multi: true
-          });
+      _.each(dirtyFields, function (field) {
+        update[field] = device.currentState[field];
+      });
 
-        } else {
-          return null;
-        }
-      };
+      device.sessionDirtyFields = [];
 
-      var updateDeviceAccessTime = function () {
-        device.lastAccess = Date.now();
-        return device.saveQ();
-      };
-
-
-      Update.findQ({
-        'targetMacAddress': device.macAddress,
-        'received': false
-      }, 'data timestamp')
-        .then(sendMessagesToClient)
-        .then(markMessagesAsReceived)
-        .then(updateDeviceAccessTime)
+      device.saveQ()
+        .then(function () {
+          res.status(200)
+            .send({
+              data: update
+            });
+        })
         .catch(function (err) {
           next(err);
         })
@@ -552,14 +524,9 @@
     //
 
     resetTests: function (req, res, next) {
-      var clearDevice = Device.removeQ({});
-      var clearUpdates = Update.updateQ({}, {
-        $set: {
-          received: true
-        }
-      });
+      var clearDevices = Device.removeQ({});
 
-      Q.all([clearDevice, clearUpdates])
+      clearDevices
         .then(function () {
           res.status(200)
             .send();

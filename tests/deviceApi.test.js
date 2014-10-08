@@ -12,6 +12,7 @@
   var S = require('string');
   var Chance = require('chance');
   var randomMac = require('random-mac');
+  var extend = require('extend');
 
   var _formatTestIndex = function (index) {
     // Mongo uses alphabetical sorting so simply appending
@@ -29,6 +30,7 @@
     var deviceAgent = superagent.agent();
     var schema = null;
     var sentUpdates = null;
+    var combinedUpdates = {};
     var tempStore = {};
     var chance = new Chance();
 
@@ -956,11 +958,13 @@
           expect(res.ok)
             .to.be.ok();
 
-          expect(res.body.data.length)
+          var updates = res.body.data;
+
+          expect(Object.keys(updates)
+            .length)
             .to.be(1);
 
-          var recvUpdate = res.body.data[0].data;
-          expect(recvUpdate.rotateSpeed.values.n)
+          expect(updates.rotateSpeed.values.n)
             .to.be(sentUpdates[0].rotateSpeed.values.n);
 
           done();
@@ -983,7 +987,11 @@
               .to.eql(null);
             expect(res.ok)
               .to.be.ok();
-            expect(res.body.data.length)
+
+            var updates = res.body.data;
+
+            expect(Object.keys(updates)
+              .length)
               .to.be(0);
 
             done();
@@ -1038,8 +1046,12 @@
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
+
           // No valid updates
-          expect(res.body.data.length)
+          var updates = res.body.data;
+
+          expect(Object.keys(updates)
+            .length)
             .to.be(0);
 
           done();
@@ -1093,10 +1105,30 @@
 
         var sendUpdate = function () {
           var deferred = Q.defer();
+
+          var update = sentUpdates[currentUpdateIndex];
+
+          // Simulate applying updates onto device state
+
+          // Get locked values
+          var maskedUpdate = extend({}, update);
+          var schemaType = _.keys(maskedUpdate)[0];
+          var schema = device.dataSchema[schemaType];
+          // Restore locked values
+          for (var key in schema.lockedValues) {
+            if (schema.lockedValues[key] === true) {
+              maskedUpdate[schemaType].values[key] =
+                device.currentState[schemaType].values[key];
+            }
+          }
+          // Merge updates
+          // Deep copy update on top of combined updates
+          combinedUpdates = extend(true, combinedUpdates, maskedUpdate);
+
           agent.post('http://localhost:3000/projects/' +
             device.projectId + '/sessions/' + device.macAddress +
             '/updates/')
-            .send(sentUpdates[currentUpdateIndex])
+            .send(update)
             .end(function (e, res) {
               expect(e)
                 .to.eql(null);
@@ -1131,24 +1163,15 @@
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
-          // No valid updates
-          expect(res.body.data.length)
-            .to.be(3);
 
-          // Check for correct ordering of updates
-          var matchFound = true;
+          var updates = res.body.data;
 
-          _.every(
-            _.zip(res.body.data, sentUpdates), function (entry) {
-              if (!utils.objMatch(entry[0].data, entry[1])) {
-                matchFound = false;
-                return false;
-              }
-              return true;
-            }
-          );
+          expect(Object.keys(updates)
+            .length)
+            .to.be(Object.keys(combinedUpdates)
+              .length);
 
-          expect(matchFound)
+          expect(utils.objMatch(updates, combinedUpdates))
             .to.be.ok();
 
           done();
@@ -1319,6 +1342,12 @@
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
+
+          var updates = res.body.data;
+
+          expect(Object.keys(updates)
+            .length)
+            .to.be(0);
 
           done();
         });

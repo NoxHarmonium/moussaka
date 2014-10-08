@@ -253,6 +253,60 @@
 
   });
 
+  describe('isNonEmptyString(x) tests', function () {
+
+    it('copyArray(undefined) === undefined', function () {
+      var x;
+      expect(utils.copyArray(x))
+        .to.be(null);
+    });
+
+    it('copyArray(null) === null', function () {
+      var x = null;
+      expect(utils.copyArray(x))
+        .to.be(null);
+    });
+
+    it('copyArray({key:\'value\'}) === null', function () {
+      var x = {
+        key: 'value'
+      };
+      expect(utils.copyArray(x))
+        .to.be(null);
+    });
+
+    it('copyArray(5) === null', function () {
+      var x = 5;
+      expect(utils.copyArray(x))
+        .to.be(null);
+    });
+
+    it('copyArray(true) === null', function () {
+      var x = true;
+      expect(utils.copyArray(x))
+        .to.be(null);
+    });
+
+    it('copyArray(\'string\') === null', function () {
+      var x = 'string';
+      expect(utils.copyArray(x))
+        .to.be(null);
+    });
+
+    it('copyArray([1,2,3,4]) === [1,2,3,4]', function () {
+      var x = [1, 2, 3, 4];
+      var y = utils.copyArray(x);
+      expect(y)
+        .to.be.an('array');
+      y.push(5);
+      expect(x)
+        .to.eql([1, 2, 3, 4]);
+      expect(y)
+        .to.eql([1, 2, 3, 4, 5]);
+
+    });
+
+  });
 
 
 

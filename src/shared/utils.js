@@ -121,6 +121,14 @@
       return module.exports.exists(str) &&
         typeof (str) === 'string' &&
         str.trim() !== '';
+    },
+
+    copyArray: function (arr) {
+      if (Array.isArray(arr)) {
+        return arr.slice(0);
+      } else {
+        return null;
+      }
     }
 
   };
