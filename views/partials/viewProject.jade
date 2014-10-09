@@ -14,8 +14,13 @@ div.dashboard-view
 
         h4= t("app.viewProject.deviceList")
 
-        p(ng-show="project.deviceCount < 1")= t("app.viewProject.noDevices")
+        p(ng-hide="project.deviceCount > 0")= t("app.viewProject.noDevices")
 
+        ul.device-list.blocks-3(
+            ng-show="project.deviceCount > 0"
+            ng-repeat="device in devices")
+            li(ng-click="openDevice(device)")
+                div {{device.name}}
        
                         
 
