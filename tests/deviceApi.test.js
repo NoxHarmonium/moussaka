@@ -16,7 +16,7 @@
 
   var _formatTestIndex = function (index) {
     // Mongo uses alphabetical sorting so simply appending
-    // numbers doesn't sort properly. 
+    // numbers doesn't sort properly.
     return S(index)
       .padLeft(3, '0');
   };
@@ -26,13 +26,19 @@
     var users = testData.getTestUsers();
     var projects = testData.getTestProjects();
     var devices = testData.getTestDevices();
+    var deviceSchemas = testData.getTestDeviceSchemas();
+    var deviceStates = testData.getTestDevicesStates();
     var agent = superagent.agent();
     var deviceAgent = superagent.agent();
-    var schema = null;
     var sentUpdates = null;
     var combinedUpdates = {};
     var tempStore = {};
     var chance = new Chance();
+
+    var getExtendedDevice = function (index) {
+      return extend({}, devices[index],
+        deviceSchemas[index], deviceStates[index]);
+    };
 
     it('Reset devices test', function (done) {
       agent.get('http://localhost:3000/test/device_api/reset/')
@@ -166,16 +172,21 @@
         var apiKey = user.apiKey;
         var project = projects[0];
         var device = devices[0];
+        var deviceSchema = deviceSchemas[0];
+        var deviceState = deviceStates[0];
         device.projectId = project._id;
 
         // Save correct MAC address and set to invalid
         tempStore.correctMac = device.macAddress;
         device.macAddress = '';
 
+        // Need to connect device with all data
+        var extendedDevice = getExtendedDevice(0);
+
         deviceAgent.put('http://localhost:3000/projects/' +
-          project._id + '/devices/' + device.macAddress + '/')
+          project._id + '/devices/' + extendedDevice.macAddress + '/')
           .set('apikey', apiKey)
-          .send(device)
+          .send(extendedDevice)
           .end(function (e, res) {
             expect(e)
               .to.eql(null);
@@ -204,10 +215,13 @@
         tempStore.correctMac = device.macAddress;
         device.macAddress = encodeURIComponent(chance.string());
 
+        // Need to connect device with all data
+        var extendedDevice = getExtendedDevice(0);
+
         deviceAgent.put('http://localhost:3000/projects/' +
-          project._id + '/devices/' + device.macAddress + '/')
+          project._id + '/devices/' + extendedDevice.macAddress + '/')
           .set('apikey', apiKey)
-          .send(device)
+          .send(extendedDevice)
           .end(function (e, res) {
             expect(e)
               .to.eql(null);
@@ -232,10 +246,14 @@
         var device = devices[0];
         device.projectId = encodeURIComponent(chance.string());
 
+        // Need to connect device with all data
+        var extendedDevice = getExtendedDevice(0);
+
         deviceAgent.put('http://localhost:3000/projects/' +
-          device.projectId + '/devices/' + device.macAddress + '/')
+          extendedDevice.projectId + '/devices/' +
+          extendedDevice.macAddress + '/')
           .set('apikey', apiKey)
-          .send(device)
+          .send(extendedDevice)
           .end(function (e, res) {
             expect(e)
               .to.eql(null);
@@ -256,9 +274,13 @@
         var device = devices[0];
         device.projectId = project._id;
 
+        // Need to connect device with all data
+        var extendedDevice = getExtendedDevice(0);
+
         deviceAgent.put('http://localhost:3000/projects/' +
-          device.projectId + '/devices/' + device.macAddress + '/')
-          .send(device)
+          extendedDevice.projectId + '/devices/' +
+          extendedDevice.macAddress + '/')
+          .send(extendedDevice)
           .end(function (e, res) {
             expect(e)
               .to.eql(null);
@@ -277,10 +299,14 @@
         var device = devices[0];
         device.projectId = project._id;
 
+        // Need to connect device with all data
+        var extendedDevice = getExtendedDevice(0);
+
         deviceAgent.put('http://localhost:3000/projects/' +
-          device.projectId + '/devices/' + device.macAddress + '/')
+          extendedDevice.projectId + '/devices/' +
+          extendedDevice.macAddress + '/')
           .set('apikey', apiKey)
-          .send(device)
+          .send(extendedDevice)
           .end(function (e, res) {
             expect(e)
               .to.eql(null);
@@ -298,19 +324,52 @@
       var device = devices[0];
       device.projectId = project._id;
 
+      // Need to connect device with all data
+      var extendedDevice = getExtendedDevice(0);
+
       deviceAgent.put('http://localhost:3000/projects/' +
-        device.projectId + '/devices/' + device.macAddress + '/')
+        extendedDevice.projectId + '/devices/' +
+        extendedDevice.macAddress + '/')
         .set('apikey', apiKey)
-        .send(device)
+        .send(extendedDevice)
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
+
+          console.log(res.status);
+          console.log(res.body.detail);
           expect(res.ok)
             .to.be.ok();
 
           done();
         });
     });
+
+    it('Connect device [0] to server under project [0] again ' +
+      'to reset timeout', function (done) {
+        var user = users[2];
+        var apiKey = user.apiKey;
+        var project = projects[0];
+        var device = devices[0];
+        device.projectId = project._id;
+
+        // Need to connect device with all data
+        var extendedDevice = getExtendedDevice(0);
+
+        deviceAgent.put('http://localhost:3000/projects/' +
+          extendedDevice.projectId + '/devices/' +
+          extendedDevice.macAddress + '/')
+          .set('apikey', apiKey)
+          .send(extendedDevice)
+          .end(function (e, res) {
+            expect(e)
+              .to.eql(null);
+            expect(res.ok)
+              .to.be.ok();
+
+            done();
+          });
+      });
 
     it('Check device [0] has been added to invalid project', function (
       done) {
@@ -502,23 +561,27 @@
         });
     });
 
-    it('Reconnect device [0] to server under project [0]', function (
-      done) {
+    it('Reconnect device [0] to server under project [0]', function (done) {
       var user = users[2];
       var apiKey = user.apiKey;
       var project = projects[0];
       var device = devices[0];
       device.projectId = project._id;
 
+      // Need to connect device with all data
+      var extendedDevice = getExtendedDevice(0);
+
       deviceAgent.put('http://localhost:3000/projects/' +
-        device.projectId + '/devices/' + device.macAddress + '/')
+        extendedDevice.projectId + '/devices/' +
+        extendedDevice.macAddress + '/')
         .set('apikey', apiKey)
-        .send(device)
+        .send(extendedDevice)
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
+
 
           done();
         });
@@ -530,13 +593,18 @@
         var apiKey = user.apiKey;
         var project = projects[0];
         var device = devices[0];
+        var dataSchema = deviceSchemas[0].dataSchema;
 
-        device.dataSchema.rotateSpeed.max = 50;
+        dataSchema.rotateSpeed.max = 50;
+
+        // Need to connect device with all data
+        var extendedDevice = getExtendedDevice(0);
 
         deviceAgent.put('http://localhost:3000/projects/' +
-          device.projectId + '/devices/' + device.macAddress + '/')
+          extendedDevice.projectId + '/devices/' +
+          extendedDevice.macAddress + '/')
           .set('apikey', apiKey)
-          .send(device)
+          .send(extendedDevice)
           .end(function (e, res) {
             expect(e)
               .to.eql(null);
@@ -776,6 +844,7 @@
 
     it('Get schema of device [0]', function (done) {
       var device = devices[0];
+      var dataSchema = deviceSchemas[0].dataSchema;
 
       agent.get('http://localhost:3000/projects/' +
         device.projectId + '/devices/' + device.macAddress +
@@ -785,7 +854,63 @@
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
-          schema = res.body.data;
+
+          expect(utils.objMatch(dataSchema, res.body.data))
+            .to.be.ok();
+
+          done();
+        });
+    });
+
+    it('Get schema of device [0] with user [2] with invalid project id',
+      function (done) {
+        var project = projects[0];
+        var device = devices[0];
+
+        agent.get('http://localhost:3000/projects/' +
+          '0000000000000000000' + '/sessions/' + device.macAddress +
+          '/schema/')
+          .end(function (e, res) {
+            expect(e)
+              .to.eql(null);
+            expect(res.status)
+              .to.be(404);
+
+            done();
+          });
+      });
+
+    it('Get currentState for invalid device with user [2]', function (done) {
+      var project = projects[0];
+      var device = devices[0];
+
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/sessions/' + '01-23-45-67-89-ab' +
+        '/state/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(404);
+
+          done();
+        });
+    });
+
+    it('Get currentState of device [0]', function (done) {
+      var device = devices[0];
+      var currentState = deviceStates[0].currentState;
+
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/devices/' + device.macAddress +
+        '/state/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+          expect(utils.objMatch(currentState, res.body.data))
+            .to.be.ok();
 
           done();
         });
@@ -858,6 +983,8 @@
       done) {
       var project = projects[0];
       var device = devices[0];
+      var deviceCurrentState = deviceStates[0].currentState;
+
 
       sentUpdates = [{
         'rotateSpeed': {
@@ -870,6 +997,9 @@
           }
         }
       }];
+
+      // Apply to state
+      extend(deviceCurrentState, sentUpdates[0]);
 
       agent.post('http://localhost:3000/projects/' +
         device.projectId + '/sessions/' + device.macAddress +
@@ -1063,6 +1193,8 @@
         done) {
         var project = projects[0];
         var device = devices[0];
+        var dataSchema = deviceSchemas[0].dataSchema;
+        var deviceCurrentState = deviceStates[0].currentState;
 
         sentUpdates = [{
           'objectPosition': {
@@ -1113,12 +1245,12 @@
           // Get locked values
           var maskedUpdate = extend({}, update);
           var schemaType = _.keys(maskedUpdate)[0];
-          var schema = device.dataSchema[schemaType];
+          var schema = dataSchema[schemaType];
           // Restore locked values
           for (var key in schema.lockedValues) {
             if (schema.lockedValues[key] === true) {
               maskedUpdate[schemaType].values[key] =
-                device.currentState[schemaType].values[key];
+                deviceCurrentState[schemaType].values[key];
             }
           }
           // Merge updates
@@ -1145,6 +1277,8 @@
           .then(sendUpdate)
           .then(sendUpdate)
           .then(function () {
+            // Apply to state
+            extend(deviceCurrentState, combinedUpdates);
             done(); // Finish test step
           });
       });
@@ -1172,6 +1306,36 @@
               .length);
 
           expect(utils.objMatch(updates, combinedUpdates))
+            .to.be.ok();
+
+          done();
+        });
+    });
+
+    it('Check device [0] state correctness', function (done) {
+      var user = users[2];
+      var apiKey = user.apiKey;
+      var device = devices[0];
+      var deviceCurrentState = deviceStates[0].currentState;
+
+      deviceAgent.get('http://localhost:3000/projects/' + device.projectId +
+        '/devices/' + device.macAddress + '/state/')
+        .set('apikey', apiKey)
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          var state = res.body.data;
+
+          console.log('state: ',
+            JSON.stringify(state, null, ' '));
+
+          console.log('deviceCurrentState: ',
+            JSON.stringify(deviceCurrentState, null, ' '));
+
+          expect(utils.objMatch(state, deviceCurrentState))
             .to.be.ok();
 
           done();
@@ -1365,14 +1529,18 @@
       var createTestProject = function (index) {
         var deferred = Q.defer();
 
-        device.deviceName = 'TEST_DATA_DELETE_' +
-          _formatTestIndex(currentProjectIndex);
-        device.macAddress = randomMac();
+        // Need to connect device with all data
+        var extendedDevice = getExtendedDevice(0);
 
-        deviceAgent.put('http://localhost:3000/projects/' +
-          device.projectId + '/devices/' + device.macAddress + '/')
+        extendedDevice.deviceName = 'TEST_DATA_DELETE_' +
+          _formatTestIndex(currentProjectIndex);
+        extendedDevice.macAddress = randomMac();
+
+        agent.put('http://localhost:3000/projects/' +
+          extendedDevice.projectId + '/devices/' +
+          extendedDevice.macAddress + '/')
           .set('apikey', apiKey)
-          .send(device)
+          .send(extendedDevice)
           .query({
             deviceId: device._id
           })
@@ -1394,7 +1562,8 @@
       }
       result.then(function () {
         done(); // Finish test step
-      });
+      })
+        .done();
     });
 
     it('List devices to test record limit', function (done) {

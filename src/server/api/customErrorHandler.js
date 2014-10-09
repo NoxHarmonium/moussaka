@@ -5,7 +5,9 @@
     require('mongoose/lib/error/validation');
   var InvalidQueryParams =
     require('../include/invalidQueryParams.js');
-  var colors = require('colors');
+  var InvalidDataError =
+    require('../include/invalidDataError.js');
+  //var colors = require('colors');
 
   module.exports = function (err, req, res, next) {
     // Client Errors (400)
@@ -13,7 +15,7 @@
     if (err instanceof MongooseValidationError) {
       //console.log('Invalid Client Request:  '.red,
       //  '[MongooseValidationError]'.yellow,
-       // err.toString());
+      // err.toString());
       return res.status(400)
         .send({
           type: 'ValidationError',
@@ -30,6 +32,17 @@
           type: 'InvalidQueryParams',
           detail: err.toString(),
           params: err.params
+        });
+    }
+
+    if (err instanceof InvalidDataError) {
+      //console.log('Invalid Client Request:  '.red,
+      //  '[InvalidDataError]'.yellow,
+      //  err.toString());
+      return res.status(400)
+        .send({
+          type: 'InvalidDataError',
+          detail: err.toString(),
         });
     }
 

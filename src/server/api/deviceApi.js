@@ -11,6 +11,7 @@
   var utils = require('../../shared/utils.js');
   var controls = require('../../shared/controls.js');
   var queryFilters = require('../include/queryFilters.js');
+  var InvalidDataError = require('../include/invalidDataError.js');
 
   // Device expiry functionality
 
@@ -19,7 +20,7 @@
   var expireDevice = function (device) {
     console.log('Expiring device \'', device.macAddress,
       '\' due to timeout (',
-      config.device_Timeout_Seconds, ' seconds)');
+      config.device_Timeout_Seconds, ' seconds )');
 
     device.removeQ()
       .then(Project.findOneQ({
@@ -75,6 +76,9 @@
           });
       }
 
+      // Need to normalize
+      macAddress = macAddress.toUpperCase();
+
       var findDevice = Device.findOne({
         'macAddress': macAddress
       });
@@ -82,6 +86,7 @@
       findDevice.execQ()
         .then(function (device) {
           req.device = device;
+          req.macAddress = macAddress;
           next();
         })
         .catch(function (err) {
@@ -122,10 +127,21 @@
 
       } else {
         // Else create new
+
+        // Need to normalize
+        var macAddress = device.macAddress.toUpperCase();
+
+        if (macAddress !== req.macAddress) {
+          //console.log(macAddress, '!==', req.macAddress);
+          throw new InvalidDataError('MAC address supplied in the ' +
+            'URL and in the data differ.' +
+            'This suggests that your data is bad. ');
+        }
+
         var newDevice = new Device({
           projectId: device.projectId,
           projectVersion: device.projectVersion,
-          macAddress: device.macAddress,
+          macAddress: macAddress,
           dataSchema: device.dataSchema,
           deviceName: device.deviceName,
           currentState: device.currentState
@@ -182,9 +198,6 @@
       })
         .then(function (data) {
           removedDevice = data;
-          return true;
-        })
-        .then(function () {
           return project.saveQ();
         })
         .then(function (data) {
@@ -224,8 +237,6 @@
             deviceName: device.deviceName,
             projectId: device.projectId,
             projectVersion: device.projectVersion,
-            dataSchema: device.dataSchema,
-            currentState: device.currentState,
             updatedAt: device.updatedAt
           }
         });
@@ -253,7 +264,7 @@
         });
 
         query.select('macAddress projectId projectVersion ' +
-          'dataSchema currentState updatedAt deviceName');
+          'updatedAt deviceName');
 
         queryFilters.paginate(req.query, query);
         queryFilters.sort(req.query, query, {
@@ -395,6 +406,31 @@
       res.status(200)
         .send({
           data: device.dataSchema
+        });
+    },
+
+    getCurrentState: function (req, res, next) {
+      var project = req.project;
+      var device = req.device;
+      var loggedInUser = req.user;
+
+      if (!project) {
+        return res.status(404)
+          .send({
+            detail: 'Project not found'
+          });
+      }
+
+      if (!device) {
+        return res.status(404)
+          .send({
+            detail: 'Device not found'
+          });
+      }
+
+      res.status(200)
+        .send({
+          data: device.currentState
         });
     },
 

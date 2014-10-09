@@ -85,6 +85,12 @@
       projectVersion: '0.3',
       deviceName: 'Jeff\'s iPad',
       macAddress: '3D:F2:C9:A6:B3:4F',
+
+    }];
+  };
+
+  exports.getTestDeviceSchemas = function () {
+    return [{
       dataSchema: {
         'titleColor': {
           type: 'color'
@@ -102,7 +108,12 @@
             z: true
           }
         }
-      },
+      }
+    }];
+  };
+
+  exports.getTestDevicesStates = function () {
+    return [{
       currentState: {
         'titleColor': {
           values: {

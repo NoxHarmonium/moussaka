@@ -14,7 +14,7 @@
 
   var _formatTestIndex = function (index) {
     // Mongo uses alphabetical sorting so simply appending
-    // numbers doesn't sort properly. 
+    // numbers don't sort properly.
     return S(index)
       .padLeft(3, '0');
   };
@@ -514,7 +514,7 @@
     });
 
     it('Update project [0] with invalid fields', function (done) {
-      // Copy project 
+      // Copy project
       var projectCopy = extend({}, projects[0]);
 
       // Set a field not in the schema
@@ -1520,7 +1520,8 @@
       }
       result.then(function () {
         done(); // Finish test step
-      });
+      })
+        .done();
     });
 
     it('List projects to test record limit', function (done) {

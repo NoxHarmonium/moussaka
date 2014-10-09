@@ -13,7 +13,7 @@
 
   var _formatTestIndex = function (index) {
     // Mongo uses alphabetical sorting so simply appending
-    // numbers doesn't sort properly. 
+    // numbers don't sort properly.
     return S(index)
       .padLeft(3, '0');
   };
@@ -77,6 +77,38 @@
             .to.be.ok();
 
           device = res.body.data;
+
+          done();
+        });
+    });
+
+    it('Get device schema created by device API tests', function (done) {
+      agent.get('http://localhost:3000/projects/' +
+        project._id + '/devices/' + devices[0].macAddress +
+        '/schema/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          device.dataSchema = res.body.data;
+
+          done();
+        });
+    });
+
+    it('Get device state created by device API tests', function (done) {
+      agent.get('http://localhost:3000/projects/' +
+        project._id + '/devices/' + devices[0].macAddress +
+        '/state/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          device.currentState = res.body.data;
 
           done();
         });
@@ -547,7 +579,8 @@
       }
       result.then(function () {
         done(); // Finish test step
-      });
+      })
+        .done();
     });
 
     it('List profiles to test record limit', function (done) {

@@ -208,6 +208,8 @@
       ':deviceMacAddr/', deviceApi.deregisterDevice);
     app.get('/projects/:projectId/devices/' +
       ':deviceMacAddr/schema/', deviceApi.getSchema);
+    app.get('/projects/:projectId/devices/' +
+      ':deviceMacAddr/state/', deviceApi.getCurrentState);
     app.put('/projects/:projectId/sessions/' +
       ':deviceMacAddr/', deviceApi.startSession);
     app.delete('/projects/:projectId/sessions/' +
