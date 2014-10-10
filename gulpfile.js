@@ -3,7 +3,7 @@
 var gulp = require('gulp'),
   jshint = require('gulp-jshint'),
   prettify = require('gulp-jsbeautifier'),
-  mocha = require('gulp-mocha'),
+  mocha = require('gulp-spawn-mocha'),
   istanbul = require('gulp-istanbul'),
   changed = require('gulp-changed'),
   cache = require('gulp-cached'),
@@ -45,9 +45,9 @@ var paths = {
     'tests/controlValidation.test.js',
     'tests/initApi.test.js',
     'tests/userApi.test.js',
-    'tests/projectApi.test.js',
-    'tests/deviceApi.test.js',
-    'tests/profileApi.test.js'
+    //'tests/projectApi.test.js',
+    //'tests/deviceApi.test.js',
+    //'tests/profileApi.test.js'
   ],
   browserifySrc: [
     './src/client/app.js',
@@ -161,12 +161,13 @@ gulp.task('test', ['compile'], function () {
       read: false
     })
     .pipe(mocha({
-      reporter: 'spec',
-      bail: true,
-      colors: true,
-      timeout: 30000
-    }))
-    .pipe(gulp.dest('./'));
+      R: 'spec',
+      c: true,
+      t: 30000,
+      env: {
+        NODE_ENV: 'testing'
+      }
+    }));
 });
 
 gulp.task('watch', function () {
@@ -192,10 +193,10 @@ gulp.task('all', ['test', 'prettify']);
 // https://github.com/gulpjs/gulp/issues/167
 // https://github.com/sindresorhus/gulp-mocha/issues/1
 // https://github.com/sindresorhus/gulp-mocha/issues/54
-gulp.on('stop', function () {
-  if (!isWatching) {
-    process.nextTick(function () {
-      process.exit(0);
-    });
-  }
-});
+// gulp.on('stop', function () {
+//   if (!isWatching) {
+//     process.nextTick(function () {
+//       process.exit(0);
+//     });
+//   }
+// });

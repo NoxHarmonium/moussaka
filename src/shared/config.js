@@ -3,6 +3,7 @@
 
   var configReader = require('yaml-config');
   var colors = require('colors');
+  var extend = require('extend');
 
   var environment = process.env.NODE_ENV;
 
@@ -13,6 +14,9 @@
     environment = 'development';
   }
 
-  module.exports = configReader.readConfig('config.yaml', environment);
+  var config = configReader.readConfig('config.yaml', environment);
+
+
+  module.exports = config;
 
 })(require, module);

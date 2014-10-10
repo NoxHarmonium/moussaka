@@ -72,6 +72,36 @@
           }, BaseResource.handleError);
       };
 
+      User.prototype.delete = function () {
+        return User.delete(this.username);
+      };
+
+      User.prototype.login = function (password) {
+        return User.login(this.username, password);
+      };
+
+      User.prototype.changePassword =
+        function (oldPassword, newPassword) {
+          var that = this;
+          return $http.post('/users/' + that.username + '/' +
+              '/password/', {
+                'oldPassword': oldPassword,
+                'newPassword': newPassword
+              })
+            .then(function (response) {
+              return that;
+            }, BaseResource.handleError);
+      };
+
+      User.prototype.resetPassword = function () {
+        var that = this;
+        return $http.post('/users/' + that.username +
+            '/resetpassword/')
+          .then(function (response) {
+            return that;
+          }, BaseResource.handleError);
+      };
+
       return User;
 
     }

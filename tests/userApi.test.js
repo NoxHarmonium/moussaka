@@ -10,11 +10,24 @@
   var colors = require('colors');
   var config = require('../src/shared/config.js');
   var Q = require('q');
+  var mockgoose = require('mockgoose');
+  var Factory = require('js-factories');
+
+  var User = require('../src/client/resources/userResource.js');
+  var ApiError = require('../src/client/exceptions/apiError.js');
+
+  var chai = require('chai');
+  var chaiAsPromised = require('chai-as-promised');
+
+  chai.use(chaiAsPromised);
+
+  var userFactory = require('./factories/userFactory.js');
+  userFactory.register();
 
   // Shared functions
 
   var startFakeSmtpServer = function (emailRecvCallback) {
-    return fakeSmtp.start(emailRecvCallback);
+    return fakeSmtp.start();
   };
 
   var stopFakeSmtpServer = function () {
@@ -22,392 +35,287 @@
   };
 
   describe('Administration API tests', function () {
-    var id;
-    var users = testData.getTestUsers();
-    var agent = superagent.agent();
-    var emailConfig = config.email_settings;
-    var passwordResetCode = null;
 
-    it('Reset test', function (done) {
-      agent.get('http://localhost:3000/test/user_api/reset/')
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.ok)
-            .to.be.ok();
-          done();
-        });
+    beforeEach(function () {
+      // Reset database before every test
+      mockgoose.reset();
     });
 
-    it('Create user [0] without username', function (done) {
-      agent.put('http://localhost:3000/users/' + users[0].username +
-        '/')
-        .send({
-          password: users[0].password
-        })
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.status)
-            .to.be(409);
-          done();
-        });
-    });
-
-    it('Create user [0] without password', function (done) {
-      agent.put('http://localhost:3000/users/' + users[0].username +
-        '/')
-        .send({
-          username: users[0].username
-        })
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.status)
-            .to.be(409);
-          done();
-        });
-    });
-
-    it('Create user [0]', function (done) {
-      agent.put('http://localhost:3000/users/' + users[0].username +
-        '/')
-        .send(users[0])
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.status)
-            .to.be(201);
-          done();
-        });
-    });
-
-    it('Attempt to create existing user [0]', function (done) {
-      agent.put('http://localhost:3000/users/' + users[0].username +
-        '/')
-        .send(users[0])
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.status)
-            .to.be(409);
-          done();
-        });
-    });
-
-    it('Create user [1]', function (done) {
-      agent.put('http://localhost:3000/users/' + users[1].username +
-        '/')
-        .send(users[1])
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.status)
-            .to.be(201);
-          done();
-        });
-    });
-
-    it('Create user [2]', function (done) {
-      agent.put('http://localhost:3000/users/' + users[2].username +
-        '/')
-        .send(users[2])
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.status)
-            .to.be(201);
-          done();
-        });
-    });
-
-
-    it('Login user [0] with incorrect password', function (done) {
-      var u = {
-        username: users[0].username,
-        password: 'incorrect'
-      };
-
-
-      agent.post('http://localhost:3000/login/')
-        .send(u)
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.status)
-            .to.be(401);
-          done();
+    describe('should validate data correctly when adding new users',
+      function () {
+        it('should not create user without username', function () {
+          var user = Factory.create('user-no-username');
+          return user.create()
+            .should.be.rejectedWith(ApiError, /400/);
         });
 
-    });
-
-    it('Login user [0] with correct password', function (done) {
-      agent.post('http://localhost:3000/login/')
-        .send(users[0])
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.ok)
-            .to.be.ok();
-          done();
+        it('should not create user without password', function () {
+          var user = Factory.create('user-no-password');
+          return user.create()
+            .should.be.rejectedWith(ApiError, /400/);
         });
 
-    });
-
-    it('Get login information for non-existant user', function (done) {
-      agent.get('http://localhost:3000/users/' + 'fake@nonexist.com' +
-        '/')
-        .send()
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.status)
-            .to.be(404);
-          done();
+        it('should not create user without firstName', function () {
+          var user = Factory.create('user-no-firstName');
+          return user.create()
+            .should.be.rejectedWith(ApiError, /400/);
         });
-    });
 
-    it('Get login information for non logged in user [1]', function (
-      done) {
-      agent.get('http://localhost:3000/users/' + users[1].username +
-        '/')
-        .send()
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.status)
-            .to.be(401);
-          done();
+        it('should not create user lastName', function () {
+          var user = Factory.create('user-no-lastName');
+          return user.create()
+            .should.be.rejectedWith(ApiError, /400/);
         });
-    });
 
-    it('Get login information for user', function (done) {
-      agent.get('http://localhost:3000/users/' + users[0].username +
-        '/')
-        .send()
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.ok)
-            .to.be.ok();
-          expect(res.body.data.password)
-            .to.be(undefined);
-          done();
-        });
-    });
-
-
-
-    it(
-      'Attempt to change password for user [0] before they are logged out',
-      function (done) {
-        agent.post('http://localhost:3000/users/' + users[0].username +
-          '/password/')
-          .send({
-            'oldPassword': users[0].password,
-            'newPassword': 'new password'
-
-          })
-          .end(function (e, res) {
-            expect(e)
-              .to.eql(null);
-            expect(res.status)
-              .to.be(400);
-            done();
+        it('should not create user with username < 3 chars long',
+          function () {
+            var user = Factory.create('user-short-username');
+            return user.create()
+              .should.be.rejectedWith(ApiError, /400/);
           });
+
+        it('should not create user with password < 3 chars long',
+          function () {
+            var user = Factory.create('user-short-password');
+            return user.create()
+              .should.be.rejectedWith(ApiError, /400/);
+          });
+
+        it('should not create user with firstName < 3 chars long',
+          function () {
+            var user = Factory.create('user-short-firstName');
+            return user.create()
+              .should.be.rejectedWith(ApiError, /400/);
+          });
+
+        it('should not create user with lastName < 3 chars long',
+          function () {
+            var user = Factory.create('user-short-lastName');
+            return user.create()
+              .should.be.rejectedWith(ApiError, /400/);
+          });
+
       });
 
-    it('Logout user [0]', function (done) {
-      agent.post('http://localhost:3000/logout/')
-        .send()
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.ok)
-            .to.be.ok();
-          done();
+    describe('should be able to perform basic user admin tasks', function () {
+      it('should only be able to create user once',
+        function () {
+          var user = Factory.create('user');
+          return user.create()
+            .should.be.fulfilled
+            .then(user.create)
+            .should.be.rejectedWith(ApiError, /409/);
+        });
+
+      it('should not be able to login with wrong password',
+        function () {
+          var user = Factory.create('user');
+          return user.create()
+            .should.be.fulfilled
+            .then(function () {
+              user.login('wrong_password');
+            })
+            .should.be.rejectedWith(ApiError, /401/);
+        });
+
+      it('should be able to login with correct password',
+        function () {
+          var user = Factory.create('user');
+          return user.create()
+            .should.be.fulfilled
+            .then(function () {
+              user.login(user.password);
+            })
+            .should.be.fulfilled;
+        });
+
+      it('should not be able to get information on a user ' +
+        'that doesn\'t exist', function () {
+          return User.get('non-existant-user')
+            .should.be.rejectedWith(ApiError, /404/);
+        });
+
+      it('should not be able to get information on a user that ' +
+        'is not logged in', function () {
+          var user1 = Factory.create('user');
+          var user2 = Factory.create('user');
+          return user1.create()
+            .should.be.fulfilled
+            .then(user2.create)
+            .should.be.fulfilled
+            .then(function () {
+              user1.login(user1.password);
+            })
+            .should.be.fulfilled
+            .then(User.get(user2.email))
+            .should.be.rejectedWith(ApiError, /401/);
+        });
+
+      it(
+        'should be able to get information on the currently logged in user',
+        function () {
+          var user = Factory.create('user');
+          return user.create()
+            .should.be.fulfilled
+            .then(function () {
+              user.login(user.password);
+            })
+            .should.be.fulfilled
+            .then(User.get(user.email))
+            .should.be.fulfilled;
+        });
+
+      it('should not be able to delete user if they are not logged in',
+        function () {
+          var user = Factory.create('user');
+          return user.create()
+            .should.be.fulfilled
+            .then(user.delete)
+            .should.be.rejectedWith(ApiError, /401/);
+        });
+
+      it('should be able to delete user if they are logged in as ' +
+        'different user',
+        function () {
+          var user1 = Factory.create('user');
+          var user2 = Factory.create('user');
+          return user1.create()
+            .should.be.fulfilled
+            .then(user2.create())
+            .should.be.fulfilled
+            .then(function () {
+              user1.login(user1.password);
+            })
+            .should.be.fulfilled
+            .then(user2.delete)
+            .should.be.rejectedWith(ApiError, /401/);
+        });
+
+      it('should be able to delete user if they are logged in',
+        function () {
+          var user = Factory.create('user');
+          return user.create()
+            .should.be.fulfilled
+            .then(function () {
+              user.login(user.password);
+            })
+            .should.be.fulfilled
+            .then(user.delete)
+            .should.be.fulfilled
+            .then(function () {
+              user.login(user.password);
+            })
+            .should.be.rejectedWith(ApiError, /401/);
+
         });
 
     });
 
-    it('Attempt to delete user [0] while logged out', function (done) {
-      agent.del('http://localhost:3000/users/' + users[0].username +
-        '/')
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.status)
-            .to.be(401);
-          done();
+    describe('should be able to change user passwords', function () {
+
+      it('should not be able to change password for user ' +
+        'if they are logged in', function () {
+          var user = Factory.create('user');
+          return user.create()
+            .should.be.fulfilled
+            .then(function () {
+              user.login(user.password);
+            })
+            .should.be.fulfilled
+            .then(User.get(user.email))
+            .should.be.rejectedWith(ApiError, /400/);
         });
+
+      it('should not be able to change password with wrong ' +
+        'existing password', function () {
+          var user = Factory.create('user');
+          return user.create()
+            .should.be.fulfilled
+            .then(user.changePassword('wrong_password', 'new_password'))
+            .should.be.rejectedWith(ApiError, /401/);
+        });
+
+      it('should be able to change password with correct ' +
+        'existing password', function () {
+          var user = Factory.create('user');
+          return user.create()
+            .should.be.fulfilled
+            .then(user.changePassword(user.password, 'new_password'))
+            .should.be.fulfilled;
+        });
+
+      it('should not be able to login with old password ' +
+        'after changing it', function () {
+          var user = Factory.create('user');
+          return user.create()
+            .should.be.fulfilled
+            .then(user.changePassword(user.password, 'new_password'))
+            .should.be.fulfilled
+            .then(function () {
+              user.login(user.password);
+            })
+            .should.be.rejectedWith(ApiError, /401/);
+        });
+
+      it('should be able to login with new password after changing it',
+        function () {
+          var user = Factory.create('user');
+          return user.create()
+            .should.be.fulfilled
+            .then(user.changePassword(user.password, 'new_password'))
+            .should.be.fulfilled
+            .then(function () {
+              user.login('new_password');
+            })
+            .should.be.fulfilled;
+        });
+
     });
 
-    it(
-      'Attempt to change password for user [0] with incorrect password',
-      function (done) {
-        agent.post('http://localhost:3000/users/' + users[0].username +
-          '/password/')
-          .send({
-            'oldPassword': 'incorrect',
-            'newPassword': 'new password'
-          })
-          .end(function (e, res) {
-            expect(e)
-              .to.eql(null);
-            expect(res.status)
-              .to.be(400);
-            done();
-          });
+    describe('should be able to reset user passwords', function () {
+
+      it('should not be able to reset password when logged in',
+        function () {
+          var user = Factory.create('user');
+          return user.create()
+            .should.be.fulfilled
+            .then(function () {
+              user.login(user.password);
+            })
+            .should.be.fulfilled
+            .then(user.resetPassword)
+            .should.be.rejectedWith(ApiError, /400/);
+        });
+
+      it('should not be able to reset password for non-existant user',
+        function () {
+          var user = Factory.create('user');
+          return user.resetPassword()
+            .should.be.rejectedWith(ApiError, /404/);
+        });
+
+      /*
+    it('should be able to reset password when not logged in',
+        function () {
+          if (!config.email_settings.enabled ||
+            !config.email_settings.fake_smtp) {
+            console.log('Test skipped because email support disabled'.yellow);
+            return true;
+          }
+
+          var user = Factory.create('user');
+          return user.create()
+            .should.be.fulfilled
+            .then(user.resetPassword)
+            .should.be.fulfilled;
       });
-
-    it('Change password for user [0] with correct password', function (
-      done) {
-      agent.post('http://localhost:3000/users/' + users[0].username +
-        '/password/')
-        .send({
-          'oldPassword': users[0].password,
-          'newPassword': 'new password'
-
-        })
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.ok)
-            .to.be.ok();
-          done();
-        });
-    });
-
-    it('Login user [0] with old password', function (done) {
-      agent.post('http://localhost:3000/login/')
-        .send(users[0])
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.status)
-            .to.be(401);
-          done();
-        });
+*/
 
     });
 
-    it('Login user [0] with new password', function (done) {
+  });
 
-      agent.post('http://localhost:3000/login/')
-        .send({
-          username: users[0].username,
-          password: 'new password'
-
-        })
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.ok)
-            .to.be.ok();
-          done();
-        });
-    });
-
-
-    it('Delete user [0]', function (done) {
-      agent.del('http://localhost:3000/users/' + users[0].username +
-        '/')
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.status)
-            .to.be(200);
-          done();
-        });
-    });
-
-    it('Attempt to login user [0] with new password after deletion',
-      function (
-        done) {
-
-        agent.post('http://localhost:3000/login/')
-          .send({
-            username: users[0].username,
-            password: 'new password'
-
-          })
-          .end(function (e, res) {
-            expect(e)
-              .to.eql(null);
-            expect(res.status)
-              .to.be(401);
-            done();
-          });
-      });
-
-
-    it('Login user [1]', function (done) {
-      agent.post('http://localhost:3000/login/')
-        .send(users[1])
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.status)
-            .to.be(200);
-          done();
-        });
-
-    });
-
-    it('Attempt to delete user [2] logged in as user [1]', function (
-      done) {
-      agent.del('http://localhost:3000/users/' + users[2].username +
-        '/')
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.status)
-            .to.be(401);
-          done();
-        });
-    });
-
-    it('Reset password for user [1] while logged in', function (done) {
-      var user = users[1];
-
-      agent.post('http://localhost:3000/users/' + user.username +
-        '/resetpassword/')
-        .send()
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.status)
-            .to.be(400);
-          done();
-        });
-
-    });
-
-    it('Logout user [1]', function (done) {
-      agent.post('http://localhost:3000/logout/')
-        .send()
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.ok)
-            .to.be.ok();
-          done();
-        });
-    });
-
-    it('Reset password for user [0]', function (done) {
-      agent.post('http://localhost:3000/users/' + users[0].username +
-        '/resetpassword/')
-        .send()
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.status)
-            .to.be(404);
-          done();
-        });
-
-    });
+  /*
 
     it('Reset password for user [1]', function (done) {
       var user = users[1];
@@ -653,8 +561,7 @@
           done();
         });
     });
+  */
 
-
-  });
 
 })(require, describe, it);

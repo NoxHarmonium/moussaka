@@ -7,6 +7,12 @@
 
   module.exports = {
     init: function (next) {
+      if (config.mockDatabase) {
+        // Make a mock database for testing that we can reset
+        var mockgoose = require('mockgoose');
+        mockgoose(mongoose);
+      }
+
       // Mongoose functions wait for db connection to be open
       // so there is no need for a success callback
       // Thanks http://stackoverflow.com/a/14049430

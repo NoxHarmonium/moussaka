@@ -8,12 +8,16 @@
     var childError = Error();
     this.name = this.constructor.name;
 
+    this.message = 'Error Code: ' + response.status + ' (';
+
     if (response.data && response.data.detail) {
-      this.message = response.data.detail;
+      this.message += response.data.detail;
     } else {
       // TODO: i18n
-      this.message = 'An unknown error occurred.';
+      this.message += 'An unknown error occurred.';
     }
+
+    this.message += ')';
 
     Object.defineProperty(this, 'stack', {
       get: function () {

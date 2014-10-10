@@ -19,7 +19,9 @@
       "describe": true, // mocha
       "before": true, // mocha
       "after": true, // mocha
-      "it": true, // mocha
+      "it": true, // mocha,
+      "beforeEach": true, // mocha
+      "afterEach": true, // mocha
       "angular": true, //angular
       "window": true, //browserify scripts
       "jQuery": true, // jquery

@@ -2,7 +2,6 @@
   'use strict';
 
   var ApiError = require('../exceptions/apiError.js');
-
   var jQuery = window.$;
 
   var BaseResource = function () {};

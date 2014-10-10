@@ -48,7 +48,10 @@ default: # The default config profile. (With documentation)
 
     # Enables more informative stack traces in Q
     # Uses more memory and CPU s so turn off in production
-    q_long_stacktrace:      true
+    q_long_stacktrace:      false
+
+    # Instead of connecting to the actual database uses a mock database for testing.
+    mockDatabase:           false
 
     # What other domains can access the API
     # See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS
@@ -74,19 +77,12 @@ default: # The default config profile. (With documentation)
             debug: true
         minify: true
 
-
-
 development: # The development config profile.
     listen_port:            3000
-    locale:                 "en-US"
     salt_work_factor:       3
     mongo_url:              "mongodb://localhost/unity-profiles-dev"
     enable_test_exts:       true
     show_friendly_errors:   true
-    max_records_per_query:  20
-    tempPasswordCodeLength: 8
-    device_Timeout_Seconds: 300
-    session_secret:         6zRckBzE
     q_long_stacktrace:      true
     access_control_allow_origin: '*' # Allow cross domain access for simulator
     email_settings:
@@ -106,7 +102,6 @@ development: # The development config profile.
 
 travis-ci: # The development config profile.
     listen_port:            3000
-    locale:                 "en-US"
     salt_work_factor:       1 # Reduce the work factor even more for slower VMs
     mongo_url:              "mongodb://localhost/unity-profiles-dev"
     enable_test_exts:       true
@@ -133,15 +128,40 @@ travis-ci: # The development config profile.
 
 # TODO: Enable a real email client
 heroku:
+    extends:                "development"
     listen_port:            5000
-    locale:                 "en-US"
     salt_work_factor:       1 # Reduce the work factor even more for slower VMs
     enable_test_exts:       true
     show_friendly_errors :  true
     max_records_per_query:  20
     tempPasswordCodeLength: 8
     device_Timeout_Seconds: 300
+    mongo_url:              "mongodb://localhost/unity-profiles-dev"
+    enable_test_exts:       true
+    show_friendly_errors:   true
     q_long_stacktrace:      true
+    email_settings:
+        enabled:    true
+        user:       "testUser"
+        password:   "testPassword"
+        host:       "localhost"
+        port:       3001
+        ssl:        false
+        from:       "forgotpassword@unity-profiles.test"
+        fake_smtp:  true
+    code_generation:
+        browserify:
+            debug: true
+
+testing: # The development config profile.
+    extends:                "development"
+    listen_port:            5000
+    salt_work_factor:       1 # Reduce the work factor even more for slower VMs
+    mongo_url:              "mongodb://localhost/unity-profiles-dev"
+    enable_test_exts:       true
+    show_friendly_errors:   true
+    q_long_stacktrace:      true
+    mockDatabase:           true
     email_settings:
         enabled:    true
         user:       "testUser"

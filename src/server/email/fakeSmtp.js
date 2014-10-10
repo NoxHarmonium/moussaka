@@ -12,8 +12,10 @@
   module.exports = {
     debug: false,
     smtpServer: null,
+    messageQueue: [],
+    messageDeferred: null,
 
-    start: function (recvCallback, debug) {
+    start: function (debug) {
       var deferred = Q.defer();
 
       if (!utils.exists(debug)) {
@@ -57,12 +59,15 @@
           console.log('simplesmtp: > accepting.');
         }
 
-        if (recvCallback) {
-          recvCallback({
-            from: connection.from,
-            to: connection.to,
-            body: buffer
-          });
+        self.messageQueue.push({
+          from: connection.from,
+          to: connection.to,
+          body: buffer
+        });
+
+        if (self.messageDeferred) {
+          self.messageDeferred.resolve(self.messageQueue);
+          self.messageDeferred = null;
         }
 
         respCallback(null, 'FAKEQUEUE');
@@ -84,6 +89,13 @@
       self.smtpServer = smtpServer;
 
       return deferred.promise;
+    },
+
+    getMessages: function () {
+      if (self.messageDeferred === null) {
+        self.messageDeferred = Q.defer();
+      }
+      return self.messageDeferred.promise;
     },
 
     stop: function () {

@@ -58,6 +58,7 @@
   "description": "Open Source Game Prototyping Framework",
   "devDependencies": {
     "bower-files": "^2.2.1",
+    "chai": "^1.9.2",
     "cheerio": "^0.17.0",
     "coveralls": "^2.11.2",
     "expect.js": "^0.3.1",
@@ -69,7 +70,12 @@
     "mocha": "^1.21.4",
     "mocha-lcov-reporter": "^0.0.1",
     "simplesmtp": "^0.3.33",
-    "superagent": "^0.20.0"
+    "superagent": "^0.20.0",
+    "chai-as-promised": "^4.1.1",
+    "gulp-spawn-mocha": "^0.4.1",
+    "js-factories": "^1.1.1",
+    "mockgoose": "^1.10.7",
+    "random-mac": "*"
   },
   "env": {
     "PYTHON": "/usr/bin/python2.7"
