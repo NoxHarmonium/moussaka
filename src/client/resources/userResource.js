@@ -63,10 +63,11 @@
 
       // Instance Methods
 
-      User.prototype.create = function () {
+      User.prototype.create = function (password) {
         // TODO: Validation?
         var that = this;
-        return $http.put('/users/' + that.username + '/', that)
+        return $http.put('/users/' + that.username + '/',
+          extend({}, that, {password: password}))
           .then(function (response) {
             return that;
           }, BaseResource.handleError);

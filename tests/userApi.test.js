@@ -12,6 +12,7 @@
   var Q = require('q');
   var mockgoose = require('mockgoose');
   var Factory = require('js-factories');
+  var chance = require('chance').Chance();
 
   var User = require('../src/client/resources/userResource.js');
   var ApiError = require('../src/client/exceptions/apiError.js');
@@ -43,56 +44,79 @@
 
     describe('should validate data correctly when adding new users',
       function () {
-        it('should not create user without username', function () {
-          var user = Factory.create('user-no-username');
-          return user.create()
-            .should.be.rejectedWith(ApiError, /400/);
-        });
 
-        it('should not create user without password', function () {
-          var user = Factory.create('user-no-password');
-          return user.create()
-            .should.be.rejectedWith(ApiError, /400/);
-        });
+        var fields = {
+          'username':   { min: 3, max: 40 },
+          'firstName':  { min: 3, max: 40 },
+          'lastName':   { min: 3, max: 40 }
+        };
+        var passwordField =  { min: 8, max: 40 };
+        var fieldInfo = null;
 
-        it('should not create user without firstName', function () {
-          var user = Factory.create('user-no-firstName');
-          return user.create()
-            .should.be.rejectedWith(ApiError, /400/);
-        });
+        for (var field in fields) {
+          fieldInfo = fields[field];
 
-        it('should not create user lastName', function () {
-          var user = Factory.create('user-no-lastName');
-          return user.create()
-            .should.be.rejectedWith(ApiError, /400/);
-        });
+          it('should not create user without ' + field,
+            function () {
+              var user = Factory.create('user');
+              var password = chance.string();
+              delete user[field];
 
-        it('should not create user with username < 3 chars long',
-          function () {
-            var user = Factory.create('user-short-username');
-            return user.create()
-              .should.be.rejectedWith(ApiError, /400/);
+              return user.create(password)
+                .should.be.rejectedWith(ApiError, /400/);
           });
 
-        it('should not create user with password < 3 chars long',
-          function () {
-            var user = Factory.create('user-short-password');
-            return user.create()
-              .should.be.rejectedWith(ApiError, /400/);
+          it('should not create user with ' + field + ' less than ' +
+            fieldInfo.min + 'characters' , function () {
+              var user = Factory.create('user');
+              var password = chance.string();
+              user[field] = S(user[field]).left(fieldInfo.min - 1).s;
+
+              return user.create(password)
+                .should.be.rejectedWith(ApiError, /400/);
           });
 
-        it('should not create user with firstName < 3 chars long',
-          function () {
-            var user = Factory.create('user-short-firstName');
-            return user.create()
-              .should.be.rejectedWith(ApiError, /400/);
+          it('should not create user with ' + field + ' more than ' +
+            fields[field].max + 'characters' , function () {
+              var user = Factory.create('user');
+              var password = chance.string();
+              user[field] = S(user[field]).pad(fieldInfo.max + 1).s;
+
+              return user.create(password)
+                .should.be.rejectedWith(ApiError, /400/);
           });
 
-        it('should not create user with lastName < 3 chars long',
-          function () {
-            var user = Factory.create('user-short-lastName');
-            return user.create()
-              .should.be.rejectedWith(ApiError, /400/);
+        };
+
+        field = 'password';
+        fieldInfo = passwordField;
+
+        it('should not create user without ' + field,
+            function () {
+              var user = Factory.create('user');
+
+              return user.create()
+                .should.be.rejectedWith(ApiError, /400/);
+          });
+
+          it('should not create user with ' + field + ' less than ' +
+            fieldInfo.min + 'characters' , function () {
+              var user = Factory.create('user');
+              var password = chance.string();
+              password = S(password).left(fieldInfo.min - 1).s;
+
+              return user.create(password)
+                .should.be.rejectedWith(ApiError, /400/);
+          });
+
+          it('should not create user with ' + field + ' more than ' +
+            fields[field].max + 'characters' , function () {
+              var user = Factory.create('user');
+              var password = chance.string();
+              user[field] = S(password).pad(fieldInfo.max + 1).s;
+
+              return user.create(password)
+                .should.be.rejectedWith(ApiError, /400/);
           });
 
       });

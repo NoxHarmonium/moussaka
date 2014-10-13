@@ -26,11 +26,10 @@
         var user = new User({
           username: $scope.email,
           firstName: $scope.firstName,
-          lastName: $scope.lastName,
-          password: $scope.password
+          lastName: $scope.lastName
         });
 
-        var result = user.create()
+        var result = user.create($scope.password)
           .then(function (response) {
             return $http.post('/login/', {
               username: $scope.email,
