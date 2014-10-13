@@ -9,9 +9,9 @@
 
 Moussaka is a web application with the goal of improving the prototyping and development of video games on mobile devices. It aims to provide an easy-to-use interface which designers and product owners can use to tweak game parameters in real-time. It will then allow them to then save different sets of parameters, easily switch between them for comparison and then even share them with others. When a set of parameters has been decided on, the developer can download the profile and drop it straight into the game for deployment.
 
-The first version of the server side REST API is now complete with extensive unit tests. The current goal (version 0.2) is writing the first version of the browser front end which is coming along rapidly.  
+The first version of the server side REST API is now complete with extensive unit tests. The current goal (version 0.2) is writing the first version of the browser front end which is coming along rapidly.
 
-The API documentation can be found at this [Apiary page](http://docs.unityprofiles.apiary.io/)
+The API documentation can be found at this [Apiary page](http://docs.noxharmonium.apiary.io/)
 
 ## Description
 
@@ -22,7 +22,7 @@ In mobile game development it is sometimes necessary to expose game variables in
 - A menu on device can be fiddly and hard to adjust, especially if the input triggers the on screen keyboard.
 - If the user finds different configurations they like and want to compare them there is no easy way to store configurations and compare them.
 
-It is also hard to share with other people when you find an optimum configuration. You may have to write down every value manually and might even lose it altogether if the game crashes. 
+It is also hard to share with other people when you find an optimum configuration. You may have to write down every value manually and might even lose it altogether if the game crashes.
 
 The main premise of Moussaka is to allow a developer to simply add an [attribute](http://msdn.microsoft.com/en-us/library/z0w1kczw.aspx) to properties of a game object. When the game is loaded, a plugin will use reflection to find properties with these attributes and then send them to a server running Moussaka.
 
@@ -30,9 +30,9 @@ The user would then use the web application, select the relevant device and then
 
 ## Why is the project called Moussaka?
 It is a very tasty dish and everyone knows that open source projects have very random names.
-## Development 
+## Development
 The backend is developed in [node.js](nodejs.org) and backed by [mongodb](mongodb.org).
-The REST API is serviced by [express](expressjs.com) which also renders the website views and partial templates using [jade](jade-lang.com). 
+The REST API is serviced by [express](expressjs.com) which also renders the website views and partial templates using [jade](jade-lang.com).
 The frontend uses [angular.js](https://angularjs.org/) to do most of the work in presenting the webpage.
 I have used [kube](http://imperavi.com/kube/) as the base responsive CSS framework that I build on and use [less](lesscss.org/) as a CSS preprocessor.
 To prevent code duplication, code written for node.js can be used client side through the magic of [browserify](http://browserify.org/).
@@ -56,13 +56,13 @@ Make sure you specify a valid MongoDB URL. You can also create a free account wi
 1. Make sure you have node.js and npm installed.
 2. Make sure you have mongodb installed.
 3. Clone the repository locally.
-    
+
 ```shell
 # git clone git@github.com:NoxHarmonium/moussaka.git
 ```
 
 4. Make sure you have gulp and bower installed globally.
-    
+
 ```shell
 # npm install -g gulp
 # npm install -g bower
