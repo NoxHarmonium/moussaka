@@ -182,7 +182,7 @@ This action can only be performed if the authenticated user is a *ProjectAdmin* 
     [Project][]
 
 
-### Update a Project [DELETE]
+### Update a Project [POST]
 
 Updates an existing *Project*.
 
@@ -207,7 +207,7 @@ This action can only be performed if the authenticated user is a *ProjectAdmin* 
 + Response 200
 
 
-## Projects [/projects{?minRecord}{?maxRecord}]
+## Projects [/projects{?minRecord}{?maxRecord}{?sortField}{?sortDir}]
 Represents all *Project* objects the currently authenticated *User* is able to see (is a *ProjectUser* or *ProjectAdmin* of the *Project*).
 Also allows the *User* to create a new *Project*.
 This resource will never return more than the maximum record count set in the server config (default: 20).
@@ -365,7 +365,7 @@ This action can only be performed if the authenticated user is a *ProjectAdmin* 
 
 + Response 200
 
-## Profiles [/projects/{projectId}/profiles{?deviceId}{?minRecord}{?maxRecord}]
+## Profiles [/projects/{projectId}/profiles{?deviceId}{?minRecord}{?maxRecord}{?sortField}{?sortDir}]
 Represents all *Profile* objects the currently authenticated *User* is able to see (is a *ProjectUser* or *ProjectAdmin* of the *Project* related to the *Profile*).
 
 This resource will never return more than the maximum record count set in the server config (default: 20).
@@ -539,7 +539,7 @@ Gets information on the specified device. The currentState and dataSchema attrib
             }
 
 
-## Devices [/projects/{projectId}/devices{?minRecord}{?maxRecord}]
+## Devices [/projects/{projectId}/devices{?minRecord}{?maxRecord}{?sortField}{?sortDir}]
 Represents all *Device* objects the currently authenticated *User* is able to see (is a *ProjectUser* or *ProjectAdmin* of the *Project* related to the *Device*).
 
 
