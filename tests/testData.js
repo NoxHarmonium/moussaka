@@ -84,8 +84,6 @@
       projectId: '',
       projectVersion: '0.3',
       deviceName: 'Jeff\'s iPad',
-      macAddress: '3D:F2:C9:A6:B3:4F',
-
     }];
   };
 

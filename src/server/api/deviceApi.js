@@ -61,32 +61,30 @@
     // Parameters
     //
 
-    pDeviceMacAddr: function (req, res, next, macAddress) {
+    pDeviceId: function (req, res, next, deviceId) {
       var project = req.project;
 
       if (!project) {
+        console.log('no project');
         return next();
       }
 
-      if (!utils.validateMacAddress(macAddress)) {
-        return res.status(409)
-          .send({
-            detail: 'Invalid MAC address format. Should be IEEE 802 format. ' +
-              '(01-23-45-67-89-ab)'
-          });
+      // Check for valid object ID
+      // Thanks: http://stackoverflow.com/a/14942113/1153203
+      if (!deviceId.match(/^[0-9a-fA-F]{24}$/)) {
+        return next();
       }
 
-      // Need to normalize
-      macAddress = macAddress.toUpperCase();
-
       var findDevice = Device.findOne({
-        'macAddress': macAddress
+        '_id': deviceId
       });
 
       findDevice.execQ()
         .then(function (device) {
           req.device = device;
-          req.macAddress = macAddress;
+          if (!device) {
+            console.log('no device');
+          }
           next();
         })
         .catch(function (err) {
@@ -128,20 +126,9 @@
       } else {
         // Else create new
 
-        // Need to normalize
-        var macAddress = device.macAddress.toUpperCase();
-
-        if (macAddress !== req.macAddress) {
-          //console.log(macAddress, '!==', req.macAddress);
-          throw new InvalidDataError('MAC address supplied in the ' +
-            'URL and in the data differ.' +
-            'This suggests that your data is bad. ');
-        }
-
         var newDevice = new Device({
           projectId: device.projectId,
           projectVersion: device.projectVersion,
-          macAddress: macAddress,
           dataSchema: device.dataSchema,
           deviceName: device.deviceName,
           currentState: device.currentState
@@ -194,7 +181,7 @@
 
       var removedDevice;
       Device.findOneAndRemoveQ({
-        'macAddress': device.macAddress
+        '_id': device._id
       })
         .then(function (data) {
           removedDevice = data;
@@ -233,7 +220,6 @@
         .send({
           data: {
             _id: device._id,
-            macAddress: device.macAddress,
             deviceName: device.deviceName,
             projectId: device.projectId,
             projectVersion: device.projectVersion,
@@ -263,7 +249,7 @@
           projectId: project._id
         });
 
-        query.select('macAddress projectId projectVersion ' +
+        query.select('projectId projectVersion ' +
           'updatedAt deviceName');
 
         queryFilters.paginate(req.query, query);

@@ -61,7 +61,6 @@
     "istanbul": "*",
     "mocha": "*",
     "mocha-lcov-reporter": "*",
-    "random-mac": "*",
     "simplesmtp": "*",
     "superagent": "*"
   },

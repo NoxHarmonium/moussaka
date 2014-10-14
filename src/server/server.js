@@ -78,7 +78,7 @@
 
     // TODO: Resolve why this breaks promise flow in API
     // https://github.com/kriskowal/q/issues/579
-    //Q.longStackSupport = config.q_long_stacktrace;
+    Q.longStackSupport = config.q_long_stacktrace;
 
     var app = express();
     var rootDir = process.cwd();
@@ -182,6 +182,7 @@
     // Profile API
     //
     app.param('profileId', profileApi.pProfileId);
+    app.use('/projects/:projectId/profiles/', profileApi.qDeviceId);
 
     app.get('/projects/:projectId/profiles/',
       profileApi.getProfiles);
@@ -198,26 +199,27 @@
     //
     // Device API
     //
-    app.param('deviceMacAddr', deviceApi.pDeviceMacAddr);
-    app.put('/projects/:projectId/devices/' +
-      ':deviceMacAddr/', deviceApi.registerDevice);
+    app.param('deviceId', deviceApi.pDeviceId);
+    app.put('/projects/:projectId/devices/', deviceApi.registerDevice);
+    app.post('/projects/:projectId/devices/:deviceId/',
+      deviceApi.registerDevice);
     app.get('/projects/:projectId/devices/', deviceApi.listDevices);
     app.get('/projects/:projectId/devices/' +
-      ':deviceMacAddr/', deviceApi.getDevice);
+      ':deviceId/', deviceApi.getDevice);
     app.delete('/projects/:projectId/devices/' +
-      ':deviceMacAddr/', deviceApi.deregisterDevice);
+      ':deviceId/', deviceApi.deregisterDevice);
     app.get('/projects/:projectId/devices/' +
-      ':deviceMacAddr/schema/', deviceApi.getSchema);
+      ':deviceId/schema/', deviceApi.getSchema);
     app.get('/projects/:projectId/devices/' +
-      ':deviceMacAddr/state/', deviceApi.getCurrentState);
+      ':deviceId/state/', deviceApi.getCurrentState);
     app.put('/projects/:projectId/sessions/' +
-      ':deviceMacAddr/', deviceApi.startSession);
+      ':deviceId/', deviceApi.startSession);
     app.delete('/projects/:projectId/sessions/' +
-      ':deviceMacAddr/', deviceApi.stopSession);
+      ':deviceId/', deviceApi.stopSession);
     app.post('/projects/:projectId/sessions/' +
-      ':deviceMacAddr/updates', deviceApi.queueUpdate);
+      ':deviceId/updates', deviceApi.queueUpdate);
     app.get('/projects/:projectId/sessions/' +
-      ':deviceMacAddr/updates', deviceApi.getUpdates);
+      ':deviceId/updates', deviceApi.getUpdates);
     if (config.enable_test_exts) {
       app.get('/test/device_api/reset/', deviceApi.resetTests);
     }

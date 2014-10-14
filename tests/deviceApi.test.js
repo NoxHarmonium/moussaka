@@ -11,7 +11,6 @@
   var Q = require('q');
   var S = require('string');
   var Chance = require('chance');
-  var randomMac = require('random-mac');
   var extend = require('extend');
 
   var _formatTestIndex = function (index) {
@@ -24,8 +23,8 @@
   describe('Device API tests', function () {
     var id;
     var users = testData.getTestUsers();
-    var projects = testData.getTestProjects();
     var devices = testData.getTestDevices();
+    var projects = testData.getTestProjects();
     var deviceSchemas = testData.getTestDeviceSchemas();
     var deviceStates = testData.getTestDevicesStates();
     var agent = superagent.agent();
@@ -167,91 +166,19 @@
     // Don't need to be logged in to connect device, only need api key
 
     it('Connect device [0] to server under project [0]' +
-      ' with no mac', function (done) {
-        var user = users[2];
-        var apiKey = user.apiKey;
-        var project = projects[0];
-        var device = devices[0];
-        var deviceSchema = deviceSchemas[0];
-        var deviceState = deviceStates[0];
-        device.projectId = project._id;
-
-        // Save correct MAC address and set to invalid
-        tempStore.correctMac = device.macAddress;
-        device.macAddress = '';
-
-        // Need to connect device with all data
-        var extendedDevice = getExtendedDevice(0);
-
-        deviceAgent.put('http://localhost:3000/projects/' +
-          project._id + '/devices/' + extendedDevice.macAddress + '/')
-          .set('apikey', apiKey)
-          .send(extendedDevice)
-          .end(function (e, res) {
-            expect(e)
-              .to.eql(null);
-            expect(res.ok)
-              .to.be(false);
-            expect(res.status)
-              .to.be(404);
-
-            // Restore correct MAC address
-            device.macAddress = tempStore.correctMac;
-            delete tempStore.correctMac;
-
-            done();
-          });
-      });
-
-    it('Connect device [0] to server under project [0]' +
-      ' with invalid mac', function (done) {
-        var user = users[2];
-        var apiKey = user.apiKey;
-        var project = projects[0];
-        var device = devices[0];
-        device.projectId = project._id;
-
-        // Save correct MAC address and set to invalid
-        tempStore.correctMac = device.macAddress;
-        device.macAddress = encodeURIComponent(chance.string());
-
-        // Need to connect device with all data
-        var extendedDevice = getExtendedDevice(0);
-
-        deviceAgent.put('http://localhost:3000/projects/' +
-          project._id + '/devices/' + extendedDevice.macAddress + '/')
-          .set('apikey', apiKey)
-          .send(extendedDevice)
-          .end(function (e, res) {
-            expect(e)
-              .to.eql(null);
-            expect(res.ok)
-              .to.be(false);
-            expect(res.status)
-              .to.be(409);
-
-            // Restore correct MAC address
-            device.macAddress = tempStore.correctMac;
-            delete tempStore.correctMac;
-
-            done();
-          });
-      });
-
-    it('Connect device [0] to server under project [0]' +
       ' with invalid project id', function (done) {
         var user = users[2];
         var apiKey = user.apiKey;
         var project = projects[0];
         var device = devices[0];
-        device.projectId = encodeURIComponent(chance.string());
 
         // Need to connect device with all data
         var extendedDevice = getExtendedDevice(0);
+        extendedDevice.projectId = encodeURIComponent(chance.string());
 
         deviceAgent.put('http://localhost:3000/projects/' +
           extendedDevice.projectId + '/devices/' +
-          extendedDevice.macAddress + '/')
+          extendedDevice._id + '/')
           .set('apikey', apiKey)
           .send(extendedDevice)
           .end(function (e, res) {
@@ -272,14 +199,13 @@
         var apiKey = user.apiKey;
         var project = projects[0];
         var device = devices[0];
-        device.projectId = project._id;
 
         // Need to connect device with all data
         var extendedDevice = getExtendedDevice(0);
+        extendedDevice.projectId = project._id;
 
         deviceAgent.put('http://localhost:3000/projects/' +
-          extendedDevice.projectId + '/devices/' +
-          extendedDevice.macAddress + '/')
+          extendedDevice.projectId + '/devices/')
           .send(extendedDevice)
           .end(function (e, res) {
             expect(e)
@@ -297,14 +223,13 @@
         var apiKey = user.apiKey;
         var project = projects[0];
         var device = devices[0];
-        device.projectId = project._id;
 
         // Need to connect device with all data
         var extendedDevice = getExtendedDevice(0);
+        extendedDevice.projectId = project._id;
 
         deviceAgent.put('http://localhost:3000/projects/' +
-          extendedDevice.projectId + '/devices/' +
-          extendedDevice.macAddress + '/')
+          extendedDevice.projectId + '/devices/')
           .set('apikey', apiKey)
           .send(extendedDevice)
           .end(function (e, res) {
@@ -328,37 +253,36 @@
       var extendedDevice = getExtendedDevice(0);
 
       deviceAgent.put('http://localhost:3000/projects/' +
-        extendedDevice.projectId + '/devices/' +
-        extendedDevice.macAddress + '/')
+        extendedDevice.projectId + '/devices/')
         .set('apikey', apiKey)
         .send(extendedDevice)
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
 
-          console.log(res.status);
-          console.log(res.body.detail);
           expect(res.ok)
             .to.be.ok();
+
+          device._id = res.body.data._id;
 
           done();
         });
     });
 
-    it('Connect device [0] to server under project [0] again ' +
+    it('Update device [0] under project [0] ' +
       'to reset timeout', function (done) {
         var user = users[2];
         var apiKey = user.apiKey;
         var project = projects[0];
         var device = devices[0];
-        device.projectId = project._id;
 
         // Need to connect device with all data
         var extendedDevice = getExtendedDevice(0);
+        extendedDevice.projectId = project._id;
 
-        deviceAgent.put('http://localhost:3000/projects/' +
+        deviceAgent.post('http://localhost:3000/projects/' +
           extendedDevice.projectId + '/devices/' +
-          extendedDevice.macAddress + '/')
+          extendedDevice._id + '/')
           .set('apikey', apiKey)
           .send(extendedDevice)
           .end(function (e, res) {
@@ -371,12 +295,12 @@
           });
       });
 
-    it('Check device [0] has been added to invalid project', function (
+    it('Check device [0] has not been added to invalid project', function (
       done) {
       var device = devices[0];
 
       agent.get('http://localhost:3000/projects/' +
-        '000000000000000000000000' + '/devices/' + device.macAddress +
+        '000000000000000000000000' + '/devices/' + device._id +
         '/')
         .end(function (e, res) {
           expect(e)
@@ -393,10 +317,11 @@
       var device = devices[0];
 
       agent.get('http://localhost:3000/projects/' +
-        device.projectId + '/devices/' + device.macAddress + '/')
+        device.projectId + '/devices/' + device._id + '/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
+
           expect(res.ok)
             .to.be.ok();
 
@@ -465,7 +390,7 @@
         var device = devices[0];
 
         deviceAgent.del('http://localhost:3000/projects/' +
-          '000000000000000000000000' + '/devices/' + device.macAddress +
+          '000000000000000000000000' + '/devices/' + device._id +
           '/')
           .set('apikey', apiKey)
           .end(function (e, res) {
@@ -485,7 +410,7 @@
       var device = devices[0];
 
       deviceAgent.del('http://localhost:3000/projects/' +
-        device.projectId + '/devices/' + device.macAddress + '/')
+        device.projectId + '/devices/' + device._id + '/')
         .set('apikey', apiKey)
         .end(function (e, res) {
           expect(e)
@@ -505,7 +430,7 @@
         var device = devices[0];
 
         deviceAgent.del('http://localhost:3000/projects/' +
-          device.projectId + '/devices/' + device.macAddress + '/')
+          device.projectId + '/devices/' + device._id + '/')
           .set('apikey', apiKey)
           .end(function (e, res) {
             expect(e)
@@ -522,7 +447,7 @@
       var device = devices[0];
 
       agent.get('http://localhost:3000/projects/' +
-        device.projectId + '/devices/' + device.macAddress + '/')
+        device.projectId + '/devices/' + device._id + '/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
@@ -572,8 +497,7 @@
       var extendedDevice = getExtendedDevice(0);
 
       deviceAgent.put('http://localhost:3000/projects/' +
-        extendedDevice.projectId + '/devices/' +
-        extendedDevice.macAddress + '/')
+        extendedDevice.projectId + '/devices/')
         .set('apikey', apiKey)
         .send(extendedDevice)
         .end(function (e, res) {
@@ -582,6 +506,7 @@
           expect(res.ok)
             .to.be.ok();
 
+          device._id = res.body.data._id;
 
           done();
         });
@@ -600,9 +525,9 @@
         // Need to connect device with all data
         var extendedDevice = getExtendedDevice(0);
 
-        deviceAgent.put('http://localhost:3000/projects/' +
+        deviceAgent.post('http://localhost:3000/projects/' +
           extendedDevice.projectId + '/devices/' +
-          extendedDevice.macAddress + '/')
+          extendedDevice._id + '/')
           .set('apikey', apiKey)
           .send(extendedDevice)
           .end(function (e, res) {
@@ -663,7 +588,7 @@
         var device = devices[0];
 
         agent.put('http://localhost:3000/projects/' +
-          device.projectId + '/sessions/' + device.macAddress + '/')
+          device.projectId + '/sessions/' + device._id + '/')
           .end(function (e, res) {
             expect(e)
               .to.eql(null);
@@ -695,7 +620,7 @@
         var device = devices[0];
 
         agent.put('http://localhost:3000/projects/' +
-          '0000000000000000000' + '/sessions/' + device.macAddress +
+          '0000000000000000000' + '/sessions/' + device._id +
           '/')
           .end(function (e, res) {
             expect(e)
@@ -728,7 +653,7 @@
       var device = devices[0];
 
       agent.put('http://localhost:3000/projects/' +
-        device.projectId + '/sessions/' + device.macAddress + '/')
+        device.projectId + '/sessions/' + device._id + '/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
@@ -770,7 +695,7 @@
         var device = devices[0];
 
         agent.put('http://localhost:3000/projects/' +
-          device.projectId + '/sessions/' + device.macAddress + '/')
+          device.projectId + '/sessions/' + device._id + '/')
           .end(function (e, res) {
             expect(e)
               .to.eql(null);
@@ -813,7 +738,7 @@
         var device = devices[0];
 
         agent.get('http://localhost:3000/projects/' +
-          '0000000000000000000' + '/sessions/' + device.macAddress +
+          '0000000000000000000' + '/sessions/' + device._id +
           '/schema/')
           .end(function (e, res) {
             expect(e)
@@ -847,7 +772,7 @@
       var dataSchema = deviceSchemas[0].dataSchema;
 
       agent.get('http://localhost:3000/projects/' +
-        device.projectId + '/devices/' + device.macAddress +
+        device.projectId + '/devices/' + device._id +
         '/schema/')
         .end(function (e, res) {
           expect(e)
@@ -868,7 +793,7 @@
         var device = devices[0];
 
         agent.get('http://localhost:3000/projects/' +
-          '0000000000000000000' + '/sessions/' + device.macAddress +
+          '0000000000000000000' + '/sessions/' + device._id +
           '/schema/')
           .end(function (e, res) {
             expect(e)
@@ -902,7 +827,7 @@
       var currentState = deviceStates[0].currentState;
 
       agent.get('http://localhost:3000/projects/' +
-        device.projectId + '/devices/' + device.macAddress +
+        device.projectId + '/devices/' + device._id +
         '/state/')
         .end(function (e, res) {
           expect(e)
@@ -935,7 +860,7 @@
         }];
 
         agent.post('http://localhost:3000/projects/' +
-          '0000000000000000000' + '/sessions/' + device.macAddress +
+          '0000000000000000000' + '/sessions/' + device._id +
           '/updates/')
           .send(sentUpdates[0])
           .end(function (e, res) {
@@ -1002,7 +927,7 @@
       extend(deviceCurrentState, sentUpdates[0]);
 
       agent.post('http://localhost:3000/projects/' +
-        device.projectId + '/sessions/' + device.macAddress +
+        device.projectId + '/sessions/' + device._id +
         '/updates/')
         .send(sentUpdates[0])
         .end(function (e, res) {
@@ -1021,7 +946,7 @@
       var device = devices[0];
 
       deviceAgent.get('http://localhost:3000/projects/' +
-        '0000000000000000000' + '/sessions/' + device.macAddress +
+        '0000000000000000000' + '/sessions/' + device._id +
         '/updates/')
         .set('apikey', apiKey)
         .end(function (e, res) {
@@ -1060,7 +985,7 @@
       var device = devices[0];
 
       deviceAgent.get('http://localhost:3000/projects/' +
-        device.projectId + '/sessions/' + device.macAddress +
+        device.projectId + '/sessions/' + device._id +
         '/updates/')
         .set('apikey', apiKey)
         .end(function (e, res) {
@@ -1079,7 +1004,7 @@
       var device = devices[0];
 
       deviceAgent.get('http://localhost:3000/projects/' +
-        device.projectId + '/sessions/' + device.macAddress +
+        device.projectId + '/sessions/' + device._id +
         '/updates/')
         .set('apikey', apiKey)
         .end(function (e, res) {
@@ -1109,7 +1034,7 @@
         var device = devices[0];
 
         deviceAgent.get('http://localhost:3000/projects/' +
-          device.projectId + '/sessions/' + device.macAddress +
+          device.projectId + '/sessions/' + device._id +
           '/updates/')
           .set('apikey', apiKey)
           .end(function (e, res) {
@@ -1149,7 +1074,7 @@
       // test (schemaValidation.test.js?)
 
       agent.post('http://localhost:3000/projects/' +
-        device.projectId + '/sessions/' + device.macAddress +
+        device.projectId + '/sessions/' + device._id +
         '/updates/')
         .send(sentUpdates[0])
         .end(function (e, res) {
@@ -1168,7 +1093,7 @@
       var device = devices[0];
 
       deviceAgent.get('http://localhost:3000/projects/' +
-        device.projectId + '/sessions/' + device.macAddress +
+        device.projectId + '/sessions/' + device._id +
         '/updates/')
         .set('apikey', apiKey)
         .end(function (e, res) {
@@ -1258,7 +1183,7 @@
           combinedUpdates = extend(true, combinedUpdates, maskedUpdate);
 
           agent.post('http://localhost:3000/projects/' +
-            device.projectId + '/sessions/' + device.macAddress +
+            device.projectId + '/sessions/' + device._id +
             '/updates/')
             .send(update)
             .end(function (e, res) {
@@ -1289,7 +1214,7 @@
       var device = devices[0];
 
       deviceAgent.get('http://localhost:3000/projects/' +
-        device.projectId + '/sessions/' + device.macAddress +
+        device.projectId + '/sessions/' + device._id +
         '/updates/')
         .set('apikey', apiKey)
         .end(function (e, res) {
@@ -1319,7 +1244,7 @@
       var deviceCurrentState = deviceStates[0].currentState;
 
       deviceAgent.get('http://localhost:3000/projects/' + device.projectId +
-        '/devices/' + device.macAddress + '/state/')
+        '/devices/' + device._id + '/state/')
         .set('apikey', apiKey)
         .end(function (e, res) {
           expect(e)
@@ -1328,12 +1253,6 @@
             .to.be.ok();
 
           var state = res.body.data;
-
-          console.log('state: ',
-            JSON.stringify(state, null, ' '));
-
-          console.log('deviceCurrentState: ',
-            JSON.stringify(deviceCurrentState, null, ' '));
 
           expect(utils.objMatch(state, deviceCurrentState))
             .to.be.ok();
@@ -1372,7 +1291,7 @@
         var device = devices[0];
 
         agent.del('http://localhost:3000/projects/' +
-          device.projectId + '/sessions/' + device.macAddress + '/')
+          device.projectId + '/sessions/' + device._id + '/')
           .end(function (e, res) {
             expect(e)
               .to.eql(null);
@@ -1416,7 +1335,7 @@
         var device = devices[0];
 
         agent.del('http://localhost:3000/projects/' +
-          '0000000000000000000' + '/sessions/' + device.macAddress +
+          '0000000000000000000' + '/sessions/' + device._id +
           '/')
           .end(function (e, res) {
             expect(e)
@@ -1449,7 +1368,7 @@
       var device = devices[0];
 
       agent.del('http://localhost:3000/projects/' +
-        device.projectId + '/sessions/' + device.macAddress + '/')
+        device.projectId + '/sessions/' + device._id + '/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
@@ -1479,7 +1398,7 @@
         }];
 
         agent.post('http://localhost:3000/projects/' +
-          device.projectId + '/sessions/' + device.macAddress +
+          device.projectId + '/sessions/' + device._id +
           '/updates/')
           .send(sentUpdates[0])
           .end(function (e, res) {
@@ -1498,7 +1417,7 @@
       var device = devices[0];
 
       deviceAgent.get('http://localhost:3000/projects/' +
-        device.projectId + '/sessions/' + device.macAddress +
+        device.projectId + '/sessions/' + device._id +
         '/updates/')
         .set('apikey', apiKey)
         .end(function (e, res) {
@@ -1534,16 +1453,11 @@
 
         extendedDevice.deviceName = 'TEST_DATA_DELETE_' +
           _formatTestIndex(currentProjectIndex);
-        extendedDevice.macAddress = randomMac();
 
         agent.put('http://localhost:3000/projects/' +
-          extendedDevice.projectId + '/devices/' +
-          extendedDevice.macAddress + '/')
+          extendedDevice.projectId + '/devices/')
           .set('apikey', apiKey)
           .send(extendedDevice)
-          .query({
-            deviceId: device._id
-          })
           .end(function (e, res) {
             expect(e)
               .to.eql(null);

@@ -8,8 +8,6 @@
 
   var projVersionValidator =
     require('./validators/projectVersionValidator.js');
-  var macAddressValidator =
-    require('./validators/macAddressValidator.js');
   var deviceNameValidator =
     require('./validators/deviceNameValidator.js');
   var emailValidator =
@@ -26,14 +24,6 @@
       required: true,
       trim: true,
       validate: projVersionValidator
-    },
-    macAddress: {
-      type: String,
-      required: true,
-      trim: true,
-      unique: true,
-      index: true,
-      validate: macAddressValidator
     },
     deviceName: {
       type: String,
