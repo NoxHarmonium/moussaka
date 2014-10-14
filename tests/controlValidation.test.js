@@ -128,6 +128,82 @@
 
   });
 
+  describe('Boolean control', function () {
+
+    var type = 'boolean';
+    var control = controls[type];
+    var schema = {
+      type: type,
+      lockedValues: {}
+    };
+    var data = {
+      values: {
+        b: 'false'
+      }
+    };
+
+    it('apply b (locked)', function () {
+      schema.lockedValues.b = true;
+      var newData = {};
+      control.apply(schema, data, newData);
+      expect(newData.values.s)
+        .to.be(undefined);
+    });
+
+    it('apply b (unlocked)', function () {
+      schema.lockedValues.b = false;
+      var newData = {};
+      control.apply(schema, data, newData);
+      expect(newData.values.s)
+        .to.be(data.values.s);
+    });
+
+    it('b == null', function () {
+      data.values.b = null;
+      var result = control.validate(schema, data);
+      expect(result.success)
+        .to.be(false);
+    });
+
+    it('b == true', function () {
+      data.values.b = 'true';
+      var result = control.validate(schema, data);
+      expect(result.success)
+        .to.be(true);
+    });
+
+    it('b == false', function () {
+      data.values.b = 'false';
+      var result = control.validate(schema, data);
+      expect(result.success)
+        .to.be(true);
+    });
+
+    it('b != true|false', function () {
+      data.values.b = 'False';
+      var result = control.validate(schema, data);
+      expect(result.success)
+        .to.be(false);
+
+      data.values.b = 'True';
+      result = control.validate(schema, data);
+      expect(result.success)
+        .to.be(false);
+
+      data.values.b = 5;
+      result = control.validate(schema, data);
+      expect(result.success)
+        .to.be(false);
+
+      data.values.b = 'someotherstring';
+      result = control.validate(schema, data);
+      expect(result.success)
+        .to.be(false);
+
+    });
+
+  });
+
   describe('Color control', function () {
 
     var type = 'color';

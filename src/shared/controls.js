@@ -83,6 +83,42 @@
       }
     },
 
+    'boolean': {
+      validate: function (schema, data) {
+        var value = data.values.b;
+
+        if (!utils.exists(value)) {
+          return {
+            success: false,
+            reason: 'A value is required'
+          };
+        }
+
+        if (value !== 'true' && value !== 'false') {
+          return {
+            success: false,
+            reason: 'A boolean value must be either \'true\' or ' +
+              '\'false\''
+          };
+        }
+
+        return {
+          success: true
+        };
+      },
+      apply: function (schema, currentData, newData) {
+        if (!utils.exists(newData.values)) {
+          newData.values = {};
+        }
+        var keys = ['b'];
+        _.forEach(keys, function (key) {
+          if (!schema.lockedValues || !schema.lockedValues[key]) {
+            currentData.values[key] = !!newData.values[key];
+          }
+        });
+      }
+    },
+
     'color': {
       validate: function (schema, data) {
         var keys = ['r', 'g', 'b', 'a'];
