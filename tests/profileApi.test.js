@@ -30,7 +30,7 @@
     var project = projects[0];
     var profileId = null;
     var device = devices[0];
-    var currentState = deviceStates[0];
+    var currentState = deviceStates[0].currentState;
 
     it('Reset profiles test', function (done) {
       agent.get('http://localhost:3000/test/profile_api/reset/')
@@ -55,7 +55,7 @@
         });
     });
 
-  it('Get test projects', function (done) {
+    it('Get test projects', function (done) {
       var user = users[2];
 
       agent.get('http://localhost:3000/projects/')
@@ -89,9 +89,6 @@
           expect(e)
             .to.eql(null);
 
-          console.log(res.status);
-          console.log(res.body.detail);
-
           expect(res.ok)
             .to.be.ok();
 
@@ -101,7 +98,8 @@
         });
     });
 
-    it('Save current session as profile [0] without session', function (done) {
+    it('Save current session as profile [0] without session', function (
+      done) {
       var data = {
         profileName: 'test profile 1'
       };
@@ -252,7 +250,7 @@
           //min: 0,
           //max: 100,
           values: {
-            n: 999
+            n: 90
           }
         }
       }];
@@ -264,11 +262,6 @@
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
-
-
-          console.log(res.status);
-          console.log(res.body.detail);
-
 
           expect(res.ok)
             .to.be.ok();
@@ -289,9 +282,12 @@
 
           var profile = res.body.data;
 
-          expect(utils.objMatch(
-            currentState,
-            profile.profileData))
+          expect(
+            utils.objMatch(
+              currentState,
+              profile.profileData
+            )
+          )
             .to.be.ok();
 
           done();
@@ -461,7 +457,7 @@
           var profile = res.body.data;
 
           expect(utils.objMatch(
-            device.currentState,
+            currentState,
             profile.profileData))
             .to.be.ok();
 

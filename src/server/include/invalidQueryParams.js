@@ -19,6 +19,10 @@
     Object.defineProperty(this, 'stack', {
       get: function () {
         return childError.stack;
+      },
+      set: function (value) {
+        // Needed for Q long stacks
+        childError.stack = value;
       }
     });
 

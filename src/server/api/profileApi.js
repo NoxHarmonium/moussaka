@@ -23,6 +23,29 @@
   module.exports = {
 
     //
+    // Query Parameters
+    //
+
+    qDeviceId: function (req, res, next) {
+      var deviceId = req.query.deviceId;
+      if (deviceId) {
+        Device.findOneQ({
+          _id: deviceId
+        })
+          .then(function (device) {
+            req.device = device;
+            next();
+          })
+          .fail(function (err) {
+            next(err);
+          })
+          .done();
+      } else {
+        next();
+      }
+    },
+
+    //
     // Parameters
     //
 
@@ -143,15 +166,15 @@
 
     saveProfile: function (req, res, next) {
       var project = req.project;
+      var device = req.device;
       var loggedInUser = req.user;
       var data = req.body;
-      var deviceId = req.query.deviceId;
       var profileName = data.profileName;
 
-      if (!deviceId) {
+      if (!device) {
         return res.status(409)
           .send({
-            detail: 'No device ID specified in query string. ' +
+            detail: 'No valid device ID specified in query string. ' +
               '(eg. .../profiles/?deviceId=xxx)'
           });
       }
@@ -170,41 +193,31 @@
           });
       }
 
-      var getDevice = Device.findOne({
-        '_id': deviceId
+      if (device.sessionUser !== loggedInUser._id) {
+        return res.status(401)
+          .send({
+            detail: 'Logged in user is not in current session ' +
+              'with this device.'
+          });
+      }
+
+      var p = new Profile({
+        projectId: project._id,
+        projectVersion: device.projectVersion,
+        profileName: data.profileName,
+        profileData: device.currentState,
+        owner: loggedInUser._id
       });
 
-      var createProfile = function (device) {
-        if (device.sessionUser !== loggedInUser._id) {
-          return res.status(401)
+      p.saveQ()
+        .then(function (savedProfile) {
+          res.status(200)
             .send({
-              detail: 'Logged in user is not in current session ' +
-                'with this device.'
+              data: {
+                _id: savedProfile._id
+              }
             });
-        }
-
-        var p = new Profile({
-          projectId: project._id,
-          projectVersion: device.projectVersion,
-          profileName: data.profileName,
-          profileData: device.currentState,
-          owner: loggedInUser._id
-        });
-        return p.saveQ();
-      };
-
-      var returnId = function (savedProfile) {
-        res.status(200)
-          .send({
-            data: {
-              _id: savedProfile._id
-            }
-          });
-      };
-
-      getDevice.execQ()
-        .then(createProfile)
-        .then(returnId)
+        })
         .catch(function (err) {
           next(err);
         })

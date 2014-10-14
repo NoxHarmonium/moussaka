@@ -126,7 +126,7 @@
         });
     });
 
-  it('Create project [0]', function (done) {
+    it('Create project [0]', function (done) {
       var project = projects[0];
       var user = users[2];
 
@@ -260,9 +260,6 @@
           expect(e)
             .to.eql(null);
 
-          console.log(res.status);
-          console.log(res.body.detail);
-
           expect(res.ok)
             .to.be.ok();
 
@@ -324,9 +321,6 @@
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
-
-          console.log(res.status);
-          console.log(res.body.detail);
 
           expect(res.ok)
             .to.be.ok();
@@ -1259,12 +1253,6 @@
             .to.be.ok();
 
           var state = res.body.data;
-
-          console.log('state: ',
-            JSON.stringify(state, null, ' '));
-
-          console.log('deviceCurrentState: ',
-            JSON.stringify(deviceCurrentState, null, ' '));
 
           expect(utils.objMatch(state, deviceCurrentState))
             .to.be.ok();

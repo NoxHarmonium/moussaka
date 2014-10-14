@@ -69,7 +69,7 @@
         return next();
       }
 
-     // Check for valid object ID
+      // Check for valid object ID
       // Thanks: http://stackoverflow.com/a/14942113/1153203
       if (!deviceId.match(/^[0-9a-fA-F]{24}$/)) {
         return next();

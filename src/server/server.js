@@ -78,7 +78,7 @@
 
     // TODO: Resolve why this breaks promise flow in API
     // https://github.com/kriskowal/q/issues/579
-    //Q.longStackSupport = config.q_long_stacktrace;
+    Q.longStackSupport = config.q_long_stacktrace;
 
     var app = express();
     var rootDir = process.cwd();
@@ -182,6 +182,7 @@
     // Profile API
     //
     app.param('profileId', profileApi.pProfileId);
+    app.use('/projects/:projectId/profiles/', profileApi.qDeviceId);
 
     app.get('/projects/:projectId/profiles/',
       profileApi.getProfiles);
