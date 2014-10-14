@@ -175,6 +175,14 @@
       });
 
       var createProfile = function (device) {
+        if (device.sessionUser !== loggedInUser._id) {
+          return res.status(401)
+            .send({
+              detail: 'Logged in user is not in current session ' +
+                'with this device.'
+            });
+        }
+
         var p = new Profile({
           projectId: project._id,
           projectVersion: device.projectVersion,

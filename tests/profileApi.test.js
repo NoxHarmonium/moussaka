@@ -10,6 +10,7 @@
   var _ = require('lodash');
   var Q = require('q');
   var S = require('string');
+  var extend = require('extend');
 
   var _formatTestIndex = function (index) {
     // Mongo uses alphabetical sorting so simply appending
@@ -23,10 +24,13 @@
     var users = testData.getTestUsers();
     var projects = testData.getTestProjects();
     var devices = testData.getTestDevices();
+    var deviceStates = testData.getTestDevicesStates();
+    var deviceSchemas = testData.getTestDeviceSchemas();
     var agent = superagent.agent();
-    var project = null;
+    var project = projects[0];
     var profileId = null;
-    var device = null;
+    var device = devices[0];
+    var currentState = deviceStates[0];
 
     it('Reset profiles test', function (done) {
       agent.get('http://localhost:3000/test/profile_api/reset/')
@@ -51,64 +55,84 @@
         });
     });
 
-    it('Get project created by device API tests', function (done) {
+  it('Get test projects', function (done) {
+      var user = users[2];
+
       agent.get('http://localhost:3000/projects/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
-          expect(res.body.data.length)
-            .to.be(1);
 
-          project = res.body.data[0];
-
-          done();
-        });
-    });
-
-    it('Get device created by device API tests', function (done) {
-      agent.get('http://localhost:3000/projects/' +
-        project._id + '/devices/' + devices[0].macAddress + '/')
-        .end(function (e, res) {
-          expect(e)
-            .to.eql(null);
-          expect(res.ok)
-            .to.be.ok();
-
-          device = res.body.data;
+          // Set test data id to the returned id
+          projects = res.body.data;
 
           done();
         });
     });
 
-    it('Get device schema created by device API tests', function (done) {
-      agent.get('http://localhost:3000/projects/' +
-        project._id + '/devices/' + devices[0].macAddress +
-        '/schema/')
+    it('Connect device [0] to server under project [0]', function (done) {
+      var user = users[2];
+      var apiKey = user.apiKey;
+      var project = projects[0];
+      var device = devices[0];
+      device.projectId = project._id;
+
+      var extendedDevice = extend({}, devices[0],
+        deviceStates[0], deviceSchemas[0]);
+
+      agent.put('http://localhost:3000/projects/' +
+        device.projectId + '/devices/')
+        .send(extendedDevice)
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
+
+          console.log(res.status);
+          console.log(res.body.detail);
+
           expect(res.ok)
             .to.be.ok();
 
-          device.dataSchema = res.body.data;
+          device._id = res.body.data._id;
 
           done();
         });
     });
 
-    it('Get device state created by device API tests', function (done) {
-      agent.get('http://localhost:3000/projects/' +
-        project._id + '/devices/' + devices[0].macAddress +
-        '/state/')
+    it('Save current session as profile [0] without session', function (done) {
+      var data = {
+        profileName: 'test profile 1'
+      };
+
+      agent.put('http://localhost:3000/projects/' +
+        device.projectId + '/profiles/')
+        .query({
+          deviceId: device._id
+        })
+        .send(data)
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(401);
+
+          done();
+        });
+    });
+
+    it('Start session for device [0] with user [2]', function (done) {
+      var project = projects[0];
+      var device = devices[0];
+
+      agent.put('http://localhost:3000/projects/' +
+        device.projectId + '/sessions/' + device._id + '/')
         .end(function (e, res) {
           expect(e)
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
-
-          device.currentState = res.body.data;
 
           done();
         });
@@ -216,6 +240,43 @@
         });
     });
 
+    it('Send valid control update to device [0]', function (
+      done) {
+      var project = projects[0];
+      var device = devices[0];
+
+      var updates = [{
+        'rotateSpeed': {
+          // Schema not needed, only values
+          //type: 'float',
+          //min: 0,
+          //max: 100,
+          values: {
+            n: 999
+          }
+        }
+      }];
+
+      agent.post('http://localhost:3000/projects/' +
+        device.projectId + '/sessions/' + device._id +
+        '/updates/')
+        .send(updates[0])
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+
+
+          console.log(res.status);
+          console.log(res.body.detail);
+
+
+          expect(res.ok)
+            .to.be.ok();
+
+          done();
+        });
+    });
+
     it('Retrieve profile [0]', function (done) {
 
       agent.get('http://localhost:3000/projects/' +
@@ -229,7 +290,7 @@
           var profile = res.body.data;
 
           expect(utils.objMatch(
-            device.currentState,
+            currentState,
             profile.profileData))
             .to.be.ok();
 
@@ -250,7 +311,7 @@
           var profile = res.body.data[0];
 
           expect(utils.objMatch(
-            device.currentState,
+            currentState,
             profile.profileData))
             .to.be.ok();
 
@@ -275,7 +336,7 @@
             var profile = res.body.data[0];
 
             expect(utils.objMatch(
-              device.currentState,
+              currentState,
               profile.profileData))
               .to.be.ok();
 
