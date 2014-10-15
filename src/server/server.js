@@ -139,6 +139,8 @@
       }
     });
 
+    deviceApi.resetDeviceCount();
+
     i18n.registerAppHelper(app);
 
     // Cross Domain

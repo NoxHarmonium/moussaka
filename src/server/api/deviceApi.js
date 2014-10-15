@@ -542,6 +542,26 @@
     },
 
     //
+    // Database Methods
+    //
+
+    resetDeviceCount: function() {
+      // Ensure devices are cleared out if the program is terminated
+      // TODO: Should the error handling be better?
+      // What if db is not connected?
+      Device.removeQ()
+        .then(Project.updateQ({},
+        {
+          deviceCount: 0
+        }))
+        .catch(function(ex) {
+          console.error('Error resetting device counts: ' +
+            ex.message + '\n' + ex.stack)
+        })
+        .done();
+    },
+
+    //
     // Test extensions
     //
 
