@@ -50,12 +50,16 @@ default: # The default config profile. (With documentation)
     # Uses more memory and CPU s so turn off in production
     q_long_stacktrace:      true
 
+    # What other domains can access the API
+    # See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS
+    access_control_allow_origin: ''
+
     # The settings so that emails can be sent for things such as lost password.
     # Set enabled to false to avoid errors due to incorrect settings.
     # When fake_smtp is set to true, an SMTP server is started by the server
     # to test the sending of emails. This should be set to false in production.
-    email_settings:     
-        enabled:    false    
+    email_settings:
+        enabled:    false
         user:       "testUser"
         password:   "testPassword"
         host:       "localhost"
@@ -83,8 +87,9 @@ development: # The development config profile.
     device_Timeout_Seconds: 300
     session_secret:         6zRckBzE
     q_long_stacktrace:      true
-    email_settings: 
-        enabled:    true    
+    access_control_allow_origin: '*' # Allow cross domain access for simulator
+    email_settings:
+        enabled:    true
         user:       "testUser"
         password:   "testPassword"
         host:       "localhost"
@@ -101,15 +106,16 @@ travis-ci: # The development config profile.
     locale:                 "en-US"
     salt_work_factor:       1 # Reduce the work factor even more for slower VMs
     mongo_url:              "mongodb://localhost/unity-profiles-dev"
-    enable_test_exts:       true 
+    enable_test_exts:       true
     show_friendly_errors :  true
     max_records_per_query:  20
     tempPasswordCodeLength: 8
     device_Timeout_Seconds: 300
     session_secret:         6zRckBzE
     q_long_stacktrace:      true
+    access_control_allow_origin: '*' # Allow cross domain access for simulator
     email_settings:
-        enabled:    true    
+        enabled:    true
         user:       "testUser"
         password:   "testPassword"
         host:       "localhost"
@@ -126,14 +132,14 @@ heroku:
     listen_port:            5000
     locale:                 "en-US"
     salt_work_factor:       1 # Reduce the work factor even more for slower VMs
-    enable_test_exts:       true 
+    enable_test_exts:       true
     show_friendly_errors :  true
     max_records_per_query:  20
     tempPasswordCodeLength: 8
     device_Timeout_Seconds: 300
     q_long_stacktrace:      true
     email_settings:
-        enabled:    true    
+        enabled:    true
         user:       "testUser"
         password:   "testPassword"
         host:       "localhost"

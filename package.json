@@ -7,6 +7,7 @@
     "browserify": "*",
     "chance": "*",
     "colors": "*",
+    "cors": "^2.4.2",
     "deamdify": "^0.1.1",
     "debowerify": "^0.8.1",
     "deep-equal": "*",

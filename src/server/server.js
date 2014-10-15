@@ -37,6 +37,7 @@
     var multer = require('multer');
     var errorHandler = require('errorhandler');
     var lactate = require('lactate');
+    var cors = require('cors');
 
     var config = require('../shared/config.js');
     var userApi = require('./api/userApi.js');
@@ -127,6 +128,8 @@
       app.use(errorHandler());
     }
 
+
+
     dbAccess.init(function (err) {
       if (err) {
         console.log(
@@ -137,6 +140,12 @@
     });
 
     i18n.registerAppHelper(app);
+
+    // Cross Domain
+    app.use(cors({
+        origin: config.access_control_allow_origin
+    }));
+    app.options('*', cors());
 
     //
     // User API
