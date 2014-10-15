@@ -18,7 +18,7 @@
   var deviceTimeouts = {};
 
   var expireDevice = function (device) {
-    console.log('Expiring device \'', device.macAddress,
+    console.log('Expiring device \'', device.deviceName,
       '\' due to timeout (',
       config.device_Timeout_Seconds, ' seconds )');
 
