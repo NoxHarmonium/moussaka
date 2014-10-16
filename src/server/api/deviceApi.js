@@ -67,7 +67,6 @@
       var project = req.project;
 
       if (!project) {
-        console.log('no project');
         return next();
       }
 
@@ -84,9 +83,6 @@
       findDevice.execQ()
         .then(function (device) {
           req.device = device;
-          if (!device) {
-            console.log('no device');
-          }
           next();
         })
         .catch(function (err) {
