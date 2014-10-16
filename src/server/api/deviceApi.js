@@ -40,17 +40,19 @@
   };
 
   var resetTimeout = function (device) {
-    clearTimeout(device);
+    deleteTimeout(device);
     var timeoutId = setTimeout(expireDevice,
       config.device_Timeout_Seconds * 1000,
       device);
     deviceTimeouts[device._id] = timeoutId;
   };
 
-  var clearTimeout = function (device) {
+  var deleteTimeout = function (device) {
     var timeoutId = deviceTimeouts[device._id];
     if (timeoutId) {
+      // global js method
       clearTimeout(timeoutId);
+      _.pull(deviceTimeouts, device._id);
     }
   };
 
@@ -188,7 +190,7 @@
           return project.saveQ();
         })
         .then(function (data) {
-          clearTimeout(removedDevice);
+          deleteTimeout(removedDevice);
           res.status(200)
             .send();
         })
@@ -530,6 +532,7 @@
 
       device.saveQ()
         .then(function () {
+          resetTimeout(device);
           res.status(200)
             .send({
               data: update
