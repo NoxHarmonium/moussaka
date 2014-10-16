@@ -556,7 +556,7 @@
         }))
         .catch(function(ex) {
           console.error('Error resetting device counts: ' +
-            ex.message + '\n' + ex.stack)
+            ex.message + '\n' + ex.stack);
         })
         .done();
     },
