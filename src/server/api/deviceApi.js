@@ -221,7 +221,8 @@
             deviceName: device.deviceName,
             projectId: device.projectId,
             projectVersion: device.projectVersion,
-            updatedAt: device.updatedAt
+            updatedAt: device.updatedAt,
+            sessionUser: device.sessionUser
           }
         });
     },
@@ -248,7 +249,7 @@
         });
 
         query.select('projectId projectVersion ' +
-          'updatedAt deviceName');
+          'updatedAt deviceName sessionUser');
 
         queryFilters.paginate(req.query, query);
         queryFilters.sort(req.query, query, {

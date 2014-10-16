@@ -664,6 +664,50 @@
         });
     });
 
+    it('Check device is in session', function (done) {
+      var device = devices[0];
+      var user = users[2];
+
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/devices/' + device._id + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          expect(res.body.data.sessionUser)
+            .to.eql(user.username);
+
+          done();
+        });
+    });
+
+    it('Check device list lists session correctly', function (done) {
+      var device = devices[0];
+      var user = users[2];
+
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/devices/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+
+          var devices = res.body.data;
+          var listedDevice = _.find(devices, { _id: device._id });
+
+          expect(listedDevice)
+            .to.be.ok();
+
+          expect(listedDevice.sessionUser)
+            .to.eql(user.username);
+
+          done();
+        });
+    });
+
     it('Logout user [2]', function (done) {
       agent.post('http://localhost:3000/logout/')
         .send()
