@@ -22,6 +22,7 @@
     "font-awesome": "~4.2.0",
     "angular-cookies": "~1.2.26",
     "angular-ui-router": "~0.2.11",
-    "angular-breadcrumb": "~0.2.3"
+    "angular-breadcrumb": "~0.2.3",
+    "Tabslet": "~1.4.2"
   }
 }

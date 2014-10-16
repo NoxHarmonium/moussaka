@@ -258,8 +258,8 @@
     });
 
     app.param('partialName', function (req, res, next, partialName) {
-      res.render('partials/' + partialName);
-      next();
+      var user = req.user || {};
+      res.render('partials/' + partialName, {user: user});
     });
 
     app.get('/views/partials/:partialName', function (req, res) {});

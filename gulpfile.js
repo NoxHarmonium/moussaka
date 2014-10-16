@@ -128,6 +128,9 @@ gulp.task('browserifyLibs', ['jshint'], function (cb) {
     b.require(bowerResolve('kube'), {
       expose: '_kube'
     });
+    b.require(bowerResolve('Tabslet'), {
+      expose: '_tabslet'
+    });
 
     // Modules that work well with requireJs
     b.require(bowerResolve('jquery'), {
@@ -152,8 +155,10 @@ gulp.task('browserifyApp', ['jshint'], function (cb) {
   b.external('_angular-cookies');
   b.external('_angular-breadcrumb');
   b.external('_kube');
+  b.external('_tabslet');
 
   b.external('jquery');
+
   b.transform('deamdify');
   b.transform('debowerify');
   b.bundle()

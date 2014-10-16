@@ -25,6 +25,9 @@ dashboardModule.factory('User',
 dashboardModule.factory('Project',
   require('./resources/projectResource.js'));
 
+dashboardModule.factory('Device',
+  require('./resources/deviceResource.js'));
+
 // Controllers
 
 dashboardModule.controller('navigationController',

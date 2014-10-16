@@ -14,7 +14,7 @@
         this.base();
         // TODO: Validation?
 
-        this.macAddress = '';
+        this._id = '';
         this.projectId = '';
         this.projectVersion = '';
         this.updatedAt = null;
@@ -29,9 +29,9 @@
 
       // Static Methods
 
-      Device.get = function (projectId, deviceMac) {
+      Device.get = function (projectId, deviceId) {
         return $http.get('/projects/' + projectId +
-            '/devices/' + deviceMac + '/')
+            '/devices/' + deviceId + '/')
           .then(function (response) {
             return new Device(response.data.data);
           }, BaseResource.handleError);
@@ -63,11 +63,11 @@
         var that = this;
         return $http.put('/projects/', that)
           .then(function (response) {
-            that._id = response.data.data._id;
+            that._id = response.data._id;
             // The only admin should be current user
             // at this point, there shouldn't be any
             // users.
-            that.admins = response.data.data.admins;
+            that.admins = response.data.admins;
             return that;
           }, BaseResource.handleError);
       };

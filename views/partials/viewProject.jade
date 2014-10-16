@@ -1,17 +1,44 @@
 div#tools-progress.dashboard-progress
     span
-        
+
 div.dashboard-sidebar-container
 
 div.dashboard-view
     #viewProject
         h2 {{project.name}}
+        h4= t("app.viewProject.summary")
         dl
-            dt= t("app.viewProject.projectContributors") 
+            dt= t("app.viewProject.projectContributors")
             dd {{getTotalContributors()}}
             dt= t("app.viewProject.connectedDevices")
             dd {{project.deviceCount}}
 
+
+        h4= t("app.viewProject.deviceConfig")
+        p= t("app.viewProject.deviceConfigBlurb")
+        div.code-example.tab-container
+            div.tabs.nav-tabs
+                ul
+                    li
+                        a(href="javascript:void(0)" data-target="#exampleCSharp") C#
+                    li
+                        a(href="javascript:void(0)" data-target="#exampleJavascript") Javascript
+
+                div#exampleCSharp
+                    code.
+                        {
+                        &nbsp;&nbsp;projectVersion =  'Your project version here'
+                        &nbsp;&nbsp;apiKey = #{user.apiKey},
+                        &nbsp;&nbsp;projectId =  {{project._id}}
+                        }
+                div#exampleJavascript
+                    code.
+                        {
+                        &nbsp;&nbsp;deviceName: 'Your device name here',
+                        &nbsp;&nbsp;projectVersion: 'Your project version here'
+                        &nbsp;&nbsp;apiKey: #{user.apiKey},
+                        &nbsp;&nbsp;projectId: {{project._id}}
+                        }
         h4= t("app.viewProject.deviceList")
 
         p(ng-hide="project.deviceCount > 0")= t("app.viewProject.noDevices")
@@ -20,7 +47,7 @@ div.dashboard-view
             ng-show="project.deviceCount > 0"
             ng-repeat="device in devices")
             li(ng-click="openDevice(device)")
-                div {{device.name}}
-       
-                        
+                div {{device.deviceName}}
+
+
 

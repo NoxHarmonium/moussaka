@@ -30,7 +30,17 @@
 
 body {
     background: url('/img/bg-fade.jpg') no-repeat center center fixed;
-} 
+}
+
+div.code-example {
+    code {
+        white-space: pre-line;
+        width: 100%;
+        margin: auto;
+        padding-top: 0.5em;
+        padding-bottom: 1em;
+    }
+}
 
 header.dashboard-header {
 
@@ -80,7 +90,7 @@ header.dashboard-header {
             float: left;
         }
     }
- 
+
     div.nav-wrapper {
         width: @center-width;
         height: 100%;
@@ -197,7 +207,7 @@ div.dashboard-outer {
         }
 
         ul.device-list {
-            
+
             li {
                 background-color: @color-black-pastel;
                 height: @device-block-height;
@@ -384,7 +394,7 @@ div.dashboard-sidebar-container {
 @media (max-width: 768px) {
     body {
         background: @color-bg;
-    } 
+    }
 
     header.dashboard-header {
         div.nav-wrapper {

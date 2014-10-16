@@ -15,7 +15,7 @@
         "password": "Password",
         "back": "Back",
         "firstName": "First Name",
-        "lastName": "Last Name"   
+        "lastName": "Last Name"
     },
 
     "loginForm": {
@@ -88,7 +88,10 @@
         "connectedDevices": "Connected Devices",
         "projectContributors": "Project Contributors",
         "deviceList": "Device List",
-        "noDevices": "There are no connected devices for this project at this time."
+        "noDevices": "There are no connected devices for this project at this time.",
+        "deviceConfig": "Device Configuration",
+        "deviceConfigBlurb": "Copy and paste the configuration below into your game to get started.",
+        "summary": "Summary"
     }
   }
 }

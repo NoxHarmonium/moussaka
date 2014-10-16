@@ -7,27 +7,44 @@
 
   // Public functions
 
-  module.exports = ['$scope', 'Project',
-    '$stateParams', '$state', '$cookies',
+  module.exports = ['$scope', 'Project', 'Device',
+    '$stateParams', '$state', '$cookies', '$q',
     function projectEditController($scope, Project,
-      $stateParams, $state, $cookies) {
-      // 
+      Device, $stateParams, $state, $cookies, $q) {
+      //
       // Setup
       //
+
+      // Make sure tab control is correct
+      $('.tabs').tabslet({
+        mouseevent: 'click',
+        attribute: 'data-target',
+      });
 
       var projectId = $stateParams.projectId;
       $scope.loading = true;
 
       if (projectId) {
-        // Get an existing project
-        Project.get(projectId)
-          .then(function (project) {
+        // Get an existing project and then devices
+
+        $q.all([
+            Project.get(projectId),
+            Device.getAll(projectId)
+          ]).then(function (results) {
+            var project = results[0];
+            var deviceResponse = results[1];
+            var devices = deviceResponse.devices;
+
+            console.log(JSON.stringify(devices));
+
             if (!project) {
               // TODO: Error handler page
               throw new Error('Project doesnt exist!');
             } else {
               $scope.project = project;
             }
+
+            $scope.devices = devices;
           })
           .catch(function (err) {
             $scope.handleError(err);
