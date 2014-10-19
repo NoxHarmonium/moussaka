@@ -46,7 +46,7 @@ div.dashboard-view
         ul.device-list.blocks-3(
             ng-show="project.deviceCount > 0"
             ng-repeat="device in devices")
-            li(ng-click="openDevice(device)")
+            li(ng-click="openDevice(device)" ng-class="{ 'locked': device.locked  }")
                 div {{device.deviceName}}
 
 

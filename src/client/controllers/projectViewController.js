@@ -69,6 +69,12 @@
         return $scope.project.users.length +
           $scope.project.admins.length;
       };
+
+      $scope.openDevice = function (device) {
+        $state.go('deviceSession', {
+          deviceId: device._id
+        });
+      };
     }
   ];
 
