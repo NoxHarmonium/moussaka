@@ -40,7 +40,7 @@
         'by BioWare and published by LucasArts. ' +
         'Written by Drew Karpyshyn, the ' +
         'soundtrack for the game was composed by Jeremy Soule. ',
-      deviceCount: 0
+      deviceCount: 0,
     }, {
       //_id: 'to be defined',
       name: 'FTL: Faster Than Light',
@@ -54,7 +54,7 @@
         'delivered to an allied ' +
         'fleet several sectors away, while being pursued by a ' +
         'large rebel fleet. ',
-      deviceCount: 0
+      deviceCount: 0,
     }, {
       //_id: 'to be defined',
       name: 'The Stanley Parable',
@@ -75,7 +75,7 @@
       name: 'A Project Without A Description',
       users: [],
       admins: ['test.account1@test.com'],
-      deviceCount: 0
+      deviceCount: 0,
     }];
   };
 
@@ -84,6 +84,8 @@
       projectId: '',
       projectVersion: '0.3',
       deviceName: 'Jeff\'s iPad',
+      locked: false,
+      sessionUser: null
     }];
   };
 

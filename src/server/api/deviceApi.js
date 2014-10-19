@@ -12,6 +12,7 @@
   var controls = require('../../shared/controls.js');
   var queryFilters = require('../include/queryFilters.js');
   var InvalidDataError = require('../include/invalidDataError.js');
+  var extend = require('extend');
 
   // Device expiry functionality
 
@@ -199,6 +200,7 @@
     getDevice: function (req, res, next) {
       var project = req.project;
       var device = req.device;
+      var loggedInUser = req.user;
 
       if (!project) {
         return res.status(404)
@@ -222,13 +224,15 @@
             projectId: device.projectId,
             projectVersion: device.projectVersion,
             updatedAt: device.updatedAt,
-            sessionUser: device.sessionUser
+            sessionUser: device.sessionUser,
+            locked: utils.exists(device.sessionUser)
           }
         });
     },
 
     listDevices: function (req, res, next) {
       var project = req.project;
+      var loggedInUser = req.user;
 
       if (!req.project) {
         return res.status(404)
@@ -262,11 +266,26 @@
 
       Q.all([countTotalRecords, getPaginatedRecords])
         .spread(function (totalRecordCount, devices) {
+
+          var projectedDevices = [];
+
+          _.each(devices, function (device) {
+              projectedDevices.push({
+                _id: device._id,
+                deviceName: device.deviceName,
+                projectId: device.projectId,
+                projectVersion: device.projectVersion,
+                updatedAt: device.updatedAt,
+                sessionUser: device.sessionUser,
+                locked: utils.exists(device.sessionUser)
+              });
+          });
+
           res.status(200)
             .send({
-              data: devices,
+              data: projectedDevices,
               control: {
-                recordsSent: devices.length,
+                recordsSent: projectedDevices.length,
                 totalRecords: totalRecordCount
               }
             });

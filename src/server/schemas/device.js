@@ -47,7 +47,8 @@
       type: String,
       required: false,
       trim: true,
-      validate: emailValidator
+      validate: emailValidator,
+      default: null
     },
     lastAccess: {
       type: Date,

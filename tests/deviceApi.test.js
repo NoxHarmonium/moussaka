@@ -651,6 +651,7 @@
     it('Start session for device [0] with user [2]', function (done) {
       var project = projects[0];
       var device = devices[0];
+      var user = users[2];
 
       agent.put('http://localhost:3000/projects/' +
         device.projectId + '/sessions/' + device._id + '/')
@@ -659,6 +660,8 @@
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
+
+          device.sessionUser = user.username;
 
           done();
         });
@@ -678,6 +681,8 @@
 
           expect(res.body.data.sessionUser)
             .to.eql(user.username);
+          expect(res.body.data.locked)
+            .to.be.ok();
 
           done();
         });
@@ -696,11 +701,14 @@
             .to.be.ok();
 
           var devices = res.body.data;
-          var listedDevice = _.find(devices, { _id: device._id });
+          var listedDevice = _.find(devices, {
+            _id: device._id
+          });
 
           expect(listedDevice)
             .to.be.ok();
-
+          expect(listedDevice.locked)
+            .to.be.ok();
           expect(listedDevice.sessionUser)
             .to.eql(user.username);
 
@@ -1418,6 +1426,28 @@
             .to.eql(null);
           expect(res.ok)
             .to.be.ok();
+
+          device.sessionUser = null;
+
+          done();
+        });
+    });
+
+    it('Check device [0] has been unlocked', function (done) {
+      var device = devices[0];
+
+      agent.get('http://localhost:3000/projects/' +
+        device.projectId + '/devices/' + device._id + '/')
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+
+          expect(res.ok)
+            .to.be.ok();
+
+          expect(res.body.data.locked)
+            .to.eql(false);
+
 
           done();
         });
