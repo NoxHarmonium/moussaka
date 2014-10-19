@@ -145,7 +145,7 @@
 
     // Cross Domain
     app.use(cors({
-        origin: config.access_control_allow_origin
+      origin: config.access_control_allow_origin
     }));
     app.options('*', cors());
 
@@ -259,7 +259,9 @@
 
     app.param('partialName', function (req, res, next, partialName) {
       var user = req.user || {};
-      res.render('partials/' + partialName, {user: user});
+      res.render('partials/' + partialName, {
+        user: user
+      });
     });
 
     app.get('/views/partials/:partialName', function (req, res) {});

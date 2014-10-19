@@ -16,10 +16,11 @@
       //
 
       // Make sure tab control is correct
-      $('.tabs').tabslet({
-        mouseevent: 'click',
-        attribute: 'data-target',
-      });
+      $('.tabs')
+        .tabslet({
+          mouseevent: 'click',
+          attribute: 'data-target',
+        });
 
       var projectId = $stateParams.projectId;
       $scope.loading = true;
@@ -28,9 +29,10 @@
         // Get an existing project and then devices
 
         $q.all([
-            Project.get(projectId),
-            Device.getAll(projectId)
-          ]).then(function (results) {
+          Project.get(projectId),
+          Device.getAll(projectId)
+        ])
+          .then(function (results) {
             var project = results[0];
             var deviceResponse = results[1];
             var devices = deviceResponse.devices;
@@ -56,7 +58,6 @@
         // TODO: Error handler page
         throw new Error('Project doesnt exist!');
       }
-
 
       //
       // Actions

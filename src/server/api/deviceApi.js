@@ -270,15 +270,15 @@
           var projectedDevices = [];
 
           _.each(devices, function (device) {
-              projectedDevices.push({
-                _id: device._id,
-                deviceName: device.deviceName,
-                projectId: device.projectId,
-                projectVersion: device.projectVersion,
-                updatedAt: device.updatedAt,
-                sessionUser: device.sessionUser,
-                locked: utils.exists(device.sessionUser)
-              });
+            projectedDevices.push({
+              _id: device._id,
+              deviceName: device.deviceName,
+              projectId: device.projectId,
+              projectVersion: device.projectVersion,
+              updatedAt: device.updatedAt,
+              sessionUser: device.sessionUser,
+              locked: utils.exists(device.sessionUser)
+            });
           });
 
           res.status(200)
@@ -564,16 +564,15 @@
     // Database Methods
     //
 
-    resetDeviceCount: function() {
+    resetDeviceCount: function () {
       // Ensure devices are cleared out if the program is terminated
       // TODO: Should the error handling be better?
       // What if db is not connected?
       Device.removeQ()
-        .then(Project.updateQ({},
-        {
+        .then(Project.updateQ({}, {
           deviceCount: 0
         }))
-        .catch(function(ex) {
+        .catch(function (ex) {
           console.error('Error resetting device counts: ' +
             ex.message + '\n' + ex.stack);
         })
