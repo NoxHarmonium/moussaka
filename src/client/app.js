@@ -46,6 +46,10 @@ dashboardModule.controller('projectViewController',
   require('./controllers/projectViewController.js')
 );
 
+dashboardModule.controller('deviceSessionController',
+  require('./controllers/deviceSessionController.js')
+);
+
 // Routes
 
 dashboardModule.config(require('./routes/dashboardRoute.js'));

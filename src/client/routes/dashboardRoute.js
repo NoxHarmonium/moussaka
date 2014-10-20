@@ -39,6 +39,15 @@
             ncyBreadcrumbLabel: '{{project.name}}',
             ncyBreadcrumbParent: 'listProjects'
           }
+        })
+        .state('deviceSession', {
+          url: '/viewProject/:projectId/session/:deviceId',
+          templateUrl: '/views/partials/deviceSession',
+          controller: 'deviceSessionController',
+          data: {
+            ncyBreadcrumbLabel: '{{device.deviceName}}',
+            ncyBreadcrumbParent: 'viewProject'
+          }
         });
     }
   ];
