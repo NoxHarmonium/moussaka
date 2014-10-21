@@ -15,7 +15,10 @@ dashboardModule.config(require('./config/breadcrumbConfig.js'));
 
 // Directives
 
-dashboardModule.directive('ngEnter', require('./directives/ngEnter.js'));
+dashboardModule.directive('ngEnter',
+  require('./directives/ngEnter.js'));
+dashboardModule.directive('staticInclude',
+  require('./directives/staticInclude.js'));
 
 // Resources
 

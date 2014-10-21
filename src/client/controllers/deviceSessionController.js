@@ -22,14 +22,17 @@
       $q.all([
         Device.get(projectId, deviceId),
         Project.get(projectId)
-        ])
+      ])
         .then(function (results) {
           var device = results[0];
           var project = results[1];
           $scope.device = device;
           $scope.project = project;
-          console.log(device.deviceName);
-          //device.startSession();
+          return device.startSession();
+        })
+        .then(function (result) {
+          $scope.dataSchema = result.dataSchema;
+          $scope.currentState = result.currentState;
         })
         .catch(function (err) {
           $scope.handleError(err);
@@ -41,6 +44,18 @@
       //
       // Actions
       //
+
+      $scope.getControlUrl = function (schemaValues) {
+        return '/views/controls/' + schemaValues.type;
+      };
+
+      $scope.sendUpdate = function (schemaName) {
+        // TODO: Collect updates over a period of time (1s) and send
+        // in batch to prevent server spamming
+        var updates = {};
+        updates[schemaName] = $scope.currentState[schemaName];
+        $scope.device.sendUpdates(updates);
+      };
 
       $scope.handleError = function (error) {
         var detail;

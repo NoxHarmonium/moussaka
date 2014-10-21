@@ -336,7 +336,9 @@
           res.status(200)
             .send({
               data: {
-                '_id': data._id
+                _id: data._id,
+                dataSchema: device.dataSchema,
+                currentState: device.currentState
               }
             });
         })
