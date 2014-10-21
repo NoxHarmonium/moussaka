@@ -45,7 +45,7 @@
         var keys = ['n'];
         _.forEach(keys, function (key) {
           if (!schema.lockedValues || !schema.lockedValues[key]) {
-            currentData.values[key] = newData.values[key];
+            currentData.values[key] = parseFloat(newData.values[key]);
           }
         });
       }
@@ -77,7 +77,7 @@
         var keys = ['s'];
         _.forEach(keys, function (key) {
           if (!schema.lockedValues || !schema.lockedValues[key]) {
-            currentData.values[key] = newData.values[key];
+            currentData.values[key] = String(newData.values[key]);
           }
         });
       }
@@ -161,7 +161,7 @@
         var keys = ['r', 'g', 'b', 'a'];
         _.forEach(keys, function (key) {
           if (!schema.lockedValues || !schema.lockedValues[key]) {
-            currentData.values[key] = newData.values[key];
+            currentData.values[key] = parseInt(newData.values[key]);
           }
         });
       }
@@ -195,7 +195,7 @@
         var keys = ['x', 'y', 'z'];
         _.forEach(keys, function (key) {
           if (!schema.lockedValues || !schema.lockedValues[key]) {
-            currentData.values[key] = newData.values[key];
+            currentData.values[key] = parseFloat(newData.values[key]);
           }
         });
       }
