@@ -16,7 +16,7 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "~2.1.1",
+    "jquery": "^2.1.1",
     "angular": "^1.2.25",
     "kube": "https://github.com/noxharmonium/kube.git#master",
     "font-awesome": "~4.2.0",
@@ -25,6 +25,6 @@
     "angular-breadcrumb": "^0.2.3",
     "Tabslet": "^1.4.2",
     "angular-spectrum-colorpicker": "^1.3.4",
-    "spectrum": "^1.6.0"
+    "spectrum": "^1.5.2"
   }
 }
