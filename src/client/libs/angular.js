@@ -1,6 +1,6 @@
 // Shim angular so it isn't global
 
-// Include the full jQuery so angular doens't use the 
+// Include the full jQuery so angular doens't use the
 // light version it comes with
 window.$ = window.jQuery = require('jquery');
 
@@ -9,5 +9,6 @@ require('_angular');
 require('_angular-ui-router');
 require('_angular-cookies');
 require('_angular-breadcrumb');
+require('_angular-spectrum-colorpicker');
 
 module.exports = window.angular;

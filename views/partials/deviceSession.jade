@@ -7,7 +7,7 @@ div.dashboard-view
     #deviceSession
         h2 {{device.name}}
 
-        p {{ currentState }}
+        // TODO: Don't display schema templates that don't exist
 
         div(ng-repeat="(schemaName, schemaValues) in dataSchema")
             h4 {{ schemaName }}

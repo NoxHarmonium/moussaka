@@ -94,7 +94,9 @@
           };
         }
 
-        if (value !== 'true' && value !== 'false') {
+        var sValue = value.toString();
+
+        if (sValue !== 'true' && sValue !== 'false') {
           return {
             success: false,
             reason: 'A boolean value must be either \'true\' or ' +

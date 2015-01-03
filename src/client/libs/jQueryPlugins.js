@@ -5,7 +5,8 @@ window.$ = window.jQuery = require('jquery');
 
 // Put all the bower loaded jquery plugins here
 
-require('_tabslet');
+require('_tabslet'); // Tab support
+require('_spectrum')(window.$); // Color picker
 
 // jQuery plugins don't really return anything so
 // just return jQuery

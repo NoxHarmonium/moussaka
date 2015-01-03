@@ -6,7 +6,12 @@ var jQueryPlugins = require('./libs/jQueryPlugins.js');
 //// ## Dashboard Module ##
 
 var dashboardModule = angular.module(
-  'dashboardModule', ['ngCookies', 'ui.router', 'ncy-angular-breadcrumb']
+  'dashboardModule', [
+    'ngCookies',
+    'ui.router',
+    'ncy-angular-breadcrumb',
+    'angularSpectrumColorpicker'
+    ]
 );
 
 // Config

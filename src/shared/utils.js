@@ -11,11 +11,11 @@
   };
 
   module.exports = {
-    // Checks if the two arrays hold identical objects 
+    // Checks if the two arrays hold identical objects
     // Checks by property values rather than reference.
     arrayMatch: function (objArrayA, objArrayB) {
 
-      //console.log('Match: ' + JSON.stringify(objArrayA) + 
+      //console.log('Match: ' + JSON.stringify(objArrayA) +
       //   ' and ' + JSON.stringify(objArrayB) );
 
       // Reference Equality
@@ -129,7 +129,7 @@
       } else {
         return null;
       }
-    }
+    },
 
   };
 })(require, module);

@@ -52,7 +52,11 @@ var paths = {
   fontSrc: [
     'bower_components/font-awesome/fonts/*'
   ],
-  fontDest: 'public/fonts/'
+  fontDest: 'public/fonts/',
+  bowerCssSrc: [
+    'bower_components/spectrum/spectrum.css'
+  ],
+  bowerCssDest: './public/css'
 };
 
 var onError = function (err) {
@@ -106,6 +110,11 @@ gulp.task('copyFonts', function () {
     .pipe(gulp.dest(paths.fontDest));
 });
 
+gulp.task('copyBowerCss', function () {
+  return gulp.src(paths.bowerCssSrc)
+    .pipe(gulp.dest(paths.bowerCssDest));
+});
+
 gulp.task('browserifyLibs', ['jshint'], function (cb) {
   // build out angular and jquery to a library file called libs.js
   bowerResolve.init(function () {
@@ -124,6 +133,12 @@ gulp.task('browserifyLibs', ['jshint'], function (cb) {
     });
     b.require(bowerResolve('angular-breadcrumb'), {
       expose: '_angular-breadcrumb'
+    });
+    b.require(bowerResolve('spectrum'), {
+      expose: '_spectrum'
+    });
+    b.require(bowerResolve('angular-spectrum-colorpicker'), {
+      expose: '_angular-spectrum-colorpicker'
     });
     b.require(bowerResolve('kube'), {
       expose: '_kube'
@@ -154,6 +169,8 @@ gulp.task('browserifyApp', ['jshint'], function (cb) {
   b.external('_angular-ui-router');
   b.external('_angular-cookies');
   b.external('_angular-breadcrumb');
+  b.external('_spectrum');
+  b.external('_angular-spectrum-colorpicker');
   b.external('_kube');
   b.external('_tabslet');
 
@@ -200,7 +217,7 @@ gulp.task('watchLess', function () {
 });
 
 gulp.task('default', ['all']);
-gulp.task('compile', ['browserifyAll', 'less', 'copyFonts']);
+gulp.task('compile', ['browserifyAll', 'less', 'copyFonts', 'copyBowerCss']);
 gulp.task('all', ['test', 'prettify']);
 
 // Hack to stop gulp from hanging after mocha test

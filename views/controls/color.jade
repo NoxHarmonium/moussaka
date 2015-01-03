@@ -1,0 +1,6 @@
+form(ng-model-options="{ getterSetter: true }")
+    spectrum-colorpicker(
+        ng-model="getSetColorAsInteger(currentState[schemaName])"
+        ng-change="sendUpdate(schemaName)"
+        options="{showInput: true, showAlpha: true}"
+        )
