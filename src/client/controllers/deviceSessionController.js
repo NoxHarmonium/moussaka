@@ -6,6 +6,7 @@
   var $ = require('jquery');
   var controls = require('../../shared/controls.js');
   var Utils = require('../../shared/utils.js');
+  // TODO: tinycolor is duplicated. It is also embedded in spectrum
   var tinycolor = require('tinycolor2');
 
   // Public functions
@@ -54,7 +55,8 @@
 
       $scope.getSetColorAsInteger = function(colorObj) {
         // Return a function used by angular to get and set the color
-        // object valus
+        // object values
+        // Warning: This is a bit hacky to interop with color picker
         return function(newValue) {
           if (Utils.exists(newValue)) {
 
@@ -69,7 +71,7 @@
             colorObj.values.r = parsedColor.r;
             colorObj.values.g = parsedColor.g;
             colorObj.values.b = parsedColor.b;
-            colorObj.values.a = parsedColor.a;
+            colorObj.values.a = parsedColor.a * 255.0;
 
             // Return it here to skip an unnessesary parse below
             return newValue;
@@ -77,9 +79,12 @@
 
           // Convert the color object into hex string
           // for the color picker
-          return tinycolor.
-            fromRatio(colorObj.values)
-            .toHexString();
+          return tinycolor({
+            r: colorObj.values.r,
+            g: colorObj.values.g,
+            b: colorObj.values.b,
+            a: colorObj.values.a / 255.0
+          }).toString('hex8');
         };
       };
 
