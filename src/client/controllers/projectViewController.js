@@ -3,7 +3,7 @@
 
   var ApiError = require('../exceptions/apiError.js');
   var _ = require('lodash');
-  var $ = require('jquery');
+  var $ = window.$;
 
   // Public functions
 

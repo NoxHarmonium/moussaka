@@ -57,6 +57,7 @@
   },
   "description": "Open Source Game Prototyping Framework",
   "devDependencies": {
+    "bower-files": "^2.2.1",
     "cheerio": "^0.17.0",
     "coveralls": "^2.11.2",
     "expect.js": "^0.3.1",

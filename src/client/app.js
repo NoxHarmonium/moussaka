@@ -1,7 +1,4 @@
 'use strict';
-var angular = require('./libs/angular.js');
-var kube = require('./libs/kube.js');
-var jQueryPlugins = require('./libs/jQueryPlugins.js');
 
 //// ## Dashboard Module ##
 

@@ -15,7 +15,8 @@ var gulp = require('gulp'),
   bowerResolve = require('bower-resolve'),
   runSequence = require('run-sequence'),
   plumber = require('gulp-plumber'),
-  gutil = require('gulp-util');
+  gutil = require('gulp-util'),
+  bowerFiles = require('bower-files');
 
 
 
@@ -53,10 +54,8 @@ var paths = {
     'bower_components/font-awesome/fonts/*'
   ],
   fontDest: 'public/fonts/',
-  bowerCssSrc: [
-    'bower_components/spectrum/spectrum.css'
-  ],
-  bowerCssDest: './public/css'
+  bowerCssDest: './public/css',
+  bowerManifest: 'bower.json'
 };
 
 var onError = function (err) {
@@ -110,96 +109,29 @@ gulp.task('copyFonts', function () {
     .pipe(gulp.dest(paths.fontDest));
 });
 
-gulp.task('copyBowerCss', function () {
-  return gulp.src(paths.bowerCssSrc)
+gulp.task('bowerJsDeps', function () {
+  gulp.src(bowerFiles().js)
+    .pipe(concat('libs.js'))
+    //.pipe(uglify())
+    .pipe(gulp.dest(paths.browserifyDest));
+});
+
+gulp.task('bowerCssDeps', function () {
+  gulp.src(bowerFiles().css)
+    .pipe(concat('libs.css'))
+    //.pipe(uglify())
     .pipe(gulp.dest(paths.bowerCssDest));
 });
 
-gulp.task('browserifyLibs', ['jshint'], function (cb) {
-  // build out angular and jquery to a library file called libs.js
-  bowerResolve.init(function () {
-    var b = browserify(browserifyOptions);
-
-    // Modules that only work globally and require shimming
-    // (Denoted by underscore prefix)
-    b.require(bowerResolve('angular'), {
-      expose: '_angular'
-    });
-    b.require(bowerResolve('angular-ui-router'), {
-      expose: '_angular-ui-router'
-    });
-    b.require(bowerResolve('angular-cookies'), {
-      expose: '_angular-cookies'
-    });
-    b.require(bowerResolve('angular-breadcrumb'), {
-      expose: '_angular-breadcrumb'
-    });
-    b.require(bowerResolve('spectrum'), {
-      expose: '_spectrum'
-    });
-    b.require(bowerResolve('angular-spectrum-colorpicker'), {
-      expose: '_angular-spectrum-colorpicker'
-    });
-    b.require(bowerResolve('kube'), {
-      expose: '_kube'
-    });
-    // TODO: Replace with jQuery UI control
-    b.require(bowerResolve('Tabslet'), {
-      expose: '_tabslet'
-    });
-    b.require(bowerResolve('jquery-ui'), {
-      expose: '_jquery-ui'
-    });
-    b.require(bowerResolve('angular-ui-slider'), {
-      expose: '_angular-ui-slider'
-    });
-
-    // Modules that work well with requireJs
-    b.require(bowerResolve('jquery'), {
-      expose: 'jquery'
-    });
-
-
-    b.transform('deamdify');
-    b.transform('debowerify');
-    b.bundle()
-      .pipe(source('libs.js'))
-      .pipe(gulp.dest(paths.browserifyDest))
-      .on('end', cb);
-  });
-});
-
 gulp.task('browserifyApp', ['jshint'], function (cb) {
-  // Compile the main app bundle using the libs bundle
+  // Compile the main app bundle
   var b = browserify(browserifyOptions);
   b.add(paths.browserifySrc);
-  b.external('_angular');
-  b.external('_angular-ui-router');
-  b.external('_angular-cookies');
-  b.external('_angular-breadcrumb');
-  b.external('_spectrum');
-  b.external('_angular-spectrum-colorpicker');
-  b.external('_kube');
-  b.external('_tabslet');
-  b.external('_jquery-ui');
-  b.external('_angular-ui-slider');
 
-  b.external('jquery');
-
-  b.transform('deamdify');
-  b.transform('debowerify');
   b.bundle()
     .pipe(source('app.js'))
     .pipe(gulp.dest(paths.browserifyDest))
     .on('end', cb);
-});
-
-gulp.task('browserifyAll', ['jshint'], function (callback) {
-  runSequence(
-    'browserifyLibs',
-    'browserifyApp',
-    callback
-  );
 });
 
 gulp.task('test', ['compile'], function () {
@@ -219,6 +151,7 @@ gulp.task('watch', function () {
   isWatching = true;
   gulp.watch(paths.scripts, ['browserifyApp']);
   gulp.watch(paths.lessDir, ['less']);
+  gulp.watch(paths.bowerManifest, ['bowerDeps']);
 });
 
 gulp.task('watchLess', function () {
@@ -227,7 +160,8 @@ gulp.task('watchLess', function () {
 });
 
 gulp.task('default', ['all']);
-gulp.task('compile', ['browserifyAll', 'less', 'copyFonts', 'copyBowerCss']);
+gulp.task('compile', ['bowerJsDeps', 'bowerCssDeps', 'browserifyApp',
+  'less', 'copyFonts']);
 gulp.task('all', ['test', 'prettify']);
 
 // Hack to stop gulp from hanging after mocha test

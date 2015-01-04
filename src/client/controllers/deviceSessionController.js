@@ -3,7 +3,7 @@
 
   var ApiError = require('../exceptions/apiError.js');
   var _ = require('lodash');
-  var $ = require('jquery');
+  var $ = window.$;
   var controls = require('../../shared/controls.js');
   var Utils = require('../../shared/utils.js');
   // TODO: tinycolor is duplicated. It is also embedded in spectrum
