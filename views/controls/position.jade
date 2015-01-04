@@ -1,9 +1,22 @@
-form
-    label Position
-        div.input-groups.width-100
-            span.input-prepend x
-                input(ng-model="currentState[schemaName].values.x" ng-change="sendUpdate(schemaName)")
-            span.input-prepend y
-                input(ng-model="currentState[schemaName].values.y" ng-change="sendUpdate(schemaName)")
-            span.input-prepend z
-                input(ng-model="currentState[schemaName].values.z" ng-change="sendUpdate(schemaName)")
+form.control.forms(method="post" action="")
+    fieldset
+        legend
+            span(ng-bind="schemaName")
+
+        ul.forms-inline-list
+            li
+                span.forms-desc x
+                input(name="positionX" type="text" size="4" ng-disabled="getLockedValues(schemaName).x" ng-model="currentState[schemaName].values.x" ng-change="sendUpdate(schemaName)")
+
+            li
+                span.forms-desc y
+                input(name="positionY" type="text" size="4" ng-disabled="getLockedValues(schemaName).y" ng-model="currentState[schemaName].values.y" ng-change="sendUpdate(schemaName)")
+
+            li
+                span.forms-desc z
+                input(name="positionZ" type="text" size="4" ng-disabled="getLockedValues(schemaName).z" ng-model="currentState[schemaName].values.z" ng-change="sendUpdate(schemaName)")
+
+        div.lock-desc.form-desc(ng-show="getLockedValueCount(schemaName) > 0")
+            span.fa.fa-lock
+                span &nbsp; The following values are locked: &nbsp;
+                span(ng-bind="getLockValuesText(schemaName)")

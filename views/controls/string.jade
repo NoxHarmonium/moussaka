@@ -1,4 +1,6 @@
-form
-    label Text
-        div.input-groups.width-100
+form.control.forms(method="post" action="")
+    fieldset
+        legend
+            span(ng-bind="schemaName")
+        div.input-groups.width-50
             input(ng-model="currentState[schemaName].values.s" ng-change="sendUpdate(schemaName)")

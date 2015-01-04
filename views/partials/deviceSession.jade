@@ -10,7 +10,6 @@ div.dashboard-view
         // TODO: Don't display schema templates that don't exist
 
         div(ng-repeat="(schemaName, schemaValues) in dataSchema")
-            h4 {{ schemaName }}
             div(static-include="getControlUrl(schemaValues)")
 
 

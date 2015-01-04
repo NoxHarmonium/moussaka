@@ -1,4 +1,13 @@
-form
-    label Boolean
-        div.input-groups.width-100
-            input(type="checkbox" ng-model="currentState[schemaName].values.b" ng-change="sendUpdate(schemaName)")
+form.control.forms(method="post" action="")
+    fieldset
+        legend
+            span(ng-bind="schemaName")
+
+        ul.forms-list
+            li
+                input(type="checkbox" name="booleanEnabled" ng-disabled="getLockedValues(schemaName).b" ng-model="currentState[schemaName].values.b" ng-change="sendUpdate(schemaName)")
+                label(for="booleanEnabled" ng-class="{'forms-desc': getLockedValues(schemaName).b}") Enabled
+
+        div.lock-desc.form-desc(ng-show="getLockedValueCount(schemaName) > 0")
+            span.fa.fa-lock
+            span &nbsp; This control is locked.

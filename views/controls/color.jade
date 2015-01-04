@@ -1,30 +1,15 @@
-// TODO: Work out how to define a variable on the parent element for reuse on the children
-// to reduce code
-form(ng-model-options="{ getterSetter: true }")
-    label Color
-        div.width-100
-            ul.forms-inline-list
-                li
-                    spectrum-colorpicker.colorpicker(
-                        ng-model="getSetColorAsInteger(currentState[schemaName], schemaName)"
-                        ng-change="sendUpdate(schemaName)"
-                        options="{showInput: false, showAlpha: true, format: 'rgb'}"
-                        )
-                li
-                    span &nbsp;
-                li
-                    span(ng-class="{'forms-desc': getLockedValues(schemaName).r}") r
-                    input(size="3" ng-disabled="getLockedValues(schemaName).r" ng-model="currentState[schemaName].values.r" ng-change="sendUpdate(schemaName)")
-                    span(ng-show="getLockedValues(schemaName).r").forms-desc.fa.fa-lock
-                li
-                    span(ng-class="{'forms-desc': getLockedValues(schemaName).g}") g
-                    input(size="3" ng-disabled="getLockedValues(schemaName).g" ng-model="currentState[schemaName].values.g" ng-change="sendUpdate(schemaName)")
-                    span(ng-show="getLockedValues(schemaName).g").forms-desc.fa.fa-lock
-                li
-                    span(ng-class="{'forms-desc': getLockedValues(schemaName).b}") b
-                    input(size="3" ng-disabled="getLockedValues(schemaName).b" ng-model="currentState[schemaName].values.b" ng-change="sendUpdate(schemaName)")
-                    span(ng-show="getLockedValues(schemaName).b").forms-desc.fa.fa-lock
-                li
-                    span(ng-class="{'forms-desc': getLockedValues(schemaName).a}") a
-                    input(size="3" ng-disabled="getLockedValues(schemaName).a" ng-model="currentState[schemaName].values.a" ng-change="sendUpdate(schemaName)")
-                    span(ng-show="getLockedValues(schemaName).a").forms-desc.fa.fa-lock
+form.control.forms(method="post" action="" ng-model-options="{ getterSetter: true }")
+    fieldset
+        legend
+            span(ng-bind="schemaName")
+
+        spectrum-colorpicker.colorpicker(
+                    ng-model="getSetColorAsInteger(currentState[schemaName], schemaName)"
+                    ng-change="sendUpdate(schemaName)"
+                    options="{showInput: true, showAlpha: true, format: 'rgb', clickoutFiresChange: true, showInitial: true, showButtons: false }"
+                    )
+
+        div.lock-desc.form-desc(ng-show="getLockedValueCount(schemaName) > 0")
+            span.fa.fa-lock
+                span &nbsp; The following values are locked: &nbsp;
+                span(ng-bind="getLockValuesText(schemaName)")

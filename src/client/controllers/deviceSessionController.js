@@ -58,6 +58,25 @@
         return lockedValues || {};
       };
 
+      $scope.getLockValuesText = function(schemaName) {
+        var lockedValues = $scope.getLockedValues(schemaName);
+        var descriptionText = '';
+        for (var key in lockedValues) {
+          var value = lockedValues[key];
+          if (value) {
+            descriptionText += '\'' + key + '\', ';
+          }
+        }
+        if (descriptionText.length > 0) {
+          descriptionText = descriptionText.slice(0, -2); // Trim off last comma
+        }
+        return descriptionText;
+      };
+
+      $scope.getLockedValueCount = function(schemaName) {
+        return Object.keys($scope.getLockedValues(schemaName)).length;
+      };
+
       $scope.getSetColorAsInteger = function(colorObj, schemaName) {
         // Return a function used by angular to get and set the color
         // object values

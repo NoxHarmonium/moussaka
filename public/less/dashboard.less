@@ -438,12 +438,17 @@ div.dashboard-sidebar-container {
 
 
 /* *** Controls *** */
+form.control {
+    .colorpicker input {
+      /* Always hide the default color picker input as it will not fit into the layout */
+      display: none !important;
+    }
 
-.colorpicker input {
-  /* Always hide the default color picker input as it will not fit into the layout */
-  display: none !important;
-}
+    .sp-replacer {
+        margin-bottom: 5px !important;
+    }
 
-form .forms-inline-list .fa-lock {
-    vertical-align: middle;
+    ul.forms-inline-list {
+        margin-bottom: 5px;
+    }
 }
