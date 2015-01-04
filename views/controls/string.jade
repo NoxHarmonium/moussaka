@@ -1,2 +1,4 @@
 form
-    input(ng-model="currentState[schemaName].values.s" ng-change="sendUpdate(schemaName)")
+    label Text
+        div.input-groups.width-100
+            input(ng-model="currentState[schemaName].values.s" ng-change="sendUpdate(schemaName)")

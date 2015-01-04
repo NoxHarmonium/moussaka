@@ -1,2 +1,4 @@
 form
-    input(type="checkbox" ng-model="currentState[schemaName].values.b" ng-change="sendUpdate(schemaName)")
+    label Boolean
+        div.input-groups.width-100
+            input(type="checkbox" ng-model="currentState[schemaName].values.b" ng-change="sendUpdate(schemaName)")

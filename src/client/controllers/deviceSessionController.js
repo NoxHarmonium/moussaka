@@ -53,7 +53,12 @@
         return '/views/controls/' + schemaValues.type;
       };
 
-      $scope.getSetColorAsInteger = function(colorObj) {
+      $scope.getLockedValues = function (schemaName) {
+        var lockedValues = this.dataSchema[schemaName].lockedValues;
+        return lockedValues || {};
+      };
+
+      $scope.getSetColorAsInteger = function(colorObj, schemaName) {
         // Return a function used by angular to get and set the color
         // object values
         // Warning: This is a bit hacky to interop with color picker
@@ -68,13 +73,16 @@
 
             // Set the color values to the object
             // captured by the closure
-            colorObj.values.r = parsedColor.r;
-            colorObj.values.g = parsedColor.g;
-            colorObj.values.b = parsedColor.b;
-            colorObj.values.a = parsedColor.a * 255.0;
+            var lockedValues = $scope.getLockedValues(schemaName);
 
-            // Return it here to skip an unnessesary parse below
-            return newValue;
+            colorObj.values.r =
+              lockedValues.r ? colorObj.values.r : parsedColor.r;
+            colorObj.values.g =
+              lockedValues.g ? colorObj.values.g : parsedColor.g;
+            colorObj.values.b =
+              lockedValues.b ? colorObj.values.b : parsedColor.b;
+            colorObj.values.a =
+              lockedValues.a ? colorObj.values.a : parsedColor.a * 255.0;
           }
 
           // Convert the color object into hex string
