@@ -143,14 +143,22 @@ gulp.task('browserifyLibs', ['jshint'], function (cb) {
     b.require(bowerResolve('kube'), {
       expose: '_kube'
     });
+    // TODO: Replace with jQuery UI control
     b.require(bowerResolve('Tabslet'), {
       expose: '_tabslet'
+    });
+    b.require(bowerResolve('jquery-ui'), {
+      expose: '_jquery-ui'
+    });
+    b.require(bowerResolve('angular-ui-slider'), {
+      expose: '_angular-ui-slider'
     });
 
     // Modules that work well with requireJs
     b.require(bowerResolve('jquery'), {
       expose: 'jquery'
     });
+
 
     b.transform('deamdify');
     b.transform('debowerify');
@@ -173,6 +181,8 @@ gulp.task('browserifyApp', ['jshint'], function (cb) {
   b.external('_angular-spectrum-colorpicker');
   b.external('_kube');
   b.external('_tabslet');
+  b.external('_jquery-ui');
+  b.external('_angular-ui-slider');
 
   b.external('jquery');
 

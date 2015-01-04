@@ -10,5 +10,6 @@ require('_angular-ui-router');
 require('_angular-cookies');
 require('_angular-breadcrumb');
 require('_angular-spectrum-colorpicker');
+require('_angular-ui-slider');
 
 module.exports = window.angular;

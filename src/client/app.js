@@ -10,7 +10,8 @@ var dashboardModule = angular.module(
     'ngCookies',
     'ui.router',
     'ncy-angular-breadcrumb',
-    'angularSpectrumColorpicker'
+    'angularSpectrumColorpicker',
+    'ui.slider'
     ]
 );
 

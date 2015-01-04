@@ -25,6 +25,12 @@
     "angular-breadcrumb": "^0.2.3",
     "Tabslet": "^1.4.2",
     "angular-spectrum-colorpicker": "^1.3.4",
-    "spectrum": "^1.5.2"
+    "spectrum": "^1.5.2",
+    "jquery-ui": "~1.11.2",
+    "angular-ui-slider": "~0.0.2"
+  },
+  "resolutions": {
+    "angular": "^1.2.25",
+    "jquery-ui": "~1.11.2"
   }
 }

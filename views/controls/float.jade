@@ -2,6 +2,8 @@ form.control.forms
     fieldset
         legend
             span(ng-bind="schemaName")
-
         div.input-groups.width-50
+            div(ui-slider="" min="0" max="10" ng-model="currentState[schemaName].values.n")
+
+        div.input-groups.width-25
             input(ng-model="currentState[schemaName].values.n" ng-change="sendUpdate(schemaName)")

@@ -5,8 +5,9 @@ window.$ = window.jQuery = require('jquery');
 
 // Put all the bower loaded jquery plugins here
 
-require('_tabslet'); // Tab support
+require('_tabslet'); // Tab support // TODO: Replace with jQuery UI widget
 require('_spectrum')(window.$); // Color picker
+require('_jquery-ui');
 
 // jQuery plugins don't really return anything so
 // just return jQuery
