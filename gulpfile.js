@@ -19,11 +19,14 @@ var gulp = require('gulp'),
   bowerFiles = require('bower-files'),
   ngAnnotate = require('gulp-ng-annotate'),
   uglify = require('gulp-uglify'),
-  cssmin = require('gulp-cssmin');
+  cssmin = require('gulp-cssmin'),
+  gulpif = require('gulp-if');
 
 
 
 var isWatching = false;
+var development =
+  config.code_generation.minify;
 
 var bowerFilesOpts = {
   join: {fonts: ['eot', 'woff', 'svg', 'ttf']}
@@ -108,22 +111,22 @@ gulp.task('less', function () {
       errorReporting: 'console',
       logLevel: 2
     }))
-    .pipe(cssmin())
+    .pipe(gulpif(!development, cssmin()))
     .pipe(gulp.dest('./public/css'));
 });
 
 gulp.task('bowerJsDeps', function () {
   gulp.src(bowerFiles(bowerFilesOpts).js)
     .pipe(concat('libs.js'))
-    .pipe(ngAnnotate())
-    .pipe(uglify())
+    .pipe(gulpif(!development, ngAnnotate()))
+    .pipe(gulpif(!development, uglify()))
     .pipe(gulp.dest(paths.browserifyDest));
 });
 
 gulp.task('bowerCssDeps', function () {
   gulp.src(bowerFiles(bowerFilesOpts).css)
     .pipe(concat('libs.css'))
-    .pipe(cssmin())
+    .pipe(gulpif(!development, cssmin()))
     .pipe(gulp.dest(paths.bowerCssDest));
 });
 
@@ -139,6 +142,8 @@ gulp.task('browserifyApp', ['jshint'], function (cb) {
 
   b.bundle()
     .pipe(source('app.js'))
+    .pipe(gulpif(!development, ngAnnotate()))
+    .pipe(gulpif(!development, uglify()))
     .pipe(gulp.dest(paths.browserifyDest))
     .on('end', cb);
 });
