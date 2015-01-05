@@ -16,11 +16,18 @@ var gulp = require('gulp'),
   runSequence = require('run-sequence'),
   plumber = require('gulp-plumber'),
   gutil = require('gulp-util'),
-  bowerFiles = require('bower-files');
+  bowerFiles = require('bower-files'),
+  ngAnnotate = require('gulp-ng-annotate'),
+  uglify = require('gulp-uglify'),
+  cssmin = require('gulp-cssmin');
 
 
 
 var isWatching = false;
+
+var bowerFilesOpts = {
+  join: {fonts: ['eot', 'woff', 'svg', 'ttf']}
+};
 
 var paths = {
   scripts: [
@@ -101,26 +108,28 @@ gulp.task('less', function () {
       errorReporting: 'console',
       logLevel: 2
     }))
+    .pipe(cssmin())
     .pipe(gulp.dest('./public/css'));
 });
 
-gulp.task('copyFonts', function () {
-  return gulp.src(paths.fontSrc)
-    .pipe(gulp.dest(paths.fontDest));
-});
-
 gulp.task('bowerJsDeps', function () {
-  gulp.src(bowerFiles().js)
+  gulp.src(bowerFiles(bowerFilesOpts).js)
     .pipe(concat('libs.js'))
-    //.pipe(uglify())
+    .pipe(ngAnnotate())
+    .pipe(uglify())
     .pipe(gulp.dest(paths.browserifyDest));
 });
 
 gulp.task('bowerCssDeps', function () {
-  gulp.src(bowerFiles().css)
+  gulp.src(bowerFiles(bowerFilesOpts).css)
     .pipe(concat('libs.css'))
-    //.pipe(uglify())
+    .pipe(cssmin())
     .pipe(gulp.dest(paths.bowerCssDest));
+});
+
+gulp.task('bowerFontDeps', function () {
+  gulp.src(bowerFiles(bowerFilesOpts).fonts)
+    .pipe(gulp.dest(paths.fontDest));
 });
 
 gulp.task('browserifyApp', ['jshint'], function (cb) {
@@ -160,8 +169,8 @@ gulp.task('watchLess', function () {
 });
 
 gulp.task('default', ['all']);
-gulp.task('compile', ['bowerJsDeps', 'bowerCssDeps', 'browserifyApp',
-  'less', 'copyFonts']);
+gulp.task('compile', ['bowerJsDeps', 'bowerCssDeps', 'bowerFontDeps',
+  'browserifyApp', 'less']);
 gulp.task('all', ['test', 'prettify']);
 
 // Hack to stop gulp from hanging after mocha test
