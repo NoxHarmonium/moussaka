@@ -74,7 +74,6 @@ var onError = function (err) {
 };
 
 var browserifyOptions = {
-  insertGlobals: true,
   debug: config.code_generation.browserify.debug
 };
 
