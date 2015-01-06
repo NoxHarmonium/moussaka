@@ -28,11 +28,13 @@
 
         if ((utils.exists(schema.min) && value < parseFloat(schema.min)) ||
           (utils.exists(schema.max) && value > parseFloat(schema.max))) {
-          // TODO: More intelligent reason (i.e. don't show undefined max/min values)
+          // TODO: More intelligent reason
+          // (i.e. don't show undefined max/min values)
           // TODO: i18n reminder
           return {
             success: false,
-            reason: 'Number out of range. (Min: ' + schema.min + ' max: ' + schema.max + ')'
+            reason: 'Number out of range. ' +
+              '(Min: ' + schema.min + ' max: ' + schema.max + ')'
           };
         }
 
