@@ -1,4 +1,4 @@
-form.control.forms(ng-model-options="{ getterSetter: true }")
+form.control.forms(ng-model-options="{ getterSetter: true }" novalidate)
     fieldset
         legend
             span(ng-bind="schemaName")
@@ -13,3 +13,8 @@ form.control.forms(ng-model-options="{ getterSetter: true }")
             span.fa.fa-lock
                 span &nbsp; The following values are locked: &nbsp;
                 span(ng-bind="getLockValuesText(schemaName)")
+
+        div.lock-desc.form-desc(ng-show="!isValid(schemaName)")
+            span.fa.fa-warning
+            span &nbsp;
+            span(ng-bind="getValidationMessage(schemaName)")

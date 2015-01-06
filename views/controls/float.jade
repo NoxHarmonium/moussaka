@@ -1,9 +1,18 @@
-form.control.forms
+form.control.forms(ng-model-options="{ getterSetter: true }" novalidate)
     fieldset
         legend
             span(ng-bind="schemaName")
-        div.input-groups.width-50
-            div(ui-slider="" min="0" max="10" ng-model="currentState[schemaName].values.n")
+        //div.input-groups.width-50
+        //    div(ui-slider="" min="0" max="10" ng-model="getModel('n', schemaName)" ng-disabled="getLocked('n', schemaName)")
 
         div.input-groups.width-25
-            input(ng-model="currentState[schemaName].values.n" ng-change="sendUpdate(schemaName)")
+            input(ng-model="getModel('n', schemaName)" ng-change="sendUpdate(schemaName)" ng-disabled="getLocked('n', schemaName)")
+
+        div.lock-desc.form-desc(ng-show="getLockedValueCount(schemaName) > 0")
+            span.fa.fa-lock
+            span &nbsp; This control is locked.
+
+        div.lock-desc.form-desc(ng-show="!isValid(schemaName)")
+            span.fa.fa-warning
+            span &nbsp;
+            span(ng-bind="getValidationMessage(schemaName)")

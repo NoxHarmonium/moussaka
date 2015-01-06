@@ -12,7 +12,7 @@
       validate: function (schema, data) {
         var value = parseFloat(data.values.n);
 
-        if (!value) {
+        if (!utils.exists(value)) {
           return {
             success: false,
             reason: 'A value is required'
@@ -28,9 +28,11 @@
 
         if ((utils.exists(schema.min) && value < parseFloat(schema.min)) ||
           (utils.exists(schema.max) && value > parseFloat(schema.max))) {
+          // TODO: More intelligent reason (i.e. don't show undefined max/min values)
+          // TODO: i18n reminder
           return {
             success: false,
-            reason: 'Number out of range'
+            reason: 'Number out of range. (Min: ' + schema.min + ' max: ' + schema.max + ')'
           };
         }
 
@@ -128,13 +130,28 @@
 
         var allKeysExist = _.every(keys, function (key) {
           currentKey = key;
-          return utils.exists(data.values[key]);
+          var keyValue = data.values[key];
+          return utils.exists(keyValue) &&
+            utils.exists(parseInt(keyValue));
         });
 
         if (!allKeysExist) {
           return {
             success: false,
             reason: 'A required value is missing: \'' + currentKey + '\''
+          };
+        }
+
+        var allKeysValid = _.every(keys, function (key) {
+          currentKey = key;
+          var keyValue = parseInt(data.values[key]);
+          return utils.exists(keyValue) && !isNaN(keyValue);
+        });
+
+        if (!allKeysValid) {
+          return {
+            success: false,
+            reason: 'A value is in an incorrect format: \'' + currentKey + '\''
           };
         }
 
@@ -173,16 +190,32 @@
       validate: function (schema, data) {
         var keys = ['x', 'y', 'z'];
         var currentKey = null;
+        var keyValue = null;
 
         var allKeysExist = _.every(keys, function (key) {
           currentKey = key;
-          return utils.exists(data.values[key]);
+          keyValue = data.values[key];
+          return utils.exists(keyValue) &&
+            ((typeof(keyValue) !== 'string') || keyValue.length > 0);
         });
 
         if (!allKeysExist) {
           return {
             success: false,
             reason: 'A required value is missing: \'' + currentKey + '\''
+          };
+        }
+
+        var allKeysValid = _.every(keys, function (key) {
+          currentKey = key;
+          keyValue = parseFloat(data.values[key]);
+          return utils.exists(keyValue) && !isNaN(keyValue);
+        });
+
+        if (!allKeysValid) {
+          return {
+            success: false,
+            reason: 'A value is in an incorrect format: \'' + currentKey + '\''
           };
         }
 

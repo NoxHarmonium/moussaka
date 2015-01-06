@@ -131,5 +131,10 @@
       }
     },
 
+    toString: function(str) {
+      return Object.prototype.toString
+        .call(str);
+    }
+
   };
 })(require, module);

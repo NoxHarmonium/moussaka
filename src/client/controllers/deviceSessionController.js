@@ -21,7 +21,10 @@
 
       var projectId = $stateParams.projectId;
       var deviceId = $stateParams.deviceId;
+
       $scope.loading = true;
+      $scope.validationSuccess = {};
+      $scope.validationMessages = {};
 
       $q.all([
         Device.get(projectId, deviceId),
@@ -115,12 +118,65 @@
         };
       };
 
+      $scope.getModel = function (paramName, schemaName) {
+        return function(newValue) {
+          var currentState = $scope.currentState[schemaName];
+
+          if (Utils.exists(newValue)) {
+            if (!$scope.getLocked(paramName, schemaName)) {
+              currentState.values[paramName] = newValue;
+              $scope.doValidation(schemaName, currentState);
+            }
+          }
+          return currentState.values[paramName];
+        };
+      };
+
       $scope.sendUpdate = function (schemaName) {
+
         // TODO: Collect updates over a period of time (1s) and send
         // in batch to prevent server spamming
-        var updates = {};
-        updates[schemaName] = $scope.currentState[schemaName];
-        $scope.device.sendUpdates(updates);
+        var update = $scope.currentState[schemaName];
+        var success = $scope.doValidation(schemaName, update);
+
+        if (success) {
+          var updates = {};
+          updates[schemaName] = update;
+          $scope.device.sendUpdates(updates);
+        }
+      };
+
+      $scope.getLocked = function (paramName, schemaName) {
+        var lockedValues = $scope.getLockedValues(schemaName);
+        return !!lockedValues[paramName];
+      };
+
+      $scope.doValidation = function(schemaName, state) {
+        var schema = $scope.dataSchema[schemaName];
+        var control = controls[schema.type];
+
+        var validationResult =
+          control.validate(schema, state);
+
+        $scope.validationSuccess[schemaName] = validationResult.success;
+        $scope.validationMessages[schemaName] = validationResult.reason;
+
+        return validationResult.success;
+      };
+
+      $scope.isValid = function(schemaName) {
+          var valid = $scope.validationSuccess[schemaName];
+
+          if (Utils.exists(valid)) {
+            return valid;
+          } else {
+            return true;
+          }
+      };
+
+      $scope.getValidationMessage = function(schemaName) {
+        var message = $scope.validationMessages[schemaName];
+        return message;
       };
 
       $scope.handleError = function (error) {
