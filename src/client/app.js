@@ -7,9 +7,7 @@ var dashboardModule = angular.module(
     'ngCookies',
     'ui.router',
     'ncy-angular-breadcrumb',
-    'angularSpectrumColorpicker',
-    'ui.slider',
-    'ngAnimate'
+    'angularSpectrumColorpicker'
     ]
 );
 
@@ -21,8 +19,12 @@ dashboardModule.config(require('./config/breadcrumbConfig.js'));
 
 dashboardModule.directive('ngEnter',
   require('./directives/ngEnter.js'));
+
 dashboardModule.directive('staticInclude',
   require('./directives/staticInclude.js'));
+
+dashboardModule.directive('slider',
+  require('./directives/slider.js'));
 
 // Resources
 

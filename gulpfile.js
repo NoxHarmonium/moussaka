@@ -65,7 +65,13 @@ var paths = {
   ],
   fontDest: 'public/fonts/',
   bowerCssDest: './public/css',
-  bowerManifest: 'bower.json'
+  bowerManifest: 'bower.json',
+  manualBowerCss: [
+    'bower_components/jquery-ui/themes/base/base.css',
+    'bower_components/jquery-ui/themes/base/core.css',
+    'bower_components/jquery-ui/themes/base/slider.css',
+    'bower_components/jquery-ui/themes/eggplant/theme.css'
+  ]
 };
 
 var onError = function (err) {
@@ -123,7 +129,10 @@ gulp.task('bowerJsDeps', function () {
 });
 
 gulp.task('bowerCssDeps', function () {
-  gulp.src(bowerFiles(bowerFilesOpts).css)
+  gulp.src(
+    bowerFiles(bowerFilesOpts).css
+      .concat(paths.manualBowerCss)
+    )
     .pipe(concat('libs.css'))
     .pipe(gulpif(!development, cssmin()))
     .pipe(gulp.dest(paths.bowerCssDest));
@@ -164,7 +173,8 @@ gulp.task('watch', function () {
   isWatching = true;
   gulp.watch(paths.scripts, ['browserifyApp']);
   gulp.watch(paths.lessDir, ['less']);
-  gulp.watch(paths.bowerManifest, ['bowerDeps']);
+  gulp.watch(paths.bowerManifest,
+    ['bowerJsDeps', 'bowerCssDeps', 'bowerFontDeps']);
 });
 
 gulp.task('watchLess', function () {

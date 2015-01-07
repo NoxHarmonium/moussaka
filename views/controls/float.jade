@@ -2,10 +2,9 @@ form.control.forms(ng-model-options="{ getterSetter: true }" novalidate)
     fieldset
         legend
             span(ng-bind="schemaName")
-        //div.input-groups.width-50
-        //    div(ui-slider="" min="0" max="10" ng-model="getModel('n', schemaName)" ng-disabled="getLocked('n', schemaName)")
 
-        input(ng-model="getModel('n', schemaName)" ng-change="notifyPendingUpdate(schemaName)" ng-disabled="getLocked('n', schemaName)")
+        div(slider min="getSchema(schemaName).min" max="getSchema(schemaName).max" step="calculateStep(schemaName)" ng-model="getModel('n', schemaName)"  ng-disabled="getLocked('n', schemaName)" ng-change="notifyPendingUpdate(schemaName)" ng-hide="!schemaHasBounds(schemaName)")
+        input(ng-model="getModel('n', schemaName)" ng-change="notifyPendingUpdate(schemaName)" ng-disabled="getLocked('n', schemaName)" )
         i.fa.fa-spinner.fa-spin.pending-update(ng-show="pendingUpdates[schemaName]")
 
         div.lock-desc.form-desc(ng-show="getLockedValueCount(schemaName) > 0")

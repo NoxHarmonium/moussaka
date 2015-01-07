@@ -135,6 +135,23 @@
         };
       };
 
+      $scope.getSchema = function (schemaName) {
+        return $scope.dataSchema[schemaName];
+      };
+
+      $scope.calculateStep = function(schemaName) {
+        var schema = $scope.dataSchema[schemaName];
+        var difference = schema.max - schema.min;
+        return schema.step || difference / 50.0;
+      };
+
+      $scope.schemaHasBounds = function(schemaName) {
+        var schema =  $scope.dataSchema[schemaName];
+        return Utils.exists(schema) &&
+          Utils.exists(schema.min) &&
+          Utils.exists(schema.max);
+      };
+
       $scope.sendPendingUpdates = function () {
         $scope.device.sendUpdates($scope.pendingUpdates);
         $scope.pendingUpdates = {};
@@ -151,6 +168,9 @@
         if (success) {
           $scope.pendingUpdates[schemaName] = update;
           $scope.sendPendingUpdatesDebounced();
+        } else {
+          // Make sure that an invalid object is not sent
+          delete $scope.pendingUpdates[schemaName];
         }
       };
 
