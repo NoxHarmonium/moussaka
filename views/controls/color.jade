@@ -5,9 +5,11 @@ form.control.forms(ng-model-options="{ getterSetter: true }" novalidate)
 
         spectrum-colorpicker.colorpicker(
                     ng-model="getSetColorAsInteger(currentState[schemaName], schemaName)"
-                    ng-change="sendUpdate(schemaName)"
+                    ng-change="notifyPendingUpdate(schemaName)"
                     options="{showInput: true, showAlpha: true, format: 'rgb', clickoutFiresChange: true, showInitial: true, showButtons: false }"
                     )
+
+        i.fa.fa-spinner.fa-spin.pending-update(ng-show="pendingUpdates[schemaName]")
 
         div.lock-desc.form-desc(ng-show="getLockedValueCount(schemaName) > 0")
             span.fa.fa-lock

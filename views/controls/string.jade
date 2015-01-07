@@ -2,8 +2,9 @@ form.control.forms(ng-model-options="{ getterSetter: true }" novalidate)
     fieldset
         legend
             span(ng-bind="schemaName")
-        div.input-groups.width-50
-            input(ng-model="getModel('s', schemaName)" ng-change="sendUpdate(schemaName)")
+
+        input(ng-model="getModel('s', schemaName)" ng-change="notifyPendingUpdate(schemaName)")
+        i.fa.fa-spinner.fa-spin.pending-update(ng-show="pendingUpdates[schemaName]")
 
         div.lock-desc.form-desc(ng-show="getLockedValueCount(schemaName) > 0")
             span.fa.fa-lock

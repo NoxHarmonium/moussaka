@@ -5,8 +5,10 @@ form.control.forms(ng-model-options="{ getterSetter: true }" novalidate)
 
         ul.forms-list
             li
-                input(type="checkbox" name="booleanEnabled" ng-disabled="getLocked('b', schemaName)" ng-model="getModel('b', schemaName)" ng-change="sendUpdate(schemaName)")
+                input(type="checkbox" name="booleanEnabled" ng-disabled="getLocked('b', schemaName)" ng-model="getModel('b', schemaName)" ng-change="notifyPendingUpdate(schemaName)")
                 label(for="booleanEnabled" ng-class="{'forms-desc': getLocked('b', schemaName)}") Enabled
+                i.fa.fa-spinner.fa-spin.pending-update(ng-show="pendingUpdates[schemaName]")
+
 
         div.lock-desc.form-desc(ng-show="getLockedValueCount(schemaName) > 0")
             span.fa.fa-lock

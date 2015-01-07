@@ -8,7 +8,8 @@ var dashboardModule = angular.module(
     'ui.router',
     'ncy-angular-breadcrumb',
     'angularSpectrumColorpicker',
-    'ui.slider'
+    'ui.slider',
+    'ngAnimate'
     ]
 );
 

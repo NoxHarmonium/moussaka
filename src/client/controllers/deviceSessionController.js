@@ -9,6 +9,7 @@
   // TODO: tinycolor is duplicated. It is also embedded in spectrum
   var tinycolor = require('tinycolor2');
 
+
   // Public functions
 
   module.exports = ['$scope', 'Project', 'Device',
@@ -25,6 +26,8 @@
       $scope.loading = true;
       $scope.validationSuccess = {};
       $scope.validationMessages = {};
+      $scope.pendingUpdates = {};
+      $scope.debounceTime = 500; //ms
 
       $q.all([
         Device.get(projectId, deviceId),
@@ -132,17 +135,22 @@
         };
       };
 
-      $scope.sendUpdate = function (schemaName) {
+      $scope.sendPendingUpdates = function () {
+        $scope.device.sendUpdates($scope.pendingUpdates);
+        $scope.pendingUpdates = {};
+      };
 
-        // TODO: Collect updates over a period of time (1s) and send
-        // in batch to prevent server spamming
+      $scope.sendPendingUpdatesDebounced =
+        _.debounce($scope.sendPendingUpdates, $scope.debounceTime);
+
+      $scope.notifyPendingUpdate = function (schemaName) {
+
         var update = $scope.currentState[schemaName];
         var success = $scope.doValidation(schemaName, update);
 
         if (success) {
-          var updates = {};
-          updates[schemaName] = update;
-          $scope.device.sendUpdates(updates);
+          $scope.pendingUpdates[schemaName] = update;
+          $scope.sendPendingUpdatesDebounced();
         }
       };
 
