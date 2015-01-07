@@ -3,7 +3,7 @@
 
   var ApiError = require('../exceptions/apiError.js');
   var _ = require('lodash');
-  var $ = require('jquery');
+  var $ = window.$;
 
   // Private functions
 
@@ -32,7 +32,7 @@
     '$state', '$cookies',
     function projectEditController($scope, Project,
       $stateParams, $state, $cookies) {
-      // 
+      //
       // Setup
       //
 
@@ -168,7 +168,7 @@
             $scope.newProjMembSubmitted = false;
 
             // Return focus
-            // TODO: This isn't working 
+            // TODO: This isn't working
             $('form input[name=newProjMembEmail]')
               .focus();
           })

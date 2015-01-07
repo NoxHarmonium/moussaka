@@ -1,0 +1,20 @@
+form.control.forms(ng-model-options="{ getterSetter: true }" novalidate)
+    fieldset
+        legend
+            span(ng-bind="schemaName")
+
+        ul.forms-list
+            li
+                input(type="checkbox" name="booleanEnabled" ng-disabled="getLocked('b', schemaName)" ng-model="getModel('b', schemaName)" ng-change="notifyPendingUpdate(schemaName)")
+                label(for="booleanEnabled" ng-class="{'forms-desc': getLocked('b', schemaName)}") Enabled
+                i.fa.fa-spinner.fa-spin.pending-update(ng-show="pendingUpdates[schemaName]")
+
+
+        div.lock-desc.form-desc(ng-show="getLockedValueCount(schemaName) > 0")
+            span.fa.fa-lock
+            span &nbsp; This control is locked.
+
+        div.lock-desc.form-desc(ng-show="!isValid(schemaName)")
+            span.fa.fa-warning
+            span &nbsp;
+            span(ng-bind="getValidationMessage(schemaName)")

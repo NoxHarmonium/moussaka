@@ -1,0 +1,29 @@
+form.control.forms(ng-model-options="{ getterSetter: true }" novalidate)
+    fieldset
+        legend
+            span(ng-bind="schemaName")
+
+        ul.forms-inline-list
+            li
+                span.forms-desc x
+                input(name="positionX" type="text" size="4" ng-disabled="getLocked('x', schemaName)" ng-model="getModel('x', schemaName)" ng-change="notifyPendingUpdate(schemaName)")
+
+            li
+                span.forms-desc y
+                input(name="positionY" type="text" size="4" ng-disabled="getLocked('y', schemaName)" ng-model="getModel('y', schemaName)" ng-change="notifyPendingUpdate(schemaName)")
+
+            li
+                span.forms-desc z
+                input(name="positionZ" type="text" size="4" ng-disabled="getLocked('z', schemaName)" ng-model="getModel('z', schemaName)" ng-change="notifyPendingUpdate(schemaName)")
+            li
+                i.fa.fa-spinner.fa-spin.pending-update(ng-show="pendingUpdates[schemaName]")
+
+        div.lock-desc.form-desc(ng-show="getLockedValueCount(schemaName) > 0")
+            span.fa.fa-lock
+                span &nbsp; The following values are locked: &nbsp;
+                span(ng-bind="getLockValuesText(schemaName)")
+
+        div.lock-desc.form-desc(ng-show="!isValid(schemaName)")
+            span.fa.fa-warning
+            span &nbsp;
+            span(ng-bind="getValidationMessage(schemaName)")

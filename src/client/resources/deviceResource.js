@@ -61,7 +61,7 @@
       Device.prototype.create = function () {
         // TODO: Validation?
         var that = this;
-        return $http.put('/projects/', that)
+        return $http.put('/devices/', that)
           .then(function (response) {
             that._id = response.data._id;
             // The only admin should be current user
@@ -75,11 +75,42 @@
       Device.prototype.update = function () {
         var that = this;
         console.log('Sending update: ', JSON.stringify(that));
-        return $http.post('/projects/' + this._id + '/', that)
+        return $http.post('/devices/' + this._id + '/', that)
           .then(function (response) {
             return that;
           }, BaseResource.handleError);
 
+      };
+
+      Device.prototype.startSession = function () {
+        var that = this;
+        console.log('Starting device session: ' + this._id);
+        return $http.put('/projects/' + this.projectId +
+            '/sessions/' + this._id + '/')
+          .then(function (response) {
+            return response.data.data;
+          }, BaseResource.handleError);
+      };
+
+      Device.prototype.stopSession = function () {
+        var that = this;
+        console.log('Stopping device session: ' + this._id);
+        return $http.delete('/projects/' + this.projectId +
+            '/sessions/' + this._id + '/')
+          .then(function (response) {
+            return that;
+          }, BaseResource.handleError);
+      };
+
+      Device.prototype.sendUpdates = function (updates) {
+        var that = this;
+        console.log('Sending device updates: ' +
+          JSON.stringify(updates));
+        return $http.post('/projects/' + this.projectId +
+            '/sessions/' + this._id + '/updates/', updates)
+          .then(function (response) {
+            return that;
+          }, BaseResource.handleError);
       };
 
       return Device;

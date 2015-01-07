@@ -1,12 +1,14 @@
 'use strict';
-var angular = require('./libs/angular.js');
-var kube = require('./libs/kube.js');
-var jQueryPlugins = require('./libs/jQueryPlugins.js');
 
 //// ## Dashboard Module ##
 
 var dashboardModule = angular.module(
-  'dashboardModule', ['ngCookies', 'ui.router', 'ncy-angular-breadcrumb']
+  'dashboardModule', [
+    'ngCookies',
+    'ui.router',
+    'ncy-angular-breadcrumb',
+    'angularSpectrumColorpicker'
+    ]
 );
 
 // Config
@@ -15,7 +17,14 @@ dashboardModule.config(require('./config/breadcrumbConfig.js'));
 
 // Directives
 
-dashboardModule.directive('ngEnter', require('./directives/ngEnter.js'));
+dashboardModule.directive('ngEnter',
+  require('./directives/ngEnter.js'));
+
+dashboardModule.directive('staticInclude',
+  require('./directives/staticInclude.js'));
+
+dashboardModule.directive('slider',
+  require('./directives/slider.js'));
 
 // Resources
 
@@ -44,6 +53,10 @@ dashboardModule.controller('projectEditController',
 
 dashboardModule.controller('projectViewController',
   require('./controllers/projectViewController.js')
+);
+
+dashboardModule.controller('deviceSessionController',
+  require('./controllers/deviceSessionController.js')
 );
 
 // Routes

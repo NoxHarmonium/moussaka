@@ -2,7 +2,7 @@
   'use strict';
   module.exports = ['$q', '$location',
     function ($q, $location) {
-      var jQuery = require('jquery');
+      var jQuery = window.$;
       var progressShown = false;
       var showProgress = function () {
         if (!progressShown) {

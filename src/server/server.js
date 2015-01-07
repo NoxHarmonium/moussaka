@@ -264,7 +264,15 @@
       });
     });
 
+    app.param('controlName', function (req, res, next, controlName) {
+      var user = req.user || {};
+      res.render('controls/' + controlName, {
+        user: user
+      });
+    });
+
     app.get('/views/partials/:partialName', function (req, res) {});
+    app.get('/views/controls/:controlName', function (req, res) {});
 
     serverModule.server = app.listen(app.get('port'), function () {
       console.log('Express server listening on port ' + app.get('port')

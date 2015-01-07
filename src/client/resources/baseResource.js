@@ -3,7 +3,7 @@
 
   var ApiError = require('../exceptions/apiError.js');
 
-  var jQuery = require('jquery');
+  var jQuery = window.$;
 
   var BaseResource = function () {};
 

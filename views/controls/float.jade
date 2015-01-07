@@ -1,0 +1,17 @@
+form.control.forms(ng-model-options="{ getterSetter: true }" novalidate)
+    fieldset
+        legend
+            span(ng-bind="schemaName")
+
+        div(slider min="getSchema(schemaName).min" max="getSchema(schemaName).max" step="calculateStep(schemaName)" ng-model="getModel('n', schemaName)"  ng-disabled="getLocked('n', schemaName)" ng-change="notifyPendingUpdate(schemaName)" ng-hide="!schemaHasBounds(schemaName)")
+        input(ng-model="getModel('n', schemaName)" ng-change="notifyPendingUpdate(schemaName)" ng-disabled="getLocked('n', schemaName)" )
+        i.fa.fa-spinner.fa-spin.pending-update(ng-show="pendingUpdates[schemaName]")
+
+        div.lock-desc.form-desc(ng-show="getLockedValueCount(schemaName) > 0")
+            span.fa.fa-lock
+            span &nbsp; This control is locked.
+
+        div.lock-desc.form-desc(ng-show="!isValid(schemaName)")
+            span.fa.fa-warning
+            span &nbsp;
+            span(ng-bind="getValidationMessage(schemaName)")

@@ -72,6 +72,7 @@ default: # The default config profile. (With documentation)
     code_generation:
         browserify:
             debug: true
+        minify: true
 
 
 
@@ -100,6 +101,8 @@ development: # The development config profile.
     code_generation:
         browserify:
             debug: true
+        minify: true
+
 
 travis-ci: # The development config profile.
     listen_port:            3000
@@ -126,6 +129,7 @@ travis-ci: # The development config profile.
     code_generation:
         browserify:
             debug: true
+        minify: true
 
 # TODO: Enable a real email client
 heroku:
@@ -150,3 +154,4 @@ heroku:
     code_generation:
         browserify:
             debug: true
+        minify: true

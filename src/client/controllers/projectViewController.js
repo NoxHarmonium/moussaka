@@ -3,7 +3,7 @@
 
   var ApiError = require('../exceptions/apiError.js');
   var _ = require('lodash');
-  var $ = require('jquery');
+  var $ = window.$;
 
   // Public functions
 
@@ -36,8 +36,6 @@
             var project = results[0];
             var deviceResponse = results[1];
             var devices = deviceResponse.devices;
-
-            console.log(JSON.stringify(devices));
 
             if (!project) {
               // TODO: Error handler page
@@ -73,8 +71,28 @@
 
       $scope.openDevice = function (device) {
         $state.go('deviceSession', {
+          projectId: $scope.project._id,
           deviceId: device._id
         });
+      };
+
+      $scope.handleError = function (error) {
+        var detail;
+        if (error instanceof ApiError) {
+          // ApiError messages come from the server so they
+          // are use friendly (i.e. user exists)
+          detail = error.message;
+        } else {
+          // Don't tell the user a generic error
+          // They wont know what it means
+          // TODO: i18n (generic error)
+          detail = 'There was an error processing your request.';
+        }
+
+        // TODO: HANDLE ERRORS
+        // Maybe make a global one
+        // $scope.hideError = false;
+        // $scope.errorMessage = detail;
       };
     }
   ];

@@ -15,11 +15,22 @@ var gulp = require('gulp'),
   bowerResolve = require('bower-resolve'),
   runSequence = require('run-sequence'),
   plumber = require('gulp-plumber'),
-  gutil = require('gulp-util');
+  gutil = require('gulp-util'),
+  bowerFiles = require('bower-files'),
+  ngAnnotate = require('gulp-ng-annotate'),
+  uglify = require('gulp-uglify'),
+  cssmin = require('gulp-cssmin'),
+  gulpif = require('gulp-if');
 
 
 
 var isWatching = false;
+var development =
+  config.code_generation.minify;
+
+var bowerFilesOpts = {
+  join: {fonts: ['eot', 'woff', 'svg', 'ttf']}
+};
 
 var paths = {
   scripts: [
@@ -52,7 +63,15 @@ var paths = {
   fontSrc: [
     'bower_components/font-awesome/fonts/*'
   ],
-  fontDest: 'public/fonts/'
+  fontDest: 'public/fonts/',
+  bowerCssDest: './public/css',
+  bowerManifest: 'bower.json',
+  manualBowerCss: [
+    'bower_components/jquery-ui/themes/base/base.css',
+    'bower_components/jquery-ui/themes/base/core.css',
+    'bower_components/jquery-ui/themes/base/slider.css',
+    'bower_components/jquery-ui/themes/eggplant/theme.css'
+  ]
 };
 
 var onError = function (err) {
@@ -61,7 +80,6 @@ var onError = function (err) {
 };
 
 var browserifyOptions = {
-  insertGlobals: true,
   debug: config.code_generation.browserify.debug
 };
 
@@ -98,81 +116,44 @@ gulp.task('less', function () {
       errorReporting: 'console',
       logLevel: 2
     }))
+    .pipe(gulpif(!development, cssmin()))
     .pipe(gulp.dest('./public/css'));
 });
 
-gulp.task('copyFonts', function () {
-  return gulp.src(paths.fontSrc)
+gulp.task('bowerJsDeps', function () {
+  gulp.src(bowerFiles(bowerFilesOpts).js)
+    .pipe(concat('libs.js'))
+    .pipe(gulpif(!development, ngAnnotate()))
+    .pipe(gulpif(!development, uglify()))
+    .pipe(gulp.dest(paths.browserifyDest));
+});
+
+gulp.task('bowerCssDeps', function () {
+  gulp.src(
+    bowerFiles(bowerFilesOpts).css
+      .concat(paths.manualBowerCss)
+    )
+    .pipe(concat('libs.css'))
+    .pipe(gulpif(!development, cssmin()))
+    .pipe(gulp.dest(paths.bowerCssDest));
+});
+
+gulp.task('bowerFontDeps', function () {
+  gulp.src(bowerFiles(bowerFilesOpts).fonts)
     .pipe(gulp.dest(paths.fontDest));
 });
 
-gulp.task('browserifyLibs', ['jshint'], function (cb) {
-  // build out angular and jquery to a library file called libs.js
-  bowerResolve.init(function () {
-    var b = browserify(browserifyOptions);
-
-    // Modules that only work globally and require shimming
-    // (Denoted by underscore prefix)
-    b.require(bowerResolve('angular'), {
-      expose: '_angular'
-    });
-    b.require(bowerResolve('angular-ui-router'), {
-      expose: '_angular-ui-router'
-    });
-    b.require(bowerResolve('angular-cookies'), {
-      expose: '_angular-cookies'
-    });
-    b.require(bowerResolve('angular-breadcrumb'), {
-      expose: '_angular-breadcrumb'
-    });
-    b.require(bowerResolve('kube'), {
-      expose: '_kube'
-    });
-    b.require(bowerResolve('Tabslet'), {
-      expose: '_tabslet'
-    });
-
-    // Modules that work well with requireJs
-    b.require(bowerResolve('jquery'), {
-      expose: 'jquery'
-    });
-
-    b.transform('deamdify');
-    b.transform('debowerify');
-    b.bundle()
-      .pipe(source('libs.js'))
-      .pipe(gulp.dest(paths.browserifyDest))
-      .on('end', cb);
-  });
-});
-
 gulp.task('browserifyApp', ['jshint'], function (cb) {
-  // Compile the main app bundle using the libs bundle
+  // Compile the main app bundle
   var b = browserify(browserifyOptions);
   b.add(paths.browserifySrc);
-  b.external('_angular');
-  b.external('_angular-ui-router');
-  b.external('_angular-cookies');
-  b.external('_angular-breadcrumb');
-  b.external('_kube');
-  b.external('_tabslet');
 
-  b.external('jquery');
-
-  b.transform('deamdify');
-  b.transform('debowerify');
   b.bundle()
     .pipe(source('app.js'))
+    .pipe(gulpif(!development, ngAnnotate()))
+    .pipe(gulpif(!development, uglify()))
     .pipe(gulp.dest(paths.browserifyDest))
     .on('end', cb);
-});
-
-gulp.task('browserifyAll', ['jshint'], function (callback) {
-  runSequence(
-    'browserifyLibs',
-    'browserifyApp',
-    callback
-  );
 });
 
 gulp.task('test', ['compile'], function () {
@@ -192,6 +173,8 @@ gulp.task('watch', function () {
   isWatching = true;
   gulp.watch(paths.scripts, ['browserifyApp']);
   gulp.watch(paths.lessDir, ['less']);
+  gulp.watch(paths.bowerManifest,
+    ['bowerJsDeps', 'bowerCssDeps', 'bowerFontDeps']);
 });
 
 gulp.task('watchLess', function () {
@@ -200,7 +183,8 @@ gulp.task('watchLess', function () {
 });
 
 gulp.task('default', ['all']);
-gulp.task('compile', ['browserifyAll', 'less', 'copyFonts']);
+gulp.task('compile', ['bowerJsDeps', 'bowerCssDeps', 'bowerFontDeps',
+  'browserifyApp', 'less']);
 gulp.task('all', ['test', 'prettify']);
 
 // Hack to stop gulp from hanging after mocha test

@@ -24,6 +24,8 @@
     it('n == null', function () {
       data.values.n = null;
       var result = control.validate(schema, data);
+      console.log('data.values.n: ' + JSON.stringify(data.values.n));
+
       expect(result.success)
         .to.be(false);
     });
@@ -31,6 +33,8 @@
     it('n < min', function () {
       data.values.n = schema.min - 10;
       var result = control.validate(schema, data);
+      console.log('data.values.n: ' + JSON.stringify(data.values.n));
+
       expect(result.success)
         .to.be(false);
     });
@@ -38,6 +42,8 @@
     it('n == min', function () {
       data.values.n = schema.min;
       var result = control.validate(schema, data);
+      console.log('data.values.n: ' + JSON.stringify(data.values.n));
+
       expect(result.success)
         .to.be(true);
     });
@@ -45,6 +51,8 @@
     it('n >= min && n <= max (0)', function () {
       data.values.n = schema.min + 1;
       var result = control.validate(schema, data);
+      console.log('data.values.n: ' + JSON.stringify(data.values.n));
+
       expect(result.success)
         .to.be(true);
     });
@@ -52,24 +60,39 @@
     it('n >= min && n <= max (1)', function () {
       data.values.n = schema.max - 1;
       var result = control.validate(schema, data);
+      console.log('data.values.n: ' + JSON.stringify(data.values.n));
+
       expect(result.success)
         .to.be(true);
     });
 
     it('apply n (locked)', function () {
       schema.lockedValues.n = true;
-      var newData = {};
+      var newData = {
+        values: {
+          n: 789
+        }
+      };
+      var oldDataValue = data.values.n;
       control.apply(schema, data, newData);
-      expect(newData.values.n)
-        .to.be(undefined);
+      console.log('data.values.n: ' + JSON.stringify(data.values.n));
+
+      expect(data.values.n)
+        .to.equal(oldDataValue);
     });
 
     it('apply n (unlocked)', function () {
       schema.lockedValues.n = false;
-      var newData = {};
+      var newData = {
+        values: {
+          n: 789
+        }
+      };
       control.apply(schema, data, newData);
-      expect(newData.values.n)
-        .to.be(data.values.n);
+      console.log('data.values.n: ' + JSON.stringify(data.values.n));
+
+      expect(data.values.n)
+        .to.be(newData.values.n);
     });
 
     it('n == max', function () {
@@ -104,19 +127,29 @@
     };
 
     it('apply s (locked)', function () {
+      var oldDataValue = data.values.s;
+
       schema.lockedValues.s = true;
-      var newData = {};
+      var newData = {
+        values: {
+          s: 'xyz'
+        }
+      };
       control.apply(schema, data, newData);
-      expect(newData.values.s)
-        .to.be(undefined);
+      expect(data.values.s)
+        .to.equal(oldDataValue);
     });
 
     it('apply s (unlocked)', function () {
       schema.lockedValues.s = false;
-      var newData = {};
+       var newData = {
+        values: {
+          s: 'xyz'
+        }
+      };
       control.apply(schema, data, newData);
-      expect(newData.values.s)
-        .to.be(data.values.s);
+      expect(data.values.s)
+        .to.equal(newData.values.s);
     });
 
     it('n == null', function () {
@@ -129,7 +162,6 @@
   });
 
   describe('Boolean control', function () {
-
     var type = 'boolean';
     var control = controls[type];
     var schema = {
@@ -143,19 +175,29 @@
     };
 
     it('apply b (locked)', function () {
+      var oldDataValue = data.values.b;
+
       schema.lockedValues.b = true;
-      var newData = {};
+      var newData = {
+        values: {
+          b: 'true'
+        }
+      };
       control.apply(schema, data, newData);
-      expect(newData.values.s)
-        .to.be(undefined);
+      expect(data.values.b)
+        .to.be(oldDataValue);
     });
 
     it('apply b (unlocked)', function () {
       schema.lockedValues.b = false;
-      var newData = {};
+       var newData = {
+        values: {
+          b: true
+        }
+      };
       control.apply(schema, data, newData);
-      expect(newData.values.s)
-        .to.be(data.values.s);
+      expect(data.values.b)
+        .to.equal(newData.values.b);
     });
 
     it('b == null', function () {
@@ -299,13 +341,22 @@
 
     it('apply keys (locked)', function () {
       resetData();
+
+      var newData = {
+        values: {
+          r: 34,
+          g: 46,
+          b: 129,
+          a: 222
+        }
+      };
       _.each(keys, function (key) {
         schema.lockedValues[key] = true;
 
-        var newData = {};
+        var oldDataValue = data.values[key];
         control.apply(schema, data, newData);
-        expect(newData.values[key])
-          .to.be(undefined);
+        expect(data.values[key])
+          .to.equal(oldDataValue);
 
         schema.lockedValues[key] = false;
       });
@@ -313,13 +364,21 @@
 
     it('apply keys (unlocked)', function () {
       resetData();
+      var newData = {
+        values: {
+          r: 34,
+          g: 46,
+          b: 129,
+          a: 222
+        }
+      };
+
       _.each(keys, function (key) {
         schema.lockedValues[key] = false;
 
-        var newData = {};
         control.apply(schema, data, newData);
-        expect(newData.values[key])
-          .to.be(data.values[key]);
+        expect(data.values[key])
+          .to.be(newData.values[key]);
 
         schema.lockedValues[key] = true;
       });
@@ -393,13 +452,21 @@
 
     it('apply keys (locked)', function () {
       resetData();
+      var newData = {
+        values: {
+          x: 45,
+          y: -34,
+          z: 44.45
+        }
+      };
       _.each(keys, function (key) {
         schema.lockedValues[key] = true;
 
-        var newData = {};
+        var oldDataValue = data.values[key];
+        console.log(JSON.stringify(data));
         control.apply(schema, data, newData);
-        expect(newData.values[key])
-          .to.be(undefined);
+        expect(data.values[key])
+          .to.equal(oldDataValue);
 
         schema.lockedValues[key] = false;
       });
@@ -407,13 +474,19 @@
 
     it('apply keys (unlocked)', function () {
       resetData();
+      var newData = {
+        values: {
+          x: 45,
+          y: -34,
+          z: 44.45
+        }
+      };
       _.each(keys, function (key) {
         schema.lockedValues[key] = false;
 
-        var newData = {};
         control.apply(schema, data, newData);
-        expect(newData.values[key])
-          .to.be(data.values[key]);
+        expect(data.values[key])
+          .to.equal(newData.values[key]);
 
         schema.lockedValues[key] = true;
       });

@@ -436,3 +436,32 @@ div.dashboard-sidebar-container {
     }
 }
 
+
+/* *** Controls *** */
+form.control {
+    .colorpicker input {
+      /* Always hide the default color picker input as it will not fit into the layout */
+      display: none !important;
+    }
+
+    .sp-replacer {
+        margin-bottom: 5px !important;
+    }
+
+    ul.forms-inline-list {
+        margin-bottom: 5px;
+    }
+
+    i.pending-update {
+        margin-left: 5px;
+        opacity: 0.5;
+        transition: opacity 0.3s;
+    }
+
+    i.pending-update.ng-hide {
+        display: inline-block !important;
+        opacity: 0;
+    }
+
+}
+
