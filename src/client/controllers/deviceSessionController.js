@@ -34,6 +34,7 @@
       $scope.profiles = [];
       $scope.hideError = true;
       $scope.modalShowing = false;
+      $scope.currentProfileId = null;
 
       $scope.profileQueryVars = {
         sortField: 'createdAt',
@@ -238,6 +239,7 @@
         _.debounce($scope.sendPendingUpdates, $scope.debounceTime);
 
       $scope.notifyPendingUpdate = function (schemaName) {
+        $scope.currentProfileId = null;
 
         var update = $scope.currentState[schemaName];
         var success = $scope.doValidation(schemaName, update);
@@ -315,6 +317,8 @@
           control.apply(schema, currentValue, profileValue);
           $scope.notifyPendingUpdate(schemaName);
         }
+
+        $scope.currentProfileId = profile._id;
       };
 
       $scope.deleteProfile = function (profileIndex) {

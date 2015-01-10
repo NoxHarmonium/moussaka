@@ -12,8 +12,8 @@ div.dashboard-sidebar-container
             hr
 
         div(ng-show="profiles.length > 0")
-            ul
-                li(ng-repeat="profile in profiles")
+            ul(ng-repeat="profile in profiles")
+                li(ng-class="{active: (currentProfileId === profile._id)}")
                     div.inline-block-children
                         div.width-80.elipsis-overflow
                             a(href="javascript:void(0)" ng-bind="profile.profileName" ng-click="switchProfile($index)")
