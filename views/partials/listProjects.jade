@@ -19,7 +19,7 @@ div.dashboard-sidebar-container
             li
                 a(ui-sref="createProject")= t("app.actions.createProject")
         hr
-        ul    
+        ul
             li
                 a(href="#/help")= t("app.actions.help")
         hr
@@ -29,7 +29,7 @@ div.dashboard-view
     #projects
         #projectRow.row(ng-hide="loading")
             .noResults(ng-show='!projects.length' ng-cloak)
-                i.fa.fa-info-circle.fa-3x 
+                i.fa.fa-info-circle.fa-3x
                 p
                     span= t("app.projectList.noProjectsMessage1")
                     a(ui-sref="createProject")= t("app.projectList.noProjectsMessage2")
@@ -39,13 +39,13 @@ div.dashboard-view
                 div.project-title
                     a(href="javascript:void(0)" ui-sref="viewProject({projectId: project._id})")
                         h3.project-name          {{project.name}}  {{project.version}}
-                    a.remove-icon(href="#" ui-sref="editProject({projectId: project._id})") 
-                            i.fa.fa-gear 
+                    a.remove-icon(href="#" ui-sref="editProject({projectId: project._id})")
+                            i.fa.fa-gear
                 p.project-description(ng-hide="!project.description")     {{project.description}}
                 p.project-info-summary
                     span {{getTotalContributors(project)}}&nbsp;
-                    span= t("app.projectList.contributors") 
-                    i.fa.fa-circle 
+                    span= t("app.projectList.contributors")
+                    i.fa.fa-circle
                     span {{project.deviceCount}}&nbsp;
                     span= t("app.projectList.connectedDevices")
 
@@ -58,10 +58,10 @@ div.dashboard-view
         div.text-centered
             ul.pagination(ng-class="{disabled: loading}")
                 li
-                    a(href="javascript:void(0)" ng-click="prevPage()")&larr;
+                    a(href="javascript:void(0)" ng-click="prevPage()") &larr;
                 li
                     span {{currentPage}} of {{totalPages}}
                 li
-                    a(href="javascript:void(0)" ng-click="nextPage()")&rarr;
-</ul>                
+                    a(href="javascript:void(0)" ng-click="nextPage()") &rarr;
+</ul>
 
