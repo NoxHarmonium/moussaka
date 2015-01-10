@@ -56,14 +56,6 @@
           }, BaseResource.handleError);
       };
 
-      Profile.delete = function () {
-        return $http.delete('/projects/' + this.projectId +
-          '/profiles/' + this.profileId + '/')
-          .then(
-            function (response) {
-              return response;
-            }, BaseResource.handleError);
-      };
 
       // Instance Methods
 
@@ -76,6 +68,17 @@
             that._id = response.data.data._id;
             return that;
           }, BaseResource.handleError);
+      };
+
+      // TODO: Why is delete sometimes an instance method (like here)
+      // and sometimes static like projectResource?
+      Profile.prototype.delete = function () {
+        return $http.delete('/projects/' + this.projectId +
+          '/profiles/' + this._id + '/')
+          .then(
+            function (response) {
+              return response;
+            }, BaseResource.handleError);
       };
 
       return Profile;

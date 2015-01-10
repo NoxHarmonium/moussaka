@@ -30,10 +30,28 @@ h1, h2, h3, h4, h5, h6 {
     display: inline;
 }
 
+.inline-block-children > * {
+    display: inline-block;
+}
+
+.elipsis-overflow {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 a.plain-link {
     text-decoration: none;
 }
 
 .text-centered {
     text-align: center;
+}
+
+.highlightOnHover:hover {
+    opacity: 0.7;
+}
+
+.highlightOnHover {
+    opacity: 0.3;
 }

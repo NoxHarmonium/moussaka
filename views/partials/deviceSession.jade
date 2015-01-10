@@ -1,25 +1,35 @@
 div#tools-progress.dashboard-progress
     span
 
+
 div.dashboard-sidebar-container
     div.dashboard-sidebar
         div
-            a(href="javascript:void(0)" ng-click="saveProfile()")
+            hr
+            a#profileNameModel.active(href="javascript:void(0)")
                 i.fa.fa-floppy-o
                 span &nbsp; Save Profile
+            hr
 
         div(ng-show="profiles.length > 0")
-            hr
             ul
                 li(ng-repeat="profile in profiles")
-                    a(href="javascript:void(0)" ng-bind="profile.profileName" ng-click="switchProfile($index)")
+                    div.inline-block-children
+                        div.width-80.elipsis-overflow
+                            a(href="javascript:void(0)" ng-bind="profile.profileName" ng-click="switchProfile($index)")
+                        div.width-10.elipsis-overflow.highlightOnHover(ng-click="deleteProfile($index)")
+                            i.fa.fa-trash
 
             hr
 
 
 div.dashboard-view
     #deviceSession
-        h2 {{device.name}}
+        div(ng-hide="hideError || modalShowing")
+            p.error
+                i.fa.fa-exclamation-triangle
+                span &nbsp; {{ errorMessage }}
+
 
         // TODO: Don't display schema templates that don't exist
 
