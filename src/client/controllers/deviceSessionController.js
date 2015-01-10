@@ -13,25 +13,36 @@
   // Public functions
 
   module.exports = ['$scope', 'Project', 'Device',
-    '$stateParams', '$state', '$q',
+    'Profile', '$stateParams', '$state', '$q',
     function projectEditController($scope, Project,
-      Device, $stateParams, $state, $q) {
+      Device, Profile, $stateParams, $state, $q) {
       //
       // Setup
       //
 
-      var projectId = $stateParams.projectId;
-      var deviceId = $stateParams.deviceId;
+      $scope.projectId = $stateParams.projectId;
+      $scope.deviceId = $stateParams.deviceId;
 
       $scope.loading = true;
       $scope.validationSuccess = {};
       $scope.validationMessages = {};
       $scope.pendingUpdates = {};
       $scope.debounceTime = 500; //ms
+      $scope.maxProfileCount = 10;
+      $scope.device = null;
+      $scope.project = null;
+      $scope.profiles = [];
+
+      $scope.profileQueryVars = {
+        sortField: 'createdAt',
+        sortDir: 'desc',
+        minRecord: 0,
+        maxRecord: $scope.maxProfileCount
+      };
 
       $q.all([
-        Device.get(projectId, deviceId),
-        Project.get(projectId)
+        Device.get($scope.projectId, $scope.deviceId),
+        Project.get($scope.projectId)
       ])
         .then(function (results) {
           var device = results[0];
@@ -49,6 +60,11 @@
         })
         .finally(function () {
           $scope.loading = false;
+        });
+
+      Profile.getAll($scope.projectId, $scope.profileQueryVars)
+        .then(function (response) {
+          $scope.profiles = response.profiles;
         });
 
       //
@@ -225,6 +241,44 @@
         // $scope.errorMessage = detail;
       };
 
+      $scope.switchProfile = function (profileIndex) {
+        var profile = $scope.profiles[profileIndex];
+        var profileData = profile.profileData || {};
+        for (var schemaName in profileData) {
+          var schema = $scope.dataSchema[schemaName];
+          var control = controls[schema.type];
+          var profileValue = profileData[schemaName];
+          var currentValue = $scope.currentState[schemaName];
+
+          // Apply the data stored in the profile to the current state
+          // Run it through the control to validate the data
+          control.apply(schema, currentValue, profileValue);
+          $scope.notifyPendingUpdate(schemaName);
+        }
+      };
+
+      $scope.saveProfile = function () {
+        var newProfile = new Profile({
+          projectId: $scope.projectId,
+          profileName: 'profile!'
+        });
+
+        $scope.loading = true;
+
+        newProfile.create($scope.deviceId)
+          .then(function () {
+              return Profile.getAll($scope.projectId, $scope.profileQueryVars);
+            })
+          .then(function (response) {
+            $scope.profiles = response.profiles;
+            })
+          .catch(function (err) {
+              $scope.handleError(err);
+            })
+          .finally(function () {
+              $scope.loading = false;
+            });
+      };
     }
   ];
 

@@ -2,6 +2,20 @@ div#tools-progress.dashboard-progress
     span
 
 div.dashboard-sidebar-container
+    div.dashboard-sidebar
+        div
+            a(href="javascript:void(0)" ng-click="saveProfile()")
+                i.fa.fa-floppy-o
+                span &nbsp; Save Profile
+
+        div(ng-show="profiles.length > 0")
+            hr
+            ul
+                li(ng-repeat="profile in profiles")
+                    a(href="javascript:void(0)" ng-bind="profile.profileName" ng-click="switchProfile($index)")
+
+            hr
+
 
 div.dashboard-view
     #deviceSession
