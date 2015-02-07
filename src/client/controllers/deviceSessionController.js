@@ -121,6 +121,28 @@
         });
       };
 
+      $scope.setupProfileDeleteModal = function() {
+        $(function() {
+          $scope.profileDeleteModal = $('#profileDeleteModal').modal({
+            width: 450,
+            content: '/views/partials/profileDeleteModal',
+            blur: false
+          });
+
+          $scope.profileDeleteModal
+            .on('loading.tools.modal', function() {
+              this.createCancelButton('Cancel');
+              var okButton = this.createActionButton('OK');
+              var that = this;
+
+              okButton.on('click', $.proxy(function() {
+                $scope.confirmDeleteProfile();
+                that.close();
+              }, this));
+            });
+        });
+      };
+
       $scope.getControlUrl = function (schemaValues) {
         return '/views/controls/' + schemaValues.type;
       };
@@ -321,10 +343,23 @@
         $scope.currentProfileId = profile._id;
       };
 
-      $scope.deleteProfile = function (profileIndex) {
+      $scope.beginDeleteProfile = function (profileIndex) {
+        $scope.profileDeletionCandidate = $scope.profiles[profileIndex];
+        $scope.profileDeleteModal.modal('load');
+      };
+
+      $scope.confirmDeleteProfile = function(profileIndex) {
         $scope.loading = true;
 
-        var profile = $scope.profiles[profileIndex];
+        var profile;
+        if (Utils.exists(profileIndex)) {
+          profile = $scope.profiles[profileIndex];
+        } else if (Utils.exists($scope.profileDeletionCandidate)) {
+          profile = $scope.profileDeletionCandidate;
+        } else {
+          throw new Error('Cannot delete undefined profile.');
+        }
+
         profile.delete()
           .then(function () {
               return Profile.getAll($scope.projectId, $scope.profileQueryVars);
@@ -367,6 +402,7 @@
       // Init calls
 
       $scope.setupProfileNameModal();
+      $scope.setupProfileDeleteModal();
     }
   ];
 

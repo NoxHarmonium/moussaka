@@ -1,3 +1,5 @@
+div#profileDeleteModal.ng-hide
+
 div#tools-progress.dashboard-progress
     span
 
@@ -17,7 +19,7 @@ div.dashboard-sidebar-container
                     div.inline-block-children
                         div.width-80.elipsis-overflow
                             a(href="javascript:void(0)" ng-bind="profile.profileName" ng-click="switchProfile($index)")
-                        div.width-10.elipsis-overflow.highlightOnHover(ng-click="deleteProfile($index)")
+                        div.width-10.elipsis-overflow.highlightOnHover(ng-click="beginDeleteProfile($index)")
                             i.fa.fa-trash
 
             hr
