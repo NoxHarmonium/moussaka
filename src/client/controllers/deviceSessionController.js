@@ -131,8 +131,8 @@
 
           $scope.profileDeleteModal
             .on('loading.tools.modal', function() {
-              this.createCancelButton('Cancel');
-              var okButton = this.createActionButton('OK');
+              this.createCancelButton('No');
+              var okButton = this.createActionButton('Yes');
               var that = this;
 
               okButton.on('click', $.proxy(function() {
