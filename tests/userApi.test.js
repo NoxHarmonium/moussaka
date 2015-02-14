@@ -13,6 +13,8 @@
   var mockgoose = require('mockgoose');
   var Factory = require('js-factories');
   var chance = require('chance').Chance();
+  var _ = require('lodash');
+  var S = require('string');
 
   var User = require('../src/client/resources/userResource.js');
   var ApiError = require('../src/client/exceptions/apiError.js');
@@ -52,8 +54,9 @@
         };
         var passwordField =  { min: 8, max: 40 };
         var fieldInfo = null;
+        var field = null;
 
-        for (var field in fields) {
+        _.each(fields, function(field) {
           fieldInfo = fields[field];
 
           it('should not create user without ' + field,
@@ -86,7 +89,7 @@
                 .should.be.rejectedWith(ApiError, /400/);
           });
 
-        };
+        });
 
         field = 'password';
         fieldInfo = passwordField;
