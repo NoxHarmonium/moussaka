@@ -56,7 +56,7 @@
         var fieldInfo = null;
         var field = null;
 
-        _.each(fields, function(field) {
+        _.each(_.keys(fields), function(field) {
           fieldInfo = fields[field];
 
           it('should not create user without ' + field,
@@ -80,7 +80,7 @@
           });
 
           it('should not create user with ' + field + ' more than ' +
-            fields[field].max + 'characters' , function () {
+            fieldInfo.max + 'characters' , function () {
               var user = Factory.create('user');
               var password = chance.string();
               user[field] = S(user[field]).pad(fieldInfo.max + 1).s;
@@ -113,7 +113,7 @@
           });
 
           it('should not create user with ' + field + ' more than ' +
-            fields[field].max + 'characters' , function () {
+            fieldInfo.max + 'characters' , function () {
               var user = Factory.create('user');
               var password = chance.string();
               user[field] = S(password).pad(fieldInfo.max + 1).s;

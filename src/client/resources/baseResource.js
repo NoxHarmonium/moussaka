@@ -2,7 +2,7 @@
   'use strict';
 
   var ApiError = require('../exceptions/apiError.js');
-  var jQuery = window.$;
+  var jQuery = require('../shims/jqueryShim.js');
 
   var BaseResource = function () {};
 

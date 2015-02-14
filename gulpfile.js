@@ -146,6 +146,7 @@ gulp.task('bowerFontDeps', function () {
 gulp.task('browserifyApp', ['jshint'], function (cb) {
   // Compile the main app bundle
   var b = browserify(browserifyOptions);
+  b.ignore('jquery');
   b.add(paths.browserifySrc);
 
   b.bundle()
