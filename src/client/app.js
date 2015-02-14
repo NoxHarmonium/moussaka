@@ -1,5 +1,7 @@
 'use strict';
 
+var angular = require('./shims/angularShim.js');
+
 //// ## Dashboard Module ##
 
 var dashboardModule = angular.module(
