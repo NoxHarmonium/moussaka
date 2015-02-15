@@ -54,6 +54,10 @@ default: # The default config profile. (With documentation)
     # See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS
     access_control_allow_origin: ''
 
+    # Enables the create account view
+    # Disable to manually administrate (i.e. beta test or internal app)
+    allow_signup:           true
+
     # The settings so that emails can be sent for things such as lost password.
     # Set enabled to false to avoid errors due to incorrect settings.
     # When fake_smtp is set to true, an SMTP server is started by the server
@@ -89,6 +93,7 @@ development: # The development config profile.
     session_secret:         6zRckBzE
     q_long_stacktrace:      true
     access_control_allow_origin: '*' # Allow cross domain access for simulator
+    allow_signup:           true
     email_settings:
         enabled:    true
         user:       "testUser"
@@ -117,6 +122,7 @@ travis-ci: # The development config profile.
     session_secret:         6zRckBzE
     q_long_stacktrace:      true
     access_control_allow_origin: '*' # Allow cross domain access for simulator
+    allow_signup:           true
     email_settings:
         enabled:    true
         user:       "testUser"
@@ -142,6 +148,7 @@ heroku:
     tempPasswordCodeLength: 8
     device_Timeout_Seconds: 300
     q_long_stacktrace:      true
+    allow_signup:           false
     email_settings:
         enabled:    true
         user:       "testUser"

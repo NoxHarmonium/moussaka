@@ -109,6 +109,14 @@
     },
 
     putUser: function (req, res, next) {
+      if (!config.allow_signup) {
+        return res.status(401)
+          .send({
+            detail: 'Sign up is disabled on this server'
+          });
+      }
+
+
       var data = req.body;
 
       if (req.selectedUser) {
@@ -388,7 +396,7 @@
           if (err) {
             return next(err);
           }
-          // Set a cookie so that client side can 
+          // Set a cookie so that client side can
           // user logic based on email
           res.cookie('userEmail', user._id);
           return res.status(200)

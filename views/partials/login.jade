@@ -1,6 +1,6 @@
 div.viewContainer
 
-    div(class="loginbox") 
+    div(class="loginbox")
         img.title(src='/img/logo-s.png' alt= t("app.altTags.applicationLogo"))
         h1.text-centered= t("app.name").toUpperCase()
 
@@ -10,8 +10,8 @@ div.viewContainer
             label= t("app.sharedForm.email")
                 div.input-groups
                     input(
-                        type="email" name="email" class="width-100" 
-                        ng-model="email" ng-Disabled="loading" 
+                        type="email" name="email" class="width-100"
+                        ng-model="email" ng-Disabled="loading"
                         watch-change="fieldHasChanged()" required
                         ng-minlength="3" ng-maxlength="254"
                         )
@@ -23,33 +23,36 @@ div.viewContainer
             label= t("app.sharedForm.password")
                 div.input-groups
                     input(
-                        type="password" name="password" class="width-100" 
-                        ng-model="password" ng-disabled="loading" 
+                        type="password" name="password" class="width-100"
+                        ng-model="password" ng-disabled="loading"
                         watch-change="fieldHasChanged()" required
                         ng-minlength="8" ng-maxlength="40"
                         )
-                    span.input-append   
+                    span.input-append
                         i(class="fa fa-lock")
                 div.forms-desc.error(ng-show="passwordFieldInvalid()")= t("app.validationMessages.passwordRequired")
                 div.forms-desc.error(ng-show="passwordFieldWrongSize()")= t("app.validationMessages.passwordWrongSize")
 
 
             div.loginError.ng-hide(ng-hide="hideError")
-                p.error 
+                p.error
                     i.fa.fa-info-circle
-                    span &nbsp; {{ errorMessage }}   
+                    span &nbsp; {{ errorMessage }}
 
             p
-                button.btn.btn-blue.width-100(type="submit" ng-disabled="loading")= t("app.loginForm.login") 
-                    span &nbsp; 
+                button.btn.btn-blue.width-100(type="submit" ng-disabled="loading")= t("app.loginForm.login")
+                    span &nbsp;
                     i.fa.fa-refresh.fa-spin.ng-hide(ng-hide="!loading")
 
         hr
 
-        div.units-row.text-centered 
+        div.units-row.text-centered
             div.unit-50
                 a(ui-sref="createAccount")
-                    button.btn.btn-smaller.width-100= t("app.loginForm.createAccount")
+                    if allow_signup
+                        button.btn.btn-smaller.width-100= t("app.loginForm.createAccount")
+                    else
+                        button.btn.btn-smaller.width-100(disabled)= t("app.loginForm.createAccount")
             div.unit-50
                 button.btn.btn-smaller.width-100= t("app.loginForm.forgotPassword")
 

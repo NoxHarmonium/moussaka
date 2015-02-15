@@ -242,7 +242,9 @@
 
     // Rendered HTML pages
     app.get('/views/auth', function (req, res) {
-      res.render('auth');
+      res.render('auth', {
+        allow_signup: config.allow_signup
+      });
     });
 
     app.get('/views/test', function (req, res) {
