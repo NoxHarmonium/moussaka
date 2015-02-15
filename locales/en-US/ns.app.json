@@ -48,6 +48,12 @@
         "create": "Create"
     },
 
+    "userPreferencesForm" : {
+        "apiKey" : "API Key",
+        "genApiKey" : "Generate New API Key",
+        "save" : "Save"
+    },
+
     "sorting": {
         "sortNameAsc": "Sort by Name (A-Z)",
         "sortNameDesc": "Sort by Name (Z-A)",

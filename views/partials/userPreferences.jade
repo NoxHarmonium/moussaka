@@ -6,5 +6,48 @@ div.dashboard-sidebar-container
 div.dashboard-view
     #userPreferences
         form(method="post" ng-submit="saveUserPrefs()" class="forms" name="userPreferencesForm" novalidate)
+            label= t("app.sharedForm.firstName")
+                div.input-groups.width-100
+                    input(type="text" name="firstName" ng-model="firstName"
+                        watch-change="fieldHasChanged()" ng-Disabled="loading"
+                        ng-minlength="3" ng-maxlength="40" maxlength="40" required)
+                div.forms-desc.error(ng-show="firstNameFieldRequired()")= t("app.validationMessages.firstNameRequired")
+                div.forms-desc.error(ng-show="firstNameFieldWrongSize()")= t("app.validationMessages.nameWrongSize")
+
+            label= t("app.sharedForm.lastName")
+                div.input-groups.width-100
+                    input(type="text" name="lastName" ng-model="lastName"
+                        watch-change="fieldHasChanged()" ng-Disabled="loading"
+                        ng-minlength="3" ng-maxlength="40" maxlength="40" required)
+                div.forms-desc.error(ng-show="lastNameFieldRequired()")= t("app.validationMessages.lastNameRequired")
+                div.forms-desc.error(ng-show="lastNameFieldWrongSize()")= t("app.validationMessages.nameWrongSize")
+
+            label= t("app.sharedForm.email")
+                div.input-groups.width-100
+                    input(type="email" name="email" ng-model="email"
+                        watch-change="fieldHasChanged()" ng-Disabled="true"
+                        ng-minlength="3" ng-maxlength="254" maxlength="254" required)
+                div.forms-desc.error(ng-show="emailFieldRequired()")= t("app.validationMessages.emailRequired")
+                div.forms-desc.error(ng-show="emailFieldFormat()")= t("app.validationMessages.emailWrongFormat")
+                div.forms-desc.error(ng-show="emailFieldWrongSize()")= t("app.validationMessages.emailWrongSize")
+
+            label= t("app.userPreferencesForm.apiKey")
+                div.input-groups.width-100
+                    input(type="text" name="apiKey" ng-model="user.apiKey" ng-Disabled="true")
+                    span.input-append-button(ng-click="regenerateApiKey")
+                        button.btn.btn-blue
+                            i(class="fa fa-refresh")
+
+            div.loginError.ng-hide(ng-hide="hideError")
+                p.error
+                    i.fa.fa-info-circle
+                    span &nbsp; {{ errorMessage }}
 
 
+            div.units-row.text-centered
+                div.unit-50
+                    button.btn.btn-blue.btn.width-100(ng-click="back()")= t("app.sharedForm.back")
+                div.unit-50
+                    button.btn.btn-blue.width-100(type="submit" ng-disabled="loading")= t("app.userPreferencesForm.save")
+                        span &nbsp;
+                        i.fa.fa-refresh.fa-spin.ng-hide(ng-hide="!loading")

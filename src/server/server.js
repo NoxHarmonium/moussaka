@@ -157,6 +157,7 @@
     app.get('/users/:user/', userApi.getUser);
     app.delete('/users/:user/', userApi.deleteUser);
     app.put('/users/:user/', userApi.putUser);
+    app.post('/users/:user/', userApi.updateUser);
     app.post('/users/:user/password/', userApi.changePassword);
     app.post('/users/:user/resetpassword/', userApi.resetPassword);
     app.post('/logout/', userApi.logout);

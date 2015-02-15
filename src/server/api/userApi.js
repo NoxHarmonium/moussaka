@@ -53,6 +53,13 @@
       // TODO: Should you be able to get limited information
       // on user who you share a project with?
 
+      if (!loggedInUser) {
+        return res.status(401)
+          .send({
+            detail: 'You are not logged in as a user'
+          });
+      }
+
       if (!selectedUser) {
         return res.status(404)
           .send({
@@ -70,7 +77,7 @@
       return res.status(200)
         .send({
           data: {
-            username: loggedInUser.username,
+            username: loggedInUser._id,
             apiKey: loggedInUser.apiKey,
             firstName: loggedInUser.firstName,
             lastName: loggedInUser.lastName
@@ -86,6 +93,13 @@
         return res.status(401)
           .send({
             detail: 'You are not logged in as a user'
+          });
+      }
+
+     if (!selectedUser) {
+        return res.status(404)
+          .send({
+            detail: 'User doesn\'t exist'
           });
       }
 
@@ -116,7 +130,6 @@
           });
       }
 
-
       var data = req.body;
 
       if (req.selectedUser) {
@@ -134,6 +147,14 @@
           });
       }
 
+      if (!utils.isNonEmptyString(data.firstName) ||
+        !utils.isNonEmptyString(data.lastName)) {
+        return res.status(409)
+          .send({
+            detail: 'Both firstName and lastName fields are required'
+          });
+      }
+
       var newUser = new User({
         _id: data.username,
         password: data.password,
@@ -146,12 +167,60 @@
           res.status(201)
             .send({
               data: {
-                username: savedUser.username,
+                username: savedUser._id,
                 apiKey: savedUser.apiKey,
                 firstName: savedUser.firstName,
                 lastName: savedUser.lastName
               }
             });
+        })
+        .catch(function (err) {
+          next(err);
+        })
+        .done();
+    },
+
+    updateUser: function (req, res, next) {
+      var currentUser = req.user;
+      var selectedUser = req.selectedUser;
+      var data = req.body;
+
+      if (!currentUser) {
+        return res.status(401)
+          .send({
+            detail: 'You are not logged in as a user'
+          });
+      }
+
+      if (!selectedUser) {
+        return res.status(404)
+          .send({
+            detail: 'User doesn\'t exist'
+          });
+      }
+
+      if (currentUser._id !== selectedUser._id) {
+        return res.status(401)
+          .send({
+            detail: 'A user can only update their own account'
+          });
+      }
+
+      if (!utils.isNonEmptyString(data.firstName) ||
+        !utils.isNonEmptyString(data.lastName)) {
+        return res.status(409)
+          .send({
+            detail: 'Both firstName and lastName fields are required'
+          });
+      }
+
+      selectedUser.firstName = data.firstName;
+      selectedUser.lastName = data.lastName;
+
+      selectedUser.saveQ()
+        .then(function (savedUser) {
+          res.status(200)
+            .send();
         })
         .catch(function (err) {
           next(err);

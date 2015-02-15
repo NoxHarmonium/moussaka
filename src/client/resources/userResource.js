@@ -72,6 +72,20 @@
           }, BaseResource.handleError);
       };
 
+      User.prototype.update = function () {
+        // TODO: Validation?
+        // TODO: Update email and password
+        var filteredData = {
+          firstName: this.firstName,
+          lastName: this.lastName
+        };
+        var that = this;
+        return $http.post('/users/' + that.username + '/', filteredData)
+          .then(function (response) {
+            return that;
+          }, BaseResource.handleError);
+      };
+
       return User;
 
     }

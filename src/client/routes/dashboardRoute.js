@@ -50,7 +50,7 @@
           }
         })
         .state('userPreferences', {
-          url: '/viewProject/userPreferences',
+          url: '/userPreferences',
           templateUrl: '/views/partials/userPreferences',
           controller: 'userPreferencesController',
           data: {
