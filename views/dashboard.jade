@@ -3,7 +3,7 @@ html(ng-app="dashboardModule")
     head
         title= t("app.dashboardTitle")
         include ./includes/css.jade
-        link(href='/css/dashboard.css', rel='stylesheet')       
+        link(href='/css/dashboard.css', rel='stylesheet')
         include ./includes/favicon.jade
 
     body
@@ -15,10 +15,10 @@ html(ng-app="dashboardModule")
             div.userInfo
                 a(href="javascript:void(0)")
                     h5(data-tools="dropdown" data-target="#user-dropdown") Welcome, #{userFirstName}
-                
+
                 ul(id="user-dropdown" class="dropdown")
                     li
-                        a(href="javascript:void(0)")
+                        a(ui-sref="userPreferences")
                             i.fa.fa-gear &nbsp; &nbsp;
                             span= t("app.nav.userPreferences")
                     li
@@ -33,10 +33,10 @@ html(ng-app="dashboardModule")
                     //
                         ul
                             li.active
-                                a(ui-sref="listProjects") 
+                                a(ui-sref="listProjects")
                                     h4= t("app.nav.projects")
 
-           
+
 
         div.dashboard-outer(ui-view)
 

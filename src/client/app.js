@@ -62,6 +62,11 @@ dashboardModule.controller('deviceSessionController',
   require('./controllers/deviceSessionController.js')
 );
 
+dashboardModule.controller('userPreferencesController',
+  require('./controllers/userPreferencesController.js')
+);
+
+
 // Routes
 
 dashboardModule.config(require('./routes/dashboardRoute.js'));

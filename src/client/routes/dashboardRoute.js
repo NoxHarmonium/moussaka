@@ -48,6 +48,15 @@
             ncyBreadcrumbLabel: '{{device.deviceName}}',
             ncyBreadcrumbParent: 'viewProject'
           }
+        })
+        .state('userPreferences', {
+          url: '/viewProject/userPreferences',
+          templateUrl: '/views/partials/userPreferences',
+          controller: 'userPreferencesController',
+          data: {
+            ncyBreadcrumbLabel: 'User Preferences',
+            ncyBreadcrumbParent: 'listProjects'
+          }
         });
     }
   ];
