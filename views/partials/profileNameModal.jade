@@ -1,0 +1,8 @@
+form.forms.input-modal(method="post" onSubmit="return false;" name="profileNameForm" novalidate)
+    h5 Profile Name: &nbsp;
+    input#profileNameInput.width-100(type="text")
+
+    p.error.modal-error-div(style="display: none;")
+        i.fa.fa-exclamation-triangle
+        span &nbsp;
+        span.modal-error-message A profile name is required.

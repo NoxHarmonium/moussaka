@@ -310,6 +310,16 @@ div.dashboard-sidebar-container {
         border-top-color: #3f333d;
     }
 
+    a {
+        text-decoration: none;
+        font-family: @side-bar-font;
+        color: @color-blue;
+    }
+
+    .active {
+        font-weight: 600;
+    }
+
     ul {
         padding: 0;
         margin: 0;
@@ -317,16 +327,6 @@ div.dashboard-sidebar-container {
         li {
             list-style: none;
             line-height: @font-size-base + (@side-bar-spacing * @px-per-em);
-
-            a {
-                text-decoration: none;
-                font-family: @side-bar-font;
-                color: @color-blue;
-            }
-        }
-
-        li.active {
-            font-weight: 600;
         }
     }
 }
@@ -464,4 +464,16 @@ form.control {
     }
 
 }
+
+/* *** Input modals  *** */
+form.forms.input-modal {
+    margin-top: -30px;
+    margin-bottom: -20px;
+
+    p.error.modal-error-div {
+        padding-top: 10px;
+    }
+}
+
+
 

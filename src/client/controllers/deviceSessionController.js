@@ -9,29 +9,44 @@
   // TODO: tinycolor is duplicated. It is also embedded in spectrum
   var tinycolor = require('tinycolor2');
 
-
   // Public functions
 
   module.exports = ['$scope', 'Project', 'Device',
-    '$stateParams', '$state', '$q',
+    'Profile', '$stateParams', '$state', '$q',
     function projectEditController($scope, Project,
-      Device, $stateParams, $state, $q) {
+      Device, Profile, $stateParams, $state, $q) {
       //
       // Setup
       //
 
-      var projectId = $stateParams.projectId;
-      var deviceId = $stateParams.deviceId;
+      var $ = window.$;
+      $scope.projectId = $stateParams.projectId;
+      $scope.deviceId = $stateParams.deviceId;
 
       $scope.loading = true;
       $scope.validationSuccess = {};
       $scope.validationMessages = {};
       $scope.pendingUpdates = {};
       $scope.debounceTime = 500; //ms
+      $scope.maxProfileCount = 10;
+      $scope.device = null;
+      $scope.project = null;
+      $scope.profiles = [];
+      $scope.hideError = true;
+      $scope.modalShowing = false;
+      $scope.currentProfileId = null;
+      $scope.modalSubmitAction = null;
+
+      $scope.profileQueryVars = {
+        sortField: 'createdAt',
+        sortDir: 'desc',
+        minRecord: 0,
+        maxRecord: $scope.maxProfileCount
+      };
 
       $q.all([
-        Device.get(projectId, deviceId),
-        Project.get(projectId)
+        Device.get($scope.projectId, $scope.deviceId),
+        Project.get($scope.projectId)
       ])
         .then(function (results) {
           var device = results[0];
@@ -51,9 +66,97 @@
           $scope.loading = false;
         });
 
+      Profile.getAll($scope.projectId, $scope.profileQueryVars)
+        .then(function (response) {
+          $scope.profiles = response.profiles;
+        });
+
       //
       // Actions
       //
+
+      $scope.setupProfileNameModal = function() {
+        $(function() {
+          var modal = $('#profileNameModel').modal({
+            width: 450,
+            content: '/views/partials/profileNameModal',
+            blur: false
+          });
+
+          // TODO: Client side validation
+
+          $('#profileNameModel')
+            .on('loading.tools.modal', function() {
+              this.createCancelButton('Cancel');
+              var saveButton = this.createActionButton('Save');
+
+              saveButton.on('click', $.proxy(function() {
+                var that = this;
+                $scope.saveProfile($('#profileNameInput').val())
+                  .finally(function() {
+                  if (!$scope.hideError) {
+                    that.$modalBody.find('p.modal-error-div').show();
+                    that.$modalBody.find('p.modal-error-message')
+                      .text($scope.errorMessage);
+                  } else {
+                    that.close();
+                  }
+                });
+              }, this));
+
+              this.$modalBody.find('form')
+                .on('submit', function() {
+                  saveButton.click();
+                });
+
+            });
+
+            $('#profileNameModel')
+              .on('opened.tools.modal', function(modal)
+            {
+                $scope.modalShowing = true;
+                $scope.$apply();
+                this.$modalBody.find('input').focus();
+            });
+            $('#profileNameModel')
+              .on('closed.tools.modal', function()
+            {
+                $scope.hideError = true;
+                $scope.modalShowing = false;
+                $scope.$apply();
+            });
+
+        });
+      };
+
+      $scope.setupProfileDeleteModal = function() {
+        $(function() {
+          $scope.profileDeleteModal = $('#profileDeleteModal').modal({
+            width: 450,
+            content: '/views/partials/profileDeleteModal',
+            blur: false
+          });
+
+          $scope.profileDeleteModal
+            .on('loading.tools.modal', function() {
+              this.createCancelButton('No');
+              var okButton = this.createActionButton('Yes');
+              var that = this;
+
+              okButton.on('click', $.proxy(function() {
+                $scope.confirmDeleteProfile();
+                that.close();
+              }, this));
+
+            });
+
+           $('#profileDeleteModal')
+              .on('opened.tools.modal', function(modal)
+            {
+                this.$modalFooter.find('button.modal-close-btn').focus();
+            });
+        });
+      };
 
       $scope.getControlUrl = function (schemaValues) {
         return '/views/controls/' + schemaValues.type;
@@ -153,7 +256,19 @@
       };
 
       $scope.sendPendingUpdates = function () {
-        $scope.device.sendUpdates($scope.pendingUpdates);
+        $scope.hideError = true;
+        $scope.loading = true;
+
+        $scope.device.sendUpdates($scope.pendingUpdates)
+          .then(function (response) {
+            })
+          .catch(function (err) {
+              $scope.handleError(err);
+            })
+          .finally(function () {
+              $scope.loading = false;
+            });
+
         $scope.pendingUpdates = {};
       };
 
@@ -161,6 +276,7 @@
         _.debounce($scope.sendPendingUpdates, $scope.debounceTime);
 
       $scope.notifyPendingUpdate = function (schemaName) {
+        $scope.currentProfileId = null;
 
         var update = $scope.currentState[schemaName];
         var success = $scope.doValidation(schemaName, update);
@@ -220,11 +336,88 @@
           detail = 'There was an error processing your request.';
         }
 
-        // TODO: Handle the error!
-        // $scope.hideError = false;
-        // $scope.errorMessage = detail;
+        $scope.hideError = false;
+        $scope.errorMessage = detail;
       };
 
+      $scope.switchProfile = function (profileIndex) {
+        var profile = $scope.profiles[profileIndex];
+        var profileData = profile.profileData || {};
+        for (var schemaName in profileData) {
+          var schema = $scope.dataSchema[schemaName];
+          var control = controls[schema.type];
+          var profileValue = profileData[schemaName];
+          var currentValue = $scope.currentState[schemaName];
+
+          // Apply the data stored in the profile to the current state
+          // Run it through the control to validate the data
+          control.apply(schema, currentValue, profileValue);
+          $scope.notifyPendingUpdate(schemaName);
+        }
+
+        $scope.currentProfileId = profile._id;
+      };
+
+      $scope.beginDeleteProfile = function (profileIndex) {
+        $scope.profileDeletionCandidate = $scope.profiles[profileIndex];
+        $scope.profileDeleteModal.modal('load');
+      };
+
+      $scope.confirmDeleteProfile = function(profileIndex) {
+        $scope.loading = true;
+
+        var profile;
+        if (Utils.exists(profileIndex)) {
+          profile = $scope.profiles[profileIndex];
+        } else if (Utils.exists($scope.profileDeletionCandidate)) {
+          profile = $scope.profileDeletionCandidate;
+        } else {
+          throw new Error('Cannot delete undefined profile.');
+        }
+
+        profile.delete()
+          .then(function () {
+              return Profile.getAll($scope.projectId, $scope.profileQueryVars);
+            })
+          .then(function (response) {
+            $scope.profiles = response.profiles;
+            })
+          .catch(function (err) {
+              $scope.handleError(err);
+            })
+          .finally(function () {
+              $scope.loading = false;
+            });
+      };
+
+      $scope.saveProfile = function (profileName) {
+        var newProfile = new Profile({
+          projectId: $scope.projectId,
+          profileName: profileName
+        });
+
+        $scope.hideError = true;
+        $scope.loading = true;
+
+        return newProfile.create($scope.deviceId)
+          .then(function () {
+              return Profile.getAll($scope.projectId, $scope.profileQueryVars);
+            })
+          .then(function (response) {
+            $scope.profiles = response.profiles;
+            })
+          .catch(function (err) {
+              $scope.handleError(err);
+            })
+          .finally(function () {
+              $scope.loading = false;
+            });
+      };
+
+      // Init calls
+
+      $scope.setupProfileNameModal();
+      $scope.setupProfileDeleteModal();
     }
   ];
 
