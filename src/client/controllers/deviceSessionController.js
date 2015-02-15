@@ -35,6 +35,7 @@
       $scope.hideError = true;
       $scope.modalShowing = false;
       $scope.currentProfileId = null;
+      $scope.modalSubmitAction = null;
 
       $scope.profileQueryVars = {
         sortField: 'createdAt',
@@ -102,6 +103,12 @@
                   }
                 });
               }, this));
+
+              this.$modalBody.find('form')
+                .on('submit', function() {
+                  saveButton.click();
+                });
+
             });
 
             $('#profileNameModel')
@@ -109,6 +116,7 @@
             {
                 $scope.modalShowing = true;
                 $scope.$apply();
+                this.$modalBody.find('input').focus();
             });
             $('#profileNameModel')
               .on('closed.tools.modal', function()
