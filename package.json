@@ -104,6 +104,9 @@
     "open",
     "source"
   ],
+  "engines": {
+    "node": "0.10.x"
+  },
   "author": "Sean Dawson <contact@seandawson.info>",
   "license": "MIT"
 }
