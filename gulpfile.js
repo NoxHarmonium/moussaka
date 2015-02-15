@@ -121,7 +121,8 @@ gulp.task('less', function () {
 });
 
 gulp.task('bowerJsDeps', function () {
-  gulp.src(bowerFiles(bowerFilesOpts).js)
+  // TODO: Update to new bower-file API
+  gulp.src(bowerFiles.old(bowerFilesOpts).js)
     .pipe(concat('libs.js'))
     .pipe(gulpif(!development, ngAnnotate()))
     .pipe(gulpif(!development, uglify()))
@@ -130,7 +131,7 @@ gulp.task('bowerJsDeps', function () {
 
 gulp.task('bowerCssDeps', function () {
   gulp.src(
-    bowerFiles(bowerFilesOpts).css
+    bowerFiles.old(bowerFilesOpts).css
       .concat(paths.manualBowerCss)
     )
     .pipe(concat('libs.css'))
@@ -139,7 +140,7 @@ gulp.task('bowerCssDeps', function () {
 });
 
 gulp.task('bowerFontDeps', function () {
-  gulp.src(bowerFiles(bowerFilesOpts).fonts)
+  gulp.src(bowerFiles.old(bowerFilesOpts).fonts)
     .pipe(gulp.dest(paths.fontDest));
 });
 
