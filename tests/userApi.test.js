@@ -227,7 +227,6 @@
             .to.be.ok();
           done();
         });
-
     });
 
     it('Attempt to delete user [0] while logged out', function (done) {
@@ -636,7 +635,7 @@
 
       });
 
-    it('Login user [0] with new password', function (done) {
+    it('Login user [1] with new password', function (done) {
       var user = users[1];
 
       agent.post('http://localhost:3000/login/')
@@ -654,7 +653,169 @@
         });
     });
 
+    it('Logout user [1]', function (done) {
+      agent.post('http://localhost:3000/logout/')
+        .send()
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+          done();
+        });
+    });
 
+    it('Update user [1] first and last name without logging in',
+      function (done) {
+      var newFirstName = 'newFirstName';
+      var newLastName = 'newLastName';
+      agent.post('http://localhost:3000/users/' + users[1].username +
+        '/')
+        .send({
+          firstName: newFirstName,
+          lastName: newLastName
+        })
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(401);
+          done();
+        });
+    });
+
+    it('Login user [1]', function (done) {
+      var user = users[1];
+
+      agent.post('http://localhost:3000/login/')
+        .send({
+          username: user.username,
+          password: 'resettedPassword'
+
+        })
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+          done();
+        });
+    });
+
+    it('Update user [1] with wrong username', function (done) {
+      var newFirstName = 'newFirstName';
+      var newLastName = 'newLastName';
+      agent.post('http://localhost:3000/users/undefined/')
+        .send({
+          firstName: newFirstName,
+          lastName: newLastName
+        })
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(404);
+          done();
+        });
+    });
+
+    it('Update user [2] logged in as user [1]', function (done) {
+      var newFirstName = 'newFirstName';
+      var newLastName = 'newLastName';
+      agent.post('http://localhost:3000/users/' + users[2].username +
+        '/')
+        .send({
+          firstName: newFirstName,
+          lastName: newLastName
+        })
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(401);
+          done();
+        });
+    });
+
+    it('Update user [1] first and last name', function (done) {
+      var newFirstName = 'newFirstName';
+      var newLastName = 'newLastName';
+      agent.post('http://localhost:3000/users/' + users[1].username +
+        '/')
+        .send({
+          firstName: newFirstName,
+          lastName: newLastName
+        })
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(200);
+          done();
+        });
+    });
+
+    it('Check that the firstName and lastName is user [1] have been updated',
+      function (done) {
+      var newFirstName = 'newFirstName';
+      var newLastName = 'newLastName';
+      agent.get('http://localhost:3000/users/' + users[1].username +
+        '/')
+        .send()
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+          expect(res.body.data.password)
+            .to.be(undefined);
+
+          var data = res.body.data;
+          expect(data.firstName)
+            .to.eql(newFirstName);
+          expect(data.lastName)
+            .to.eql(newLastName);
+          done();
+        });
+    });
+
+    it('Update user [1] username and password', function (done) {
+      var newUsername = 'newUsername';
+      var newPassword = 'newPassword';
+      agent.post('http://localhost:3000/users/' + users[1].username +
+        '/')
+        .send({
+          username: newUsername,
+          password: newPassword
+        })
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.status)
+            .to.be(200);
+          done();
+        });
+    });
+
+    it('Check that user [1] does not have new username and password ' +
+      'is undefined', function (done) {
+      agent.get('http://localhost:3000/users/' + users[1].username +
+        '/')
+        .send()
+        .end(function (e, res) {
+          expect(e)
+            .to.eql(null);
+          expect(res.ok)
+            .to.be.ok();
+          expect(res.body.data.password)
+            .to.be(undefined);
+
+          var data = res.body.data;
+          expect(data.username)
+            .to.eql(users[1].username);
+
+          done();
+        });
+    });
   });
-
 })(require, describe, it);
