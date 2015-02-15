@@ -1,10 +1,12 @@
 (function (require, module) {
   'use strict';
 
-  var UserResource = require('../../src/client/resources/userResource.js');
   var sampleData = require('./sampleData.json');
   var S = require('string');
   var Factory = require('js-factories');
+  var angular = require('../../src/client/shims/angularShim.js');
+  var UserClass = require('../../src/client/resources/userResource.js');
+  var injector = angular.injector(['ng']);
 
   var generateEmail = function(args) {
     var address =
@@ -15,18 +17,6 @@
     var domain = this.sample.apply(this, sampleData.emailDomains);
 
     return address + '@' + domain;
-  };
-
-  var deAngularify = function(angularModule) {
-    if (!Array.isArray(angularModule)) {
-        throw new Error('Angular module not in correct format.');
-    }
-    for (var i = 0; i < angularModule.length; i++) {
-        if (typeof angularModule[i] === 'function') {
-            return angularModule[i]();
-        }
-    }
-    throw new Error('Could not find angular method.');
   };
 
   var register = function() {
@@ -40,7 +30,7 @@
         args.username = args.username ||
             generateEmail.call(this, args);
 
-        var User = deAngularify(UserResource);
+        var User = injector.instantiate(UserClass);
         return new User(args);
     });
   };

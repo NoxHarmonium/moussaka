@@ -11,4 +11,4 @@
     module.exports = require('jquery');
   }
 
-})(module, require, window);
+})(module, require, global.window);

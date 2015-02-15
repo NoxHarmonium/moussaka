@@ -16,13 +16,17 @@
   var _ = require('lodash');
   var S = require('string');
 
-  var User = require('../src/client/resources/userResource.js');
+  var UserClass = require('../src/client/resources/userResource.js');
   var ApiError = require('../src/client/exceptions/apiError.js');
 
   var chai = require('chai');
   var chaiAsPromised = require('chai-as-promised');
 
   chai.use(chaiAsPromised);
+
+  // Init app module
+  var angular = require('../src/client/shims/angularShim.js');
+  var injector = angular.injector(['ng']);
 
   var userFactory = require('./factories/userFactory.js');
   userFactory.register();
@@ -46,6 +50,8 @@
 
     describe('should validate data correctly when adding new users',
       function () {
+
+        var User = injector.instantiate(UserClass);
 
         var fields = {
           'username':   { min: 3, max: 40 },
@@ -125,6 +131,9 @@
       });
 
     describe('should be able to perform basic user admin tasks', function () {
+
+      var User = injector.instantiate(UserClass);
+
       it('should only be able to create user once',
         function () {
           var user = Factory.create('user');
@@ -239,6 +248,8 @@
     });
 
     describe('should be able to change user passwords', function () {
+
+      var User = injector.instantiate(UserClass);
 
       it('should not be able to change password for user ' +
         'if they are logged in', function () {
