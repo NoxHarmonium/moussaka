@@ -1,19 +1,21 @@
 language: node_js
-
 before_install:
-  - gem install coveralls
-
+- gem install coveralls
 node_js:
-  - "0.10"
-
+- '0.10'
 services: mongodb
-
-install: 
-  - npm install -g gulp
-  - npm install -g bower
-  - bower install   # Client side depenencies
-  - npm install     # Server side dependencies
-
-script: 
-    - gulp test # Run linting, compliation and tests
-    - npm run coveralls # Upload coverage
+install:
+- npm install -g gulp
+- npm install -g bower
+- bower install
+- npm install
+script:
+- gulp test
+- npm run coveralls
+deploy:
+  provider: heroku
+  api_key:
+    secure: Xj4vib1ZO1ZMy+SxM27xKtu7u4PsDWbO3DJbZtjs8t9DicfjKBwCnOqRBnsVCPugGnMZMgqhRP86l2CK7VBIvFh4xZDZEEPI2GsA3K/cT43TFICB/w+NZdm0X9MA/oYaI8B8Lyv+KLW+VqAFAC6NtfhClf+xd+IfQpo5nJIpd7Q=
+  app: moussaka
+  on:
+    repo: NoxHarmonium/moussaka
