@@ -206,16 +206,13 @@
           });
       }
 
-      if (!utils.isNonEmptyString(data.firstName) ||
-        !utils.isNonEmptyString(data.lastName)) {
-        return res.status(409)
-          .send({
-            detail: 'Both firstName and lastName fields are required'
-          });
+      if (data.firstName) {
+        selectedUser.firstName = data.firstName;
       }
 
-      selectedUser.firstName = data.firstName;
-      selectedUser.lastName = data.lastName;
+      if (data.lastName) {
+        selectedUser.lastName = data.lastName;
+      }
 
       selectedUser.saveQ()
         .then(function (savedUser) {
