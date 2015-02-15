@@ -8,6 +8,11 @@
             window.location = '/views/auth/';
           });
       };
+
+      $scope.closeUserDropdown = function (e) {
+        var dropdown = $('#userDropdownToggle').data('dropdown');
+        $.proxy(dropdown.hide, dropdown)();
+      };
     }
   ];
 })(module, require, window);

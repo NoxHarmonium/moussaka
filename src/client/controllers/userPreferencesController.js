@@ -6,7 +6,8 @@
 
   // createAccountController
   module.exports = ['$scope', '$http', 'User', '$cookies', '$location',
-    function userPreferencesController($scope, $http, User, $cookies, $location) {
+    function userPreferencesController($scope, $http, User, $cookies,
+      $location) {
         $scope.firstName = '';
         $scope.lastName = '';
         $scope.password = '';
