@@ -147,6 +147,13 @@
                 $scope.confirmDeleteProfile();
                 that.close();
               }, this));
+
+            });
+
+           $('#profileDeleteModal')
+              .on('opened.tools.modal', function(modal)
+            {
+                this.$modalFooter.find('button.modal-close-btn').focus();
             });
         });
       };
