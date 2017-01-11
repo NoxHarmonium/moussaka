@@ -36,7 +36,7 @@ The REST API is serviced by [express](expressjs.com) which also renders the webs
 The frontend uses [angular.js](https://angularjs.org/) to do most of the work in presenting the webpage.
 I have used [kube](http://imperavi.com/kube/) as the base responsive CSS framework that I build on and use [less](lesscss.org/) as a CSS preprocessor.
 To prevent code duplication, code written for node.js can be used client side through the magic of [browserify](http://browserify.org/).
-The API tests run on [mocha](visionmedia.github.io/mocha/) but I am still determining what will run the end-to-end tests on the frontend interface although it will most likely be [karma](karma-runner.github.io/) with [phantomjs](phantomjs.org).
+The API tests run on [mocha](http://mochajs.org/) but I am still determining what will run the end-to-end tests on the frontend interface although it will most likely be [karma](karma-runner.github.io/) with [phantomjs](phantomjs.org).
 
 The code style I've used for this project is documented [here](http://nodeguide.com/style.html). It is enforced with a jshint grunt task so the Travis build will fail if any of the code doesn't match this style.
 
