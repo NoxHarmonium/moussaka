@@ -23,8 +23,8 @@
         }
       });
 
+      var mongooseUrl = process.env.MONGO_URL || config.mongo_url;
       try {
-        var mongooseUrl = process.env.MONGO_URL || config.mongo_url;
         mongoose.connect(mongooseUrl);
         var db = mongoose.connection;
         console.log('Started connection on ' + (mongooseUrl)

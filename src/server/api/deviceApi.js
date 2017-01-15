@@ -40,14 +40,6 @@
       .done();
   };
 
-  var resetTimeout = function (device) {
-    deleteTimeout(device);
-    var timeoutId = setTimeout(expireDevice,
-      config.device_Timeout_Seconds * 1000,
-      device);
-    deviceTimeouts[device._id] = timeoutId;
-  };
-
   var deleteTimeout = function (device) {
     var timeoutId = deviceTimeouts[device._id];
     if (timeoutId) {
@@ -55,6 +47,14 @@
       clearTimeout(timeoutId);
       _.pull(deviceTimeouts, device._id);
     }
+  };
+
+  var resetTimeout = function (device) {
+    deleteTimeout(device);
+    var timeoutId = setTimeout(expireDevice,
+      config.device_Timeout_Seconds * 1000,
+      device);
+    deviceTimeouts[device._id] = timeoutId;
   };
 
   // Public functions
